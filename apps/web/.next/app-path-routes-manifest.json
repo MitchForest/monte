@@ -1,0 +1,13 @@
+{
+  "/(app)/classrooms/page": "/classrooms",
+  "/(app)/home/page": "/home",
+  "/(app)/observations/page": "/observations",
+  "/(app)/settings/page": "/settings",
+  "/(app)/students/page": "/students",
+  "/(app)/tasks/page": "/tasks",
+  "/(auth)/login/page": "/login",
+  "/(auth)/signup/page": "/signup",
+  "/(marketing)/page": "/",
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico"
+}

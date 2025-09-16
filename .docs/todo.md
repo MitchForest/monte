@@ -1,0 +1,2 @@
+- Get basic marketing website, auth, and app working
+- Migrate to 1EdTech before prod

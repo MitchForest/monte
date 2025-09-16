@@ -1,0 +1,1240 @@
+openapi: 3.1.1
+info:
+  title: Caliper Analytics API
+  version: 1.2.0
+  description: A modern implementation of the IMS Caliper Analytics® specification v1.2
+servers:
+  - url: https://caliper.timebackapi.com
+    description: API Server
+components:
+  securitySchemes: {}
+  schemas:
+    CaliperEnvelope:
+      type: object
+      properties:
+        sensor:
+          type: string
+          description: Sensor identifier
+        sendTime:
+          type: string
+          format: date-time
+          description: When the envelope was sent
+        dataVersion:
+          type: string
+          enum:
+            - http://purl.imsglobal.org/ctx/caliper/v1p2
+          description: Caliper specification version
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              "@context":
+                type: string
+                enum:
+                  - http://purl.imsglobal.org/ctx/caliper/v1p2
+              id:
+                type: string
+                description: Event ID (IRI format)
+              type:
+                type: string
+                description: Event type (e.g., ViewEvent, AssessmentEvent)
+              actor:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Actor ID (IRI format)
+                  type:
+                    type: string
+                    description: Actor type (e.g., Person, SoftwareApplication)
+                required:
+                  - id
+                  - type
+                description: Who performed the action
+              action:
+                type: string
+                description: Action performed (e.g., Viewed, Started)
+              object:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Object ID (IRI format)
+                  type:
+                    type: string
+                    description: Object type (e.g., Page, Assessment)
+                  name:
+                    type: string
+                    description: Object name
+                required:
+                  - id
+                  - type
+                description: Target of the action
+              eventTime:
+                type: string
+                format: date-time
+                description: When the event occurred
+              target:
+                nullable: true
+                description: Specific part of the object
+              generated:
+                nullable: true
+                description: What was created by the action
+              referrer:
+                nullable: true
+                description: Navigation source
+              edApp:
+                nullable: true
+                description: Software application context
+              group:
+                nullable: true
+                description: Group context
+              membership:
+                nullable: true
+                description: Actor membership context
+              session:
+                nullable: true
+                description: Session context
+              federatedSession:
+                nullable: true
+                description: External session context
+              extensions:
+                type: object
+                additionalProperties:
+                  nullable: true
+                description: Custom extensions
+            required:
+              - "@context"
+              - id
+              - type
+              - actor
+              - action
+              - object
+              - eventTime
+            additionalProperties:
+              nullable: true
+          description: Array of Caliper events
+      required:
+        - sensor
+        - sendTime
+        - dataVersion
+        - data
+  parameters: {}
+paths:
+  /health:
+    get:
+      tags:
+        - System
+      summary: Health check endpoint
+      description: Returns the health status of the API
+      responses:
+        "200":
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - ok
+                  timestamp:
+                    type: string
+                    format: date-time
+                required:
+                  - status
+                  - timestamp
+  /caliper/v1p2/events/validate:
+    post:
+      tags:
+        - Caliper Events
+      summary: Validate Caliper events
+      description: Validates Caliper events against the v1.2 specification without
+        storing them
+      requestBody:
+        description: Caliper envelope containing events to validate
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaliperEnvelope"
+            examples:
+              default:
+                value:
+                  sensor: https://example.edu/sensors/1
+                  sendTime: 2018-11-15T10:15:00.000Z
+                  dataVersion: http://purl.imsglobal.org/ctx/caliper/v1p2
+                  data:
+                    - "@context": http://purl.imsglobal.org/ctx/caliper/v1p2
+                      id: urn:uuid:fcd495d0-3740-4298-9bec-1154571dc211
+                      type: ViewEvent
+                      actor:
+                        id: https://example.edu/users/554433
+                        type: Person
+                      action: Viewed
+                      object:
+                        id: https://example.edu/terms/201801/courses/7/sections/1/pages/2
+                        type: Page
+                        name: Introduction to Physics
+                      eventTime: 2018-11-15T10:15:00.000Z
+      responses:
+        "200":
+          description: Validation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                  eventCount:
+                    type: number
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: array
+                          items:
+                            anyOf:
+                              - type: string
+                              - type: number
+                        message:
+                          type: string
+                        code:
+                          type: string
+                      required:
+                        - path
+                        - message
+                required:
+                  - valid
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                  eventCount:
+                    type: number
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: array
+                          items:
+                            anyOf:
+                              - type: string
+                              - type: number
+                        message:
+                          type: string
+                        code:
+                          type: string
+                      required:
+                        - path
+                        - message
+                required:
+                  - valid
+  /caliper/v1p2/events:
+    post:
+      tags:
+        - Caliper Events
+      summary: Store Caliper events
+      description: Stores Caliper events in DynamoDB for real-time access and archives
+        them to S3 via Kinesis for long-term storage. Requires sensor
+        authentication.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Caliper envelope containing events to store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaliperEnvelope"
+            examples:
+              default:
+                value:
+                  sensor: https://example.edu/sensors/1
+                  sendTime: 2018-11-15T10:15:00.000Z
+                  dataVersion: http://purl.imsglobal.org/ctx/caliper/v1p2
+                  data:
+                    - "@context": http://purl.imsglobal.org/ctx/caliper/v1p2
+                      id: urn:uuid:fcd495d0-3740-4298-9bec-1154571dc211
+                      type: ViewEvent
+                      actor:
+                        id: https://example.edu/users/554433
+                        type: Person
+                      action: Viewed
+                      object:
+                        id: https://example.edu/terms/201801/courses/7/sections/1/pages/2
+                        type: Page
+                        name: Introduction to Physics
+                      eventTime: 2018-11-15T10:15:00.000Z
+      responses:
+        "200":
+          description: Events stored successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  eventsStored:
+                    type: number
+                  message:
+                    type: string
+                required:
+                  - success
+                  - eventsStored
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    nullable: true
+                required:
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+  /analytics/events:
+    get:
+      tags:
+        - Analytics
+      summary: Query Caliper events
+      description: Query stored Caliper events with filtering and pagination support
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+          required: false
+          name: actorId
+          in: query
+        - schema:
+            type: string
+          required: false
+          name: objectId
+          in: query
+        - schema:
+            type: string
+          required: false
+          name: eventType
+          in: query
+        - schema:
+            type: string
+            format: date-time
+          required: false
+          name: startTime
+          in: query
+        - schema:
+            type: string
+            format: date-time
+          required: false
+          name: endTime
+          in: query
+        - schema:
+            type: string
+            pattern: ^\d+$
+            default: "20"
+          required: false
+          name: limit
+          in: query
+        - schema:
+            type: string
+            pattern: ^\d+$
+            default: "0"
+          required: false
+          name: offset
+          in: query
+      responses:
+        "200":
+          description: Collection of events (see headers for pagination info)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        type:
+                          type: string
+                        actor:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            type:
+                              type: string
+                          required:
+                            - id
+                            - type
+                        action:
+                          type: string
+                        object:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            type:
+                              type: string
+                            name:
+                              type: string
+                          required:
+                            - id
+                            - type
+                        eventTime:
+                          type: string
+                        storedAt:
+                          type: string
+                        sensor:
+                          type: string
+                      required:
+                        - id
+                        - type
+                        - actor
+                        - action
+                        - object
+                        - eventTime
+                        - storedAt
+                        - sensor
+                required:
+                  - events
+              examples:
+                default:
+                  value:
+                    events:
+                      - id: urn:uuid:fcd495d0-3740-4298-9bec-1154571dc211
+                        type: ViewEvent
+                        actor:
+                          id: https://example.edu/users/554433
+                          type: Person
+                        action: Viewed
+                        object:
+                          id: https://example.edu/terms/201801/courses/7/sections/1/pages/2
+                          type: Page
+                          name: Introduction to Physics
+                        eventTime: 2018-11-15T10:15:00.000Z
+                        storedAt: 2018-11-15T10:15:05.000Z
+                        sensor: sensor-123
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+  /analytics/events/:id:
+    get:
+      tags:
+        - Analytics
+      summary: Get a specific Caliper event
+      description: Retrieve a single Caliper event by its ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            description: Event ID
+          required: true
+          description: Event ID
+          name: id
+          in: path
+      responses:
+        "200":
+          description: Event details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  actor:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                    required:
+                      - id
+                      - type
+                  action:
+                    type: string
+                  object:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                      - id
+                      - type
+                  eventTime:
+                    type: string
+                  storedAt:
+                    type: string
+                  sensor:
+                    type: string
+                required:
+                  - id
+                  - type
+                  - actor
+                  - action
+                  - object
+                  - eventTime
+                  - storedAt
+                  - sensor
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+        "404":
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+  /webhooks:
+    post:
+      tags:
+        - Webhooks
+      summary: Create a webhook
+      description: Create a new webhook to receive Caliper events
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  description: Name of the webhook
+                targetUrl:
+                  type: string
+                  format: uri
+                  description: URL to send events to
+                description:
+                  type: string
+                  description: Description of the webhook
+                filters:
+                  type: object
+                  properties:
+                    eventTypes:
+                      type: array
+                      items:
+                        type: string
+                        enum:
+                          - AnnotationEvent
+                          - AssessmentEvent
+                          - AssessmentItemEvent
+                          - AssignableEvent
+                          - FeedbackEvent
+                          - ForumEvent
+                          - ThreadEvent
+                          - MessageEvent
+                          - GradeEvent
+                          - MediaEvent
+                          - NavigationEvent
+                          - ReadingEvent
+                          - ResourceManagementEvent
+                          - SearchEvent
+                          - SessionEvent
+                          - SurveyEvent
+                          - QuestionnaireEvent
+                          - SurveyInvitationEvent
+                          - ToolUseEvent
+                          - ViewEvent
+                          - OutcomeEvent
+                      minItems: 1
+                      description: List of event types to filter (if empty, all events are sent)
+                    actorId:
+                      type: string
+                      description: Filter events by specific actor ID
+                    objectType:
+                      type: string
+                      description: Filter events by object type
+                  description: Event filters
+                active:
+                  type: boolean
+                  default: true
+                  description: Whether the webhook is active
+                headers:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: Custom headers to include in webhook requests
+              required:
+                - name
+                - targetUrl
+      responses:
+        "201":
+          description: Webhook created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Webhook ID
+                  sensorId:
+                    type: string
+                    description: Sensor ID that owns this webhook
+                  name:
+                    type: string
+                    description: Name of the webhook
+                  targetUrl:
+                    type: string
+                    description: URL to send events to
+                  description:
+                    type: string
+                    description: Description of the webhook
+                  filters:
+                    type: object
+                    properties:
+                      eventTypes:
+                        type: array
+                        items:
+                          type: string
+                          enum:
+                            - AnnotationEvent
+                            - AssessmentEvent
+                            - AssessmentItemEvent
+                            - AssignableEvent
+                            - FeedbackEvent
+                            - ForumEvent
+                            - ThreadEvent
+                            - MessageEvent
+                            - GradeEvent
+                            - MediaEvent
+                            - NavigationEvent
+                            - ReadingEvent
+                            - ResourceManagementEvent
+                            - SearchEvent
+                            - SessionEvent
+                            - SurveyEvent
+                            - QuestionnaireEvent
+                            - SurveyInvitationEvent
+                            - ToolUseEvent
+                            - ViewEvent
+                            - OutcomeEvent
+                        minItems: 1
+                        description: List of event types to filter (if empty, all events are sent)
+                      actorId:
+                        type: string
+                        description: Filter events by specific actor ID
+                      objectType:
+                        type: string
+                        description: Filter events by object type
+                    description: Event filters
+                  active:
+                    type: boolean
+                    description: Whether the webhook is active
+                  headers:
+                    type: object
+                    additionalProperties:
+                      type: string
+                    description: Custom headers
+                  secret:
+                    type: string
+                    description: Webhook secret for signature verification
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: When the webhook was created
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: When the webhook was last updated
+                required:
+                  - id
+                  - sensorId
+                  - name
+                  - targetUrl
+                  - active
+                  - secret
+                  - createdAt
+                  - updatedAt
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    nullable: true
+                required:
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+    get:
+      tags:
+        - Webhooks
+      summary: List webhooks
+      description: List all webhooks for the authenticated sensor
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of webhooks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  webhooks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Webhook ID
+                        sensorId:
+                          type: string
+                          description: Sensor ID that owns this webhook
+                        name:
+                          type: string
+                          description: Name of the webhook
+                        targetUrl:
+                          type: string
+                          description: URL to send events to
+                        description:
+                          type: string
+                          description: Description of the webhook
+                        filters:
+                          type: object
+                          properties:
+                            eventTypes:
+                              type: array
+                              items:
+                                type: string
+                                enum:
+                                  - AnnotationEvent
+                                  - AssessmentEvent
+                                  - AssessmentItemEvent
+                                  - AssignableEvent
+                                  - FeedbackEvent
+                                  - ForumEvent
+                                  - ThreadEvent
+                                  - MessageEvent
+                                  - GradeEvent
+                                  - MediaEvent
+                                  - NavigationEvent
+                                  - ReadingEvent
+                                  - ResourceManagementEvent
+                                  - SearchEvent
+                                  - SessionEvent
+                                  - SurveyEvent
+                                  - QuestionnaireEvent
+                                  - SurveyInvitationEvent
+                                  - ToolUseEvent
+                                  - ViewEvent
+                                  - OutcomeEvent
+                              minItems: 1
+                              description: List of event types to filter (if empty, all events are sent)
+                            actorId:
+                              type: string
+                              description: Filter events by specific actor ID
+                            objectType:
+                              type: string
+                              description: Filter events by object type
+                          description: Event filters
+                        active:
+                          type: boolean
+                          description: Whether the webhook is active
+                        headers:
+                          type: object
+                          additionalProperties:
+                            type: string
+                          description: Custom headers
+                        secret:
+                          type: string
+                          description: Webhook secret for signature verification
+                        createdAt:
+                          type: string
+                          format: date-time
+                          description: When the webhook was created
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          description: When the webhook was last updated
+                      required:
+                        - id
+                        - sensorId
+                        - name
+                        - targetUrl
+                        - active
+                        - secret
+                        - createdAt
+                        - updatedAt
+                  count:
+                    type: number
+                required:
+                  - webhooks
+                  - count
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+  /webhooks/:id:
+    get:
+      tags:
+        - Webhooks
+      summary: Get a webhook
+      description: Get details of a specific webhook
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            description: Webhook ID
+          required: true
+          description: Webhook ID
+          name: id
+          in: path
+      responses:
+        "200":
+          description: Webhook details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Webhook ID
+                  sensorId:
+                    type: string
+                    description: Sensor ID that owns this webhook
+                  name:
+                    type: string
+                    description: Name of the webhook
+                  targetUrl:
+                    type: string
+                    description: URL to send events to
+                  description:
+                    type: string
+                    description: Description of the webhook
+                  filters:
+                    type: object
+                    properties:
+                      eventTypes:
+                        type: array
+                        items:
+                          type: string
+                          enum:
+                            - AnnotationEvent
+                            - AssessmentEvent
+                            - AssessmentItemEvent
+                            - AssignableEvent
+                            - FeedbackEvent
+                            - ForumEvent
+                            - ThreadEvent
+                            - MessageEvent
+                            - GradeEvent
+                            - MediaEvent
+                            - NavigationEvent
+                            - ReadingEvent
+                            - ResourceManagementEvent
+                            - SearchEvent
+                            - SessionEvent
+                            - SurveyEvent
+                            - QuestionnaireEvent
+                            - SurveyInvitationEvent
+                            - ToolUseEvent
+                            - ViewEvent
+                            - OutcomeEvent
+                        minItems: 1
+                        description: List of event types to filter (if empty, all events are sent)
+                      actorId:
+                        type: string
+                        description: Filter events by specific actor ID
+                      objectType:
+                        type: string
+                        description: Filter events by object type
+                    description: Event filters
+                  active:
+                    type: boolean
+                    description: Whether the webhook is active
+                  headers:
+                    type: object
+                    additionalProperties:
+                      type: string
+                    description: Custom headers
+                  secret:
+                    type: string
+                    description: Webhook secret for signature verification
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: When the webhook was created
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: When the webhook was last updated
+                required:
+                  - id
+                  - sensorId
+                  - name
+                  - targetUrl
+                  - active
+                  - secret
+                  - createdAt
+                  - updatedAt
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+        "404":
+          description: Webhook not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - Webhook not found
+                required:
+                  - error
+    put:
+      tags:
+        - Webhooks
+      summary: Update a webhook
+      description: Update an existing webhook
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            description: Webhook ID
+          required: true
+          description: Webhook ID
+          name: id
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  description: Name of the webhook
+                targetUrl:
+                  type: string
+                  format: uri
+                  description: URL to send events to
+                description:
+                  type: string
+                  description: Description of the webhook
+                filters:
+                  type: object
+                  properties:
+                    eventTypes:
+                      type: array
+                      items:
+                        type: string
+                        enum:
+                          - AnnotationEvent
+                          - AssessmentEvent
+                          - AssessmentItemEvent
+                          - AssignableEvent
+                          - FeedbackEvent
+                          - ForumEvent
+                          - ThreadEvent
+                          - MessageEvent
+                          - GradeEvent
+                          - MediaEvent
+                          - NavigationEvent
+                          - ReadingEvent
+                          - ResourceManagementEvent
+                          - SearchEvent
+                          - SessionEvent
+                          - SurveyEvent
+                          - QuestionnaireEvent
+                          - SurveyInvitationEvent
+                          - ToolUseEvent
+                          - ViewEvent
+                          - OutcomeEvent
+                      minItems: 1
+                      description: List of event types to filter (if empty, all events are sent)
+                    actorId:
+                      type: string
+                      description: Filter events by specific actor ID
+                    objectType:
+                      type: string
+                      description: Filter events by object type
+                  description: Event filters
+                active:
+                  type: boolean
+                  default: true
+                  description: Whether the webhook is active
+                headers:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: Custom headers to include in webhook requests
+      responses:
+        "200":
+          description: Webhook updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Webhook ID
+                  sensorId:
+                    type: string
+                    description: Sensor ID that owns this webhook
+                  name:
+                    type: string
+                    description: Name of the webhook
+                  targetUrl:
+                    type: string
+                    description: URL to send events to
+                  description:
+                    type: string
+                    description: Description of the webhook
+                  filters:
+                    type: object
+                    properties:
+                      eventTypes:
+                        type: array
+                        items:
+                          type: string
+                          enum:
+                            - AnnotationEvent
+                            - AssessmentEvent
+                            - AssessmentItemEvent
+                            - AssignableEvent
+                            - FeedbackEvent
+                            - ForumEvent
+                            - ThreadEvent
+                            - MessageEvent
+                            - GradeEvent
+                            - MediaEvent
+                            - NavigationEvent
+                            - ReadingEvent
+                            - ResourceManagementEvent
+                            - SearchEvent
+                            - SessionEvent
+                            - SurveyEvent
+                            - QuestionnaireEvent
+                            - SurveyInvitationEvent
+                            - ToolUseEvent
+                            - ViewEvent
+                            - OutcomeEvent
+                        minItems: 1
+                        description: List of event types to filter (if empty, all events are sent)
+                      actorId:
+                        type: string
+                        description: Filter events by specific actor ID
+                      objectType:
+                        type: string
+                        description: Filter events by object type
+                    description: Event filters
+                  active:
+                    type: boolean
+                    description: Whether the webhook is active
+                  headers:
+                    type: object
+                    additionalProperties:
+                      type: string
+                    description: Custom headers
+                  secret:
+                    type: string
+                    description: Webhook secret for signature verification
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: When the webhook was created
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: When the webhook was last updated
+                required:
+                  - id
+                  - sensorId
+                  - name
+                  - targetUrl
+                  - active
+                  - secret
+                  - createdAt
+                  - updatedAt
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    nullable: true
+                required:
+                  - error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+        "404":
+          description: Webhook not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - Webhook not found
+                required:
+                  - error
+    delete:
+      tags:
+        - Webhooks
+      summary: Delete a webhook
+      description: Delete an existing webhook
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            description: Webhook ID
+          required: true
+          description: Webhook ID
+          name: id
+          in: path
+      responses:
+        "204":
+          description: Webhook deleted successfully
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                required:
+                  - error
+        "404":
+          description: Webhook not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    enum:
+                      - Webhook not found
+                required:
+                  - error

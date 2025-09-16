@@ -1,0 +1,4 @@
+$ biome check
+
+thread 'biome::workspace_worker_2' has overflowed its stack
+fatal runtime error: stack overflow, aborting
