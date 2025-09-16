@@ -17,7 +17,14 @@ import {
 import { atom, useAtom } from "jotai";
 import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from "lucide-react";
 import type { HTMLAttributes, ReactNode } from "react";
-import { createContext, memo, useCallback, useContext } from "react";
+import {
+  cloneElement,
+  createContext,
+  isValidElement,
+  memo,
+  useCallback,
+  useContext,
+} from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -117,7 +124,17 @@ export const TableHeaderGroup = ({
   children,
 }: TableHeaderGroupProps) => (
   <TableRowRaw key={headerGroup.id}>
-    {headerGroup.headers.map((header) => children({ header }))}
+    {headerGroup.headers.map((header) => {
+      const renderedHeader = children({ header });
+
+      if (isValidElement(renderedHeader)) {
+        return renderedHeader.key == null
+          ? cloneElement(renderedHeader, { key: header.id })
+          : renderedHeader;
+      }
+
+      return renderedHeader;
+    })}
   </TableRowRaw>
 );
 
@@ -131,7 +148,17 @@ export const TableHeader = ({ className, children }: TableHeaderProps) => {
 
   return (
     <TableHeaderRaw className={className}>
-      {table?.getHeaderGroups().map((headerGroup) => children({ headerGroup }))}
+      {table?.getHeaderGroups().map((headerGroup) => {
+        const renderedGroup = children({ headerGroup });
+
+        if (isValidElement(renderedGroup)) {
+          return renderedGroup.key == null
+            ? cloneElement(renderedGroup, { key: headerGroup.id })
+            : renderedGroup;
+        }
+
+        return renderedGroup;
+      })}
     </TableHeaderRaw>
   );
 };
@@ -233,7 +260,17 @@ export const TableBody = ({ children, className }: TableBodyProps) => {
   return (
     <TableBodyRaw className={className}>
       {rows?.length ? (
-        rows.map((row) => children({ row }))
+        rows.map((row) => {
+          const renderedRow = children({ row });
+
+          if (isValidElement(renderedRow)) {
+            return renderedRow.key == null
+              ? cloneElement(renderedRow, { key: row.id })
+              : renderedRow;
+          }
+
+          return renderedRow;
+        })
       ) : (
         <TableRowRaw>
           <TableCellRaw className="h-24 text-center" colSpan={columns.length}>

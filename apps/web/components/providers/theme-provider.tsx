@@ -17,7 +17,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       enableSystem
     >
       {children}
-      <Toaster position="top-center" richColors closeButton />
+      <Toaster closeButton position="bottom-right" richColors />
     </NextThemesProvider>
   );
 }

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
 type BreadcrumbEntry = {
@@ -57,28 +58,31 @@ export function AppPageHeader({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)}>
-      {hasBreadcrumbs ? (
-        <Breadcrumb>
-          <BreadcrumbList>
-            {breadcrumbs?.map((crumb, index) => {
-              const isLast = index === breadcrumbs.length - 1;
-              return (
-                <BreadcrumbItem key={`${crumb.label}-${index}`}>
-                  {crumb.href && !isLast ? (
-                    <BreadcrumbLink href={crumb.href}>
-                      {crumb.label}
-                    </BreadcrumbLink>
-                  ) : (
-                    <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                  )}
-                  {isLast ? null : <BreadcrumbSeparator />}
-                </BreadcrumbItem>
-              );
-            })}
-          </BreadcrumbList>
-        </Breadcrumb>
-      ) : null}
+    <div className={cn("sticky top-0 z-10 flex flex-col gap-6 bg-background border-b border-border/40 -mx-4 -mt-4 px-4 pt-4 pb-4 mb-6 md:-mx-8 md:-mt-8 md:px-8 md:pt-8 md:pb-6 md:mb-8", className)}>
+      <div className="flex items-center gap-2">
+        <SidebarTrigger className="h-4 w-4" />
+        {hasBreadcrumbs ? (
+          <Breadcrumb>
+            <BreadcrumbList>
+              {breadcrumbs?.map((crumb, index) => {
+                const isLast = index === breadcrumbs.length - 1;
+                return (
+                  <BreadcrumbItem key={`${crumb.label}-${index}`}>
+                    {crumb.href && !isLast ? (
+                      <BreadcrumbLink href={crumb.href}>
+                        {crumb.label}
+                      </BreadcrumbLink>
+                    ) : (
+                      <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                    )}
+                    {isLast ? null : <BreadcrumbSeparator />}
+                  </BreadcrumbItem>
+                );
+              })}
+            </BreadcrumbList>
+          </Breadcrumb>
+        ) : null}
+      </div>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-2">

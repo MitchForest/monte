@@ -2,31 +2,41 @@
 
 import {
   CheckSquare,
+  ChevronDown,
   ClipboardCheck,
   GraduationCap,
   Home,
+  LogOut,
+  Moon,
   Settings,
+  Sun,
+  User,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { UserSettingsModal } from "@/components/app/user-settings-modal";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth/client";
 import { getAuthErrorMessage } from "@/lib/auth/errors";
@@ -60,6 +70,8 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
   const router = useRouter();
   const sessionAtom = authClient.useSession();
   const [isSigningOut, startSignOut] = useTransition();
+  const { theme, setTheme } = useTheme();
+  const [userSettingsOpen, setUserSettingsOpen] = useState(false);
 
   const activeUser = sessionAtom.data?.user ?? initialUser;
   const displayName = activeUser
@@ -83,19 +95,20 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
   };
 
   return (
-    <Sidebar collapsible="icon" variant="inset">
+    <Sidebar className="border-none" collapsible="icon" variant="sidebar">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-1.5">
-          <SidebarTrigger aria-label="Toggle sidebar" />
-          <span className="font-semibold tracking-tight">Monte</span>
+          <span 
+            className="text-3xl font-bold transition-all duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:scale-0" 
+            style={{ fontFamily: "'DynaPuff', system-ui" }}
+          >
+            Monte
+          </span>
         </div>
       </SidebarHeader>
 
-      <SidebarSeparator />
-
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {routes.map((route) => {
@@ -124,32 +137,60 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
       </SidebarContent>
 
       <SidebarFooter>
-        <div className="flex items-center gap-2 rounded-md px-2 py-1.5">
-          <Avatar>
-            <AvatarImage
-              alt={`${displayName}'s avatar`}
-              src={activeUser?.image ?? undefined}
-            />
-            <AvatarFallback>{initials}</AvatarFallback>
-          </Avatar>
-          <div className="flex min-w-0 flex-col">
-            <span className="truncate font-medium text-sm leading-5">
-              {displayName}
-            </span>
-            <span className="truncate text-muted-foreground text-xs">
-              {activeUser?.email ?? ""}
-            </span>
-          </div>
-        </div>
-        <Button
-          className="mt-2 w-full"
-          disabled={isSigningOut}
-          onClick={handleSignOut}
-          variant="secondary"
-        >
-          {isSigningOut ? "Signing out..." : "Sign out"}
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus:outline-none focus:ring-2 focus:ring-sidebar-ring"
+              type="button"
+            >
+              <Avatar className="h-8 w-8">
+                <AvatarImage
+                  alt={`${displayName}'s avatar`}
+                  src={activeUser?.image || `https://api.dicebear.com/7.x/micah/svg?seed=${activeUser?.email || 'default'}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=200`}
+                />
+                <AvatarFallback className="bg-background text-primary font-semibold">{initials}</AvatarFallback>
+              </Avatar>
+              <div className="flex min-w-0 flex-1 flex-col text-left">
+                <span className="truncate font-medium text-sm leading-5">
+                  {displayName}
+                </span>
+              </div>
+              <ChevronDown className="h-4 w-4" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuItem onClick={() => setUserSettingsOpen(true)}>
+              <User className="mr-2 h-4 w-4" />
+              <span>User Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <Sun className="mr-2 h-4 w-4" />
+              ) : (
+                <Moon className="mr-2 h-4 w-4" />
+              )}
+              <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="text-red-600 focus:text-red-600"
+              disabled={isSigningOut}
+              onClick={handleSignOut}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>{isSigningOut ? "Signing out..." : "Sign out"}</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarFooter>
+      
+      <UserSettingsModal 
+        onOpenChange={setUserSettingsOpen}
+        open={userSettingsOpen} 
+        user={activeUser}
+      />
     </Sidebar>
   );
 }
