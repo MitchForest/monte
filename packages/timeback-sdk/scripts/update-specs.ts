@@ -53,6 +53,10 @@ async function main() {
   if (exitCode !== 0) {
     throw new Error(`Generation failed with exit code ${exitCode}`);
   }
+
+  process.stdout.write(
+    "Updated shared TimeBack schemas in packages/shared/src/timeback/generated\n"
+  );
 }
 
 await main();

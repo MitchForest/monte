@@ -4,7 +4,7 @@ import type { HttpMethod, QueryRecord } from "../http";
 import {
   getEndpoint as getOneRosterEndpoint,
   schemas as oneRosterSchemas,
-} from "../generated/core.ts/OneRoster_v1_2___Rostering";
+} from "@monte/shared/timeback/generated/core.ts/OneRoster_v1_2___Rostering";
 import type {
   AuthRequestOptions,
   AcademicSession,

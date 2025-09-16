@@ -4,7 +4,7 @@ import type { HttpMethod } from "../http";
 import {
   getEndpoint as getUsersEndpoint,
   schemas as userSchemas,
-} from "../generated/core.ts/Users";
+} from "@monte/shared/timeback/generated/core.ts/Users";
 import type {
   AssociateOneRosterInput,
   AssociateOneRosterOptions,

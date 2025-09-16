@@ -1,5 +1,6 @@
 export { TimebackClient } from "./client";
 export type { ServiceOptions, TimebackClientOptions } from "./client";
+export { createMonteTimeback } from "./monte";
 export {
   CoreClient,
   CoreAuthClient,

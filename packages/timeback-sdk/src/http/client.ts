@@ -1,3 +1,4 @@
+import { toTimebackSuccess, type TimebackSuccess } from "@monte/shared/timeback";
 import { TimebackError } from "./errors";
 import type {
   FetchLike,
@@ -235,5 +236,13 @@ export class TimebackHttpClient {
       return options.schema.parse(parsed);
     }
     return parsed;
+  };
+
+  requestSuccess = async <TResponse = unknown, TBody = unknown>(
+    path: string,
+    options: RequestOptions<TBody, TResponse> = {}
+  ): Promise<TimebackSuccess<TResponse>> => {
+    const payload = await this.request<TResponse, TBody>(path, options);
+    return toTimebackSuccess(payload);
   };
 }

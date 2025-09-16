@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { TimebackHttpClient } from "../http";
 import type { HttpMethod } from "../http";
-import { getEndpoint as getAuditEndpoint } from "../generated/core.ts/Audit";
+import { getEndpoint as getAuditEndpoint } from "@monte/shared/timeback/generated/core.ts/Audit";
 import type {
   AuditStatsOptions,
   AuditStatsResponse,

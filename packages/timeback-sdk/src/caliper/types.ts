@@ -2,15 +2,15 @@ import { z } from "zod";
 import {
   schemas as caliperEventSchemas,
   getEndpoint as getCaliperEventEndpoint,
-} from "../generated/caliper.ts/Caliper_Events";
+} from "@monte/shared/timeback/generated/caliper.ts/Caliper_Events";
 import {
   getEndpoint as getAnalyticsEndpoint,
-} from "../generated/caliper.ts/Analytics";
+} from "@monte/shared/timeback/generated/caliper.ts/Analytics";
 import {
   schemas as webhookSchemas,
   getEndpoint as getWebhooksEndpoint,
-} from "../generated/caliper.ts/Webhooks";
-import { getEndpoint as getSystemEndpoint } from "../generated/caliper.ts/System";
+} from "@monte/shared/timeback/generated/caliper.ts/Webhooks";
+import { getEndpoint as getSystemEndpoint } from "@monte/shared/timeback/generated/caliper.ts/System";
 
 function requireEndpoint(
   get: (alias: string) => unknown,

@@ -1,20 +1,20 @@
 import { z } from "zod";
 import {
   getEndpoint as getAuthenticationEndpoint,
-} from "../generated/core.ts/Authentication";
+} from "@monte/shared/timeback/generated/core.ts/Authentication";
 import {
   getEndpoint as getOneRosterEndpoint,
   schemas as oneRosterSchemas,
-} from "../generated/core.ts/OneRoster_v1_2___Rostering";
+} from "@monte/shared/timeback/generated/core.ts/OneRoster_v1_2___Rostering";
 import {
   getEndpoint as getUsersEndpoint,
   schemas as userSchemas,
-} from "../generated/core.ts/Users";
+} from "@monte/shared/timeback/generated/core.ts/Users";
 import {
   getEndpoint as getSsoEndpoint,
   schemas as ssoSchemas,
-} from "../generated/core.ts/SSO";
-import { getEndpoint as getAuditEndpoint } from "../generated/core.ts/Audit";
+} from "@monte/shared/timeback/generated/core.ts/SSO";
+import { getEndpoint as getAuditEndpoint } from "@monte/shared/timeback/generated/core.ts/Audit";
 
 function requireEndpoint(
   get: (alias: string) => unknown,
@@ -270,6 +270,9 @@ export type Organization = ListOrganizationsResponse["orgs"][number];
 export type GetOrganizationResponse = z.infer<typeof getOrganizationEndpoint.response>;
 export type CreateOrganizationInput = z.input<typeof oneRosterSchemas.postImsOnerosterRosteringV1p2Orgs_Body>;
 export type UpdateOrganizationInput = z.input<typeof oneRosterSchemas.putImsOnerosterRosteringV1p2OrgsById_Body>;
+export type CreateOrganizationResponse = z.infer<typeof createOrganizationEndpoint.response>;
+export type UpdateOrganizationResponse = z.infer<typeof updateOrganizationEndpoint.response>;
+export type DeleteOrganizationResponse = z.infer<typeof deleteOrganizationEndpoint.response>;
 
 export type ListAcademicSessionsOptions = OneRosterListOptions;
 export type ListAcademicSessionsResponse = z.infer<typeof listAcademicSessionsEndpoint.response>;
@@ -277,6 +280,9 @@ export type AcademicSession = ListAcademicSessionsResponse["academicSessions"][n
 export type GetAcademicSessionResponse = z.infer<typeof getAcademicSessionEndpoint.response>;
 export type CreateAcademicSessionInput = z.input<typeof oneRosterSchemas.postImsOnerosterRosteringV1p2AcademicSessions_Body>;
 export type UpdateAcademicSessionInput = z.input<typeof oneRosterSchemas.putImsOnerosterRosteringV1p2AcademicSessionsById_Body>;
+export type CreateAcademicSessionResponse = z.infer<typeof createAcademicSessionEndpoint.response>;
+export type UpdateAcademicSessionResponse = z.infer<typeof updateAcademicSessionEndpoint.response>;
+export type DeleteAcademicSessionResponse = z.infer<typeof deleteAcademicSessionEndpoint.response>;
 
 export type ListCoursesOptions = OneRosterListOptions;
 export type ListCoursesResponse = z.infer<typeof listCoursesEndpoint.response>;
@@ -284,6 +290,9 @@ export type Course = ListCoursesResponse["courses"][number];
 export type GetCourseResponse = z.infer<typeof getCourseEndpoint.response>;
 export type CreateCourseInput = z.input<typeof oneRosterSchemas.postImsOnerosterRosteringV1p2Courses_Body>;
 export type UpdateCourseInput = z.input<typeof oneRosterSchemas.putImsOnerosterRosteringV1p2CoursesById_Body>;
+export type CreateCourseResponse = z.infer<typeof createCourseEndpoint.response>;
+export type UpdateCourseResponse = z.infer<typeof updateCourseEndpoint.response>;
+export type DeleteCourseResponse = z.infer<typeof deleteCourseEndpoint.response>;
 
 export type ListClassesOptions = OneRosterListOptions;
 export type ListClassesResponse = z.infer<typeof listClassesEndpoint.response>;
@@ -291,6 +300,9 @@ export type Class = ListClassesResponse["classes"][number];
 export type GetClassResponse = z.infer<typeof getClassEndpoint.response>;
 export type CreateClassInput = z.input<typeof oneRosterSchemas.postImsOnerosterRosteringV1p2Classes_Body>;
 export type UpdateClassInput = z.input<typeof oneRosterSchemas.putImsOnerosterRosteringV1p2ClassesById_Body>;
+export type CreateClassResponse = z.infer<typeof createClassEndpoint.response>;
+export type UpdateClassResponse = z.infer<typeof updateClassEndpoint.response>;
+export type DeleteClassResponse = z.infer<typeof deleteClassEndpoint.response>;
 
 export type ListEnrollmentsOptions = OneRosterListOptions;
 export type ListEnrollmentsResponse = z.infer<typeof listEnrollmentsEndpoint.response>;
@@ -298,6 +310,9 @@ export type Enrollment = ListEnrollmentsResponse["enrollments"][number];
 export type GetEnrollmentResponse = z.infer<typeof getEnrollmentEndpoint.response>;
 export type CreateEnrollmentInput = z.input<typeof oneRosterSchemas.postImsOnerosterRosteringV1p2Enrollments_Body>;
 export type UpdateEnrollmentInput = z.input<typeof oneRosterSchemas.putImsOnerosterRosteringV1p2EnrollmentsById_Body>;
+export type CreateEnrollmentResponse = z.infer<typeof createEnrollmentEndpoint.response>;
+export type UpdateEnrollmentResponse = z.infer<typeof updateEnrollmentEndpoint.response>;
+export type DeleteEnrollmentResponse = z.infer<typeof deleteEnrollmentEndpoint.response>;
 
 export type CoreHealthResponse = z.infer<
   typeof healthSchema

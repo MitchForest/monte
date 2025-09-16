@@ -1,9 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src",
     "composite": true,
     "noEmit": true
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "../shared/src/timeback/**/*.ts",
+    "../shared/src/api-types.ts",
+    "../shared/src/schemas.ts",
+    "../shared/src/timeback/envelope.ts",
+    "../shared/src/timeback/index.ts"
+  ]
 }

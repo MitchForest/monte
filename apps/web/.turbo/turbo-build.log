@@ -1,43 +1,37 @@
-$ bun --env-file=../../.env x next build --turbopack
-   ▲ Next.js 15.5.3 (Turbopack)
 
-   Creating an optimized production build ...
- ✓ Finished writing to disk in 62ms
- ✓ Compiled successfully in 5.5s
-   Skipping linting
-   Checking validity of types ...
- ⚠ TypeScript project references are not fully supported. Attempting to build in incremental mode.
-   Collecting page data ...
-   Generating static pages (0/13) ...
-   Generating static pages (3/13) 
-   Generating static pages (6/13) 
-   Generating static pages (9/13) 
- ✓ Generating static pages (13/13)
-   Finalizing page optimization ...
-   Collecting build traces ...
+[0m[2m[35m$[0m [2m[1mbun --env-file=../../.env x next build[0m
+   [1m[38;2;173;127;168m▲ Next.js 15.5.3[39m[22m
 
-Route (app)                         Size  First Load JS
-┌ ƒ /                            36.3 kB         171 kB
-├ ○ /_not-found                      0 B         135 kB
-├ ƒ /classrooms                  3.18 kB         212 kB
-├ ƒ /home                            0 B         188 kB
-├ ƒ /login                       9.11 kB         157 kB
-├ ƒ /observations                    0 B         188 kB
-├ ƒ /settings                        0 B         188 kB
-├ ƒ /signup                      9.19 kB         157 kB
-├ ƒ /students                    28.6 kB         238 kB
-└ ƒ /tasks                           0 B         188 kB
-+ First Load JS shared by all     151 kB
-  ├ chunks/38c30d7890fcfaec.js   17.2 kB
-  ├ chunks/743ef0792dd30de1.js   20.6 kB
-  ├ chunks/7880f8283a6f3daf.js   59.2 kB
-  ├ chunks/d75ce5fe326e24e9.js   15.9 kB
-  ├ chunks/5b0fdba0a3a22199.css  16.1 kB
-  └ other shared chunks (total)  22.2 kB
+ [37m[1m [22m[39m Creating an optimized production build ...
+ [32m[1m✓[22m[39m Compiled successfully in 2.5s
+ [37m[1m [22m[39m Skipping linting
+[?25l [37m[1m [22m[39m Checking validity of types  [36m.[39m ⚠ TypeScript project references are not fully supported. Attempting to build in incremental mode.
+[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m...[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m.[39m[2K[1G [37m[1m [22m[39m Checking validity of types  [36m..[39m[2K[1G[?25h [37m[1m [22m[39m Checking validity of types     [32m[1m✓[22m[39m Checking validity of types 
+[?25l [37m[1m [22m[39m Collecting page data  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting page data  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting page data  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting page data  [36m.[39m[2K[1G[?25h [37m[1m [22m[39m Collecting page data     [32m[1m✓[22m[39m Collecting page data 
+[?25l [37m[1m [22m[39m Generating static pages (0/13)  [36m[    ][39m[2K[1G [37m[1m [22m[39m Generating static pages (0/13)  [36m[=   ][39m[2K[1G [37m[1m [22m[39m Generating static pages (0/13)  [36m[==  ][39m[2K[1G[?25h [32m[1m✓[22m[39m Generating static pages (13/13)
+[?25l [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[?25l [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G[?25h [37m[1m [22m[39m Collecting build traces     [32m[1m✓[22m[39m Collecting build traces 
+[2K[1G[?25h [37m[1m [22m[39m Finalizing page optimization     [32m[1m✓[22m[39m Finalizing page optimization 
+
+[4mRoute (app)[24m                                 [4mSize[24m  [4mFirst Load JS[24m  [4m[24m  [4m[24m
+┌ ƒ /                                    12.4 kB         [37m[1m138 kB[22m[39m
+├ ○ /_not-found                            986 B         [37m[1m103 kB[22m[39m
+├ ƒ /classrooms                          1.99 kB         [37m[1m195 kB[22m[39m
+├ ƒ /home                                2.67 kB         [37m[1m117 kB[22m[39m
+├ ƒ /login                               2.89 kB         [37m[1m133 kB[22m[39m
+├ ƒ /observations                        2.67 kB         [37m[1m117 kB[22m[39m
+├ ƒ /settings                            2.67 kB         [37m[1m117 kB[22m[39m
+├ ƒ /signup                              2.98 kB         [37m[1m133 kB[22m[39m
+├ ƒ /students                            20.9 kB         [37m[1m214 kB[22m[39m
+└ ƒ /tasks                               2.67 kB         [37m[1m117 kB[22m[39m
++ First Load JS shared by all             [37m[1m102 kB[22m[39m
+  ├ chunks/18-cc9f92efa59c45f7.js        45.9 kB
+  ├ chunks/87c73c54-24122e7b92478d00.js  54.2 kB
+  └ other shared chunks (total)          1.93 kB
 
 
-ƒ Middleware                     39.3 kB
+ƒ Middleware                             [37m[1m34.3 kB[22m[39m
 
 ○  (Static)   prerendered as static content
 ƒ  (Dynamic)  server-rendered on demand
 
+[?25h

@@ -1,13 +1,13 @@
 {
-  "/(app)/classrooms/page": "/classrooms",
-  "/(app)/home/page": "/home",
-  "/(app)/observations/page": "/observations",
-  "/(app)/settings/page": "/settings",
-  "/(app)/students/page": "/students",
-  "/(app)/tasks/page": "/tasks",
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/(marketing)/page": "/",
   "/(auth)/login/page": "/login",
   "/(auth)/signup/page": "/signup",
-  "/(marketing)/page": "/",
-  "/_not-found/page": "/_not-found",
-  "/favicon.ico/route": "/favicon.ico"
+  "/(app)/classrooms/page": "/classrooms",
+  "/(app)/settings/page": "/settings",
+  "/(app)/observations/page": "/observations",
+  "/(app)/tasks/page": "/tasks",
+  "/(app)/students/page": "/students",
+  "/(app)/home/page": "/home"
 }

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { TimebackHttpClient } from "../http";
 import type { HttpMethod } from "../http";
-import { getEndpoint as getAuthenticationEndpoint } from "../generated/core.ts/Authentication";
+import { getEndpoint as getAuthenticationEndpoint } from "@monte/shared/timeback/generated/core.ts/Authentication";
 import type {
   AuthRequestOptions,
   CoreAuthInfoEnvelope,

@@ -4,7 +4,7 @@ import type { HttpMethod } from "../http";
 import {
   getEndpoint as getSsoEndpoint,
   schemas as ssoSchemas,
-} from "../generated/core.ts/SSO";
+} from "@monte/shared/timeback/generated/core.ts/SSO";
 import type {
   CheckSsoResponse,
   ListSsoSessionsResponse,
