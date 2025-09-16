@@ -1,5 +1,7 @@
 "use client";
 
+import type { ClassroomWithGuides, TeamMember } from "@monte/shared";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -21,89 +23,72 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { apiFetch } from "@/lib/api/client";
-import type {
-  ClassroomWithGuides,
-  TeamListResponse,
-  TeamMember,
-} from "@monte/shared";
-
-type Classroom = ClassroomWithGuides;
-type ClassroomResponse = {
-  classrooms: ClassroomWithGuides[];
-};
+import {
+  createClassroom,
+  listClassrooms,
+  listTeamMembers,
+} from "@/lib/api/endpoints";
 
 export default function ClassroomsPage() {
-  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
-  const [team, setTeam] = useState<TeamMember[]>([]);
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [name, setName] = useState("");
   const [selectedGuides, setSelectedGuides] = useState<string[]>([]);
 
-  useEffect(() => {
-    const loadTeam = async () => {
-      try {
-        const payload = await apiFetch<TeamListResponse>("/team");
-        setTeam(payload.members);
-      } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : "Unable to load team"
-        );
-      }
-    };
-
-    loadTeam();
-  }, []);
+  const teamQuery = useQuery({
+    queryKey: ["team"],
+    queryFn: ({ signal }: { signal?: AbortSignal }) =>
+      listTeamMembers({ signal }),
+  });
 
   useEffect(() => {
-    const loadClassrooms = async () => {
-      setIsLoading(true);
-      try {
-        const params = new URLSearchParams();
-        if (search.trim().length > 0) {
-          params.set("search", search.trim());
-        }
-        const payload = await apiFetch<ClassroomResponse>(
-          `/classrooms${params.size > 0 ? `?${params.toString()}` : ""}`
-        );
-        setClassrooms(payload.classrooms);
-      } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : "Unable to load classrooms"
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadClassrooms();
-  }, [search]);
-
-  const handleCreate = async () => {
-    if (name.trim().length === 0) {
-      toast.error("Classroom name is required");
-      return;
+    if (teamQuery.error instanceof Error) {
+      toast.error(teamQuery.error.message);
     }
-    try {
-      const created = await apiFetch<Classroom>("/classrooms", {
-        method: "POST",
-        body: JSON.stringify({
-          name: name.trim(),
-          guideIds: selectedGuides,
-        }),
-      });
+  }, [teamQuery.error]);
+
+  const classroomsQuery = useQuery({
+    queryKey: ["classrooms", { search }],
+    queryFn: ({ signal }: { signal?: AbortSignal }) =>
+      listClassrooms({ search }, { signal }),
+  });
+
+  useEffect(() => {
+    if (classroomsQuery.error instanceof Error) {
+      toast.error(classroomsQuery.error.message);
+    }
+  }, [classroomsQuery.error]);
+
+  const createMutation = useMutation({
+    mutationFn: createClassroom,
+    onSuccess: () => {
       toast.success("Classroom created");
       setName("");
       setSelectedGuides([]);
       setDialogOpen(false);
-      setClassrooms((prev) => [created, ...prev]);
-    } catch (error) {
+      queryClient.invalidateQueries({ queryKey: ["classrooms"] });
+    },
+    onError: (error: unknown) => {
       toast.error(
-        error instanceof Error ? error.message : "Unable to create classroom"
+        error instanceof Error ? error.message : "Unable to create classroom",
       );
+    },
+  });
+
+  const classrooms = (classroomsQuery.data ?? []) as ClassroomWithGuides[];
+  const isLoading = classroomsQuery.isLoading;
+  const isFetching = classroomsQuery.isFetching;
+
+  const handleCreate = () => {
+    if (name.trim().length === 0) {
+      toast.error("Classroom name is required");
+      return;
     }
+    createMutation.mutate({
+      name: name.trim(),
+      guideIds: selectedGuides,
+    });
   };
 
   return (
@@ -135,7 +120,9 @@ export default function ClassroomsPage() {
         <CardContent>
           {classrooms.length === 0 ? (
             <p className="text-muted-foreground text-sm">
-              {isLoading ? "Loading classrooms…" : "No classrooms yet."}
+              {isLoading || isFetching
+                ? "Loading classrooms…"
+                : "No classrooms yet."}
             </p>
           ) : (
             <ul className="divide-y divide-border/50 text-muted-foreground text-sm">
@@ -200,7 +187,7 @@ export default function ClassroomsPage() {
             <div className="space-y-2 text-sm">
               <span className="font-medium text-foreground">Guides</span>
               <div className="flex flex-wrap gap-2">
-                {team.map((member) => {
+                {(teamQuery.data ?? []).map((member: TeamMember) => {
                   const label = member.name ?? member.email;
                   const isChecked = selectedGuides.includes(member.id);
                   return (
@@ -217,7 +204,7 @@ export default function ClassroomsPage() {
                           setSelectedGuides((prev) =>
                             event.target.checked
                               ? [...prev, member.id]
-                              : prev.filter((id) => id !== member.id)
+                              : prev.filter((id) => id !== member.id),
                           );
                         }}
                         type="checkbox"
@@ -226,7 +213,7 @@ export default function ClassroomsPage() {
                     </label>
                   );
                 })}
-                {team.length === 0 && (
+                {(teamQuery.data?.length ?? 0) === 0 && (
                   <span className="text-muted-foreground">
                     Invite teammates to assign guides later.
                   </span>
@@ -238,7 +225,9 @@ export default function ClassroomsPage() {
             <Button onClick={() => setDialogOpen(false)} variant="outline">
               Cancel
             </Button>
-            <Button onClick={handleCreate}>Create classroom</Button>
+            <Button disabled={createMutation.isPending} onClick={handleCreate}>
+              {createMutation.isPending ? "Creating..." : "Create classroom"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

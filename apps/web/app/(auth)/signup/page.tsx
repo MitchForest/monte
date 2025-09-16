@@ -6,13 +6,9 @@ export const metadata: Metadata = {
   title: "Sign up",
 };
 
-type PageProps = {
-  searchParams?: Record<string, string | string[]>;
-};
+type PageSearchParams = Record<string, string | string[]>;
 
-function resolveRedirect(
-  searchParams?: Record<string, string | string[]>
-): string | undefined {
+function resolveRedirect(searchParams?: PageSearchParams): string | undefined {
   const raw = searchParams?.redirect;
   const redirect = Array.isArray(raw) ? raw.at(0) : raw;
   if (!redirect?.startsWith("/")) {
@@ -24,8 +20,13 @@ function resolveRedirect(
   return redirect;
 }
 
-export default function Page({ searchParams }: PageProps) {
-  const redirectTo = resolveRedirect(searchParams);
+type PageProps = {
+  searchParams: Promise<PageSearchParams>;
+};
+
+export default async function Page({ searchParams }: PageProps) {
+  const resolvedParams = await searchParams;
+  const redirectTo = resolveRedirect(resolvedParams);
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">

@@ -1,6 +1,47 @@
 {
-  "app": {},
-  "appUsingSizeAdjust": false,
+  "app": {
+    "[project]/apps/web/app/(app)/classrooms/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/(app)/home/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/(app)/observations/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/(app)/settings/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/(app)/students/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/(app)/tasks/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/(auth)/login/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/(auth)/signup/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/(marketing)/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ],
+    "[project]/apps/web/app/_not-found/page": [
+      "static/media/797e433ab948586e-s.p.dbea232f.woff2",
+      "static/media/fba5a26ea33df6a3-s.p.1bbdebe6.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
   "pages": {},
   "pagesUsingSizeAdjust": false
 }

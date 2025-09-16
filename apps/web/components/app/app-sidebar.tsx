@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +29,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth/client";
+import { getAuthErrorMessage } from "@/lib/auth/errors";
 import type { AuthenticatedSession } from "@/lib/auth/session";
 
 const routes = [
@@ -69,9 +71,14 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
 
   const handleSignOut = () => {
     startSignOut(async () => {
-      await authClient.signOut();
-      router.replace("/login");
-      router.refresh();
+      try {
+        await authClient.signOut();
+        router.replace("/login");
+        router.refresh();
+      } catch (err) {
+        const message = getAuthErrorMessage(err, "Unable to sign out.");
+        toast.error(message);
+      }
     });
   };
 

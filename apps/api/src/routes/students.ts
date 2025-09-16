@@ -1,7 +1,14 @@
+import { withDbContext } from "@monte/database";
+import {
+  StudentDetailResponseSchema,
+  StudentSchema,
+  StudentsListResponseSchema,
+} from "@monte/shared";
 import { Hono } from "hono";
 import { z } from "zod";
-import { withDbContext } from "@monte/database";
+
 import { getServerSession } from "../lib/auth/session";
+import { HTTP_STATUS } from "../lib/http/status";
 
 const router = new Hono();
 
@@ -21,7 +28,7 @@ const CreateStudentBody = z.object({
 router.get("/", async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
   }
 
   try {
@@ -32,7 +39,11 @@ router.get("/", async (c) => {
       async (trx) => {
         let queryBuilder = trx
           .selectFrom("students")
-          .leftJoin("classrooms", "classrooms.id", "students.primary_classroom_id")
+          .leftJoin(
+            "classrooms",
+            "classrooms.id",
+            "students.primary_classroom_id",
+          )
           .select([
             "students.id as id",
             "students.org_id as org_id",
@@ -51,14 +62,14 @@ router.get("/", async (c) => {
           queryBuilder = queryBuilder.where(
             "full_name",
             "ilike",
-            `%${query.search.trim()}%`
+            `%${query.search.trim()}%`,
           );
         }
         if (query.classroomId) {
           queryBuilder = queryBuilder.where(
             "primary_classroom_id",
             "=",
-            query.classroomId
+            query.classroomId,
           );
         }
 
@@ -76,18 +87,24 @@ router.get("/", async (c) => {
             ? { id: row.classroom_id, name: row.classroom_name ?? "" }
             : null,
         }));
-      }
+      },
     );
 
-    return c.json({ students });
+    const response = StudentsListResponseSchema.parse({
+      data: { students },
+    });
+    return c.json(response);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return c.json(
         { error: "Invalid query parameters", details: error.errors },
-        400
+        HTTP_STATUS.badRequest,
       );
     }
-    return c.json({ error: "Failed to fetch students" }, 500);
+    return c.json(
+      { error: "Failed to fetch students" },
+      HTTP_STATUS.internalServerError,
+    );
   }
 });
 
@@ -95,7 +112,7 @@ router.get("/", async (c) => {
 router.post("/", async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
   }
 
   try {
@@ -103,8 +120,8 @@ router.post("/", async (c) => {
 
     const student = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
-      async (trx) => {
-        return trx
+      (trx) =>
+        trx
           .insertInto("students")
           .values({
             id: crypto.randomUUID(),
@@ -113,22 +130,29 @@ router.post("/", async (c) => {
             dob: body.dob,
             primary_classroom_id: body.primary_classroom_id,
             avatar_url: body.avatar_url,
-            created_at: new Date().toISOString()
+            created_at: new Date().toISOString(),
           })
           .returningAll()
-          .executeTakeFirstOrThrow();
-      }
+          .executeTakeFirstOrThrow(),
     );
 
-    return c.json({ student }, 201);
+    const parsedStudent = StudentSchema.parse(student);
+    const response = StudentDetailResponseSchema.parse({
+      data: { student: parsedStudent },
+    });
+
+    return c.json(response, HTTP_STATUS.created);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return c.json(
         { error: "Invalid request body", details: error.errors },
-        400
+        HTTP_STATUS.badRequest,
       );
     }
-    return c.json({ error: "Failed to create student" }, 500);
+    return c.json(
+      { error: "Failed to create student" },
+      HTTP_STATUS.internalServerError,
+    );
   }
 });
 

@@ -1,18 +1,3 @@
-# Project Context
-Ultracite enforces strict type safety, accessibility standards, and consistent code quality for JavaScript/TypeScript projects using Biome's lightning-fast formatter and linter.
-
-## Key Principles
-- Zero configuration required
-- Subsecond performance
-- Maximum type safety
-- AI-friendly code generation
-
-## Before Writing Code
-1. Analyze existing patterns in the codebase
-2. Consider edge cases and error scenarios
-3. Follow the rules below strictly
-4. Validate accessibility requirements
-
 ## Rules
 
 ### Accessibility (a11y)
@@ -303,9 +288,11 @@ Ultracite enforces strict type safety, accessibility standards, and consistent c
 - Don't use disabled tests.
 
 ## Common Tasks
-- `bun ultracite init` - Initialize Ultracite in your project
-- `bun ultracite fix` - Format and fix code automatically
-- `bun ultracite check` - Check for issues without fixing
+- `bun lint` - Run Biome linter to check for issues
+- `bun format` - Format code with Biome
+- `bun typecheck` - Check TypeScript types
+- `biome check --write` - Fix all auto-fixable issues
+- `biome format --write .` - Format all files
 
 ## Example: Error Handling
 ```typescript

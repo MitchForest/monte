@@ -9,17 +9,17 @@ export type DbContext = {
 
 export function withDbContext<T>(
   ctx: DbContext,
-  fn: (db: Kysely<Database>) => Promise<T>
+  fn: (db: Kysely<Database>) => Promise<T>,
 ): Promise<T> {
   return baseDb.transaction().execute(async (trx) => {
     if (ctx.userId) {
       await sql`select set_config('app.user_id', ${ctx.userId}, true)`.execute(
-        trx
+        trx,
       );
     }
     if (ctx.orgId) {
       await sql`select set_config('app.org_id', ${ctx.orgId}, true)`.execute(
-        trx
+        trx,
       );
     }
     return fn(trx);

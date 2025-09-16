@@ -2,6 +2,7 @@
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 type ThemeProviderProps = {
   children: ReactNode;
@@ -16,6 +17,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       enableSystem
     >
       {children}
+      <Toaster position="top-center" richColors closeButton />
     </NextThemesProvider>
   );
 }

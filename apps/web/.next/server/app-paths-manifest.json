@@ -1,1 +1,13 @@
-{}
+{
+  "/(app)/classrooms/page": "app/(app)/classrooms/page.js",
+  "/(app)/home/page": "app/(app)/home/page.js",
+  "/(app)/observations/page": "app/(app)/observations/page.js",
+  "/(app)/settings/page": "app/(app)/settings/page.js",
+  "/(app)/students/page": "app/(app)/students/page.js",
+  "/(app)/tasks/page": "app/(app)/tasks/page.js",
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(auth)/signup/page": "app/(auth)/signup/page.js",
+  "/(marketing)/page": "app/(marketing)/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
+}

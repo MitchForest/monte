@@ -17,7 +17,7 @@ const Avatar = forwardRef<
   <AvatarRoot
     className={cn(
       "relative flex size-10 shrink-0 overflow-hidden rounded-full",
-      className
+      className,
     )}
     ref={ref}
     {...props}
@@ -44,7 +44,7 @@ const AvatarFallback = forwardRef<
   <AvatarFbk
     className={cn(
       "flex size-full items-center justify-center rounded-full bg-muted",
-      className
+      className,
     )}
     ref={ref}
     {...props}

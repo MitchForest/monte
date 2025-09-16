@@ -1,11 +1,18 @@
-import { Hono } from "hono";
-import { z } from "zod";
+import { withDbContext } from "@monte/database";
 import {
+  ClassroomCreatedResponseSchema,
   ClassroomsListResponseSchema,
   ClassroomWithGuidesSchema,
 } from "@monte/shared";
-import { withDbContext } from "@monte/database";
+import { Hono } from "hono";
+import { z } from "zod";
+
 import { getServerSession } from "../lib/auth/session";
+import { HTTP_STATUS } from "../lib/http/status";
+
+const ListClassroomsQuery = z.object({
+  search: z.string().optional(),
+});
 
 const CreateClassroomBody = z.object({
   name: z.string().min(1),
@@ -17,22 +24,33 @@ const router = new Hono();
 router.get("/", async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
   }
 
   try {
+    const query = ListClassroomsQuery.parse(c.req.query());
+
     const classrooms = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
       async (trx) => {
-        const base = await trx
+        let queryBuilder = trx
           .selectFrom("classrooms")
           .select(["id", "org_id", "name", "created_at"])
           .where("org_id", "=", session.session.orgId)
-          .orderBy("name", "asc")
-          .execute();
+          .orderBy("name", "asc");
+
+        if (query.search && query.search.trim().length > 0) {
+          queryBuilder = queryBuilder.where(
+            "name",
+            "ilike",
+            `%${query.search.trim()}%`,
+          );
+        }
+
+        const base = await queryBuilder.execute();
 
         if (base.length === 0) {
-          return [] as Array<z.infer<typeof ClassroomWithGuidesSchema>>;
+          return [] as z.infer<typeof ClassroomWithGuidesSchema>[];
         }
 
         const classroomIds = base.map((room) => room.id);
@@ -49,7 +67,10 @@ router.get("/", async (c) => {
           .where("classroom_guides.classroom_id", "in", classroomIds)
           .execute();
 
-        const guidesByClassroom = new Map<string, Array<{ id: string; name: string | null; email: string }>>();
+        const guidesByClassroom = new Map<
+          string,
+          { id: string; name: string | null; email: string }[]
+        >();
         for (const guide of guideRows) {
           if (!guidesByClassroom.has(guide.classroom_id)) {
             guidesByClassroom.set(guide.classroom_id, []);
@@ -65,23 +86,31 @@ router.get("/", async (c) => {
           ...room,
           guides: guidesByClassroom.get(room.id) ?? [],
         }));
-      }
+      },
     );
 
-    const response = ClassroomsListResponseSchema.parse({ classrooms });
+    const response = ClassroomsListResponseSchema.parse({
+      data: { classrooms },
+    });
     return c.json(response);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return c.json({ error: "Invalid data", details: error.errors }, 400);
+      return c.json(
+        { error: "Invalid data", details: error.errors },
+        HTTP_STATUS.badRequest,
+      );
     }
-    return c.json({ error: "Failed to load classrooms" }, 500);
+    return c.json(
+      { error: "Failed to load classrooms" },
+      HTTP_STATUS.internalServerError,
+    );
   }
 });
 
 router.post("/", async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
   }
 
   try {
@@ -108,38 +137,45 @@ router.post("/", async (c) => {
                 id: crypto.randomUUID(),
                 classroom_id: created.id,
                 user_id: guideId,
-              }))
+              })),
             )
             .onConflict((oc) =>
-              oc
-                .column("classroom_id")
-                .column("user_id")
-                .doNothing()
+              oc.column("classroom_id").column("user_id").doNothing(),
             )
             .execute();
         }
 
-        const guides = body.guideIds && body.guideIds.length > 0
-          ? await trx
-              .selectFrom("users")
-              .select(["id", "name", "email"])
-              .where("id", "in", body.guideIds)
-              .execute()
-          : [];
+        const guides =
+          body.guideIds && body.guideIds.length > 0
+            ? await trx
+                .selectFrom("users")
+                .select(["id", "name", "email"])
+                .where("id", "in", body.guideIds)
+                .execute()
+            : [];
 
         return ClassroomWithGuidesSchema.parse({
           ...created,
           guides,
         });
-      }
+      },
     );
 
-    return c.json(classroom, 201);
+    const response = ClassroomCreatedResponseSchema.parse({
+      data: { classroom },
+    });
+    return c.json(response, HTTP_STATUS.created);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return c.json({ error: "Invalid request", details: error.errors }, 400);
+      return c.json(
+        { error: "Invalid request", details: error.errors },
+        HTTP_STATUS.badRequest,
+      );
     }
-    return c.json({ error: "Failed to create classroom" }, 500);
+    return c.json(
+      { error: "Failed to create classroom" },
+      HTTP_STATUS.internalServerError,
+    );
   }
 });
 

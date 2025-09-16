@@ -1,39 +1,39 @@
-$ next build --turbopack
+$ bun --env-file=../../.env x next build --turbopack
    ▲ Next.js 15.5.3 (Turbopack)
 
    Creating an optimized production build ...
- ✓ Finished writing to disk in 45ms
- ✓ Compiled successfully in 4.5s
+ ✓ Finished writing to disk in 62ms
+ ✓ Compiled successfully in 5.5s
    Skipping linting
    Checking validity of types ...
+ ⚠ TypeScript project references are not fully supported. Attempting to build in incremental mode.
    Collecting page data ...
-[2m2025-09-16T00:04:37.744Z[0m [31mERROR[0m [1m[Better Auth]:[0m You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.
    Generating static pages (0/13) ...
    Generating static pages (3/13) 
    Generating static pages (6/13) 
    Generating static pages (9/13) 
-[2m2025-09-16T00:04:38.567Z[0m [31mERROR[0m [1m[Better Auth]:[0m You are using the default secret. Please set `BETTER_AUTH_SECRET` in your environment variables or pass `secret` in your auth config.
  ✓ Generating static pages (13/13)
    Finalizing page optimization ...
    Collecting build traces ...
 
 Route (app)                         Size  First Load JS
-┌ ƒ /                            36.4 kB         152 kB
-├ ○ /_not-found                      0 B         116 kB
-├ ○ /classrooms                  8.09 kB         177 kB
-├ ○ /home                            0 B         170 kB
-├ ƒ /login                       8.97 kB         137 kB
-├ ○ /observations                    0 B         170 kB
-├ ○ /settings                        0 B         170 kB
-├ ƒ /signup                      9.05 kB         138 kB
-├ ○ /students                    33.7 kB         202 kB
-└ ○ /tasks                           0 B         170 kB
-+ First Load JS shared by all     132 kB
+┌ ƒ /                            36.3 kB         171 kB
+├ ○ /_not-found                      0 B         135 kB
+├ ƒ /classrooms                  3.18 kB         212 kB
+├ ƒ /home                            0 B         188 kB
+├ ƒ /login                       9.11 kB         157 kB
+├ ƒ /observations                    0 B         188 kB
+├ ƒ /settings                        0 B         188 kB
+├ ƒ /signup                      9.19 kB         157 kB
+├ ƒ /students                    28.6 kB         238 kB
+└ ƒ /tasks                           0 B         188 kB
++ First Load JS shared by all     151 kB
   ├ chunks/38c30d7890fcfaec.js   17.2 kB
-  ├ chunks/569f8ca39997ccda.js   21.7 kB
+  ├ chunks/743ef0792dd30de1.js   20.6 kB
   ├ chunks/7880f8283a6f3daf.js   59.2 kB
-  ├ chunks/9d74d3dfd885c8b3.css  16.1 kB
-  └ other shared chunks (total)  17.8 kB
+  ├ chunks/d75ce5fe326e24e9.js   15.9 kB
+  ├ chunks/5b0fdba0a3a22199.css  16.1 kB
+  └ other shared chunks (total)  22.2 kB
 
 
 ƒ Middleware                     39.3 kB

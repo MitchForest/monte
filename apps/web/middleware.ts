@@ -13,7 +13,7 @@ async function getSession(request: NextRequest): Promise<boolean> {
           cookie: request.headers.get("cookie") ?? "",
         },
         cache: "no-store",
-      }
+      },
     );
     if (!response.ok) {
       return false;

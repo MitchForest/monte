@@ -2,16 +2,21 @@
 
 import { createAuthClient } from "better-auth/react";
 
-// Use the full URL during build/SSR, relative URL on client
+// Use the full URL in every environment so better-auth has an absolute base
 const getBaseURL = () => {
-  if (typeof window === "undefined") {
-    // Server-side / build time
-    return process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  if (typeof window !== "undefined") {
+    return window.location.origin;
   }
-  // Client-side - use relative URL
-  return "";
+  return (
+    process.env.BETTER_AUTH_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    "http://localhost:3000"
+  );
 };
 
 export const authClient = createAuthClient({
-  baseURL: getBaseURL() + "/api/auth",
+  baseURL: `${getBaseURL()}/api/auth`,
+  fetchOptions: {
+    throw: true,
+  },
 });

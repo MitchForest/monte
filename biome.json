@@ -7,14 +7,16 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": [
-      "**",
-      "!node_modules",
-      "!.next",
-      "!dist",
-      "!build",
-      "!components/ui",
-      "!hooks/use-mobile.ts"
+    "maxSize": 5242880,
+    "experimentalScannerIgnores": [
+      "node_modules",
+      ".next",
+      "dist",
+      "build",
+      ".turbo",
+      "apps/web/components/ui",
+      "apps/web/hooks/use-mobile.ts",
+      "packages/timeback-sdk"
     ]
   },
   "formatter": {
@@ -28,19 +30,14 @@
       "recommended": true,
       "suspicious": {
         "noUnknownAtRules": "off"
+      },
+      "performance": {
+        "noBarrelFile": "off"
       }
     },
     "domains": {
       "next": "recommended",
       "react": "recommended"
     }
-  },
-  "assist": {
-    "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
-    }
-  },
-  "extends": ["ultracite"]
+  }
 }

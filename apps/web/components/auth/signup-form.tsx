@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState, useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,18 +15,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth/client";
+import { getAuthErrorMessage } from "@/lib/auth/errors";
 import { cn } from "@/lib/utils";
 
 type SignupFormProps = {
   redirectTo?: string;
   className?: string;
-};
-
-type SignUpError = {
-  body?: {
-    message?: string;
-  };
-  message: string;
 };
 
 const MIN_PASSWORD_LENGTH = 8;
@@ -75,10 +70,9 @@ export function SignupForm({
         router.replace(destination);
         router.refresh();
       } catch (err) {
-        const authError = err as SignUpError;
-        const message =
-          authError.body?.message ?? authError.message ?? "Unable to sign up.";
+        const message = getAuthErrorMessage(err, "Unable to sign up.");
         setError(message);
+        toast.error(message);
       }
     });
   };

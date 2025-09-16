@@ -6,16 +6,17 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
+    "dev": "bun --env-file=.env turbo dev",
+    "build": "bun --env-file=.env turbo build",
+    "lint": "bun --env-file=.env turbo lint",
+    "typecheck": "bun --env-file=.env turbo typecheck",
     "format": "biome format --write .",
-    "db:migrate": "bun --filter @monte/database db:migrate",
-    "db:codegen": "bun --filter @monte/database db:codegen"
+    "db:migrate": "bun --env-file=.env --filter @monte/database db:migrate",
+    "db:codegen": "bun --env-file=.env --filter @monte/database db:codegen"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
+    "openapi-zod-client": "^1.18.3",
     "turbo": "^2.3.3",
     "typescript": "^5"
   },

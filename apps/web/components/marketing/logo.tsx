@@ -12,7 +12,7 @@ export function MarketingLogo({ className }: MarketingLogoProps) {
       aria-label="Return to Monte home"
       className={cn(
         "group inline-flex items-center gap-2 rounded-full px-3 py-1 font-semibold text-sm",
-        className
+        className,
       )}
       href="/"
     >

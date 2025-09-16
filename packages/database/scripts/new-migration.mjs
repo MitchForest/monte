@@ -23,7 +23,7 @@ try {
   process.stdout.write(`Created ${path.relative(process.cwd(), filePath)}\n`);
 } catch (error) {
   process.stdout.write(
-    `Failed to create migration: ${String(error?.message ?? error)}\n`
+    `Failed to create migration: ${String(error?.message ?? error)}\n`,
   );
   process.exit(1);
 }

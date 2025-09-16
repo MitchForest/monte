@@ -1,8 +1,15 @@
+import { withDbContext } from "@monte/database";
+import {
+  HabitDetailResponseSchema,
+  HabitScheduleSchema,
+  HabitSchema,
+  HabitsListResponseSchema,
+} from "@monte/shared";
 import { Hono } from "hono";
 import { z } from "zod";
-import { HabitsListResponseSchema, HabitSchema, HabitScheduleSchema } from "@monte/shared";
-import { withDbContext } from "@monte/database";
+
 import { getServerSession } from "../lib/auth/session";
+import { HTTP_STATUS } from "../lib/http/status";
 
 const CreateHabitBody = z.object({
   studentId: z.string().uuid(),
@@ -15,13 +22,13 @@ const router = new Hono();
 router.get("/", async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
   }
 
   try {
     const habits = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
-      async (trx) =>
+      (trx) =>
         trx
           .selectFrom("habits")
           .select([
@@ -35,20 +42,25 @@ router.get("/", async (c) => {
           ])
           .where("org_id", "=", session.session.orgId)
           .orderBy("created_at", "desc")
-          .execute()
+          .execute(),
     );
 
-    const response = HabitsListResponseSchema.parse({ habits });
+    const response = HabitsListResponseSchema.parse({
+      data: { habits },
+    });
     return c.json(response);
-  } catch (error) {
-    return c.json({ error: "Failed to load habits" }, 500);
+  } catch (_error) {
+    return c.json(
+      { error: "Failed to load habits" },
+      HTTP_STATUS.internalServerError,
+    );
   }
 });
 
 router.post("/", async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
   }
 
   try {
@@ -56,7 +68,7 @@ router.post("/", async (c) => {
 
     const habit = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
-      async (trx) =>
+      (trx) =>
         trx
           .insertInto("habits")
           .values({
@@ -77,15 +89,26 @@ router.post("/", async (c) => {
             "active",
             "created_at",
           ])
-          .executeTakeFirstOrThrow()
+          .executeTakeFirstOrThrow(),
     );
 
-    return c.json(HabitSchema.parse(habit), 201);
+    const parsedHabit = HabitSchema.parse(habit);
+    const response = HabitDetailResponseSchema.parse({
+      data: { habit: parsedHabit },
+    });
+
+    return c.json(response, HTTP_STATUS.created);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return c.json({ error: "Invalid request", details: error.errors }, 400);
+      return c.json(
+        { error: "Invalid request", details: error.errors },
+        HTTP_STATUS.badRequest,
+      );
     }
-    return c.json({ error: "Failed to create habit" }, 500);
+    return c.json(
+      { error: "Failed to create habit" },
+      HTTP_STATUS.internalServerError,
+    );
   }
 });
 

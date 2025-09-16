@@ -3,7 +3,7 @@
   "config": {
     "env": {
       "BETTER_AUTH_URL": "http://localhost:3000",
-      "BETTER_AUTH_SECRET": ""
+      "BETTER_AUTH_SECRET": "5nI3tJtLtb0qPd1hn0q53CTmiLpRSK5Q"
     },
     "webpack": null,
     "eslint": {
@@ -291,6 +291,11 @@
     "configFileName": "next.config.ts",
     "turbopack": {
       "root": "/Users/mitchellwhite/Code/monte"
+    },
+    "_originalRewrites": {
+      "beforeFiles": [],
+      "afterFiles": [],
+      "fallback": []
     }
   },
   "appDir": "/Users/mitchellwhite/Code/monte/apps/web",

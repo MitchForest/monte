@@ -1,0 +1,21 @@
+{
+  "name": "@monte/timeback-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "bun x tsc --noEmit",
+    "lint": "echo 'Skipping lint for generated SDK'",
+    "generate": "mkdir -p src/generated && rm -rf src/generated/core.ts src/generated/caliper.ts && bun x openapi-zod-client ./specs/CoreAPI.yaml -o src/generated/core.ts --template ./templates/zodios-with-endpoints.hbs --group-strategy tag-file --strict-objects --with-docs --export-schemas --export-types && bun x openapi-zod-client ./specs/CaliperAPI.yaml -o src/generated/caliper.ts --template ./templates/zodios-with-endpoints.hbs --group-strategy tag-file --strict-objects --with-docs --export-schemas --export-types",
+    "update": "bun scripts/update-specs.ts"
+  },
+  "dependencies": {
+    "@zodios/core": "^10.9.6",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "yaml": "^2.5.1",
+    "typescript": "^5"
+  }
+}

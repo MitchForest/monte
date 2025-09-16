@@ -1,14 +1,16 @@
-import { Hono } from "hono";
-import { TeamListResponseSchema } from "@monte/shared";
 import { withDbContext } from "@monte/database";
+import { TeamListResponseSchema } from "@monte/shared";
+import { Hono } from "hono";
+
 import { getServerSession } from "../lib/auth/session";
+import { HTTP_STATUS } from "../lib/http/status";
 
 const router = new Hono();
 
 router.get("/", async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, 401);
+    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
   }
 
   try {
@@ -26,13 +28,18 @@ router.get("/", async (c) => {
           ])
           .where("org_memberships.org_id", "=", session.session.orgId)
           .orderBy("users.name", "asc")
-          .execute()
+          .execute(),
     );
 
-    const response = TeamListResponseSchema.parse({ members });
+    const response = TeamListResponseSchema.parse({
+      data: { members },
+    });
     return c.json(response);
   } catch {
-    return c.json({ error: "Failed to load team" }, 500);
+    return c.json(
+      { error: "Failed to load team" },
+      HTTP_STATUS.internalServerError,
+    );
   }
 });
 

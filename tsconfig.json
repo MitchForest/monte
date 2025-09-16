@@ -21,7 +21,9 @@
       "@monte/shared": ["./packages/shared/src/index.ts"],
       "@monte/shared/*": ["./packages/shared/src/*"],
       "@monte/api": ["./apps/api/src/index.ts"],
-      "@monte/api/*": ["./apps/api/src/*"]
+      "@monte/api/*": ["./apps/api/src/*"],
+      "@monte/timeback-sdk": ["./packages/timeback-sdk/src/index.ts"],
+      "@monte/timeback-sdk/*": ["./packages/timeback-sdk/src/*"]
     }
   }
 }

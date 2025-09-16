@@ -1,11 +1,4 @@
 import { z } from "zod";
-import type {
-  Role,
-  ActionStatus,
-  ActionType,
-  HabitSchedule,
-} from "./types";
-
 // Core enum schemas
 export const RoleSchema = z.enum(["super_admin", "admin", "guide"]);
 export const ActionStatusSchema = z.enum([
@@ -122,7 +115,7 @@ export const HabitCheckinSchema = z.object({
 export const AuthSessionSchema = z.object({
   id: z.string(),
   user_id: z.string(),
-  org_id: z.string(),
+  org_id: z.string().nullable(),
   token: z.string(),
   expires_at: z.string(),
   created_at: z.string(),

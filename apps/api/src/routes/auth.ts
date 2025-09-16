@@ -4,8 +4,6 @@ import { auth } from "../lib/auth";
 const router = new Hono();
 
 // Handle all auth routes through better-auth
-router.all("/*", async (c) => {
-  return auth.handler(c.req.raw);
-});
+router.all("/*", (c) => auth.handler(c.req.raw));
 
 export { router as authHandler };

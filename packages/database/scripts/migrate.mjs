@@ -1,8 +1,28 @@
-import "dotenv/config";
+import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { config as loadDotEnv } from "dotenv";
 import { Client } from "pg";
+
+function resolveEnvFile(startDir) {
+  let current = startDir;
+  for (;;) {
+    const candidate = path.join(current, ".env");
+    if (existsSync(candidate)) {
+      return candidate;
+    }
+    const parent = path.dirname(current);
+    if (parent === current) {
+      return null;
+    }
+    current = parent;
+  }
+}
+
+const envFile =
+  process.env.DOTENV_CONFIG_PATH ?? resolveEnvFile(process.cwd()) ?? undefined;
+loadDotEnv(envFile ? { path: envFile } : {});
 
 const DATABASE_URL = process.env.DATABASE_URL ?? "";
 if (!DATABASE_URL) {
@@ -21,13 +41,13 @@ function byNameAsc(a, b) {
 
 async function ensureMigrationsTable() {
   await client.query(
-    "create table if not exists app_migrations (id serial primary key, name text unique not null, run_at timestamptz not null default now())"
+    "create table if not exists app_migrations (id serial primary key, name text unique not null, run_at timestamptz not null default now())",
   );
 }
 
 async function appliedMigrations() {
   const res = await client.query(
-    "select name from app_migrations order by name asc"
+    "select name from app_migrations order by name asc",
   );
   return new Set(res.rows.map((r) => r.name));
 }
@@ -58,7 +78,7 @@ async function run() {
       process.stdout.write(`Applied ${file}\n`);
     } catch (error) {
       process.stderr.write(
-        `Failed ${file}: ${String(error?.message ?? error)}\n`
+        `Failed ${file}: ${String(error?.message ?? error)}\n`,
       );
       await client.end();
       process.exit(1);
@@ -67,7 +87,7 @@ async function run() {
 
   await client.end();
   process.stdout.write(
-    pending.length ? "Migrations complete.\n" : "No pending migrations.\n"
+    pending.length ? "Migrations complete.\n" : "No pending migrations.\n",
   );
 }
 

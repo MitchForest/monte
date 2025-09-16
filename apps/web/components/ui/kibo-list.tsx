@@ -55,7 +55,7 @@ export const ListHeader = (props: ListHeaderProps) =>
     <div
       className={cn(
         "flex shrink-0 items-center gap-2 bg-foreground/5 p-3",
-        props.className
+        props.className,
       )}
     >
       <div
@@ -80,7 +80,7 @@ export const ListGroup = ({ id, children, className }: ListGroupProps) => {
       className={cn(
         "bg-secondary transition-colors",
         isOver && "bg-foreground/10",
-        className
+        className,
       )}
       ref={setNodeRef}
     >
@@ -115,7 +115,7 @@ export const ListItem = ({
       className={cn(
         "flex cursor-grab items-center gap-2 rounded-md border bg-background p-2 shadow-sm",
         isDragging && "cursor-grabbing",
-        className
+        className,
       )}
       style={{
         transform: transform

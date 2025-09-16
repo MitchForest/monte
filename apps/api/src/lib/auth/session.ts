@@ -1,3 +1,4 @@
+import { db } from "@monte/database";
 import { auth } from "./index";
 
 type SessionPayload = Awaited<ReturnType<typeof auth.api.getSession>>;
@@ -8,7 +9,7 @@ export type AuthenticatedSession = NonNullableSession & {
 };
 
 export async function getServerSession(
-  request: Request
+  request: Request,
 ): Promise<AuthenticatedSession | null> {
   try {
     const result = await auth.api.getSession({
@@ -20,7 +21,38 @@ export async function getServerSession(
       return null;
     }
 
-    return result as AuthenticatedSession;
+    const sessionDetails = result.session as NonNullableSession["session"] & {
+      orgId?: string | null;
+    };
+
+    if (!sessionDetails.orgId) {
+      const membership = await db
+        .selectFrom("org_memberships")
+        .select("org_id")
+        .where("user_id", "=", sessionDetails.userId)
+        .orderBy("created_at", "asc")
+        .executeTakeFirst();
+
+      if (!membership?.org_id) {
+        return null;
+      }
+
+      await db
+        .updateTable("auth_sessions")
+        .set({ org_id: membership.org_id })
+        .where("token", "=", sessionDetails.token)
+        .execute();
+
+      return {
+        ...result,
+        session: { ...sessionDetails, orgId: membership.org_id },
+      } as AuthenticatedSession;
+    }
+
+    return {
+      ...result,
+      session: { ...sessionDetails, orgId: sessionDetails.orgId },
+    } as AuthenticatedSession;
   } catch {
     return null;
   }

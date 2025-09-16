@@ -8,7 +8,9 @@ if (!supabaseUrl) {
   throw new Error("SUPABASE_URL is not set");
 }
 if (!serviceRoleKey) {
-  throw new Error("SUPABASE_SERVICE_ROLE or SUPABASE_SERVICE_ROLE_KEY must be set");
+  throw new Error(
+    "SUPABASE_SERVICE_ROLE or SUPABASE_SERVICE_ROLE_KEY must be set",
+  );
 }
 
 export const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {

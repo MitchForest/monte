@@ -8,14 +8,12 @@ function resolveBaseURL(): string {
     process.env.BETTER_AUTH_URL ??
     process.env.NEXT_PUBLIC_APP_URL ??
     process.env.APP_URL;
-  
+
   if (process.env.NODE_ENV !== "production") {
     const resolved = explicit || "http://localhost:3000";
-    process.stdout.write(
-      `auth base URL resolved to ${resolved}\n`
-    );
+    process.stdout.write(`auth base URL resolved to ${resolved}\n`);
   }
-  
+
   if (explicit) {
     return explicit;
   }
@@ -70,6 +68,14 @@ const initializedAuth =
         updatedAt: "updated_at",
         ipAddress: "ip_address",
         userAgent: "user_agent",
+      },
+      additionalFields: {
+        orgId: {
+          fieldName: "org_id",
+          input: false,
+          required: false,
+          type: "string",
+        },
       },
     },
     account: {

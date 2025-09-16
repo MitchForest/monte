@@ -5,7 +5,8 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "bun x tsc --noEmit",
+    "lint": "bun x biome check"
   },
   "dependencies": {
     "clsx": "^2.1.1",

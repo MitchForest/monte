@@ -2,7 +2,6 @@
 
 import type { PropsWithChildren } from "react";
 import { AppSidebar } from "@/components/app/app-sidebar";
-import { Toaster } from "@/components/ui/sonner";
 import {
   SidebarInset,
   SidebarProvider,
@@ -28,7 +27,6 @@ export function AppShell({ session, children }: AppShellProps) {
           </div>
         </div>
       </SidebarInset>
-      <Toaster position="top-center" richColors closeButton />
     </SidebarProvider>
   );
 }

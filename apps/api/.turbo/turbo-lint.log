@@ -1,4 +1,2 @@
-$ biome check
-
-thread 'biome::workspace_worker_0' has overflowed its stack
-fatal runtime error: stack overflow, aborting
+$ bun x biome check
+Checked 14 files in 45ms. No fixes applied.

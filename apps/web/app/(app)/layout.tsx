@@ -1,23 +1,14 @@
+import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
-import { AppSidebar } from "@/components/app/app-sidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarRail,
-} from "@/components/ui/sidebar";
 
-export default function AppLayout({ children }: { children: ReactNode }) {
-  return (
-    <SidebarProvider defaultOpen>
-      <AppSidebar initialUser={null} />
-      <SidebarRail />
-      <SidebarInset>
-        <div className="mx-2 my-2 flex-1 md:my-4 md:mr-4">
-          <div className="rounded-xl bg-card text-card-foreground shadow-sm">
-            <div className="p-4 md:p-6">{children}</div>
-          </div>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+import { AppShell } from "@/components/app/app-shell";
+import { getServerSession } from "@/lib/auth/session";
+
+export default async function AppLayout({ children }: { children: ReactNode }) {
+  const session = await getServerSession();
+  if (!session) {
+    redirect("/login");
+  }
+
+  return <AppShell session={session}>{children}</AppShell>;
 }

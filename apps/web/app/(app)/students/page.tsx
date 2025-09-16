@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import type { ClassroomWithGuides, Habit, HabitSchedule } from "@monte/shared";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-
 import { AppPageHeader } from "@/components/app/page-header";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  createHabit,
+  createStudent,
+  listClassrooms,
+  listHabits,
+  listStudents,
+} from "@/lib/api/endpoints";
 import type { ColumnDef } from "../../../components/ui/kibo-table";
 import {
   TableBody,
@@ -32,13 +40,6 @@ import {
   TableProvider,
   TableRow,
 } from "../../../components/ui/kibo-table";
-import { apiFetch } from "@/lib/api/client";
-import type {
-  ClassroomWithGuides,
-  HabitSchedule,
-  Habit,
-  StudentsTable,
-} from "@monte/shared";
 
 type Classroom = ClassroomWithGuides;
 type Student = {
@@ -52,18 +53,10 @@ type Student = {
   classroom: { id: string; name: string } | null;
 };
 
-type StudentResponse = { students: Student[] };
-type ClassroomResponse = { classrooms: Classroom[] };
-type HabitResponse = { habits: Habit[] };
-
 export default function StudentsPage() {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [habits, setHabits] = useState<Habit[]>([]);
-  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [selectedClassroom, setSelectedClassroom] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isHabitLoading, setIsHabitLoading] = useState(false);
   const [isStudentDialogOpen, setStudentDialogOpen] = useState(false);
   const [isHabitDialogOpen, setHabitDialogOpen] = useState(false);
 
@@ -75,95 +68,102 @@ export default function StudentsPage() {
   const [habitName, setHabitName] = useState("");
   const [habitSchedule, setHabitSchedule] = useState<HabitSchedule>("daily");
 
-  const refreshStudents = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (search.trim().length > 0) {
-        params.set("search", search.trim());
-      }
-      if (selectedClassroom) {
-        params.set("classroomId", selectedClassroom);
-      }
-      const query = params.toString();
-      const payload = await apiFetch<StudentResponse>(
-        `/students${query ? `?${query}` : ""}`
-      );
-      setStudents(payload.students);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Unable to load students"
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, [search, selectedClassroom]);
+  const classroomsQuery = useQuery({
+    queryKey: ["classrooms", { scope: "students" }],
+    queryFn: ({ signal }: { signal?: AbortSignal }) =>
+      listClassrooms({}, { signal }),
+  });
 
-  const refreshClassrooms = useCallback(async () => {
-    try {
-      const payload = await apiFetch<ClassroomResponse>("/classrooms");
-      setClassrooms(payload.classrooms);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Unable to load classrooms"
-      );
-    }
-  }, []);
+  const studentsQuery = useQuery({
+    queryKey: ["students", { search, classroom: selectedClassroom }],
+    queryFn: ({ signal }: { signal?: AbortSignal }) =>
+      listStudents(
+        {
+          search,
+          classroomId: selectedClassroom ? selectedClassroom : undefined,
+        },
+        { signal },
+      ),
+  });
 
-  const refreshHabits = useCallback(async () => {
-    setIsHabitLoading(true);
-    try {
-      const payload = await apiFetch<HabitResponse>("/habits");
-      setHabits(payload.habits);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Unable to load habits"
-      );
-    } finally {
-      setIsHabitLoading(false);
-    }
-  }, []);
+  const habitsQuery = useQuery({
+    queryKey: ["habits"],
+    queryFn: ({ signal }: { signal?: AbortSignal }) => listHabits({ signal }),
+  });
 
   useEffect(() => {
-    refreshClassrooms();
-  }, [refreshClassrooms]);
-
-  useEffect(() => {
-    refreshStudents();
-  }, [refreshStudents]);
-
-  useEffect(() => {
-    refreshHabits();
-  }, [refreshHabits]);
-
-  const handleCreateStudent = async () => {
-    if (newStudentName.trim().length === 0) {
-      toast.error("Name is required");
-      return;
+    if (classroomsQuery.error instanceof Error) {
+      toast.error(classroomsQuery.error.message);
     }
-    try {
-      await apiFetch<{ student: StudentsTable }>("/students", {
-        method: "POST",
-        body: JSON.stringify({
-          full_name: newStudentName.trim(),
-          dob: newStudentDob ? newStudentDob : undefined,
-          primary_classroom_id: newStudentClassroom || null,
-        }),
-      });
+  }, [classroomsQuery.error]);
+
+  useEffect(() => {
+    if (studentsQuery.error instanceof Error) {
+      toast.error(studentsQuery.error.message);
+    }
+  }, [studentsQuery.error]);
+
+  useEffect(() => {
+    if (habitsQuery.error instanceof Error) {
+      toast.error(habitsQuery.error.message);
+    }
+  }, [habitsQuery.error]);
+
+  const students = (studentsQuery.data ?? []) as Student[];
+  const classrooms = (classroomsQuery.data ?? []) as Classroom[];
+  const habits = (habitsQuery.data ?? []) as Habit[];
+
+  const isStudentsLoading = studentsQuery.isLoading || studentsQuery.isFetching;
+  const isHabitsLoading = habitsQuery.isLoading || habitsQuery.isFetching;
+
+  const createStudentMutation = useMutation({
+    mutationFn: createStudent,
+    onSuccess: () => {
       toast.success("Learner added");
       setStudentDialogOpen(false);
       setNewStudentName("");
       setNewStudentDob("");
       setNewStudentClassroom("");
-      await refreshStudents();
-    } catch (error) {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      queryClient.invalidateQueries({ queryKey: ["habits"] });
+    },
+    onError: (error: unknown) => {
       toast.error(
-        error instanceof Error ? error.message : "Unable to add learner"
+        error instanceof Error ? error.message : "Unable to add learner",
       );
+    },
+  });
+
+  const createHabitMutation = useMutation({
+    mutationFn: createHabit,
+    onSuccess: () => {
+      toast.success("Habit created");
+      setHabitDialogOpen(false);
+      setHabitStudentId("");
+      setHabitName("");
+      setHabitSchedule("daily");
+      queryClient.invalidateQueries({ queryKey: ["habits"] });
+    },
+    onError: (error: unknown) => {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to create habit",
+      );
+    },
+  });
+
+  const handleCreateStudent = () => {
+    if (newStudentName.trim().length === 0) {
+      toast.error("Name is required");
+      return;
     }
+    createStudentMutation.mutate({
+      fullName: newStudentName.trim(),
+      dob: newStudentDob ? newStudentDob : undefined,
+      primaryClassroomId: newStudentClassroom || null,
+    });
   };
 
-  const handleCreateHabit = async () => {
+  const handleCreateHabit = () => {
     if (!habitStudentId) {
       toast.error("Choose a learner for the habit");
       return;
@@ -172,26 +172,11 @@ export default function StudentsPage() {
       toast.error("Provide a habit name");
       return;
     }
-    try {
-      await apiFetch("/habits", {
-        method: "POST",
-        body: JSON.stringify({
-          studentId: habitStudentId,
-          name: habitName.trim(),
-          schedule: habitSchedule,
-        }),
-      });
-      toast.success("Habit created");
-      setHabitDialogOpen(false);
-      setHabitStudentId("");
-      setHabitName("");
-      setHabitSchedule("daily");
-      await refreshHabits();
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Unable to create habit"
-      );
-    }
+    createHabitMutation.mutate({
+      studentId: habitStudentId,
+      name: habitName.trim(),
+      schedule: habitSchedule,
+    });
   };
 
   const tableColumns = useMemo<ColumnDef<Student>[]>(
@@ -247,7 +232,7 @@ export default function StudentsPage() {
         ),
       },
     ],
-    []
+    [],
   );
 
   const habitsByStudent = useMemo(() => {
@@ -319,7 +304,7 @@ export default function StudentsPage() {
               {({ headerGroup }) => (
                 <TableHeaderGroup headerGroup={headerGroup}>
                   {({ header }) => (
-                    <TableHead 
+                    <TableHead
                       header={header}
                       className="text-muted-foreground text-xs uppercase tracking-[0.18em]"
                     />
@@ -335,7 +320,7 @@ export default function StudentsPage() {
               )}
             </TableBody>
           </TableProvider>
-          {isLoading && (
+          {isStudentsLoading && (
             <p className="pt-4 text-center text-muted-foreground text-sm">
               Loading learners…
             </p>
@@ -351,15 +336,15 @@ export default function StudentsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {isHabitLoading && (
+          {isHabitsLoading && (
             <p className="text-muted-foreground text-sm">Loading habits…</p>
           )}
-          {!isHabitLoading && habits.length === 0 && (
+          {!isHabitsLoading && habits.length === 0 && (
             <p className="text-muted-foreground text-sm">
               No habits yet. Create one to track daily routines.
             </p>
           )}
-          {!isHabitLoading && habits.length > 0 && (
+          {!isHabitsLoading && habits.length > 0 && (
             <ul className="grid gap-4 md:grid-cols-2">
               {students.map((student) => {
                 const studentHabits = habitsByStudent.get(student.id) ?? [];
@@ -458,7 +443,12 @@ export default function StudentsPage() {
             >
               Cancel
             </Button>
-            <Button onClick={handleCreateStudent}>Save learner</Button>
+            <Button
+              disabled={createStudentMutation.isPending}
+              onClick={handleCreateStudent}
+            >
+              {createStudentMutation.isPending ? "Saving..." : "Save learner"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -523,7 +513,12 @@ export default function StudentsPage() {
             <Button onClick={() => setHabitDialogOpen(false)} variant="outline">
               Cancel
             </Button>
-            <Button onClick={handleCreateHabit}>Create habit</Button>
+            <Button
+              disabled={createHabitMutation.isPending}
+              onClick={handleCreateHabit}
+            >
+              {createHabitMutation.isPending ? "Creating..." : "Create habit"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

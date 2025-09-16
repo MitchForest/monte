@@ -1,13 +1,14 @@
 import { z } from "zod";
+
 import {
-  StudentSchema,
-  ClassroomSchema,
-  ObservationSchema,
   ActionSchema,
+  ClassroomSchema,
   HabitSchema,
-  UserSchema,
+  ObservationSchema,
   OrganizationSchema,
   RoleSchema,
+  StudentSchema,
+  UserSchema,
 } from "./schemas";
 
 // API Response wrapper schemas
@@ -33,13 +34,13 @@ export const ApiSuccessSchema = <T extends z.ZodType>(dataSchema: T) =>
 export const StudentsListResponseSchema = ApiSuccessSchema(
   z.object({
     students: z.array(StudentSchema),
-  })
+  }),
 );
 
 export const StudentDetailResponseSchema = ApiSuccessSchema(
   z.object({
     student: StudentSchema,
-  })
+  }),
 );
 
 // Classroom API responses
@@ -53,55 +54,63 @@ export const ClassroomWithGuidesSchema = ClassroomSchema.extend({
   guides: z.array(ClassroomGuideSummarySchema),
 });
 
-export const ClassroomsListResponseSchema = z.object({
-  classrooms: z.array(ClassroomWithGuidesSchema),
-});
+export const ClassroomsListResponseSchema = ApiSuccessSchema(
+  z.object({
+    classrooms: z.array(ClassroomWithGuidesSchema),
+  }),
+);
+
+export const ClassroomCreatedResponseSchema = ApiSuccessSchema(
+  z.object({
+    classroom: ClassroomWithGuidesSchema,
+  }),
+);
 
 export const ClassroomDetailResponseSchema = ApiSuccessSchema(
   z.object({
     classroom: ClassroomSchema,
     guides: z.array(UserSchema),
     students: z.array(StudentSchema),
-  })
+  }),
 );
 
 // Observation API responses
 export const ObservationsListResponseSchema = ApiSuccessSchema(
   z.object({
     observations: z.array(ObservationSchema),
-  })
+  }),
 );
 
 export const ObservationDetailResponseSchema = ApiSuccessSchema(
   z.object({
     observation: ObservationSchema,
-  })
+  }),
 );
 
 // Action/Task API responses
 export const ActionsListResponseSchema = ApiSuccessSchema(
   z.object({
     actions: z.array(ActionSchema),
-  })
+  }),
 );
 
 export const ActionDetailResponseSchema = ApiSuccessSchema(
   z.object({
     action: ActionSchema,
-  })
+  }),
 );
 
 // Habit API responses
 export const HabitsListResponseSchema = ApiSuccessSchema(
   z.object({
     habits: z.array(HabitSchema),
-  })
+  }),
 );
 
 export const HabitDetailResponseSchema = ApiSuccessSchema(
   z.object({
     habit: HabitSchema,
-  })
+  }),
 );
 
 // Auth API responses
@@ -127,19 +136,32 @@ export const TeamMemberSchema = z.object({
   role: RoleSchema,
 });
 
-export const TeamListResponseSchema = z.object({
-  members: z.array(TeamMemberSchema),
-});
+export const TeamListResponseSchema = ApiSuccessSchema(
+  z.object({
+    members: z.array(TeamMemberSchema),
+  }),
+);
 
 // Type exports
 export type ApiError = z.infer<typeof ApiErrorSchema>;
 export type StudentsListResponse = z.infer<typeof StudentsListResponseSchema>;
 export type StudentDetailResponse = z.infer<typeof StudentDetailResponseSchema>;
-export type ClassroomsListResponse = z.infer<typeof ClassroomsListResponseSchema>;
+export type ClassroomsListResponse = z.infer<
+  typeof ClassroomsListResponseSchema
+>;
 export type ClassroomWithGuides = z.infer<typeof ClassroomWithGuidesSchema>;
-export type ClassroomDetailResponse = z.infer<typeof ClassroomDetailResponseSchema>;
-export type ObservationsListResponse = z.infer<typeof ObservationsListResponseSchema>;
-export type ObservationDetailResponse = z.infer<typeof ObservationDetailResponseSchema>;
+export type ClassroomDetailResponse = z.infer<
+  typeof ClassroomDetailResponseSchema
+>;
+export type ClassroomCreatedResponse = z.infer<
+  typeof ClassroomCreatedResponseSchema
+>;
+export type ObservationsListResponse = z.infer<
+  typeof ObservationsListResponseSchema
+>;
+export type ObservationDetailResponse = z.infer<
+  typeof ObservationDetailResponseSchema
+>;
 export type ActionsListResponse = z.infer<typeof ActionsListResponseSchema>;
 export type ActionDetailResponse = z.infer<typeof ActionDetailResponseSchema>;
 export type HabitsListResponse = z.infer<typeof HabitsListResponseSchema>;

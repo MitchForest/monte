@@ -174,7 +174,7 @@ export type WorkPeriodItemsTable = {
 export type AuthSessionsTable = {
   id: string;
   user_id: string;
-  org_id: string;
+  org_id: string | null;
   token: string;
   expires_at: string;
   created_at: string;

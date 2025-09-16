@@ -1,5 +1,5 @@
-import { betterAuth } from "better-auth";
 import { db, withDbContext } from "@monte/database";
+import { betterAuth } from "better-auth";
 
 function resolveBaseURL(): string {
   const explicit =
@@ -18,7 +18,7 @@ function resolveBaseURL(): string {
 
 function buildOrganizationName(
   name: string | null,
-  email: string | null
+  email: string | null,
 ): string {
   const trimmed = name?.trim();
   if (trimmed && trimmed.length > 0) {
@@ -42,7 +42,8 @@ const initializedAuth =
   betterAuth({
     appName: "Monte",
     baseURL: resolveBaseURL(),
-    basePath: "/api/auth",
+    // Match the API router mount in apps/api/src/index.ts: app.route("/auth", authHandler)
+    basePath: "/auth",
     database: {
       db,
       type: "postgres",
@@ -74,6 +75,14 @@ const initializedAuth =
         updatedAt: "updated_at",
         ipAddress: "ip_address",
         userAgent: "user_agent",
+      },
+      additionalFields: {
+        orgId: {
+          fieldName: "org_id",
+          input: false,
+          required: false,
+          type: "string",
+        },
       },
     },
     account: {
@@ -120,9 +129,9 @@ const initializedAuth =
               const orgId = crypto.randomUUID();
               const organizationName = buildOrganizationName(
                 user.name ?? null,
-                user.email
+                user.email,
               );
-              
+
               await withDbContext({ userId: user.id, orgId }, async (trx) => {
                 await trx
                   .insertInto("organizations")
@@ -144,6 +153,21 @@ const initializedAuth =
                   })
                   .execute();
               });
+
+              const latestSession = await db
+                .selectFrom("auth_sessions")
+                .select("token")
+                .where("user_id", "=", user.id)
+                .orderBy("created_at", "desc")
+                .executeTakeFirst();
+
+              if (latestSession?.token) {
+                await db
+                  .updateTable("auth_sessions")
+                  .set({ org_id: orgId })
+                  .where("token", "=", latestSession.token)
+                  .execute();
+              }
             },
           },
           {
@@ -164,7 +188,7 @@ const initializedAuth =
                     .select("org_id")
                     .where("user_id", "=", user.id)
                     .orderBy("created_at", "asc")
-                    .executeTakeFirst()
+                    .executeTakeFirst(),
               );
 
               if (membership?.org_id) {
@@ -181,7 +205,7 @@ const initializedAuth =
               const orgId = crypto.randomUUID();
               const organizationName = buildOrganizationName(
                 user.name ?? null,
-                user.email ?? null
+                user.email ?? null,
               );
 
               await withDbContext({ userId: user.id, orgId }, async (trx) => {
