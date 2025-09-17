@@ -148,7 +148,7 @@ const initializedAuth =
                     id: crypto.randomUUID(),
                     org_id: orgId,
                     user_id: user.id,
-                    role: "super_admin",
+                    role: "administrator",
                     created_at: new Date().toISOString(),
                   })
                   .execute();
@@ -224,7 +224,7 @@ const initializedAuth =
                     id: crypto.randomUUID(),
                     org_id: orgId,
                     user_id: user.id,
-                    role: "super_admin",
+                    role: "administrator",
                     created_at: new Date().toISOString(),
                   })
                   .execute();

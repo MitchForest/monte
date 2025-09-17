@@ -3,7 +3,7 @@ BEGIN;
 create extension if not exists pgcrypto;
 
 -- Enums
-create type role as enum ('super_admin','admin','guide');
+create type role as enum ('administrator','teacher','student','parent');
 create type action_status as enum ('pending','in_progress','completed','cancelled');
 create type action_type as enum ('task','lesson');
 create type tag_type as enum ('student','domain','topic','material','class_area');
@@ -212,14 +212,14 @@ alter table action_tags enable row level security;
 create or replace view app.user_org_roles as
 select m.user_id, m.org_id, m.role from org_memberships m;
 
--- Organizations: super_admins can read/write their org
+-- Organizations: administrators can read/write their org
 create policy organizations_read on organizations for select
   using (id = app.current_org_id());
 create policy organizations_write on organizations for all
   using (
     id = app.current_org_id() and exists (
       select 1 from app.user_org_roles r
-      where r.org_id = id and r.user_id = app.current_user_id() and r.role = 'super_admin'
+      where r.org_id = id and r.user_id = app.current_user_id() and r.role = 'administrator'
     )
   ) with check (id = app.current_org_id());
 
@@ -230,7 +230,7 @@ create policy students_write on students for all
   using (
     org_id = app.current_org_id() and exists (
       select 1 from app.user_org_roles r
-      where r.org_id = students.org_id and r.user_id = app.current_user_id() and r.role in ('super_admin','admin')
+      where r.org_id = students.org_id and r.user_id = app.current_user_id() and r.role = 'administrator'
     )
   ) with check (org_id = app.current_org_id());
 
@@ -248,7 +248,7 @@ create policy observations_update on observations for update
   using (
     org_id = app.current_org_id() and exists (
       select 1 from app.user_org_roles r
-      where r.org_id = observations.org_id and r.user_id = app.current_user_id() and r.role in ('super_admin','admin')
+      where r.org_id = observations.org_id and r.user_id = app.current_user_id() and r.role = 'administrator'
     )
   ) with check (org_id = app.current_org_id());
 

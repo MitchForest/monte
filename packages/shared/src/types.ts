@@ -1,5 +1,5 @@
 // Core enums and types
-export type Role = "super_admin" | "admin" | "guide";
+export type Role = "administrator" | "teacher" | "student" | "parent";
 
 export type ActionStatus =
   | "pending"

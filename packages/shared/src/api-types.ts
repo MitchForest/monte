@@ -126,7 +126,7 @@ export const LoginResponseSchema = z.object({
 export const CurrentUserResponseSchema = z.object({
   user: UserSchema,
   organization: OrganizationSchema,
-  role: z.enum(["super_admin", "admin", "guide"]),
+  role: RoleSchema,
 });
 
 export const TeamMemberSchema = z.object({

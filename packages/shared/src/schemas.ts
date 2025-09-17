@@ -1,6 +1,6 @@
 import { z } from "zod";
 // Core enum schemas
-export const RoleSchema = z.enum(["super_admin", "admin", "guide"]);
+export const RoleSchema = z.enum(["administrator", "teacher", "student", "parent"]);
 export const ActionStatusSchema = z.enum([
   "pending",
   "in_progress",

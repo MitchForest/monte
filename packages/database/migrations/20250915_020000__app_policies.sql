@@ -11,7 +11,7 @@ create policy classrooms_manage on classrooms for all
       from app.user_org_roles r
       where r.org_id = classrooms.org_id
         and r.user_id = app.current_user_id()
-        and r.role in ('super_admin', 'admin')
+        and r.role = 'administrator'
     )
   )
   with check (org_id = app.current_org_id());
@@ -39,7 +39,7 @@ create policy classroom_guides_manage on classroom_guides for all
       from app.user_org_roles r
       where r.org_id = app.current_org_id()
         and r.user_id = app.current_user_id()
-        and r.role in ('super_admin', 'admin')
+        and r.role = 'administrator'
     )
   )
   with check (
@@ -74,7 +74,7 @@ create policy actions_update on actions for update
       from app.user_org_roles r
       where r.org_id = actions.org_id
         and r.user_id = app.current_user_id()
-        and r.role in ('super_admin', 'admin')
+        and r.role = 'administrator'
     )
   )
   with check (org_id = app.current_org_id());
