@@ -1,9 +1,8 @@
 import { withDbContext } from "@monte/database";
+import type { SummaryScope } from "@monte/shared";
 import type { AuthenticatedSession } from "../lib/auth/session";
 import { generateSummary } from "../lib/integrations/openai";
 import { sendSummaryEmail } from "../lib/integrations/resend";
-
-type SummaryScope = "today" | "this_week" | "custom";
 
 type SummaryRequest = {
   studentId: string;

@@ -345,6 +345,7 @@ type ListActionsParams = {
   type?: "task" | "lesson";
   status?: string;
   assignedTo?: string;
+  studentId?: string;
 };
 
 export async function listActions(
@@ -355,9 +356,10 @@ export async function listActions(
     client.tasks.$get(
       {
         query: {
-          ...(params.type ? { type: params.type } : {}),
-          ...(params.status ? { status: params.status } : {}),
-          ...(params.assignedTo ? { assignedTo: params.assignedTo } : {}),
+          type: params.type,
+          status: params.status,
+          assignedTo: params.assignedTo,
+          ...(params.studentId ? { studentId: params.studentId } : {}),
         },
       },
       options.signal ? { init: { signal: options.signal } } : undefined,

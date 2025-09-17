@@ -19,11 +19,16 @@ import {
 
 const routerBase = new OpenAPIHono();
 
+const SummaryDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .or(z.string().datetime({ offset: false }));
+
 const CreateSummaryBody = z.object({
   studentId: z.string().uuid(),
   scope: SummaryScopeSchema.default("today"),
-  from: z.string().datetime({ offset: false }).optional(),
-  to: z.string().datetime({ offset: false }).optional(),
+  from: SummaryDateSchema.optional(),
+  to: SummaryDateSchema.optional(),
   includeObservations: z.boolean().optional(),
   includeTasks: z.boolean().optional(),
   includeLessons: z.boolean().optional(),

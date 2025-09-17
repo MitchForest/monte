@@ -415,10 +415,11 @@ const router = routerWithCheckin.openapi(deleteHabitCheckinRoute, async (c) => {
     const deleted = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
       async (trx) => {
+        const deletionDate = new Date(`${query.date}T00:00:00.000Z`);
         const result = await trx
           .deleteFrom("habit_checkin_events")
           .where("habit_id", "=", params.id)
-          .where("date", "=", new Date(query.date))
+          .where("date", "=", deletionDate)
           .where("org_id", "=", session.session.orgId)
           .returning(["id"])
           .executeTakeFirst();

@@ -1,3 +1,3 @@
 
 [0m[2m[35m$[0m [2m[1mbun x biome check --files-ignore-unknown=true ./app ./components/app ./components/auth ./components/marketing ./components/providers ./lib ./middleware.ts[0m
-[0m[34mChecked [0m[0m[34m47[0m[0m[34m [0m[0m[34mfiles[0m[0m[34m in [0m[0m[34m54[0m[0m[2m[34mms[0m[0m[34m.[0m[0m[34m No fixes applied.[0m
+[0m[34mChecked [0m[0m[34m47[0m[0m[34m [0m[0m[34mfiles[0m[0m[34m in [0m[0m[34m62[0m[0m[2m[34mms[0m[0m[34m.[0m[0m[34m No fixes applied.[0m

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 const FONT_LINK_ID = "monte-dynapuff-font";
+const FONT_PRECONNECT_ID = "monte-dynapuff-preconnect";
 const FONT_STYLESHEET =
   "https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;500;600;700&display=swap";
 
@@ -11,6 +12,15 @@ export function FontProvider() {
     if (typeof document === "undefined") {
       return;
     }
+    if (!document.getElementById(FONT_PRECONNECT_ID)) {
+      const preconnect = document.createElement("link");
+      preconnect.id = FONT_PRECONNECT_ID;
+      preconnect.rel = "preconnect";
+      preconnect.href = "https://fonts.gstatic.com";
+      preconnect.crossOrigin = "anonymous";
+      document.head.appendChild(preconnect);
+    }
+
     if (document.getElementById(FONT_LINK_ID)) {
       return;
     }
