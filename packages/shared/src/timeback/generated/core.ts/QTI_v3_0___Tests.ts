@@ -73,7 +73,7 @@ export const endpoints = makeApi([
               id: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               identifier: z.string(),
@@ -90,7 +90,7 @@ export const endpoints = makeApi([
               createdBy: z.union([z.string(), z.null()]),
               organizationId: z.union([z.string(), z.null()]),
             })
-            .strict()
+            .strict(),
         ),
         pagination: z
           .object({
@@ -149,7 +149,7 @@ export const endpoints = makeApi([
             id: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             identifier: z.string(),
@@ -238,7 +238,7 @@ export const endpoints = makeApi([
             id: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             identifier: z.string(),
@@ -322,7 +322,7 @@ export const endpoints = makeApi([
             id: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             identifier: z.string(),
@@ -491,7 +491,7 @@ export const endpoints = makeApi([
               createdAt: z.string(),
               updatedAt: z.string(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -567,7 +567,7 @@ export const endpoints = makeApi([
               partIdentifier: z.string(),
               sequence: z.number(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -652,13 +652,13 @@ export const endpoints = makeApi([
                           interactionType: z.string(),
                           sequence: z.number(),
                         })
-                        .strict()
+                        .strict(),
                     ),
                   })
-                  .strict()
+                  .strict(),
               ),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),

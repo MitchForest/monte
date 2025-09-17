@@ -10,7 +10,9 @@ const friendlyTextMessages: Record<string, string> = {
   "invalid email or password": friendlyStatusMessages[401],
 };
 
-const getFriendlyMessage = (input: string | null | undefined): string | null => {
+const getFriendlyMessage = (
+  input: string | null | undefined,
+): string | null => {
   if (!input) {
     return null;
   }

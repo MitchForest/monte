@@ -20,7 +20,7 @@ export const endpoints = makeApi([
         schema: z
           .string()
           .regex(
-            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
           )
           .uuid()
           .optional(),
@@ -31,7 +31,7 @@ export const endpoints = makeApi([
         schema: z
           .string()
           .regex(
-            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
           )
           .uuid()
           .optional(),
@@ -83,7 +83,7 @@ export const endpoints = makeApi([
                   id: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   userId: z.union([z.string(), z.null()]),
@@ -103,7 +103,7 @@ export const endpoints = makeApi([
                         id: z
                           .string()
                           .regex(
-                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                           )
                           .uuid(),
                         email: z.string(),
@@ -118,7 +118,7 @@ export const endpoints = makeApi([
                         id: z
                           .string()
                           .regex(
-                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                           )
                           .uuid(),
                         name: z.string(),
@@ -128,7 +128,7 @@ export const endpoints = makeApi([
                     z.null(),
                   ]),
                 })
-                .strict()
+                .strict(),
             ),
             pagination: z
               .object({
@@ -227,7 +227,7 @@ export const endpoints = makeApi([
                   count: z.number(),
                   averageResponseTime: z.number(),
                 })
-                .strict()
+                .strict(),
             ),
             topUsers: z.array(
               z
@@ -236,7 +236,7 @@ export const endpoints = makeApi([
                   email: z.string(),
                   count: z.number(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),

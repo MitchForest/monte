@@ -75,7 +75,7 @@ export const endpoints = makeApi([
               sensor: z.string(),
             })
             .strict()
-            .passthrough()
+            .passthrough(),
         ),
       })
       .strict()

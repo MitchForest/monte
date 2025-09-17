@@ -120,7 +120,7 @@ export const endpoints = makeApi([
               createdAt: z.string(),
               updatedAt: z.string(),
             })
-            .strict()
+            .strict(),
         ),
         pagination: z
           .object({
@@ -503,7 +503,7 @@ export const endpoints = makeApi([
               title: z.string(),
               sequence: z.number(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),

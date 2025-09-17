@@ -1,17 +1,12 @@
+import { loadServerEnv, requireServerEnv } from "@monte/shared";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL;
+const env = loadServerEnv();
+const supabaseUrl = env.SUPABASE_URL ?? requireServerEnv("SUPABASE_URL");
 const serviceRoleKey =
-  process.env.SUPABASE_SERVICE_ROLE ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!supabaseUrl) {
-  throw new Error("SUPABASE_URL is not set");
-}
-if (!serviceRoleKey) {
-  throw new Error(
-    "SUPABASE_SERVICE_ROLE or SUPABASE_SERVICE_ROLE_KEY must be set",
-  );
-}
+  env.SUPABASE_SERVICE_ROLE ??
+  env.SUPABASE_SERVICE_ROLE_KEY ??
+  requireServerEnv("SUPABASE_SERVICE_ROLE");
 
 export const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
   auth: { persistSession: false },

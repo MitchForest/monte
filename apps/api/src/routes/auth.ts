@@ -1,7 +1,8 @@
-import { Hono } from "hono";
+import { OpenAPIHono } from "@hono/zod-openapi";
+
 import { auth } from "../lib/auth";
 
-const router = new Hono();
+const router = new OpenAPIHono();
 
 // Handle all auth routes through better-auth
 router.all("/*", (c) => auth.handler(c.req.raw));

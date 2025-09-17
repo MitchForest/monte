@@ -15,9 +15,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
 import { useTheme } from "next-themes";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { UserSettingsModal } from "@/components/app/user-settings-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -26,7 +27,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserSettingsModal } from "@/components/app/user-settings-modal";
 import {
   Sidebar,
   SidebarContent,
@@ -98,8 +98,8 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
     <Sidebar className="border-none" collapsible="icon" variant="sidebar">
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-1.5">
-          <span 
-            className="text-3xl font-bold transition-all duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:scale-0" 
+          <span
+            className="text-3xl font-bold transition-all duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:scale-0"
             style={{ fontFamily: "'DynaPuff', system-ui" }}
           >
             Monte
@@ -146,9 +146,14 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
               <Avatar className="h-8 w-8">
                 <AvatarImage
                   alt={`${displayName}'s avatar`}
-                  src={activeUser?.image || `https://api.dicebear.com/7.x/micah/svg?seed=${activeUser?.email || 'default'}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=200`}
+                  src={
+                    activeUser?.image ||
+                    `https://api.dicebear.com/7.x/micah/svg?seed=${activeUser?.email || "default"}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=200`
+                  }
                 />
-                <AvatarFallback className="bg-background text-primary font-semibold">{initials}</AvatarFallback>
+                <AvatarFallback className="bg-background text-primary font-semibold">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
               <div className="flex min-w-0 flex-1 flex-col text-left">
                 <span className="truncate font-medium text-sm leading-5">
@@ -185,10 +190,10 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarFooter>
-      
-      <UserSettingsModal 
+
+      <UserSettingsModal
         onOpenChange={setUserSettingsOpen}
-        open={userSettingsOpen} 
+        open={userSettingsOpen}
         user={activeUser}
       />
     </Sidebar>

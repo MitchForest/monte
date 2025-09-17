@@ -13,7 +13,7 @@ const postApiBadgesV3Profiles_Body = z
     email: z
       .string()
       .regex(
-        /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/
+        /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9-]*\.)+[A-Za-z]{2,}$/,
       )
       .email()
       .optional(),
@@ -35,7 +35,7 @@ const putApiBadgesV3ProfilesById_Body = z
     email: z
       .string()
       .regex(
-        /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/
+        /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9-]*\.)+[A-Za-z]{2,}$/,
       )
       .email(),
     telephone: z.string(),
@@ -95,7 +95,7 @@ export const endpoints = makeApi([
                   email: z
                     .string()
                     .regex(
-                      /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/
+                      /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9-]*\.)+[A-Za-z]{2,}$/,
                     )
                     .email()
                     .optional(),
@@ -116,11 +116,11 @@ export const endpoints = makeApi([
                           controller: z.string(),
                           publicKeyJwk: z.unknown(),
                         })
-                        .strict()
+                        .strict(),
                     )
                     .optional(),
                 })
-                .strict()
+                .strict(),
             ),
             pagination: z
               .object({

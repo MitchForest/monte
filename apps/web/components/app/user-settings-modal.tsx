@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { RefreshCw, Upload, User, Mail, Lock } from "lucide-react";
+import { Lock, Mail, RefreshCw, Upload, User } from "lucide-react";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +14,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 
 type UserSettingsModalProps = {
   open: boolean;
@@ -47,9 +47,15 @@ function getInitials(name: string): string {
   return `${first}${last}`.toUpperCase();
 }
 
-export function UserSettingsModal({ open, onOpenChange, user }: UserSettingsModalProps) {
+export function UserSettingsModal({
+  open,
+  onOpenChange,
+  user,
+}: UserSettingsModalProps) {
   const [isUploading, setIsUploading] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState(user?.image || generateDicebearUrl(user?.email || ""));
+  const [avatarUrl, setAvatarUrl] = useState(
+    user?.image || generateDicebearUrl(user?.email || ""),
+  );
   const [formData, setFormData] = useState({
     name: user?.name || "",
     email: user?.email || "",
@@ -189,7 +195,9 @@ export function UserSettingsModal({ open, onOpenChange, user }: UserSettingsModa
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="Enter your name"
                 />
               </div>
@@ -202,7 +210,9 @@ export function UserSettingsModal({ open, onOpenChange, user }: UserSettingsModa
                   id="email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   placeholder="Enter your email"
                 />
               </div>
@@ -222,7 +232,12 @@ export function UserSettingsModal({ open, onOpenChange, user }: UserSettingsModa
                   id="current-password"
                   type="password"
                   value={formData.currentPassword}
-                  onChange={(e) => setFormData({ ...formData, currentPassword: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      currentPassword: e.target.value,
+                    })
+                  }
                   placeholder="Enter current password"
                 />
               </div>
@@ -235,7 +250,9 @@ export function UserSettingsModal({ open, onOpenChange, user }: UserSettingsModa
                   id="new-password"
                   type="password"
                   value={formData.newPassword}
-                  onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, newPassword: e.target.value })
+                  }
                   placeholder="Enter new password (min. 8 characters)"
                 />
               </div>
@@ -248,7 +265,12 @@ export function UserSettingsModal({ open, onOpenChange, user }: UserSettingsModa
                   id="confirm-password"
                   type="password"
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
                   placeholder="Confirm new password"
                 />
               </div>
@@ -260,9 +282,7 @@ export function UserSettingsModal({ open, onOpenChange, user }: UserSettingsModa
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>
-            Save Changes
-          </Button>
+          <Button onClick={handleSave}>Save Changes</Button>
         </div>
       </DialogContent>
     </Dialog>

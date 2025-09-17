@@ -47,7 +47,7 @@ const postImsQtiV3p0SectionsByIdItems_Body = z
             required: z.boolean().default(true),
             fixed: z.boolean().default(false),
           })
-          .strict()
+          .strict(),
       )
       .min(1),
   })
@@ -117,7 +117,7 @@ export const endpoints = makeApi([
               createdAt: z.string(),
               updatedAt: z.string(),
             })
-            .strict()
+            .strict(),
         ),
         pagination: z
           .object({
@@ -501,7 +501,7 @@ export const endpoints = makeApi([
                 .strict()
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -585,7 +585,7 @@ export const endpoints = makeApi([
                 .strict()
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),

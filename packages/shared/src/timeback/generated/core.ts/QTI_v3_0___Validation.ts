@@ -18,7 +18,7 @@ const postImsQtiV3p0ValidateBatch_Body = z
             xmlContent: z.string(),
             documentType: z.string().optional(),
           })
-          .strict()
+          .strict(),
       )
       .min(1)
       .max(100),
@@ -59,7 +59,7 @@ export const endpoints = makeApi([
                   severity: z.enum(["error", "warning"]),
                   path: z.string().optional(),
                 })
-                .strict()
+                .strict(),
             ),
             version: z.string().optional(),
             documentType: z.string().optional(),
@@ -158,7 +158,7 @@ export const endpoints = makeApi([
                   severity: z.enum(["error", "warning"]),
                   path: z.string().optional(),
                 })
-                .strict()
+                .strict(),
             ),
             version: z.string().optional(),
             documentType: z.string().optional(),
@@ -257,7 +257,7 @@ export const endpoints = makeApi([
                   severity: z.enum(["error", "warning"]),
                   path: z.string().optional(),
                 })
-                .strict()
+                .strict(),
             ),
             version: z.string().optional(),
             documentType: z.string().optional(),
@@ -359,12 +359,12 @@ export const endpoints = makeApi([
                         severity: z.enum(["error", "warning"]),
                         path: z.string().optional(),
                       })
-                      .strict()
+                      .strict(),
                   ),
                   version: z.string().optional(),
                   documentType: z.string().optional(),
                 })
-                .strict()
+                .strict(),
             ),
             summary: z
               .object({
@@ -459,7 +459,7 @@ export const endpoints = makeApi([
                   description: z.string(),
                   version: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),

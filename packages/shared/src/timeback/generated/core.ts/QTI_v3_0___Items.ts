@@ -151,7 +151,7 @@ export const endpoints = makeApi([
               createdBy: z.union([z.string(), z.null()]),
               organizationId: z.union([z.string(), z.null()]),
             })
-            .strict()
+            .strict(),
         ),
         pagination: z
           .object({
@@ -636,7 +636,7 @@ export const endpoints = makeApi([
               organizationId: z.union([z.string(), z.null()]),
               sequence: z.number(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),

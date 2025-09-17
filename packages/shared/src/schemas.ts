@@ -1,6 +1,11 @@
 import { z } from "zod";
 // Core enum schemas
-export const RoleSchema = z.enum(["administrator", "teacher", "student", "parent"]);
+export const RoleSchema = z.enum([
+  "administrator",
+  "teacher",
+  "student",
+  "parent",
+]);
 export const ActionStatusSchema = z.enum([
   "pending",
   "in_progress",
@@ -9,6 +14,12 @@ export const ActionStatusSchema = z.enum([
 ]);
 export const ActionTypeSchema = z.enum(["task", "lesson"]);
 export const HabitScheduleSchema = z.enum(["daily", "weekdays", "custom"]);
+export const LessonInstanceStatusSchema = z.enum([
+  "unscheduled",
+  "scheduled",
+  "completed",
+]);
+export const SummaryScopeSchema = z.enum(["today", "this_week", "custom"]);
 
 // User schemas
 export const UserSchema = z.object({
@@ -37,13 +48,33 @@ export const OrgMembershipSchema = z.object({
 });
 
 // Student schemas
-export const StudentSchema = z.object({
+export const StudentClassroomSchema = z.object({
   id: z.string(),
-  org_id: z.string(),
-  full_name: z.string(),
-  avatar_url: z.string().url().nullable(),
-  dob: z.string().nullable(),
-  primary_classroom_id: z.string().nullable(),
+  name: z.string(),
+});
+
+export const StudentSchema = z
+  .object({
+    id: z.string(),
+    org_id: z.string(),
+    full_name: z.string(),
+    avatar_url: z.string().url().nullable(),
+    dob: z.string().nullable(),
+    primary_classroom_id: z.string().nullable(),
+    created_at: z.string(),
+  })
+  .extend({
+    classroom: StudentClassroomSchema.nullable().optional(),
+  });
+
+export const StudentParentSchema = z.object({
+  id: z.string(),
+  student_id: z.string(),
+  name: z.string(),
+  email: z.string().email().nullable(),
+  phone: z.string().nullable(),
+  relation: z.string().nullable(),
+  preferred_contact_method: z.string().nullable(),
   created_at: z.string(),
 });
 
@@ -59,6 +90,35 @@ export const ClassroomGuideSchema = z.object({
   id: z.string(),
   classroom_id: z.string(),
   user_id: z.string(),
+});
+
+// Course schemas
+export const SubjectSchema = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  name: z.string(),
+  color: z.string().nullable(),
+  created_at: z.string(),
+});
+
+export const CourseSchema = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  subject_id: z.string().nullable(),
+  name: z.string(),
+  description: z.string().nullable(),
+  created_at: z.string(),
+});
+
+export const CourseLessonSchema = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  course_id: z.string(),
+  title: z.string(),
+  description: z.string().nullable(),
+  duration_minutes: z.number().nullable(),
+  order_index: z.number(),
+  created_at: z.string(),
 });
 
 // Observation schemas
@@ -92,6 +152,45 @@ export const ActionSchema = z.object({
   completed_by: z.string().nullable(),
 });
 
+export const StudentLessonSchema = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  student_id: z.string(),
+  course_lesson_id: z.string().nullable(),
+  custom_title: z.string().nullable(),
+  notes: z.string().nullable(),
+  status: LessonInstanceStatusSchema,
+  scheduled_for: z.string().nullable(),
+  completed_at: z.string().nullable(),
+  assigned_by_user_id: z.string().nullable(),
+  rescheduled_from_id: z.string().nullable(),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+
+export const StudentSummarySchema = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  student_id: z.string(),
+  generated_by_user_id: z.string().nullable(),
+  title: z.string(),
+  content: z.string(),
+  scope: SummaryScopeSchema,
+  timespan_start: z.string().nullable(),
+  timespan_end: z.string().nullable(),
+  emailed_at: z.string().nullable(),
+  created_at: z.string(),
+});
+
+export const StudentSummaryRecipientSchema = z.object({
+  id: z.string(),
+  summary_id: z.string(),
+  parent_id: z.string().nullable(),
+  email: z.string().email(),
+  delivered_at: z.string().nullable(),
+  created_at: z.string(),
+});
+
 // Habit schemas
 export const HabitSchema = z.object({
   id: z.string(),
@@ -108,6 +207,18 @@ export const HabitCheckinSchema = z.object({
   habit_id: z.string(),
   date: z.string(),
   checked_by: z.string().nullable(),
+  created_at: z.string(),
+});
+
+export const HabitCheckinEventSchema = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  habit_id: z.string(),
+  student_id: z.string(),
+  date: z.string(),
+  checked: z.boolean(),
+  source: z.string(),
+  created_by: z.string().nullable(),
   created_at: z.string(),
 });
 
@@ -153,13 +264,24 @@ export const AuthVerificationSchema = z.object({
 export type User = z.infer<typeof UserSchema>;
 export type Organization = z.infer<typeof OrganizationSchema>;
 export type OrgMembership = z.infer<typeof OrgMembershipSchema>;
+export type StudentClassroom = z.infer<typeof StudentClassroomSchema>;
 export type Student = z.infer<typeof StudentSchema>;
+export type StudentParent = z.infer<typeof StudentParentSchema>;
 export type Classroom = z.infer<typeof ClassroomSchema>;
 export type ClassroomGuide = z.infer<typeof ClassroomGuideSchema>;
+export type Subject = z.infer<typeof SubjectSchema>;
+export type Course = z.infer<typeof CourseSchema>;
+export type CourseLesson = z.infer<typeof CourseLessonSchema>;
 export type Observation = z.infer<typeof ObservationSchema>;
 export type Action = z.infer<typeof ActionSchema>;
+export type StudentLesson = z.infer<typeof StudentLessonSchema>;
+export type StudentSummary = z.infer<typeof StudentSummarySchema>;
+export type StudentSummaryRecipient = z.infer<
+  typeof StudentSummaryRecipientSchema
+>;
 export type Habit = z.infer<typeof HabitSchema>;
 export type HabitCheckin = z.infer<typeof HabitCheckinSchema>;
+export type HabitCheckinEvent = z.infer<typeof HabitCheckinEventSchema>;
 export type AuthSession = z.infer<typeof AuthSessionSchema>;
 export type AuthAccount = z.infer<typeof AuthAccountSchema>;
 export type AuthVerification = z.infer<typeof AuthVerificationSchema>;

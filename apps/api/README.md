@@ -17,14 +17,11 @@ The Monte API workspace is a Bun + Hono service that exposes organization-scoped
 src/
 ├── index.ts         # App entry, CORS, route registration
 ├── lib/
-│   └── auth/        # Better Auth setup + session helpers
-└── routes/
-    ├── students.ts
-    ├── classrooms.ts
-    ├── habits.ts
-    ├── tasks.ts
-    ├── observations.ts
-    └── team.ts
+│   ├── auth/        # Better Auth setup + session helpers
+│   ├── http/        # HTTP helpers (status codes, responders)
+│   └── timeback/    # Optional TimeBack client bootstrap
+├── routes/          # Hono routers (students, classrooms, habits, tasks, observations, team, timeback-analytics)
+└── services/        # Domain services (AI summaries, TimeBack analytics, etc.)
 ```
 
 Each route file follows the same pattern:
@@ -32,7 +29,8 @@ Each route file follows the same pattern:
 1. Import request/response schemas from `@monte/shared`.
 2. Parse query/body payloads with Zod before using them.
 3. Execute database work inside `withDbContext({ userId, orgId }, trx => ...)`.
-4. Parse the response object with the matching response schema before returning `c.json({ data: ... })`.
+4. Parse the response object with the matching response schema before returning `respond(route, c, parsedPayload, status?)` so TypeScript narrows the payload to the declared status code.
+5. If the route relies on optional integrations (e.g., TimeBack), detect missing credentials and respond with a clear error instead of crashing at startup.
 
 ## API Conventions
 
@@ -63,6 +61,12 @@ BETTER_AUTH_SECRET=super-secret
 BETTER_AUTH_URL=http://localhost:8787
 PORT=8787
 APP_ORIGINS=http://localhost:3000,http://localhost:3001
+# Optional TimeBack integration (leave blank to disable)
+TIMEBACK_CORE_URL=
+TIMEBACK_CORE_TOKEN=
+TIMEBACK_CALIPER_URL=
+TIMEBACK_CALIPER_TOKEN=
+TIMEBACK_NAMESPACE=
 ```
 
 ## Adding a Route Example

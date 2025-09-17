@@ -110,7 +110,7 @@ export const endpoints = makeApi([
                     })
                     .partial()
                     .strict()
-                    .passthrough()
+                    .passthrough(),
                 ),
               })
               .partial()
@@ -184,7 +184,7 @@ export const endpoints = makeApi([
                     .object({ id: z.string().url(), type: z.string() })
                     .partial()
                     .strict()
-                    .passthrough()
+                    .passthrough(),
                 )
                 .optional(),
               proof: z
@@ -197,7 +197,7 @@ export const endpoints = makeApi([
                 })
                 .strict(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -279,7 +279,7 @@ export const endpoints = makeApi([
               .object({ id: z.string().url(), type: z.string() })
               .partial()
               .strict()
-              .passthrough()
+              .passthrough(),
           )
           .optional(),
         proof: z
@@ -549,7 +549,7 @@ export const endpoints = makeApi([
                     })
                     .partial()
                     .strict()
-                    .passthrough()
+                    .passthrough(),
                 ),
               })
               .partial()

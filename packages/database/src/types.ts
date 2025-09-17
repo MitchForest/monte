@@ -1,6 +1,10 @@
 import type { ColumnType } from "kysely";
 
-export type ActionStatus = "cancelled" | "completed" | "in_progress" | "pending";
+export type ActionStatus =
+  | "cancelled"
+  | "completed"
+  | "in_progress"
+  | "pending";
 
 export type ActionType = "lesson" | "task";
 
@@ -14,7 +18,13 @@ export type AuthFactorType = "phone" | "totp" | "webauthn";
 
 export type AuthOauthRegistrationType = "dynamic" | "manual";
 
-export type AuthOneTimeTokenType = "confirmation_token" | "email_change_token_current" | "email_change_token_new" | "phone_change_token" | "reauthentication_token" | "recovery_token";
+export type AuthOneTimeTokenType =
+  | "confirmation_token"
+  | "email_change_token_current"
+  | "email_change_token_new"
+  | "phone_change_token"
+  | "reauthentication_token"
+  | "recovery_token";
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
@@ -22,7 +32,13 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
 
 export type HabitSchedule = "custom" | "daily" | "weekdays";
 
-export type Int8 = ColumnType<string, bigint | number | string, bigint | number | string>;
+export type LessonInstanceStatus = "completed" | "scheduled" | "unscheduled";
+
+export type Int8 = ColumnType<
+  string,
+  bigint | number | string,
+  bigint | number | string
+>;
 
 export type Json = JsonValue;
 
@@ -40,7 +56,12 @@ export type Numeric = ColumnType<string, number | string, number | string>;
 
 export type Role = "administrator" | "parent" | "student" | "teacher";
 
-export type TagType = "class_area" | "domain" | "material" | "student" | "topic";
+export type TagType =
+  | "class_area"
+  | "domain"
+  | "material"
+  | "student"
+  | "topic";
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
@@ -357,6 +378,34 @@ export interface Classrooms {
   org_id: string;
 }
 
+export interface Subjects {
+  color: string | null;
+  created_at: Generated<Timestamp>;
+  id: Generated<string>;
+  name: string;
+  org_id: string;
+}
+
+export interface Courses {
+  created_at: Generated<Timestamp>;
+  description: string | null;
+  id: Generated<string>;
+  name: string;
+  org_id: string;
+  subject_id: string | null;
+}
+
+export interface CourseLessons {
+  course_id: string;
+  created_at: Generated<Timestamp>;
+  description: string | null;
+  duration_minutes: number | null;
+  id: Generated<string>;
+  order_index: Generated<number>;
+  org_id: string;
+  title: string;
+}
+
 export interface Domains {
   id: Generated<string>;
   name: string;
@@ -425,6 +474,18 @@ export interface HabitCheckins {
   date: Timestamp;
   habit_id: string;
   id: Generated<string>;
+}
+
+export interface HabitCheckinEvents {
+  checked: Generated<boolean>;
+  created_at: Generated<Timestamp>;
+  created_by: string | null;
+  date: Timestamp;
+  habit_id: string;
+  id: Generated<string>;
+  org_id: string;
+  source: Generated<string>;
+  student_id: string;
 }
 
 export interface Habits {
@@ -577,6 +638,45 @@ export interface StudentParents {
   student_id: string;
 }
 
+export interface StudentLessons {
+  assigned_by_user_id: string | null;
+  completed_at: Timestamp | null;
+  course_lesson_id: string | null;
+  created_at: Generated<Timestamp>;
+  custom_title: string | null;
+  id: Generated<string>;
+  notes: string | null;
+  org_id: string;
+  rescheduled_from_id: string | null;
+  scheduled_for: Timestamp | null;
+  status: Generated<LessonInstanceStatus>;
+  student_id: string;
+  updated_at: Generated<Timestamp>;
+}
+
+export interface StudentSummaries {
+  content: string;
+  created_at: Generated<Timestamp>;
+  emailed_at: Timestamp | null;
+  generated_by_user_id: string | null;
+  id: Generated<string>;
+  org_id: string;
+  scope: string;
+  student_id: string;
+  timespan_end: Timestamp | null;
+  timespan_start: Timestamp | null;
+  title: string;
+}
+
+export interface StudentSummaryRecipients {
+  created_at: Generated<Timestamp>;
+  delivered_at: Timestamp | null;
+  email: string;
+  id: Generated<string>;
+  parent_id: string | null;
+  summary_id: string;
+}
+
 export interface Students {
   avatar_url: string | null;
   created_at: Generated<Timestamp>;
@@ -672,10 +772,14 @@ export interface DB {
   class_areas: ClassAreas;
   classroom_guides: ClassroomGuides;
   classrooms: Classrooms;
+  courses: Courses;
+  course_lessons: CourseLessons;
+  subjects: Subjects;
   domains: Domains;
   "extensions.pg_stat_statements": ExtensionsPgStatStatements;
   "extensions.pg_stat_statements_info": ExtensionsPgStatStatementsInfo;
   habit_checkins: HabitCheckins;
+  habit_checkin_events: HabitCheckinEvents;
   habits: Habits;
   materials: Materials;
   observation_tags: ObservationTags;
@@ -691,6 +795,9 @@ export interface DB {
   "storage.s3_multipart_uploads": StorageS3MultipartUploads;
   "storage.s3_multipart_uploads_parts": StorageS3MultipartUploadsParts;
   student_parents: StudentParents;
+  student_lessons: StudentLessons;
+  student_summaries: StudentSummaries;
+  student_summary_recipients: StudentSummaryRecipients;
   students: Students;
   topics: Topics;
   users: Users;
@@ -699,3 +806,5 @@ export interface DB {
   work_period_items: WorkPeriodItems;
   work_periods: WorkPeriods;
 }
+
+export type Database = DB;

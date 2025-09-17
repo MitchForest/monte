@@ -48,7 +48,7 @@ export const endpoints = makeApi([
                 code: z.string().optional(),
               })
               .strict()
-              .passthrough()
+              .passthrough(),
           )
           .optional(),
       })
@@ -71,7 +71,7 @@ export const endpoints = makeApi([
                     code: z.string().optional(),
                   })
                   .strict()
-                  .passthrough()
+                  .passthrough(),
               )
               .optional(),
           })

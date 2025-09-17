@@ -1,14 +1,19 @@
+import "../lib/openapi";
+
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
 import {
+  ApiErrorSchema,
   ClassroomCreatedResponseSchema,
   ClassroomsListResponseSchema,
   ClassroomWithGuidesSchema,
 } from "@monte/shared";
-import { Hono } from "hono";
-import { z } from "zod";
 
 import { getServerSession } from "../lib/auth/session";
+import { respond } from "../lib/http/respond";
 import { HTTP_STATUS } from "../lib/http/status";
+
+const routerBase = new OpenAPIHono();
 
 const ListClassroomsQuery = z.object({
   search: z.string().optional(),
@@ -19,17 +24,55 @@ const CreateClassroomBody = z.object({
   guideIds: z.array(z.string().uuid()).optional(),
 });
 
-const router = new Hono();
+const listClassroomsRoute = createRoute({
+  method: "get",
+  path: "/",
+  tags: ["Classrooms"],
+  request: {
+    query: ListClassroomsQuery,
+  },
+  responses: {
+    [HTTP_STATUS.ok]: {
+      description: "List classrooms",
+      content: {
+        "application/json": {
+          schema: ClassroomsListResponseSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.unauthorized]: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.internalServerError]: {
+      description: "Failed to load classrooms",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+  },
+});
 
-router.get("/", async (c) => {
+const routerWithList = routerBase.openapi(listClassroomsRoute, async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
+    return respond(
+      listClassroomsRoute,
+      c,
+      { error: "Unauthorized" },
+      HTTP_STATUS.unauthorized,
+    );
   }
 
-  try {
-    const query = ListClassroomsQuery.parse(c.req.query());
+  const query = c.req.valid("query");
 
+  try {
     const classrooms = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
       async (trx) => {
@@ -71,6 +114,7 @@ router.get("/", async (c) => {
           string,
           { id: string; name: string | null; email: string }[]
         >();
+
         for (const guide of guideRows) {
           if (!guidesByClassroom.has(guide.classroom_id)) {
             guidesByClassroom.set(guide.classroom_id, []);
@@ -92,29 +136,72 @@ router.get("/", async (c) => {
     const response = ClassroomsListResponseSchema.parse({
       data: { classrooms },
     });
-    return c.json(response);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return c.json(
-        { error: "Invalid data", details: error.errors },
-        HTTP_STATUS.badRequest,
-      );
-    }
-    return c.json(
+    return respond(listClassroomsRoute, c, response);
+  } catch (_error) {
+    return respond(
+      listClassroomsRoute,
+      c,
       { error: "Failed to load classrooms" },
       HTTP_STATUS.internalServerError,
     );
   }
 });
 
-router.post("/", async (c) => {
+const createClassroomRoute = createRoute({
+  method: "post",
+  path: "/",
+  tags: ["Classrooms"],
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: CreateClassroomBody,
+        },
+      },
+    },
+  },
+  responses: {
+    [HTTP_STATUS.created]: {
+      description: "Classroom created",
+      content: {
+        "application/json": {
+          schema: ClassroomCreatedResponseSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.unauthorized]: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.internalServerError]: {
+      description: "Failed to create classroom",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+  },
+});
+
+const router = routerWithList.openapi(createClassroomRoute, async (c) => {
   const session = await getServerSession(c.req.raw);
   if (!session) {
-    return c.json({ error: "Unauthorized" }, HTTP_STATUS.unauthorized);
+    return respond(
+      createClassroomRoute,
+      c,
+      { error: "Unauthorized" },
+      HTTP_STATUS.unauthorized,
+    );
   }
 
+  const body = c.req.valid("json");
+
   try {
-    const body = CreateClassroomBody.parse(await c.req.json());
     const classroom = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
       async (trx) => {
@@ -164,15 +251,11 @@ router.post("/", async (c) => {
     const response = ClassroomCreatedResponseSchema.parse({
       data: { classroom },
     });
-    return c.json(response, HTTP_STATUS.created);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return c.json(
-        { error: "Invalid request", details: error.errors },
-        HTTP_STATUS.badRequest,
-      );
-    }
-    return c.json(
+    return respond(createClassroomRoute, c, response, HTTP_STATUS.created);
+  } catch (_error) {
+    return respond(
+      createClassroomRoute,
+      c,
       { error: "Failed to create classroom" },
       HTTP_STATUS.internalServerError,
     );

@@ -37,7 +37,7 @@ const postWebhooks_Body = z
               "ToolUseEvent",
               "ViewEvent",
               "OutcomeEvent",
-            ])
+            ]),
           )
           .min(1),
         actorId: z.string(),
@@ -83,7 +83,7 @@ const putWebhooks_id_Body = z
               "ToolUseEvent",
               "ViewEvent",
               "OutcomeEvent",
-            ])
+            ]),
           )
           .min(1),
         actorId: z.string(),
@@ -151,7 +151,7 @@ export const endpoints = makeApi([
                   "ToolUseEvent",
                   "ViewEvent",
                   "OutcomeEvent",
-                ])
+                ]),
               )
               .min(1),
             actorId: z.string(),
@@ -227,7 +227,7 @@ export const endpoints = makeApi([
                         "ToolUseEvent",
                         "ViewEvent",
                         "OutcomeEvent",
-                      ])
+                      ]),
                     )
                     .min(1),
                   actorId: z.string(),
@@ -244,7 +244,7 @@ export const endpoints = makeApi([
               updatedAt: z.string().datetime({ offset: true }),
             })
             .strict()
-            .passthrough()
+            .passthrough(),
         ),
         count: z.number(),
       })
@@ -304,7 +304,7 @@ export const endpoints = makeApi([
                   "ToolUseEvent",
                   "ViewEvent",
                   "OutcomeEvent",
-                ])
+                ]),
               )
               .min(1),
             actorId: z.string(),
@@ -389,7 +389,7 @@ export const endpoints = makeApi([
                   "ToolUseEvent",
                   "ViewEvent",
                   "OutcomeEvent",
-                ])
+                ]),
               )
               .min(1),
             actorId: z.string(),

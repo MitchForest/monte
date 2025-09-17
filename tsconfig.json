@@ -20,6 +20,8 @@
     "paths": {
       "@monte/shared": ["./packages/shared/src/index.ts"],
       "@monte/shared/*": ["./packages/shared/src/*"],
+      "@monte/shared/timeback": ["./packages/shared/src/timeback/index.ts"],
+      "@monte/shared/timeback/*": ["./packages/shared/src/timeback/*"],
       "@monte/api": ["./apps/api/src/index.ts"],
       "@monte/api/*": ["./apps/api/src/*"],
       "@monte/timeback-sdk": ["./packages/timeback-sdk/src/index.ts"],

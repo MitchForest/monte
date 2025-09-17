@@ -11,6 +11,10 @@ export type ActionType = "task" | "lesson";
 
 export type HabitSchedule = "daily" | "weekdays" | "custom";
 
+export type LessonInstanceStatus = "unscheduled" | "scheduled" | "completed";
+
+export type SummaryScope = "today" | "this_week" | "custom";
+
 // Database table types
 export type UsersTable = {
   id: string;
@@ -131,6 +135,18 @@ export type HabitCheckinsTable = {
   created_at: string;
 };
 
+export type HabitCheckinEventsTable = {
+  id: string;
+  org_id: string;
+  habit_id: string;
+  student_id: string;
+  date: string;
+  checked: boolean;
+  source: string;
+  created_by: string | null;
+  created_at: string;
+};
+
 export type ClassAreasTable = {
   id: string;
   name: string;
@@ -139,6 +155,34 @@ export type ClassAreasTable = {
 export type DomainsTable = {
   id: string;
   name: string;
+};
+
+export type SubjectsTable = {
+  id: string;
+  org_id: string;
+  name: string;
+  color: string | null;
+  created_at: string;
+};
+
+export type CoursesTable = {
+  id: string;
+  org_id: string;
+  subject_id: string | null;
+  name: string;
+  description: string | null;
+  created_at: string;
+};
+
+export type CourseLessonsTable = {
+  id: string;
+  org_id: string;
+  course_id: string;
+  title: string;
+  description: string | null;
+  duration_minutes: number | null;
+  order_index: number;
+  created_at: string;
 };
 
 export type TopicsTable = {
@@ -169,6 +213,45 @@ export type WorkPeriodItemsTable = {
   material_id: string | null;
   domain_id: string | null;
   topic_id: string | null;
+};
+
+export type StudentLessonsTable = {
+  id: string;
+  org_id: string;
+  student_id: string;
+  course_lesson_id: string | null;
+  custom_title: string | null;
+  notes: string | null;
+  status: LessonInstanceStatus;
+  scheduled_for: string | null;
+  completed_at: string | null;
+  assigned_by_user_id: string | null;
+  rescheduled_from_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type StudentSummariesTable = {
+  id: string;
+  org_id: string;
+  student_id: string;
+  generated_by_user_id: string | null;
+  title: string;
+  content: string;
+  scope: SummaryScope;
+  timespan_start: string | null;
+  timespan_end: string | null;
+  emailed_at: string | null;
+  created_at: string;
+};
+
+export type StudentSummaryRecipientsTable = {
+  id: string;
+  summary_id: string;
+  parent_id: string | null;
+  email: string;
+  delivered_at: string | null;
+  created_at: string;
 };
 
 export type AuthSessionsTable = {

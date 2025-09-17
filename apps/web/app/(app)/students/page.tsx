@@ -1,19 +1,15 @@
 "use client";
 
-import type { ClassroomWithGuides, Habit, HabitSchedule } from "@monte/shared";
+import type { ClassroomWithGuides, Habit, Student } from "@monte/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+
 import { AppPageHeader } from "@/components/app/page-header";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { StudentCard } from "@/components/app/students/student-card";
+import { StudentModal } from "@/components/app/students/student-modal";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -30,28 +26,17 @@ import {
   listHabits,
   listStudents,
 } from "@/lib/api/endpoints";
-import type { ColumnDef } from "../../../components/ui/kibo-table";
-import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableHeaderGroup,
-  TableProvider,
-  TableRow,
-} from "../../../components/ui/kibo-table";
+
+const viewModes = [
+  { id: "directory", label: "Directory" },
+  { id: "attendance", label: "Attendance" },
+] as const;
+
+type ViewMode = (typeof viewModes)[number]["id"];
 
 type Classroom = ClassroomWithGuides;
-type Student = {
-  id: string;
-  org_id: string;
-  full_name: string;
-  avatar_url: string | null;
-  dob: string | null;
-  primary_classroom_id: string | null;
-  created_at: string;
-  classroom: { id: string; name: string } | null;
-};
+
+type AttendanceState = Record<string, boolean>;
 
 export default function StudentsPage() {
   const queryClient = useQueryClient();
@@ -59,6 +44,11 @@ export default function StudentsPage() {
   const [selectedClassroom, setSelectedClassroom] = useState<string>("");
   const [isStudentDialogOpen, setStudentDialogOpen] = useState(false);
   const [isHabitDialogOpen, setHabitDialogOpen] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(
+    null,
+  );
+  const [viewMode, setViewMode] = useState<ViewMode>("directory");
+  const [attendance, setAttendance] = useState<AttendanceState>({});
 
   const [newStudentName, setNewStudentName] = useState("");
   const [newStudentDob, setNewStudentDob] = useState("");
@@ -66,7 +56,8 @@ export default function StudentsPage() {
 
   const [habitStudentId, setHabitStudentId] = useState("");
   const [habitName, setHabitName] = useState("");
-  const [habitSchedule, setHabitSchedule] = useState<HabitSchedule>("daily");
+  const [habitSchedule, setHabitSchedule] =
+    useState<Habit["schedule"]>("daily");
 
   const classroomsQuery = useQuery({
     queryKey: ["classrooms", { scope: "students" }],
@@ -114,7 +105,6 @@ export default function StudentsPage() {
   const habits = (habitsQuery.data ?? []) as Habit[];
 
   const isStudentsLoading = studentsQuery.isLoading || studentsQuery.isFetching;
-  const isHabitsLoading = habitsQuery.isLoading || habitsQuery.isFetching;
 
   const createStudentMutation = useMutation({
     mutationFn: createStudent,
@@ -125,7 +115,6 @@ export default function StudentsPage() {
       setNewStudentDob("");
       setNewStudentClassroom("");
       queryClient.invalidateQueries({ queryKey: ["students"] });
-      queryClient.invalidateQueries({ queryKey: ["habits"] });
     },
     onError: (error: unknown) => {
       toast.error(
@@ -179,62 +168,6 @@ export default function StudentsPage() {
     });
   };
 
-  const tableColumns = useMemo<ColumnDef<Student>[]>(
-    () => [
-      {
-        accessorKey: "full_name",
-        header: "Learner",
-        cell: ({ row }) => {
-          const learner = row.original;
-          const initials = learner.full_name
-            .split(" ")
-            .map((part) => part.slice(0, 1))
-            .join("")
-            .slice(0, 2)
-            .toUpperCase();
-          return (
-            <div className="flex items-center gap-3">
-              <Avatar>
-                <AvatarFallback>{initials}</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <span className="font-medium text-foreground text-sm">
-                  {learner.full_name}
-                </span>
-                <span className="text-muted-foreground text-xs">
-                  {learner.classroom?.name ?? "Unassigned"}
-                </span>
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "dob",
-        header: "Birthday",
-        cell: ({ row }) => (
-          <span className="text-muted-foreground text-sm">
-            {row.original.dob ?? "—"}
-          </span>
-        ),
-      },
-      {
-        accessorKey: "created_at",
-        header: "Joined",
-        cell: ({ row }) => (
-          <span className="text-muted-foreground text-sm">
-            {new Intl.DateTimeFormat("en", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            }).format(new Date(row.original.created_at))}
-          </span>
-        ),
-      },
-    ],
-    [],
-  );
-
   const habitsByStudent = useMemo(() => {
     const grouped = new Map<string, Habit[]>();
     for (const habit of habits) {
@@ -245,6 +178,25 @@ export default function StudentsPage() {
     }
     return grouped;
   }, [habits]);
+
+  const presentCount = useMemo(() => {
+    return Object.values(attendance).filter(Boolean).length;
+  }, [attendance]);
+
+  const handleAttendanceToggle = (studentId: string, present: boolean) => {
+    setAttendance((current) => ({
+      ...current,
+      [studentId]: present,
+    }));
+  };
+
+  const handleOpenStudent = (studentId: string) => {
+    setSelectedStudentId(studentId);
+  };
+
+  const handleCloseStudent = () => {
+    setSelectedStudentId(null);
+  };
 
   return (
     <div className="flex flex-1 flex-col gap-8">
@@ -286,99 +238,110 @@ export default function StudentsPage() {
           >
             Create habit
           </Button>
+          <div className="flex gap-2 rounded-full border border-border/60 bg-card/70 p-1">
+            {viewModes.map((mode) => (
+              <Button
+                key={mode.id}
+                onClick={() => setViewMode(mode.id)}
+                type="button"
+                variant={viewMode === mode.id ? "default" : "ghost"}
+              >
+                {mode.label}
+              </Button>
+            ))}
+          </div>
         </div>
       </AppPageHeader>
 
-      <Card className="rounded-3xl border-border/60 bg-card/90 shadow-md">
-        <CardHeader>
-          <CardTitle className="font-semibold text-xl">
-            Learners ({students.length})
-          </CardTitle>
-          <CardDescription>
-            Filter and explore the children across each environment.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="overflow-hidden rounded-2xl border border-border/50">
-          <TableProvider columns={tableColumns} data={students}>
-            <TableHeader className="bg-muted/40">
-              {({ headerGroup }) => (
-                <TableHeaderGroup headerGroup={headerGroup}>
-                  {({ header }) => (
-                    <TableHead
-                      header={header}
-                      className="text-muted-foreground text-xs uppercase tracking-[0.18em]"
-                    />
-                  )}
-                </TableHeaderGroup>
-              )}
-            </TableHeader>
-            <TableBody>
-              {({ row }) => (
-                <TableRow row={row}>
-                  {({ cell }) => <TableCell cell={cell} />}
-                </TableRow>
-              )}
-            </TableBody>
-          </TableProvider>
-          {isStudentsLoading && (
-            <p className="pt-4 text-center text-muted-foreground text-sm">
-              Loading learners…
+      <section className="grid gap-4 md:grid-cols-3">
+        <Card className="rounded-3xl border-border/60 bg-card/80 shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Total learners
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-semibold text-foreground">
+              {students.length}
             </p>
-          )}
-        </CardContent>
-      </Card>
+            <p className="text-sm text-muted-foreground">
+              Across all classrooms
+            </p>
+          </CardContent>
+        </Card>
+        <Card className="rounded-3xl border-border/60 bg-card/80 shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Attendance today
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-semibold text-foreground">
+              {presentCount}
+            </p>
+            <p className="text-sm text-muted-foreground">Marked present</p>
+          </CardContent>
+        </Card>
+        <Card className="rounded-3xl border-border/60 bg-card/80 shadow-sm">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Habits tracked
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-semibold text-foreground">
+              {habits.length}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Active across learners
+            </p>
+          </CardContent>
+        </Card>
+      </section>
 
-      <Card className="rounded-3xl border-border/60 bg-card/90 shadow-md">
-        <CardHeader>
-          <CardTitle className="font-semibold text-xl">Habits</CardTitle>
-          <CardDescription>
-            Gentle rhythms you are cultivating with learners.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isHabitsLoading && (
-            <p className="text-muted-foreground text-sm">Loading habits…</p>
-          )}
-          {!isHabitsLoading && habits.length === 0 && (
-            <p className="text-muted-foreground text-sm">
-              No habits yet. Create one to track daily routines.
-            </p>
-          )}
-          {!isHabitsLoading && habits.length > 0 && (
-            <ul className="grid gap-4 md:grid-cols-2">
-              {students.map((student) => {
-                const studentHabits = habitsByStudent.get(student.id) ?? [];
-                if (studentHabits.length === 0) {
-                  return null;
+      <section className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-foreground">
+            {viewMode === "attendance"
+              ? "Attendance mode"
+              : "Learner spotlight"}
+          </h2>
+          {isStudentsLoading ? (
+            <p className="text-sm text-muted-foreground">Loading learners…</p>
+          ) : null}
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {students.map((student) => {
+            const studentHabits = habitsByStudent.get(student.id) ?? [];
+            const present = attendance[student.id] ?? false;
+            return (
+              <StudentCard
+                attendanceMarked={present}
+                attendanceMode={viewMode === "attendance"}
+                habitsCount={studentHabits.length}
+                key={student.id}
+                onOpen={() => handleOpenStudent(student.id)}
+                onToggleAttendance={(value) =>
+                  handleAttendanceToggle(student.id, value)
                 }
-                return (
-                  <li
-                    className="rounded-2xl border border-border/50 bg-background/70 p-4"
-                    key={student.id}
-                  >
-                    <p className="font-medium text-foreground text-sm">
-                      {student.full_name}
-                    </p>
-                    <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
-                      {studentHabits.map((habit) => (
-                        <li
-                          className="flex items-center justify-between rounded-xl bg-card/60 px-3 py-2"
-                          key={habit.id}
-                        >
-                          <span>{habit.name}</span>
-                          <span className="text-xs uppercase tracking-[0.2em]">
-                            {habit.schedule}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
+                student={student}
+              />
+            );
+          })}
+        </div>
+        {students.length === 0 && !isStudentsLoading ? (
+          <Card className="rounded-3xl border-border/60 bg-card/80 p-8 text-center text-muted-foreground">
+            <p>
+              No learners found. Try a different filter or add a new learner.
+            </p>
+          </Card>
+        ) : null}
+      </section>
+
+      <StudentModal
+        onClose={handleCloseStudent}
+        studentId={selectedStudentId}
+      />
 
       <Dialog onOpenChange={setStudentDialogOpen} open={isStudentDialogOpen}>
         <DialogContent>
@@ -439,6 +402,7 @@ export default function StudentsPage() {
           <DialogFooter>
             <Button
               onClick={() => setStudentDialogOpen(false)}
+              type="button"
               variant="outline"
             >
               Cancel
@@ -446,6 +410,7 @@ export default function StudentsPage() {
             <Button
               disabled={createStudentMutation.isPending}
               onClick={handleCreateStudent}
+              type="button"
             >
               {createStudentMutation.isPending ? "Saving..." : "Save learner"}
             </Button>
@@ -499,7 +464,7 @@ export default function StudentsPage() {
                 className="rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                 id="habit-schedule"
                 onChange={(event) =>
-                  setHabitSchedule(event.target.value as HabitSchedule)
+                  setHabitSchedule(event.target.value as Habit["schedule"])
                 }
                 value={habitSchedule}
               >
@@ -510,12 +475,17 @@ export default function StudentsPage() {
             </label>
           </div>
           <DialogFooter>
-            <Button onClick={() => setHabitDialogOpen(false)} variant="outline">
+            <Button
+              onClick={() => setHabitDialogOpen(false)}
+              type="button"
+              variant="outline"
+            >
               Cancel
             </Button>
             <Button
               disabled={createHabitMutation.isPending}
               onClick={handleCreateHabit}
+              type="button"
             >
               {createHabitMutation.isPending ? "Creating..." : "Create habit"}
             </Button>

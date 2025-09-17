@@ -213,7 +213,7 @@ export const endpoints = makeApi([
                   name: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),

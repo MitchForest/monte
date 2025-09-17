@@ -4,6 +4,7 @@ export const HTTP_STATUS = {
   badRequest: 400,
   unauthorized: 401,
   notFound: 404,
+  serviceUnavailable: 503,
   internalServerError: 500,
 } as const;
 

@@ -6,11 +6,11 @@ Monte is a fully type-safe Montessori operations platform built in a Bun-powered
 
 | Path | Description |
 | ---- | ----------- |
-| `apps/api` | Bun + Hono REST API with Better Auth and Kysely-backed handlers. |
+| `apps/api` | Bun + Hono REST API with Better Auth, Kysely-backed handlers, shared `respond()` helper, and optional TimeBack integrations. |
 | `apps/web` | Next.js 15 application using React 19, Tailwind v4, Shadcn/Radix primitives, and TanStack Query. |
 | `packages/database` | Postgres access layer (Kysely client, transactions, migrations). |
-| `packages/shared` | Single source of truth for Zod schemas, TypeScript types, and API envelopes. |
-| `packages/timeback-sdk` | External Timeback API SDK; generation targets `@monte/shared/timeback` so all workspaces share the same contract. |
+| `packages/shared` | Single source of truth for Zod schemas, TypeScript types, response envelopes, and TimeBack analytics helpers. |
+| `packages/timeback-sdk` | External TimeBack API SDK; generation targets `@monte/shared/timeback` so all workspaces share the same contract. |
 
 ## Tech Stack at a Glance
 
@@ -51,7 +51,7 @@ Monte enforces a single contract for every domain entity through the `packages/s
 2. **Implement the API handler** in `apps/api`.
    - Parse input using the shared schema (`Schema.parse(...)`) before executing.
    - Wrap database work in `withDbContext({ userId, orgId }, trx => ...)` to participate in multi-tenant RLS.
-   - Parse the outbound payload with the shared response schema before calling `c.json`.
+   - Parse the outbound payload with the shared response schema and return it with `respond(route, c, parsed, status?)` so TypeScript enforces status-aware typing.
 3. **Expose the client helper** in `apps/web/lib/api/endpoints.ts`.
    - Call the Hono client (`apiClient`) and pass responses through `handleResponse(..., SharedSchema)` to keep runtime validation aligned with build-time types.
    - Export simple functions (e.g. `listStudents`, `createStudent`) returning the parsed data for React Query.
@@ -67,7 +67,8 @@ This loop guarantees that if any shape diverges, compilation or runtime parsing 
 - **Zod** supplies runtime validation on top of TypeScript types. Schemas defined in `@monte/shared` guard API inputs/outputs and power `z.infer` to produce matching static types for consumers.
 - **TanStack React Query** is our data orchestration layer in the React app. It manages caching, loading states, background refetching, and error handling for all network interactions. Every query or mutation in the UI flows through React Query so we never reimplement fetching logic manually.
 - **Shadcn UI & Radix** provide accessible, unstyled primitives. We wrap these components with Tailwind classes to keep the UI consistent while meeting accessibility rules.
-- **Timeback SDK** generates Zod schemas from TimeBack’s OpenAPI specs directly into `@monte/shared/timeback`. Use `createMonteTimeback(client)` to access helpers that return Monte’s `{ data, meta? }` envelope while staying in sync with the external contract.
+- **Shared `respond()` helper** guarantees every success path mirrors the OpenAPI metadata. Import it from `apps/api/src/lib/http/respond.ts` to return typed responses instead of calling `c.json` directly.
+- **TimeBack SDK** generates Zod schemas from TimeBack’s OpenAPI specs directly into `@monte/shared/timeback`. Use `createMonteTimeback(client)` to access helpers that return Monte’s `{ data, meta? }` envelope while staying in sync with the external contract.
 
 ## React Query & Data Flow
 

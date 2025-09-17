@@ -297,7 +297,7 @@ export const endpoints = makeApi([
               itemTitle: z.string(),
               interactionType: z.string(),
             })
-            .strict()
+            .strict(),
         ),
         pagination: z
           .object({

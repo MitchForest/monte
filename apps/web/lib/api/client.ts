@@ -61,7 +61,9 @@ function createFetch(defaultHeaders?: HeadersInit): typeof fetch {
   return Object.assign(wrapped, fetch);
 }
 
-function buildClient(baseUrl: string, fetcher: typeof fetch) {
+type HonoClient = ReturnType<typeof hc<ApiApp>>;
+
+function buildClient(baseUrl: string, fetcher: typeof fetch): HonoClient {
   return hc<ApiApp>(baseUrl, {
     fetch: fetcher,
   });
@@ -75,7 +77,7 @@ function instantiateClient(headers?: HeadersInit) {
 
 const defaultClient = instantiateClient();
 
-export type ApiClient = ReturnType<typeof buildClient>;
+export type ApiClient = HonoClient;
 export const apiClient: ApiClient = defaultClient;
 
 export function createApiClient(options?: CreateApiClientOptions): ApiClient {

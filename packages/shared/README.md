@@ -11,9 +11,10 @@ src/
 ├── types.ts        # Montessori domain TypeScript types
 ├── utils.ts        # Shared utilities (cn, etc.)
 └── timeback/
-    ├── generated/  # Zod schemas & endpoint metadata generated from TimeBack OpenAPI specs
-    ├── envelope.ts # Monte response helpers for TimeBack integrations
-    └── index.ts    # Barrel exports for TimeBack-related modules
+    ├── analytics.ts # Monte-defined helpers for TimeBack analytics summaries
+    ├── generated/   # Zod schemas & endpoint metadata generated from TimeBack OpenAPI specs
+    ├── envelope.ts  # Monte response helpers for TimeBack integrations
+    └── index.ts     # Barrel exports for TimeBack-related modules
 ```
 
 ## How TimeBack Shapes Arrive Here

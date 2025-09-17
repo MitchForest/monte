@@ -13,7 +13,7 @@ const postImsCaseV1p1CFPackages_Body = z
         identifier: z
           .string()
           .regex(
-            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
           )
           .uuid(),
         uri: z.string().url(),
@@ -32,13 +32,13 @@ const postImsCaseV1p1CFPackages_Body = z
                 identifier: z
                   .string()
                   .regex(
-                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                   )
                   .uuid(),
                 uri: z.string().url(),
                 targetType: z.string().optional(),
               })
-              .strict()
+              .strict(),
           )
           .optional(),
         language: z.string().optional(),
@@ -52,7 +52,7 @@ const postImsCaseV1p1CFPackages_Body = z
             identifier: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             uri: z.string().url(),
@@ -67,7 +67,7 @@ const postImsCaseV1p1CFPackages_Body = z
             identifier: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             uri: z.string().url(),
@@ -86,7 +86,7 @@ const postImsCaseV1p1CFPackages_Body = z
           identifier: z
             .string()
             .regex(
-              /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+              /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
             )
             .uuid(),
           uri: z.string().url(),
@@ -104,7 +104,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -121,7 +121,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -135,7 +135,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -151,7 +151,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -163,7 +163,7 @@ const postImsCaseV1p1CFPackages_Body = z
           subjectURI: z.string().optional(),
           extensions: z.object({}).partial().strict().passthrough().optional(),
         })
-        .strict()
+        .strict(),
     ),
     CFAssociations: z.array(
       z
@@ -171,7 +171,7 @@ const postImsCaseV1p1CFPackages_Body = z
           identifier: z
             .string()
             .regex(
-              /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+              /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
             )
             .uuid(),
           uri: z.string().url(),
@@ -184,7 +184,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -197,7 +197,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -210,7 +210,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -224,7 +224,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -235,7 +235,7 @@ const postImsCaseV1p1CFPackages_Body = z
           notes: z.string().optional(),
           extensions: z.object({}).partial().strict().passthrough().optional(),
         })
-        .strict()
+        .strict(),
     ),
     CFDefinitions: z
       .object({
@@ -245,7 +245,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -254,7 +254,7 @@ const postImsCaseV1p1CFPackages_Body = z
               hierarchyCode: z.string().optional(),
               description: z.string().optional(),
             })
-            .strict()
+            .strict(),
         ),
         CFConcepts: z.array(
           z
@@ -262,7 +262,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -272,7 +272,7 @@ const postImsCaseV1p1CFPackages_Body = z
               hierarchyCode: z.string().optional(),
               description: z.string().optional(),
             })
-            .strict()
+            .strict(),
         ),
         CFItemTypes: z.array(
           z
@@ -280,7 +280,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -290,7 +290,7 @@ const postImsCaseV1p1CFPackages_Body = z
               hierarchyCode: z.string().optional(),
               typeCode: z.string().optional(),
             })
-            .strict()
+            .strict(),
         ),
         CFLicenses: z.array(
           z
@@ -298,7 +298,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -307,7 +307,7 @@ const postImsCaseV1p1CFPackages_Body = z
               description: z.string().optional(),
               licenseText: z.string(),
             })
-            .strict()
+            .strict(),
         ),
         CFAssociationGroupings: z.array(
           z
@@ -315,7 +315,7 @@ const postImsCaseV1p1CFPackages_Body = z
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -323,7 +323,7 @@ const postImsCaseV1p1CFPackages_Body = z
               title: z.string(),
               description: z.string().optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .partial()
@@ -336,7 +336,7 @@ const postImsCaseV1p1CFPackages_Body = z
             identifier: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             uri: z.string().url(),
@@ -350,7 +350,7 @@ const postImsCaseV1p1CFPackages_Body = z
                     identifier: z
                       .string()
                       .regex(
-                        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                       )
                       .uuid(),
                     uri: z.string().url(),
@@ -363,7 +363,7 @@ const postImsCaseV1p1CFPackages_Body = z
                         identifier: z
                           .string()
                           .regex(
-                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                           )
                           .uuid(),
                         uri: z.string().url(),
@@ -380,7 +380,7 @@ const postImsCaseV1p1CFPackages_Body = z
                             identifier: z
                               .string()
                               .regex(
-                                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                               )
                               .uuid(),
                             uri: z.string().url(),
@@ -391,15 +391,15 @@ const postImsCaseV1p1CFPackages_Body = z
                             feedback: z.string().optional(),
                             position: z.number().optional(),
                           })
-                          .strict()
+                          .strict(),
                       )
                       .optional(),
                   })
-                  .strict()
+                  .strict(),
               )
               .optional(),
           })
-          .strict()
+          .strict(),
       )
       .optional(),
   })
@@ -435,7 +435,7 @@ export const endpoints = makeApi([
             identifier: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             uri: z.string().url(),
@@ -454,13 +454,13 @@ export const endpoints = makeApi([
                     identifier: z
                       .string()
                       .regex(
-                        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                       )
                       .uuid(),
                     uri: z.string().url(),
                     targetType: z.string().optional(),
                   })
-                  .strict()
+                  .strict(),
               )
               .optional(),
             language: z.string().optional(),
@@ -474,7 +474,7 @@ export const endpoints = makeApi([
                 identifier: z
                   .string()
                   .regex(
-                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                   )
                   .uuid(),
                 uri: z.string().url(),
@@ -489,7 +489,7 @@ export const endpoints = makeApi([
                 identifier: z
                   .string()
                   .regex(
-                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                   )
                   .uuid(),
                 uri: z.string().url(),
@@ -513,7 +513,7 @@ export const endpoints = makeApi([
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -531,7 +531,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -548,7 +548,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -562,7 +562,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -578,7 +578,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -595,7 +595,7 @@ export const endpoints = makeApi([
                 .passthrough()
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
         CFAssociations: z.array(
           z
@@ -603,7 +603,7 @@ export const endpoints = makeApi([
               identifier: z
                 .string()
                 .regex(
-                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                  /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                 )
                 .uuid(),
               uri: z.string().url(),
@@ -616,7 +616,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -629,7 +629,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -642,7 +642,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -656,7 +656,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -672,7 +672,7 @@ export const endpoints = makeApi([
                 .passthrough()
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
         CFDefinitions: z
           .object({
@@ -682,7 +682,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -691,7 +691,7 @@ export const endpoints = makeApi([
                   hierarchyCode: z.string().optional(),
                   description: z.string().optional(),
                 })
-                .strict()
+                .strict(),
             ),
             CFConcepts: z.array(
               z
@@ -699,7 +699,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -709,7 +709,7 @@ export const endpoints = makeApi([
                   hierarchyCode: z.string().optional(),
                   description: z.string().optional(),
                 })
-                .strict()
+                .strict(),
             ),
             CFItemTypes: z.array(
               z
@@ -717,7 +717,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -727,7 +727,7 @@ export const endpoints = makeApi([
                   hierarchyCode: z.string().optional(),
                   typeCode: z.string().optional(),
                 })
-                .strict()
+                .strict(),
             ),
             CFLicenses: z.array(
               z
@@ -735,7 +735,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -744,7 +744,7 @@ export const endpoints = makeApi([
                   description: z.string().optional(),
                   licenseText: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
             CFAssociationGroupings: z.array(
               z
@@ -752,7 +752,7 @@ export const endpoints = makeApi([
                   identifier: z
                     .string()
                     .regex(
-                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                      /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                     )
                     .uuid(),
                   uri: z.string().url(),
@@ -760,7 +760,7 @@ export const endpoints = makeApi([
                   title: z.string(),
                   description: z.string().optional(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .partial()
@@ -773,7 +773,7 @@ export const endpoints = makeApi([
                 identifier: z
                   .string()
                   .regex(
-                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                   )
                   .uuid(),
                 uri: z.string().url(),
@@ -787,7 +787,7 @@ export const endpoints = makeApi([
                         identifier: z
                           .string()
                           .regex(
-                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                           )
                           .uuid(),
                         uri: z.string().url(),
@@ -800,7 +800,7 @@ export const endpoints = makeApi([
                             identifier: z
                               .string()
                               .regex(
-                                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                               )
                               .uuid(),
                             uri: z.string().url(),
@@ -817,7 +817,7 @@ export const endpoints = makeApi([
                                 identifier: z
                                   .string()
                                   .regex(
-                                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                                   )
                                   .uuid(),
                                 uri: z.string().url(),
@@ -828,15 +828,15 @@ export const endpoints = makeApi([
                                 feedback: z.string().optional(),
                                 position: z.number().optional(),
                               })
-                              .strict()
+                              .strict(),
                           )
                           .optional(),
                       })
-                      .strict()
+                      .strict(),
                   )
                   .optional(),
               })
-              .strict()
+              .strict(),
           )
           .optional(),
       })
@@ -858,7 +858,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -881,7 +881,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -904,7 +904,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -935,7 +935,7 @@ export const endpoints = makeApi([
             documentId: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             stats: z
@@ -967,7 +967,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -990,7 +990,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -1013,7 +1013,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -1047,7 +1047,7 @@ export const endpoints = makeApi([
             sourcedId: z
               .string()
               .regex(
-                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
               )
               .uuid(),
             CFDocument: z
@@ -1055,7 +1055,7 @@ export const endpoints = makeApi([
                 identifier: z
                   .string()
                   .regex(
-                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                    /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                   )
                   .uuid(),
                 uri: z.string().url(),
@@ -1074,13 +1074,13 @@ export const endpoints = makeApi([
                         identifier: z
                           .string()
                           .regex(
-                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                           )
                           .uuid(),
                         uri: z.string().url(),
                         targetType: z.string().optional(),
                       })
-                      .strict()
+                      .strict(),
                   )
                   .optional(),
                 language: z.string().optional(),
@@ -1094,7 +1094,7 @@ export const endpoints = makeApi([
                     identifier: z
                       .string()
                       .regex(
-                        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                       )
                       .uuid(),
                     uri: z.string().url(),
@@ -1109,7 +1109,7 @@ export const endpoints = makeApi([
                     identifier: z
                       .string()
                       .regex(
-                        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+                        /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
                       )
                       .uuid(),
                     uri: z.string().url(),
@@ -1149,7 +1149,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -1172,7 +1172,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -1195,7 +1195,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),

@@ -10,15 +10,26 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["bun-types"],
-    "lib": ["ES2022"],
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "types": ["bun-types", "@asteasolutions/zod-to-openapi"],
+    "lib": ["ES2022", "dom"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@monte/api": ["./src/index.ts"],
+      "@monte/api/*": ["./src/*"],
+      "@monte/shared": ["../../packages/shared/src/index.ts"],
+      "@monte/shared/*": ["../../packages/shared/src/*"],
+      "@monte/shared/timeback": ["../../packages/shared/src/timeback/index.ts"],
+      "@monte/shared/timeback/*": ["../../packages/shared/src/timeback/*"],
+      "@monte/timeback-sdk": ["../../packages/timeback-sdk/src/index.ts"],
+      "@monte/timeback-sdk/*": ["../../packages/timeback-sdk/src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "../../packages/shared/src/**/*",
+    "../../packages/database/src/**/*",
+    "../../packages/timeback-sdk/src/**/*"
+  ],
   "exclude": ["node_modules", "dist"]
 }

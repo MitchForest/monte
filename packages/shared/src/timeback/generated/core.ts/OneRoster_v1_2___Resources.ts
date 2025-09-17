@@ -71,7 +71,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -89,7 +89,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -107,7 +107,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -125,7 +125,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -182,7 +182,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -200,7 +200,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -218,7 +218,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -294,7 +294,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -312,7 +312,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -330,7 +330,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -348,7 +348,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -424,7 +424,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -442,7 +442,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -460,7 +460,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -478,7 +478,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -554,7 +554,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -572,7 +572,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -590,7 +590,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -608,7 +608,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -670,7 +670,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -688,7 +688,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -706,7 +706,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -783,7 +783,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -801,7 +801,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -819,7 +819,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -837,7 +837,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -919,7 +919,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -937,7 +937,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -955,7 +955,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -973,7 +973,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1049,7 +1049,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -1067,7 +1067,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1085,7 +1085,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1103,7 +1103,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1165,7 +1165,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1183,7 +1183,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1201,7 +1201,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1283,7 +1283,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -1301,7 +1301,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1319,7 +1319,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1337,7 +1337,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1414,7 +1414,7 @@ export const endpoints = makeApi([
                 ])
                 .optional(),
             })
-            .strict()
+            .strict(),
         ),
       })
       .strict(),
@@ -1432,7 +1432,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1450,7 +1450,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),
@@ -1468,7 +1468,7 @@ export const endpoints = makeApi([
                   codeMinor: z.string(),
                   description: z.string(),
                 })
-                .strict()
+                .strict(),
             ),
           })
           .strict(),

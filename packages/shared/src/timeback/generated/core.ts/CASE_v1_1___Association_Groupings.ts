@@ -25,7 +25,7 @@ export const endpoints = makeApi([
         identifier: z
           .string()
           .regex(
-            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/
+            /^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000)$/,
           )
           .uuid(),
         uri: z.string().url(),
@@ -51,7 +51,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -74,7 +74,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
@@ -97,7 +97,7 @@ export const endpoints = makeApi([
                       imsx_codeMinorFieldName: z.string(),
                       imsx_codeMinorFieldValue: z.string(),
                     })
-                    .strict()
+                    .strict(),
                 ),
               })
               .strict(),
