@@ -34,9 +34,19 @@ import {
   WorkspaceInvitesListResponseSchema,
 } from "@monte/shared";
 import {
-  TimebackAnalyticsResponseSchema,
-  type TimebackAnalyticsSummary,
-} from "@monte/shared/timeback";
+  type StudentNextPlacement,
+  StudentNextPlacementResponseSchema,
+  type StudentPlacementCourseProgress,
+  type StudentPlacementLevel,
+  StudentPlacementLevelResponseSchema,
+  StudentPlacementProgressResponseSchema,
+  type StudentPlacementTestAttempt,
+  StudentPlacementTestsResponseSchema,
+  type StudentXpSummary,
+  StudentXpSummaryResponseSchema,
+  type SubjectTrackAssignment,
+  SubjectTrackListResponseSchema,
+} from "@monte/shared/student";
 import { z } from "zod";
 
 import { apiClient } from "./client";
@@ -80,7 +90,9 @@ type ApiClientShape = {
   "guide-dashboard": ApiEndpoint;
   "student-lessons": ApiEndpoint;
   "student-summaries": ApiEndpoint;
-  "timeback-analytics": ApiEndpoint;
+  "student-xp": ApiEndpoint;
+  "student-placements": ApiEndpoint;
+  "subject-tracks": ApiEndpoint;
 };
 
 const client = apiClient as unknown as ApiClientShape;
@@ -97,7 +109,9 @@ const curriculumClient = client.curriculum;
 const guideDashboardClient = client["guide-dashboard"];
 const studentLessonsClient = client["student-lessons"];
 const studentSummariesClient = client["student-summaries"];
-const timebackAnalyticsClient = client["timeback-analytics"];
+const studentXpClient = client["student-xp"];
+const studentPlacementsClient = client["student-placements"];
+const subjectTracksClient = client["subject-tracks"];
 
 async function handleResponse<T>(
   promise: Promise<Response>,
@@ -978,9 +992,9 @@ type GetStudentXpSummaryParams = {
 export async function getStudentXpSummary(
   params: GetStudentXpSummaryParams,
   options: RequestOptions = {},
-): Promise<TimebackAnalyticsSummary> {
+): Promise<StudentXpSummary> {
   const response = await handleResponse(
-    timebackAnalyticsClient.xp.$get(
+    studentXpClient.summary.$get(
       {
         query: {
           studentId: params.studentId,
@@ -992,10 +1006,109 @@ export async function getStudentXpSummary(
       },
       options.signal ? { init: { signal: options.signal } } : undefined,
     ),
-    TimebackAnalyticsResponseSchema,
+    StudentXpSummaryResponseSchema,
   );
 
   return response.data;
+}
+
+type StudentPlacementParams = {
+  studentId: string;
+  subject?: string | null;
+};
+
+export async function getStudentPlacementCourses(
+  params: StudentPlacementParams,
+  options: RequestOptions = {},
+): Promise<StudentPlacementCourseProgress[]> {
+  const response = await handleResponse(
+    studentPlacementsClient.progress.$get(
+      {
+        query: {
+          studentId: params.studentId,
+          ...(params.subject ? { subject: params.subject } : {}),
+        },
+      },
+      options.signal ? { init: { signal: options.signal } } : undefined,
+    ),
+    StudentPlacementProgressResponseSchema,
+  );
+
+  return response.data.courses;
+}
+
+export async function getStudentPlacementLevel(
+  params: StudentPlacementParams,
+  options: RequestOptions = {},
+): Promise<StudentPlacementLevel | null> {
+  const response = await handleResponse(
+    studentPlacementsClient["current-level"].$get(
+      {
+        query: {
+          studentId: params.studentId,
+          ...(params.subject ? { subject: params.subject } : {}),
+        },
+      },
+      options.signal ? { init: { signal: options.signal } } : undefined,
+    ),
+    StudentPlacementLevelResponseSchema,
+  );
+
+  return response.data.currentLevel ?? null;
+}
+
+export async function getStudentNextPlacement(
+  params: StudentPlacementParams,
+  options: RequestOptions = {},
+): Promise<StudentNextPlacement | null> {
+  const response = await handleResponse(
+    studentPlacementsClient["next-test"].$get(
+      {
+        query: {
+          studentId: params.studentId,
+          ...(params.subject ? { subject: params.subject } : {}),
+        },
+      },
+      options.signal ? { init: { signal: options.signal } } : undefined,
+    ),
+    StudentNextPlacementResponseSchema,
+  );
+
+  return response.data.nextPlacement ?? null;
+}
+
+export async function getStudentPlacementTests(
+  params: StudentPlacementParams,
+  options: RequestOptions = {},
+): Promise<StudentPlacementTestAttempt[]> {
+  const response = await handleResponse(
+    studentPlacementsClient.tests.$get(
+      {
+        query: {
+          studentId: params.studentId,
+          ...(params.subject ? { subject: params.subject } : {}),
+        },
+      },
+      options.signal ? { init: { signal: options.signal } } : undefined,
+    ),
+    StudentPlacementTestsResponseSchema,
+  );
+
+  return response.data.tests;
+}
+
+export async function listSubjectTracks(
+  options: RequestOptions = {},
+): Promise<SubjectTrackAssignment[]> {
+  const response = await handleResponse(
+    subjectTracksClient.$get(
+      undefined,
+      options.signal ? { init: { signal: options.signal } } : undefined,
+    ),
+    SubjectTrackListResponseSchema,
+  );
+
+  return response.data.tracks;
 }
 
 export async function listClassAreas(options: RequestOptions = {}) {

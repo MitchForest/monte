@@ -24,10 +24,12 @@ type StudentXpPanelProps = {
 
 type XpEventRow = {
   id: string;
-  eventTime: string | null | undefined;
-  name: string | null | undefined;
+  occurredAt: string | null | undefined;
+  activity: string | null | undefined;
   xpEarned: number | null | undefined;
   subject: string | null | undefined;
+  appName: string | null | undefined;
+  metrics: Array<{ type: string; value: number }>;
 };
 
 function computeGoal(range: XpRange, start: Date, end: Date) {
@@ -62,16 +64,20 @@ function buildEvents(
   return summary.events
     .map((event, index) => ({
       id: event.id ?? `${index}`,
-      eventTime: event.eventTime,
-      name: event.object?.name ?? event.type ?? "Activity",
-      subject: event.object?.type ?? null,
+      occurredAt: event.occurredAt,
+      activity: event.activityTitle ?? "Activity",
+      subject: event.subject ?? null,
+      appName: event.app ?? null,
+      metrics: event.metrics ?? [],
       xpEarned: event.xpEarned ?? 0,
     }))
     .sort((a, b) => {
-      if (!a.eventTime || !b.eventTime) {
+      if (!a.occurredAt || !b.occurredAt) {
         return 0;
       }
-      return new Date(b.eventTime).getTime() - new Date(a.eventTime).getTime();
+      return (
+        new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime()
+      );
     });
 }
 
@@ -200,25 +206,45 @@ export function StudentXpPanel({ studentId }: StudentXpPanelProps) {
                   <TableHead className="text-xs uppercase tracking-[0.2em]">
                     Subject
                   </TableHead>
-                  <TableHead className="text-right text-xs uppercase tracking-[0.2em]">
-                    XP
+                  <TableHead className="text-xs uppercase tracking-[0.2em]">
+                    App
+                  </TableHead>
+                  <TableHead className="text-xs uppercase tracking-[0.2em]">
+                    XP Earned
+                  </TableHead>
+                  <TableHead className="text-xs uppercase tracking-[0.2em]">
+                    Details
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {events.map((event) => (
-                  <TableRow key={`${event.id}-${event.eventTime}`}>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {formatEventDate(event.eventTime)}
+                  <TableRow key={event.id}>
+                    <TableCell className="align-top text-sm text-foreground">
+                      {formatEventDate(event.occurredAt)}
                     </TableCell>
-                    <TableCell className="text-sm text-foreground">
-                      {event.name ?? "Activity"}
+                    <TableCell className="align-top text-sm text-foreground">
+                      {event.activity ?? "Activity"}
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
+                    <TableCell className="align-top text-sm text-muted-foreground">
                       {event.subject ?? "—"}
                     </TableCell>
-                    <TableCell className="text-right text-sm font-medium text-foreground">
+                    <TableCell className="align-top text-sm text-muted-foreground">
+                      {event.appName ?? "—"}
+                    </TableCell>
+                    <TableCell className="align-top text-sm font-medium text-foreground">
                       {Math.round(event.xpEarned ?? 0)}
+                    </TableCell>
+                    <TableCell className="align-top text-xs text-muted-foreground">
+                      {event.metrics.length > 0
+                        ? event.metrics
+                            .filter((metric) => metric.type !== "xpEarned")
+                            .map(
+                              (metric) =>
+                                `${metric.type}: ${Math.round(metric.value)}`,
+                            )
+                            .join(" · ") || "—"
+                        : "—"}
                     </TableCell>
                   </TableRow>
                 ))}

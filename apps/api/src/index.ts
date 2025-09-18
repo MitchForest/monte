@@ -12,11 +12,13 @@ import { observationsRouter } from "./routes/observations";
 import { organizationsRouter } from "./routes/organizations";
 import { studentLessonsRouter } from "./routes/student-lessons";
 import { studentParentsRouter } from "./routes/student-parents";
+import { studentPlacementsRouter } from "./routes/student-placements";
 import { studentSummariesRouter } from "./routes/student-summaries";
+import { studentXpRouter } from "./routes/student-xp";
 import { studentsRouter } from "./routes/students";
+import { subjectTracksRouter } from "./routes/subject-tracks";
 import { tasksRouter } from "./routes/tasks";
 import { teamRouter } from "./routes/team";
-import { timebackAnalyticsRouter } from "./routes/timeback-analytics";
 import { timebackEventsRouter } from "./routes/timeback-events";
 
 const app = createAPIApp({
@@ -43,7 +45,9 @@ const typedApp = app
   .route("/curriculum", curriculumRouter)
   .route("/guide-dashboard", guideDashboardRouter)
   .route("/attendance", attendanceRouter)
-  .route("/timeback-analytics", timebackAnalyticsRouter)
+  .route("/student-xp", studentXpRouter)
+  .route("/student-placements", studentPlacementsRouter)
+  .route("/subject-tracks", subjectTracksRouter)
   .route("/timeback-events", timebackEventsRouter)
   .route("/invites", invitesRouter)
   .route("/organizations", organizationsRouter)

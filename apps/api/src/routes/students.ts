@@ -14,8 +14,8 @@ import { respond } from "../lib/http/respond";
 import { HTTP_STATUS } from "../lib/http/status";
 import {
   getStudentXpSummary,
-  TimebackUnavailableError,
-} from "../services/timeback/analytics";
+  StudentXpUnavailableError,
+} from "../services/students/xp";
 import {
   listStudentsForOrganization,
   syncStudentByRosterId,
@@ -687,7 +687,7 @@ const studentsRouter = routerWithDetail.openapi(dashboardRoute, async (c) => {
         endTime: window.end,
       });
     } catch (error) {
-      if (!(error instanceof TimebackUnavailableError)) {
+      if (!(error instanceof StudentXpUnavailableError)) {
         throw error;
       }
       xpSummary = null;

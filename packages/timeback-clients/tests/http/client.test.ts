@@ -1,7 +1,7 @@
 import { describe, expect, it, mock } from "bun:test";
 
-import type { TimebackServiceConfig } from "../../env";
-import { createTimebackFetch } from "../client";
+import type { TimebackServiceConfig } from "../../src/env";
+import { createTimebackFetch } from "../../src/http/client";
 
 describe("createTimebackFetch", () => {
   it("attaches bearer tokens, retries on 401, and annotates responses", async () => {

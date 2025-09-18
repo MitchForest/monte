@@ -1,9 +1,15 @@
 import { describe, expect, it } from "bun:test";
 
-import type { AssessmentLineItem, AssessmentResult } from "../grade-mastery";
-import { __testing, getHighestGradeMastery } from "../grade-mastery";
+import type {
+  AssessmentLineItem,
+  AssessmentResult,
+} from "../../src/oneroster/helpers/grade-mastery";
+import {
+  __testing,
+  getHighestGradeMastery,
+} from "../../src/oneroster/helpers/grade-mastery";
 
-const testClient = {} as import("../../client").OneRosterClient;
+const testClient = {} as import("../../src/oneroster/client").OneRosterClient;
 
 describe("getHighestGradeMastery", () => {
   it("returns the highest mastered grade by normalized grade and accuracy", async () => {

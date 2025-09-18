@@ -23,6 +23,7 @@ import type { StudentLessonItem } from "@/components/app/students/student-lesson
 import { StudentLessonsTable } from "@/components/app/students/student-lessons-table";
 import { StudentModal } from "@/components/app/students/student-modal";
 import { StudentObservationsPanel } from "@/components/app/students/student-observations-panel";
+import { StudentPlacementsPanel } from "@/components/app/students/student-placements-panel";
 import { StudentSummaryPanel } from "@/components/app/students/student-summary-panel";
 import { StudentXpPanel } from "@/components/app/students/student-xp-panel";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -360,6 +361,12 @@ function StudentDetailPageInner({ studentId }: { studentId: string }) {
 
       <section className="px-6">
         <StudentXpPanel studentId={student.oneroster_user_id ?? student.id} />
+      </section>
+
+      <section className="px-6">
+        <StudentPlacementsPanel
+          studentId={student.oneroster_user_id ?? student.id}
+        />
       </section>
 
       <section className="grid gap-6 px-6 lg:grid-cols-[1.1fr_0.9fr]">

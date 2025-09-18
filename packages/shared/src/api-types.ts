@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { ApiSuccessSchema } from "./api/response";
 import {
   ActionSchema,
   ClassAreaSchema,
@@ -23,26 +24,9 @@ import {
   WorkPeriodSchema,
   WorkspaceInviteSchema,
 } from "./schemas";
-import { TimebackAnalyticsSummarySchema } from "./timeback";
+import { StudentXpSummarySchema } from "./student";
 
-// API Response wrapper schemas
-export const ApiErrorSchema = z.object({
-  error: z.string(),
-  code: z.string().optional(),
-  details: z.unknown().optional(),
-});
-
-export const ApiSuccessSchema = <T extends z.ZodType>(dataSchema: T) =>
-  z.object({
-    data: dataSchema,
-    meta: z
-      .object({
-        page: z.number().optional(),
-        limit: z.number().optional(),
-        total: z.number().optional(),
-      })
-      .optional(),
-  });
+export { ApiErrorSchema, ApiSuccessSchema } from "./api/response";
 
 // Student API responses
 export const StudentsListResponseSchema = ApiSuccessSchema(
@@ -66,7 +50,7 @@ export const StudentDashboardResponseSchema = ApiSuccessSchema(
     student: StudentSchema,
     habits: z.array(HabitSchema),
     habitCheckins: z.array(HabitCheckinEventSchema),
-    xp: TimebackAnalyticsSummarySchema.nullable(),
+    xp: StudentXpSummarySchema.nullable(),
   }),
 );
 
@@ -312,7 +296,7 @@ export const TeamListResponseSchema = ApiSuccessSchema(
 );
 
 // Type exports
-export type ApiError = z.infer<typeof ApiErrorSchema>;
+export type ApiError = z.infer<typeof import("./api/response").ApiErrorSchema>;
 export type StudentsListResponse = z.infer<typeof StudentsListResponseSchema>;
 export type StudentDetailResponse = z.infer<typeof StudentDetailResponseSchema>;
 export type StudentParentsListResponse = z.infer<

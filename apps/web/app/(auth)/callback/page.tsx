@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
+import { useAuthSafe } from "@/lib/auth/use-auth";
 
 const isMockMode =
   process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
@@ -10,7 +10,7 @@ const isMockMode =
     process.env.NODE_ENV !== "production");
 
 export default function CallbackPage() {
-  const auth = useAuth();
+  const auth = useAuthSafe();
   const router = useRouter();
 
   useEffect(() => {

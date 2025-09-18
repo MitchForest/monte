@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAuth } from "react-oidc-context";
+import { useAuthSafe } from "@/lib/auth/use-auth";
 
 const isMockMode =
   process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
@@ -18,7 +18,7 @@ type LoginFormProps = {
 
 export function LoginForm({ redirectTo }: LoginFormProps) {
   const router = useRouter();
-  const auth = useAuth();
+  const auth = useAuthSafe();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

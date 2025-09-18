@@ -2,7 +2,7 @@ Other:
 - Virtual Materials (checkerboard, golden beads)
 
 Immediate Steps:
-- No type, lint, build, or runtime errors (all apps, packages, root)
+- No type, lint, build, or compile/runtime errors (all apps, packages, root)
 - Update README.md for each package/app/root
 - UI/UX testing (basic)
 - Commit here

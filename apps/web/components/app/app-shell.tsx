@@ -3,14 +3,13 @@
 import { useRouter } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
-
 import { AppSidebar } from "@/components/app/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useAuthSafe } from "@/lib/auth/use-auth";
 
 const isMockMode =
   process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
@@ -20,7 +19,7 @@ const isMockMode =
 type AppShellProps = PropsWithChildren;
 
 export function AppShell({ children }: AppShellProps) {
-  const auth = useAuth();
+  const auth = useAuthSafe();
   const router = useRouter();
 
   useEffect(() => {

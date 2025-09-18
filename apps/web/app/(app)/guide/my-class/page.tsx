@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -21,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { useSubjectTracks } from "@/hooks/use-subject-tracks";
 
 const mockStudents = [
   {
@@ -71,6 +73,9 @@ export default function GuideMyClassPage() {
     () => Object.values(attendance).filter(Boolean).length,
     [attendance],
   );
+
+  const subjectTracksQuery = useSubjectTracks();
+  const subjectTracks = subjectTracksQuery.data ?? [];
 
   return (
     <div className="flex flex-1 flex-col gap-8">
@@ -200,6 +205,79 @@ export default function GuideMyClassPage() {
             <Button size="sm" variant="outline" type="button">
               View XP dashboard
             </Button>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="px-6">
+        <Card className="rounded-3xl border-border/60 bg-card/80 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-foreground">
+              Subject tracks
+            </CardTitle>
+            <CardDescription>
+              Default course assignments aligned with PowerPath subject tracks.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {subjectTracksQuery.isLoading ? (
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-48" />
+                <Skeleton className="h-5 w-64" />
+                <Skeleton className="h-5 w-56" />
+              </div>
+            ) : subjectTracks.length === 0 ? (
+              <p className="rounded-2xl border border-border/60 bg-background/70 p-6 text-sm text-muted-foreground">
+                No subject tracks are available yet. Configure tracks in
+                Timeback to see recommended courses here.
+              </p>
+            ) : (
+              <div className="overflow-hidden rounded-3xl border border-border/60">
+                <Table>
+                  <TableHeader className="bg-background/70">
+                    <TableRow>
+                      <TableHead className="text-xs uppercase tracking-[0.2em]">
+                        Grade
+                      </TableHead>
+                      <TableHead className="text-xs uppercase tracking-[0.2em]">
+                        Subject
+                      </TableHead>
+                      <TableHead className="text-xs uppercase tracking-[0.2em]">
+                        Course
+                      </TableHead>
+                      <TableHead className="text-xs uppercase tracking-[0.2em]">
+                        Application
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {subjectTracks.map((track) => (
+                      <TableRow key={track.id}>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {track.grade}
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {track.subject}
+                        </TableCell>
+                        <TableCell className="text-sm text-foreground">
+                          <div className="flex flex-col">
+                            <span className="font-medium">
+                              {track.course.title}
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              {track.course.code ?? track.course.id ?? "—"}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {track.application.name}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </CardContent>
         </Card>
       </section>

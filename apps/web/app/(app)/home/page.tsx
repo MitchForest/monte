@@ -60,11 +60,12 @@ function buildActivityCards(
 
   return summary.events
     .map((event, index) => {
-      const name = event.object?.name ?? event.type ?? "Activity";
-      const subject = event.object?.type ?? "Learning";
+      const name =
+        event.activityTitle ?? event.app ?? event.course?.name ?? "Activity";
+      const subject = event.subject ?? event.course?.name ?? "Learning";
       const id = event.id ?? `${index}`;
       const xp = Math.max(0, event.xpEarned ?? 0);
-      const url = normalizeActivityLink(event.object?.id);
+      const url = normalizeActivityLink(event.resourceUri);
 
       return {
         id,
@@ -72,7 +73,7 @@ function buildActivityCards(
         subject,
         xpEarned: xp,
         goal: DAILY_XP_GOAL,
-        occurredAt: event.eventTime ?? null,
+        occurredAt: event.occurredAt ?? null,
         launchUrl: url,
       } satisfies TodayActivity;
     })

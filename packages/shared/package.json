@@ -9,8 +9,8 @@
     "./api-types": "./src/api-types.ts",
     "./env": "./src/env.ts",
     "./schemas": "./src/schemas.ts",
-    "./timeback": "./src/timeback/index.ts",
-    "./timeback/*": "./src/timeback/*"
+    "./student": "./src/student/index.ts",
+    "./student/*": "./src/student/*"
   },
   "scripts": {
     "typecheck": "bun x tsc --noEmit",

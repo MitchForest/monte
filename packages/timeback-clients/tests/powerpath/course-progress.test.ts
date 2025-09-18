@@ -1,14 +1,14 @@
 import { describe, expect, it } from "bun:test";
 
-import type { OperationResponse } from "../../../http";
-import type { PowerpathOperationSpecs } from "../../generated/operation-specs";
+import type { OperationResponse } from "../../src/http";
+import type { PowerpathOperationSpecs } from "../../src/powerpath/generated/operation-specs";
 import {
   __testing,
   type CourseProgressLineItem,
   getCourseProgressSummary,
-} from "../course-progress";
+} from "../../src/powerpath/helpers/course-progress";
 
-const testClient = {} as import("../../client").PowerpathClient;
+const testClient = {} as import("../../src/powerpath/client").PowerpathClient;
 
 describe("getCourseProgressSummary", () => {
   it("computes summary metrics and aggregates XP", async () => {

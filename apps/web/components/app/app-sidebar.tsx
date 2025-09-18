@@ -18,8 +18,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useState, useTransition } from "react";
-import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
+
 import { UserSettingsModal } from "@/components/app/user-settings-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -40,8 +40,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
 import { setAccessToken } from "@/lib/auth/token-store";
+import { useAuthSafe } from "@/lib/auth/use-auth";
 import { cn } from "@/lib/utils";
 
 const routes = [
@@ -80,7 +80,7 @@ const mockUser = {
 export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const auth = useAuth();
+  const auth = useAuthSafe();
   const [isSigningOut, startSignOut] = useTransition();
   const { theme, setTheme } = useTheme();
   const [userSettingsOpen, setUserSettingsOpen] = useState(false);
