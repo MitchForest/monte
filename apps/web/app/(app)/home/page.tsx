@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useImpersonation } from "@/hooks/use-impersonation";
 import { useStudentsLookup } from "@/hooks/use-students-lookup";
 import { getStudent, getStudentDashboard } from "@/lib/api/endpoints";
 
@@ -88,18 +89,26 @@ function buildActivityCards(
 }
 
 export default function StudentHomePage() {
+  const { selection } = useImpersonation();
   const { students, isLoading: studentsLoading } =
     useStudentsLookup("student-home");
-  const activeStudent = students.at(0) ?? null;
 
+  const impersonatedStudentId =
+    selection.kind === "student"
+      ? selection.studentId
+      : selection.kind === "parent"
+        ? selection.studentId
+        : null;
+
+  const activeStudentId = impersonatedStudentId ?? students.at(0)?.id ?? null;
   const studentDetailQuery = useQuery({
-    queryKey: ["student-home-detail", activeStudent?.id],
-    enabled: Boolean(activeStudent?.id),
+    queryKey: ["student-home-detail", activeStudentId],
+    enabled: Boolean(activeStudentId),
     queryFn: () => {
-      if (!activeStudent?.id) {
+      if (!activeStudentId) {
         return Promise.resolve(null);
       }
-      return getStudent(activeStudent.id);
+      return getStudent(activeStudentId);
     },
   });
 
@@ -109,14 +118,14 @@ export default function StudentHomePage() {
   const summaries = studentDetailQuery.data?.summaries ?? [];
   const timebackStudentId = student?.oneroster_user_id ?? student?.id ?? null;
   const dashboardQuery = useQuery({
-    queryKey: ["student-dashboard", activeStudent?.id],
-    enabled: Boolean(activeStudent?.id),
+    queryKey: ["student-dashboard", activeStudentId],
+    enabled: Boolean(activeStudentId),
     queryFn: ({ signal }: { signal?: AbortSignal }) => {
-      if (!activeStudent?.id) {
+      if (!activeStudentId) {
         return Promise.resolve(null);
       }
       return getStudentDashboard(
-        activeStudent.id,
+        activeStudentId,
         { range: "daily" },
         { signal },
       );
@@ -149,7 +158,7 @@ export default function StudentHomePage() {
           <Skeleton className="h-72 w-full rounded-3xl" />
           <Skeleton className="h-72 w-full rounded-3xl" />
         </div>
-      ) : activeStudent && student ? (
+      ) : activeStudentId && student ? (
         <>
           <section className="grid gap-6 xl:grid-cols-[1.05fr_1.2fr]">
             <StudentHabitsPanel

@@ -1,25 +1,33 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import type { LucideIcon } from "lucide-react";
 import {
   CheckSquare,
   ChevronDown,
   ClipboardCheck,
+  Flame,
   GraduationCap,
   Home,
   Library,
+  LineChart,
   LogOut,
+  Mail,
+  Megaphone,
   Moon,
   Settings,
+  ShoppingBag,
   Sun,
+  Target,
   User,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
-
+import { ImpersonationMenuSection } from "@/components/app/impersonation-switcher";
 import { UserSettingsModal } from "@/components/app/user-settings-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -40,21 +48,59 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useImpersonation } from "@/hooks/use-impersonation";
+import { getCurrentUser } from "@/lib/api/endpoints";
+import { isMockAuthMode } from "@/lib/auth/config";
 import { setAccessToken } from "@/lib/auth/token-store";
 import { useAuthSafe } from "@/lib/auth/use-auth";
+import type { Persona } from "@/lib/persona";
+import { resolvePersona } from "@/lib/persona";
 import { cn } from "@/lib/utils";
 
-const routes = [
+type SidebarRoute = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+};
+
+const STUDENT_ROUTES: SidebarRoute[] = [
   { href: "/home", label: "Home", icon: Home },
-  { href: "/guide", label: "Guide", icon: User },
+  { href: "/xp", label: "XP", icon: Flame },
+  { href: "/check-charts", label: "Check charts", icon: LineChart },
+  { href: "/placements", label: "Placements", icon: Target },
+  { href: "/app-store", label: "App store", icon: ShoppingBag },
+];
+
+const PARENT_ROUTES: SidebarRoute[] = [
+  { href: "/home", label: "Home", icon: Home },
+  { href: "/updates", label: "Updates", icon: Megaphone },
+  { href: "/inbox", label: "Inbox", icon: Mail },
+  { href: "/xp", label: "XP", icon: Flame },
+  { href: "/check-charts", label: "Check charts", icon: LineChart },
+  { href: "/placements", label: "Placements", icon: Target },
+];
+
+const GUIDE_ROUTES: SidebarRoute[] = [
+  { href: "/guide", label: "Home", icon: Home },
   { href: "/guide/my-class", label: "My class", icon: Users },
   { href: "/guide/digital-album", label: "Digital album", icon: Library },
   { href: "/classrooms", label: "Classrooms", icon: GraduationCap },
-  { href: "/students", label: "Students", icon: Users },
+  { href: "/students", label: "Students", icon: User },
   { href: "/observations", label: "Observations", icon: ClipboardCheck },
   { href: "/tasks", label: "Tasks", icon: CheckSquare },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
+
+function routesForPersona(persona: Persona): SidebarRoute[] {
+  switch (persona) {
+    case "student":
+      return STUDENT_ROUTES;
+    case "parent":
+      return PARENT_ROUTES;
+    default:
+      return GUIDE_ROUTES;
+  }
+}
 
 function getInitials(name: string): string {
   const parts = name.split(" ").filter((part) => part.length > 0);
@@ -66,10 +112,7 @@ function getInitials(name: string): string {
   return `${first}${last}`.toUpperCase();
 }
 
-const isMockMode =
-  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
-  (!process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID &&
-    process.env.NODE_ENV !== "production");
+const isMockMode = isMockAuthMode;
 
 const mockUser = {
   email: process.env.NEXT_PUBLIC_DEV_USER_EMAIL ?? "guide@example.com",
@@ -84,6 +127,19 @@ export function AppSidebar() {
   const [isSigningOut, startSignOut] = useTransition();
   const { theme, setTheme } = useTheme();
   const [userSettingsOpen, setUserSettingsOpen] = useState(false);
+  const { selection } = useImpersonation();
+
+  const currentUserQuery = useQuery({
+    queryKey: ["current-user"],
+    queryFn: ({ signal }) => getCurrentUser({ signal }),
+  });
+
+  const role = currentUserQuery.data?.role;
+  const persona = useMemo(
+    () => resolvePersona(role, selection),
+    [role, selection],
+  );
+  const menuRoutes = useMemo(() => routesForPersona(persona), [persona]);
 
   const activeProfile = isMockMode
     ? mockUser
@@ -171,9 +227,11 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {routes.map((route) => {
+              {menuRoutes.map((route) => {
                 const Icon = route.icon;
-                const isActive = pathname === route.href;
+                const isActive =
+                  pathname === route.href ||
+                  (route.href !== "/" && pathname.startsWith(`${route.href}/`));
                 return (
                   <SidebarMenuItem key={route.href}>
                     <Link
@@ -218,6 +276,7 @@ export function AppSidebar() {
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
+            <ImpersonationMenuSection />
             <DropdownMenuItem onClick={() => setUserSettingsOpen(true)}>
               <User className="mr-2 h-4 w-4" />
               <span>User Settings</span>

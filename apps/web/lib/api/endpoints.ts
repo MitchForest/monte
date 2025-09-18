@@ -7,6 +7,7 @@ import {
   ClassroomsListResponseSchema,
   CourseLessonsListResponseSchema,
   CoursesListResponseSchema,
+  CurrentUserResponseSchema,
   GuideDashboardResponseSchema,
   HabitCheckinDeletionResponseSchema,
   HabitCheckinDetailResponseSchema,
@@ -16,11 +17,13 @@ import {
   MaterialsListResponseSchema,
   ObservationDetailResponseSchema,
   ObservationsListResponseSchema,
+  ParentsListResponseSchema,
   StudentDashboardResponseSchema,
   StudentDetailResponseSchema,
   StudentLessonDetailResponseSchema,
   StudentLessonsListResponseSchema,
   StudentParentMutateResponseSchema,
+  StudentParentOverviewSchema,
   StudentParentsListResponseSchema,
   StudentSummariesListResponseSchema,
   StudentSummaryDetailResponseSchema,
@@ -33,6 +36,7 @@ import {
   WorkspaceInviteDetailResponseSchema,
   WorkspaceInvitesListResponseSchema,
 } from "@monte/shared";
+
 import {
   type StudentNextPlacement,
   StudentNextPlacementResponseSchema,
@@ -93,6 +97,8 @@ type ApiClientShape = {
   "student-xp": ApiEndpoint;
   "student-placements": ApiEndpoint;
   "subject-tracks": ApiEndpoint;
+  parents: ApiEndpoint;
+  "current-user": ApiEndpoint;
 };
 
 const client = apiClient as unknown as ApiClientShape;
@@ -112,6 +118,8 @@ const studentSummariesClient = client["student-summaries"];
 const studentXpClient = client["student-xp"];
 const studentPlacementsClient = client["student-placements"];
 const subjectTracksClient = client["subject-tracks"];
+const parentsClient = client.parents;
+const currentUserClient = client["current-user"];
 
 async function handleResponse<T>(
   promise: Promise<Response>,
@@ -149,6 +157,32 @@ export async function listTeamMembers(options: RequestOptions = {}) {
     TeamListResponseSchema,
   );
   return response.data.members;
+}
+
+export async function listParents(options: RequestOptions = {}) {
+  const response = await handleResponse(
+    parentsClient.$get(
+      undefined,
+      options.signal ? { init: { signal: options.signal } } : undefined,
+    ),
+    ParentsListResponseSchema,
+  );
+  return response.data.parents.map((parent) =>
+    StudentParentOverviewSchema.parse({
+      ...parent,
+    }),
+  );
+}
+
+export async function getCurrentUser(options: RequestOptions = {}) {
+  const response = await handleResponse(
+    currentUserClient.$get(
+      undefined,
+      options.signal ? { init: { signal: options.signal } } : undefined,
+    ),
+    CurrentUserResponseSchema,
+  );
+  return response;
 }
 
 type ListClassroomsParams = {

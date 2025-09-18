@@ -2,14 +2,20 @@
 
 import type { ClassroomWithGuides, Habit, Student } from "@monte/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { AppPageHeader } from "@/components/app/page-header";
 import { StudentCard } from "@/components/app/students/student-card";
 import { StudentModal } from "@/components/app/students/student-modal";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -19,13 +25,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useImpersonation } from "@/hooks/use-impersonation";
 import {
   createHabit,
   createStudent,
+  getCurrentUser,
   listClassrooms,
   listHabits,
   listStudents,
 } from "@/lib/api/endpoints";
+import { isGuidePersona, resolvePersona } from "@/lib/persona";
 
 const viewModes = [
   { id: "directory", label: "Directory" },
@@ -59,10 +68,24 @@ export default function StudentsPage() {
   const [habitSchedule, setHabitSchedule] =
     useState<Habit["schedule"]>("daily");
 
+  const { selection } = useImpersonation();
+  const currentUserQuery = useQuery({
+    queryKey: ["current-user"],
+    queryFn: ({ signal }: { signal?: AbortSignal }) =>
+      getCurrentUser({ signal }),
+  });
+
+  const persona = resolvePersona(currentUserQuery.data?.role, selection);
+  const canManageRoster = currentUserQuery.isSuccess && isGuidePersona(persona);
+  const shouldLoadRoster = canManageRoster;
+
+  const shownErrorsRef = useRef<Set<string>>(new Set());
+
   const classroomsQuery = useQuery<Classroom[]>({
     queryKey: ["classrooms", { scope: "students" }],
     queryFn: ({ signal }: { signal?: AbortSignal }) =>
       listClassrooms({}, { signal }),
+    enabled: shouldLoadRoster,
   });
 
   const studentsQuery = useQuery<Student[]>({
@@ -75,31 +98,55 @@ export default function StudentsPage() {
         },
         { signal },
       ),
+    enabled: shouldLoadRoster,
   });
 
   const habitsQuery = useQuery<Habit[]>({
     queryKey: ["habits"],
     queryFn: ({ signal }: { signal?: AbortSignal }) =>
       listHabits({}, { signal }),
+    enabled: shouldLoadRoster,
   });
 
   useEffect(() => {
     if (classroomsQuery.error instanceof Error) {
-      toast.error(classroomsQuery.error.message);
+      const key = `classrooms:${classroomsQuery.error.message}`;
+      if (!shownErrorsRef.current.has(key)) {
+        shownErrorsRef.current.add(key);
+        toast.error(classroomsQuery.error.message);
+      }
     }
   }, [classroomsQuery.error]);
 
   useEffect(() => {
     if (studentsQuery.error instanceof Error) {
-      toast.error(studentsQuery.error.message);
+      const key = `students:${studentsQuery.error.message}`;
+      if (!shownErrorsRef.current.has(key)) {
+        shownErrorsRef.current.add(key);
+        toast.error(studentsQuery.error.message);
+      }
     }
   }, [studentsQuery.error]);
 
   useEffect(() => {
     if (habitsQuery.error instanceof Error) {
-      toast.error(habitsQuery.error.message);
+      const key = `habits:${habitsQuery.error.message}`;
+      if (!shownErrorsRef.current.has(key)) {
+        shownErrorsRef.current.add(key);
+        toast.error(habitsQuery.error.message);
+      }
     }
   }, [habitsQuery.error]);
+
+  useEffect(() => {
+    if (currentUserQuery.error instanceof Error) {
+      const key = `current-user:${currentUserQuery.error.message}`;
+      if (!shownErrorsRef.current.has(key)) {
+        shownErrorsRef.current.add(key);
+        toast.error("Unable to determine your permissions.");
+      }
+    }
+  }, [currentUserQuery.error]);
 
   const students = studentsQuery.data ?? [];
   const classrooms = classroomsQuery.data ?? [];
@@ -199,16 +246,67 @@ export default function StudentsPage() {
     setSelectedStudentId(null);
   };
 
+  if (currentUserQuery.isLoading) {
+    return (
+      <div className="flex flex-1 flex-col gap-8">
+        <AppPageHeader
+          breadcrumbs={[
+            { label: "Home", href: "/home" },
+            { label: "Students" },
+          ]}
+          description="Preparing your roster access."
+          title="Student directory"
+        />
+        <Card className="rounded-3xl border-border/60 bg-card/80 p-10 text-center">
+          <CardTitle className="text-xl font-semibold text-foreground">
+            Loading permissions…
+          </CardTitle>
+          <CardDescription className="mt-2 text-sm text-muted-foreground">
+            Sit tight while we confirm what you can manage.
+          </CardDescription>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!canManageRoster) {
+    return (
+      <div className="flex flex-1 flex-col gap-8">
+        <AppPageHeader
+          breadcrumbs={[
+            { label: "Home", href: "/home" },
+            { label: "Students" },
+          ]}
+          description="Only guides and administrators can manage rosters."
+          title="Student directory"
+        />
+        <Card className="rounded-3xl border-border/60 bg-card/80 p-10 text-center">
+          <CardTitle className="text-xl font-semibold text-foreground">
+            Roster management unavailable
+          </CardTitle>
+          <CardDescription className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+            Switch back to your guide account to view and edit learners. Parents
+            and students can keep exploring daily plans from their home tab.
+          </CardDescription>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-8">
       <AppPageHeader
         breadcrumbs={[{ label: "Home", href: "/home" }, { label: "Students" }]}
         description="Spot trends across cohorts and respond to learner needs quickly."
         onSearchChange={setSearch}
-        primaryAction={{
-          label: "Add learner",
-          onClick: () => setStudentDialogOpen(true),
-        }}
+        primaryAction={
+          canManageRoster
+            ? {
+                label: "Add learner",
+                onClick: () => setStudentDialogOpen(true),
+              }
+            : undefined
+        }
         searchPlaceholder="Search learners or guardians"
         title="Student directory"
       >

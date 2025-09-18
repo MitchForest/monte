@@ -2,12 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { isMockAuthMode } from "@/lib/auth/config";
 import { useAuthSafe } from "@/lib/auth/use-auth";
 
-const isMockMode =
-  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
-  (!process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID &&
-    process.env.NODE_ENV !== "production");
+const isMockMode = isMockAuthMode;
 
 export default function CallbackPage() {
   const auth = useAuthSafe();

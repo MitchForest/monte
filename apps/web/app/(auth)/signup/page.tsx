@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SignupForm } from "@/components/auth/signup-form";
 
 export const metadata: Metadata = {
-  title: "Sign up",
+  title: "Create your account",
 };
 
 type PageSearchParams = Record<string, string | string[]>;

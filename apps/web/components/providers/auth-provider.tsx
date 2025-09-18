@@ -8,6 +8,7 @@ import {
   useAuth,
 } from "react-oidc-context";
 
+import { devAccessToken, isMockAuthMode } from "@/lib/auth/config";
 import { setAccessToken } from "@/lib/auth/token-store";
 
 const DEFAULT_AUTHORITY =
@@ -15,10 +16,7 @@ const DEFAULT_AUTHORITY =
   "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_H5aVRMERg";
 const DEFAULT_SCOPE =
   process.env.NEXT_PUBLIC_COGNITO_SCOPE ?? "openid email profile";
-const isMockMode =
-  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
-  (!process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID &&
-    process.env.NODE_ENV !== "production");
+const isMockMode = isMockAuthMode;
 
 function resolveRedirectUri(): string | undefined {
   if (typeof window === "undefined") {
@@ -45,8 +43,7 @@ type ProviderProps = {
 };
 
 export function AuthProvider({ children }: ProviderProps) {
-  const mockToken =
-    process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN ?? "dev-access-token";
+  const mockToken = devAccessToken;
 
   useEffect(() => {
     if (isMockMode) {

@@ -295,6 +295,17 @@ export const TeamListResponseSchema = ApiSuccessSchema(
   }),
 );
 
+export const StudentParentOverviewSchema = StudentParentSchema.extend({
+  studentId: z.string(),
+  studentName: z.string().nullable(),
+});
+
+export const ParentsListResponseSchema = ApiSuccessSchema(
+  z.object({
+    parents: z.array(StudentParentOverviewSchema),
+  }),
+);
+
 // Type exports
 export type ApiError = z.infer<typeof import("./api/response").ApiErrorSchema>;
 export type StudentsListResponse = z.infer<typeof StudentsListResponseSchema>;
@@ -373,6 +384,8 @@ export type LoginResponse = z.infer<typeof LoginResponseSchema>;
 export type CurrentUserResponse = z.infer<typeof CurrentUserResponseSchema>;
 export type TeamMember = z.infer<typeof TeamMemberSchema>;
 export type TeamListResponse = z.infer<typeof TeamListResponseSchema>;
+export type StudentParentOverview = z.infer<typeof StudentParentOverviewSchema>;
+export type ParentsListResponse = z.infer<typeof ParentsListResponseSchema>;
 export type WorkspaceInvitesListResponse = z.infer<
   typeof WorkspaceInvitesListResponseSchema
 >;

@@ -4,11 +4,9 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { LoginForm } from "@/components/auth/login-form";
+import { isMockAuthMode } from "@/lib/auth/config";
 
-const isMockMode =
-  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
-  (!process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID &&
-    process.env.NODE_ENV !== "production");
+const isMockMode = isMockAuthMode;
 
 const DEFAULT_REDIRECT = "/home";
 

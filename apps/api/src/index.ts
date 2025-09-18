@@ -4,12 +4,14 @@ import { createAPIApp, getCorsOrigins } from "./lib/app";
 import { HTTP_STATUS } from "./lib/http/status";
 import { attendanceRouter } from "./routes/attendance";
 import { classroomsRouter } from "./routes/classrooms";
+import { currentUserRouter } from "./routes/current-user";
 import { curriculumRouter } from "./routes/curriculum";
 import { guideDashboardRouter } from "./routes/guide-dashboard";
 import { habitsRouter } from "./routes/habits";
 import { invitesRouter } from "./routes/invites";
 import { observationsRouter } from "./routes/observations";
 import { organizationsRouter } from "./routes/organizations";
+import { parentsRouter } from "./routes/parents";
 import { studentLessonsRouter } from "./routes/student-lessons";
 import { studentParentsRouter } from "./routes/student-parents";
 import { studentPlacementsRouter } from "./routes/student-placements";
@@ -51,13 +53,19 @@ const typedApp = app
   .route("/timeback-events", timebackEventsRouter)
   .route("/invites", invitesRouter)
   .route("/organizations", organizationsRouter)
+  .route("/parents", parentsRouter)
+  .route("/current-user", currentUserRouter)
   .route("/team", teamRouter);
 
 typedApp.notFound((c) => c.json({ error: "Not found" }, HTTP_STATUS.notFound));
 
-typedApp.onError((_err, c) =>
-  c.json({ error: "Internal server error" }, HTTP_STATUS.internalServerError),
-);
+typedApp.onError((err, c) => {
+  console.error("API error", err);
+  return c.json(
+    { error: "Internal server error" },
+    HTTP_STATUS.internalServerError,
+  );
+});
 
 export type ApiApp = typeof typedApp;
 export { typedApp as app };

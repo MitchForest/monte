@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useImpersonation } from "@/hooks/use-impersonation";
 import {
   createClassroom,
   listClassrooms,
@@ -31,6 +32,9 @@ import {
 
 export default function ClassroomsPage() {
   const queryClient = useQueryClient();
+  const { selection } = useImpersonation();
+  const canManageClassrooms =
+    selection.kind === "self" || selection.kind === "guide";
   const [search, setSearch] = useState("");
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [name, setName] = useState("");
@@ -100,10 +104,14 @@ export default function ClassroomsPage() {
         ]}
         description="See every prepared environment at a glance and keep teams balanced."
         onSearchChange={setSearch}
-        primaryAction={{
-          label: "Add classroom",
-          onClick: () => setDialogOpen(true),
-        }}
+        primaryAction={
+          canManageClassrooms
+            ? {
+                label: "Add classroom",
+                onClick: () => setDialogOpen(true),
+              }
+            : undefined
+        }
         searchPlaceholder="Search classrooms or guides"
         title="Classroom environments"
       />
@@ -160,7 +168,10 @@ export default function ClassroomsPage() {
         </CardContent>
       </Card>
 
-      <Dialog onOpenChange={setDialogOpen} open={isDialogOpen}>
+      <Dialog
+        onOpenChange={setDialogOpen}
+        open={isDialogOpen && canManageClassrooms}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create classroom</DialogTitle>

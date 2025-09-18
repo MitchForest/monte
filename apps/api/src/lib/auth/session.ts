@@ -1,4 +1,4 @@
-import { db } from "@monte/database";
+import { getDb } from "@monte/database";
 import { oneroster } from "@monte/timeback-clients";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 
@@ -22,82 +22,176 @@ export type AuthenticatedSession = {
     token: string;
     userId: string;
     orgId: string;
+    role: "administrator" | "teacher" | "student" | "parent";
   };
   user: {
     id: string;
     email: string;
     name: string | null;
+    image_url: string | null;
+    created_at: string;
+    updated_at: string;
+    email_verified: boolean;
+  };
+  organization?: {
+    id: string;
+    name: string;
+    created_at: string;
   };
 };
 
-async function ensureDevUser(): Promise<AuthenticatedSession> {
+export async function ensureDevUser(): Promise<AuthenticatedSession> {
   const email = process.env.DEV_USER_EMAIL ?? "guide@example.com";
   const name = process.env.DEV_USER_NAME ?? "Guide User";
   const orgName = process.env.DEV_ORG_NAME ?? "Development School";
+  const orgIdFromEnv =
+    process.env.DEV_ORGANIZATION_ID?.trim() ??
+    process.env.DEFAULT_ORGANIZATION_ID?.trim() ??
+    null;
+  const orgRosterId = process.env.DEV_ONEROSTER_ORG_ID?.trim() ?? null;
+  const rosterUserId =
+    process.env.DEV_ONEROSTER_USER_ID?.trim() ??
+    process.env.DEV_ONEROSTER_ID?.trim() ??
+    undefined;
+  const rawRole = process.env.DEV_USER_ROLE?.trim()?.toLowerCase();
+  const role: "administrator" | "teacher" | "student" | "parent" =
+    rawRole === "teacher" || rawRole === "student" || rawRole === "parent"
+      ? rawRole
+      : "administrator";
 
-  let user = await db
-    .selectFrom("users")
-    .selectAll()
-    .where("email", "=", email)
-    .executeTakeFirst();
+  const db = getDb();
 
-  if (!user) {
-    user = await db
-      .insertInto("users")
-      .values({
-        id: crypto.randomUUID(),
-        email,
-        name,
-        image_url: null,
-      })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-  }
+  const user = await findOrCreateUserByEmail(email, name, rosterUserId);
 
-  let organization = await db
-    .selectFrom("organizations")
-    .selectAll()
-    .where("name", "=", orgName)
-    .executeTakeFirst();
+  const organization = await (async () => {
+    if (orgIdFromEnv) {
+      const existingById = await db
+        .selectFrom("organizations")
+        .selectAll()
+        .where("id", "=", orgIdFromEnv)
+        .executeTakeFirst();
+      if (existingById) {
+        if (orgRosterId && existingById.oneroster_sourced_id !== orgRosterId) {
+          await db
+            .updateTable("organizations")
+            .set({ oneroster_sourced_id: orgRosterId })
+            .where("id", "=", orgIdFromEnv)
+            .execute();
+          return {
+            ...existingById,
+            oneroster_sourced_id: orgRosterId,
+          };
+        }
+        return existingById;
+      }
 
-  if (!organization) {
-    organization = await db
-      .insertInto("organizations")
-      .values({ id: crypto.randomUUID(), name: orgName })
-      .returningAll()
-      .executeTakeFirstOrThrow();
-  }
+      await db
+        .insertInto("organizations")
+        .values({
+          id: orgIdFromEnv,
+          name: orgName,
+          oneroster_sourced_id: orgRosterId ?? orgIdFromEnv,
+        })
+        .onConflict((oc) => oc.column("id").doNothing())
+        .execute();
 
-  const existingMembership = await db
-    .selectFrom("org_memberships")
-    .select(["id"])
-    .where("org_id", "=", organization.id)
-    .where("user_id", "=", user.id)
-    .executeTakeFirst();
+      const inserted = await db
+        .selectFrom("organizations")
+        .selectAll()
+        .where("id", "=", orgIdFromEnv)
+        .executeTakeFirstOrThrow();
 
-  if (!existingMembership) {
+      if (orgRosterId && inserted.oneroster_sourced_id !== orgRosterId) {
+        await db
+          .updateTable("organizations")
+          .set({ oneroster_sourced_id: orgRosterId })
+          .where("id", "=", orgIdFromEnv)
+          .execute();
+        return {
+          ...inserted,
+          oneroster_sourced_id: orgRosterId,
+        };
+      }
+
+      return inserted;
+    }
+
+    const existingByName = await db
+      .selectFrom("organizations")
+      .selectAll()
+      .where("name", "=", orgName)
+      .executeTakeFirst();
+
+    if (existingByName) {
+      return existingByName;
+    }
+
+    const generatedOrgId = orgIdFromEnv ?? crypto.randomUUID();
+
     await db
-      .insertInto("org_memberships")
+      .insertInto("organizations")
       .values({
-        id: crypto.randomUUID(),
-        org_id: organization.id,
-        user_id: user.id,
-        role: "teacher",
+        id: generatedOrgId,
+        name: orgName,
+        oneroster_sourced_id: orgRosterId ?? generatedOrgId,
       })
+      .onConflict((oc) => oc.column("id").doNothing())
       .execute();
-  }
+
+    return db
+      .selectFrom("organizations")
+      .selectAll()
+      .where("id", "=", generatedOrgId)
+      .executeTakeFirstOrThrow();
+  })();
+
+  await db
+    .insertInto("org_memberships")
+    .values({
+      id: crypto.randomUUID(),
+      org_id: organization.id,
+      user_id: user.id,
+      role,
+    })
+    .onConflict((oc) =>
+      oc.constraint("org_memberships_org_id_user_id_key").doUpdateSet({ role }),
+    )
+    .execute();
+
+  const normalizedUser = {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    image_url: user.image_url ?? null,
+    created_at:
+      user.created_at instanceof Date
+        ? user.created_at.toISOString()
+        : (user.created_at ?? new Date().toISOString()),
+    updated_at:
+      user.updated_at instanceof Date
+        ? user.updated_at.toISOString()
+        : (user.updated_at ?? new Date().toISOString()),
+    email_verified: user.email_verified ?? false,
+  };
+
+  const normalizedOrganization = {
+    id: organization.id,
+    name: organization.name,
+    created_at:
+      organization.created_at instanceof Date
+        ? organization.created_at.toISOString()
+        : (organization.created_at ?? new Date().toISOString()),
+  };
 
   return {
     session: {
       token: "dev-token",
       userId: user.id,
       orgId: organization.id,
+      role,
     },
-    user: {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-    },
+    user: normalizedUser,
+    organization: normalizedOrganization,
   };
 }
 
@@ -106,6 +200,7 @@ async function findOrCreateUserByEmail(
   name?: string,
   onerosterUserId?: string,
 ) {
+  const db = getDb();
   let user = await db
     .selectFrom("users")
     .selectAll()
@@ -147,6 +242,7 @@ async function findOrCreateUserByEmail(
 }
 
 async function ensureOrganizationFromOneRoster(orgSourcedId: string) {
+  const db = getDb();
   const existing = await db
     .selectFrom("organizations")
     .select(["id"])
@@ -222,6 +318,8 @@ async function syncOneRosterMemberships(
   if (!client) {
     return [] as string[];
   }
+
+  const db = getDb();
 
   try {
     const userResponse = await oneroster.callOneRosterOperation(
@@ -309,18 +407,26 @@ export async function getServerSession(
 
     const user = await findOrCreateUserByEmail(email, name, onerosterUserId);
 
+    const db = getDb();
     let membership = await db
       .selectFrom("org_memberships")
-      .select(["org_id"])
+      .select(["org_id", "role"])
       .where("user_id", "=", user.id)
       .orderBy("created_at", "asc")
       .executeTakeFirst();
 
     let rosterOrgIds: string[] = [];
+    let membershipRole = membership?.role as
+      | "administrator"
+      | "teacher"
+      | "student"
+      | "parent"
+      | undefined;
     if (onerosterUserId) {
       rosterOrgIds = await syncOneRosterMemberships(user.id, onerosterUserId);
       if (!membership && rosterOrgIds.length > 0) {
-        membership = { org_id: rosterOrgIds[0] };
+        membership = { org_id: rosterOrgIds[0], role: "teacher" };
+        membershipRole = membership.role;
       }
     }
 
@@ -339,7 +445,8 @@ export async function getServerSession(
           })
           .onConflict((oc) => oc.doNothing())
           .execute();
-        membership = { org_id: fallbackOrgId };
+        membership = { org_id: fallbackOrgId, role: "teacher" };
+        membershipRole = "teacher";
       }
     }
 
@@ -363,7 +470,8 @@ export async function getServerSession(
             oc.constraint("org_memberships_org_id_user_id_key").doNothing(),
           )
           .execute();
-        membership = fallbackOrg;
+        membership = { org_id: fallbackOrg.org_id, role: "teacher" };
+        membershipRole = "teacher";
       }
     }
 
@@ -371,16 +479,37 @@ export async function getServerSession(
       throw new Error("User has no organisation membership");
     }
 
+    if (!membershipRole) {
+      membershipRole =
+        (membership.role as
+          | "administrator"
+          | "teacher"
+          | "student"
+          | "parent"
+          | undefined) || "teacher";
+    }
+
     return {
       session: {
         token,
         userId: user.id,
         orgId: membership.org_id,
+        role: membershipRole,
       },
       user: {
         id: user.id,
         email: user.email,
         name: user.name,
+        image_url: user.image_url ?? null,
+        created_at:
+          user.created_at instanceof Date
+            ? user.created_at.toISOString()
+            : (user.created_at ?? new Date().toISOString()),
+        updated_at:
+          user.updated_at instanceof Date
+            ? user.updated_at.toISOString()
+            : (user.updated_at ?? new Date().toISOString()),
+        email_verified: user.email_verified ?? false,
       },
     };
   } catch (error) {

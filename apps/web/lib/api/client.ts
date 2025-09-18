@@ -2,6 +2,7 @@ import type { ApiApp } from "@monte/api";
 import { hc } from "hono/client";
 
 import { getAccessToken } from "@/lib/auth/token-store";
+import { getImpersonationSelection } from "@/lib/impersonation/store";
 
 const devBaseUrl = "http://localhost:8787";
 const isServer = typeof window === "undefined";
@@ -56,6 +57,30 @@ function createFetch(defaultHeaders?: HeadersInit): typeof fetch {
       const token = getAccessToken();
       if (token) {
         mergedHeaders.set("authorization", `Bearer ${token}`);
+      }
+      const impersonation = getImpersonationSelection();
+      if (impersonation.kind !== "self") {
+        mergedHeaders.set("x-monte-impersonate-kind", impersonation.kind);
+        if (impersonation.kind === "student") {
+          mergedHeaders.set(
+            "x-monte-impersonate-student-id",
+            impersonation.studentId,
+          );
+        } else if (impersonation.kind === "guide") {
+          mergedHeaders.set(
+            "x-monte-impersonate-guide-id",
+            impersonation.guideId,
+          );
+        } else if (impersonation.kind === "parent") {
+          mergedHeaders.set(
+            "x-monte-impersonate-parent-id",
+            impersonation.parentId,
+          );
+          mergedHeaders.set(
+            "x-monte-impersonate-student-id",
+            impersonation.studentId,
+          );
+        }
       }
     }
     const finalInit: RequestInit = {

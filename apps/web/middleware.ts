@@ -4,6 +4,10 @@ import { NextResponse } from "next/server";
 const PUBLIC_ROUTES = new Set(["/", "/login", "/signup"]);
 const AUTH_ROUTES = new Set(["/login", "/signup"]);
 
+const MOCK_AUTH =
+  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
+  !process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID;
+
 async function getSession(request: NextRequest): Promise<boolean> {
   try {
     const response = await fetch(
@@ -26,6 +30,10 @@ async function getSession(request: NextRequest): Promise<boolean> {
 }
 
 export async function middleware(request: NextRequest) {
+  if (MOCK_AUTH) {
+    return NextResponse.next();
+  }
+
   const { pathname, search } = request.nextUrl;
   if (pathname.startsWith("/api/auth") || pathname.startsWith("/_next")) {
     return NextResponse.next();

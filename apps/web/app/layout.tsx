@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { ImpersonationProvider } from "@/components/providers/impersonation-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
@@ -23,7 +24,9 @@ export default function RootLayout({
       <body className="antialiased bg-background text-foreground">
         <ThemeProvider>
           <AuthProvider>
-            <QueryProvider>{children}</QueryProvider>
+            <ImpersonationProvider>
+              <QueryProvider>{children}</QueryProvider>
+            </ImpersonationProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

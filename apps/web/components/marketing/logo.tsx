@@ -16,10 +16,12 @@ export function MarketingLogo({ className }: MarketingLogoProps) {
       )}
       href="/"
     >
-      <span className="inline-flex size-9 items-center justify-center rounded-full bg-primary/15 text-primary shadow-sm">
-        <span className="font-semibold text-base">M</span>
+      <span className="inline-flex size-12 items-center justify-center rounded-full bg-primary/15 text-primary shadow-sm">
+        <span className="font-semibold text-2xl">M</span>
       </span>
-      <span className="text-foreground tracking-tight">Monte</span>
+      <span className="text-foreground tracking-tight text-2xl font-semibold">
+        Monte
+      </span>
     </Link>
   );
 }
