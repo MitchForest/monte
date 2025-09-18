@@ -59,13 +59,13 @@ export default function StudentsPage() {
   const [habitSchedule, setHabitSchedule] =
     useState<Habit["schedule"]>("daily");
 
-  const classroomsQuery = useQuery({
+  const classroomsQuery = useQuery<Classroom[]>({
     queryKey: ["classrooms", { scope: "students" }],
     queryFn: ({ signal }: { signal?: AbortSignal }) =>
       listClassrooms({}, { signal }),
   });
 
-  const studentsQuery = useQuery({
+  const studentsQuery = useQuery<Student[]>({
     queryKey: ["students", { search, classroom: selectedClassroom }],
     queryFn: ({ signal }: { signal?: AbortSignal }) =>
       listStudents(
@@ -77,9 +77,9 @@ export default function StudentsPage() {
       ),
   });
 
-  const habitsQuery = useQuery({
+  const habitsQuery = useQuery<Habit[]>({
     queryKey: ["habits"],
-    queryFn: ({ signal }: { signal?: AbortSignal }) => listHabits({ signal }),
+    queryFn: ({ signal }: { signal?: AbortSignal }) => listHabits({}, { signal }),
   });
 
   useEffect(() => {
@@ -100,9 +100,9 @@ export default function StudentsPage() {
     }
   }, [habitsQuery.error]);
 
-  const students = (studentsQuery.data ?? []) as Student[];
-  const classrooms = (classroomsQuery.data ?? []) as Classroom[];
-  const habits = (habitsQuery.data ?? []) as Habit[];
+  const students = studentsQuery.data ?? [];
+  const classrooms = classroomsQuery.data ?? [];
+  const habits = habitsQuery.data ?? [];
 
   const isStudentsLoading = studentsQuery.isLoading || studentsQuery.isFetching;
 

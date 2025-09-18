@@ -35,3 +35,11 @@ export function respond<R extends RouteConfig>(
 
   return response as unknown as RouteConfigToTypedResponse<R>;
 }
+
+export function respondNoContent<R extends RouteConfig>(
+  _route: R,
+  c: Context,
+): RouteConfigToTypedResponse<R> {
+  const response = c.body(null, 204);
+  return response as unknown as RouteConfigToTypedResponse<R>;
+}

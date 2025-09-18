@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -21,14 +22,8 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@monte/api": ["../api/src/index.ts"],
-      "@monte/api/*": ["../api/src/*"],
       "@monte/shared": ["../../packages/shared/src/index.ts"],
-      "@monte/shared/*": ["../../packages/shared/src/*"],
-      "@monte/shared/timeback": ["../../packages/shared/src/timeback/index.ts"],
-      "@monte/shared/timeback/*": ["../../packages/shared/src/timeback/*"],
-      "@monte/timeback-sdk": ["../../packages/timeback-sdk/src/index.ts"],
-      "@monte/timeback-sdk/*": ["../../packages/timeback-sdk/src/*"]
+      "@monte/shared/*": ["../../packages/shared/src/*"]
     },
     "strictNullChecks": true
   },
@@ -36,9 +31,7 @@
     "apps/web/next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "../api/src/**/*.ts",
     "../../packages/shared/src/**/*.ts",
-    "../../packages/timeback-sdk/src/**/*.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]

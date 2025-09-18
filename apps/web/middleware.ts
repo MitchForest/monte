@@ -41,8 +41,17 @@ export async function middleware(request: NextRequest) {
     pathname.endsWith("/") && pathname.length > 1
       ? pathname.slice(0, -1)
       : pathname;
-  const shouldCheckSession =
-    AUTH_ROUTES.has(normalizedPath) || !PUBLIC_ROUTES.has(normalizedPath);
+  if (normalizedPath === "/") {
+    const hasSession = await getSession(request);
+    if (hasSession) {
+      return NextResponse.redirect(new URL("/home", request.url));
+    }
+    return NextResponse.next();
+  }
+
+  const isPublicRoute = PUBLIC_ROUTES.has(normalizedPath);
+  const isAuthRoute = AUTH_ROUTES.has(normalizedPath);
+  const shouldCheckSession = isAuthRoute || !isPublicRoute;
 
   if (!shouldCheckSession) {
     return NextResponse.next();
@@ -50,13 +59,13 @@ export async function middleware(request: NextRequest) {
 
   const hasSession = await getSession(request);
 
-  if (!(hasSession || PUBLIC_ROUTES.has(normalizedPath))) {
+  if (!hasSession && !isPublicRoute) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", `${pathname}${search}`);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (hasSession && AUTH_ROUTES.has(normalizedPath)) {
+  if (hasSession && isAuthRoute) {
     const homeUrl = new URL("/home", request.url);
     return NextResponse.redirect(homeUrl);
   }

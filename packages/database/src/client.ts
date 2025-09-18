@@ -1,7 +1,9 @@
 import { loadServerEnv, requireServerEnv } from "@monte/shared";
 import { Kysely, PostgresDialect } from "kysely";
 import { Pool, type PoolConfig } from "pg";
-import type { Database } from "./types";
+import type { DB } from "./types";
+
+type Database = DB;
 
 declare global {
   // eslint-disable-next-line no-var

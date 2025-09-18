@@ -1,5 +1,3 @@
-import "../lib/openapi";
-
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
 import type { ActionStatus, ActionType } from "@monte/shared";

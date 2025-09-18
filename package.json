@@ -6,22 +6,23 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun --env-file=.env turbo dev",
-    "build": "bun --env-file=.env turbo build",
-    "lint": "bun --env-file=.env turbo lint",
-    "typecheck": "bun --env-file=.env turbo typecheck",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
     "format": "biome format --write .",
-    "db:migrate": "bun --env-file=.env --filter @monte/database db:migrate",
-    "db:codegen": "bun --env-file=.env --filter @monte/database db:codegen"
+    "db:migrate": "bun --filter @monte/database db:migrate",
+    "db:codegen": "bun --filter @monte/database db:codegen"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
+    "@hono/swagger-ui": "^0.5.2",
+    "@scalar/openapi-to-markdown": "^0.2.37",
     "openapi-zod-client": "^1.18.3",
     "turbo": "^2.3.3",
     "typescript": "^5"
   },
   "packageManager": "bun@1.1.0",
-  "dependencies": {
-    "better-auth": "^1.3.10"
-  }
+  "dependencies": {}
 }

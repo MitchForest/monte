@@ -1,5 +1,6 @@
-import type { ApiApp } from "@monte/api";
 import { hc } from "hono/client";
+
+import { getAccessToken } from "@/lib/auth/token-store";
 
 const devBaseUrl = "http://localhost:8787";
 const isServer = typeof window === "undefined";
@@ -7,13 +8,13 @@ const isServer = typeof window === "undefined";
 function resolveBaseUrl(): string {
   if (isServer) {
     if (process.env.NODE_ENV === "production") {
-      const apiUrl = process.env.RAILWAY_API_URL;
-      if (!apiUrl) {
-        throw new Error("RAILWAY_API_URL must be configured on the server");
+      const apiUrl = process.env.RAILWAY_API_URL ?? process.env.API_URL;
+      if (apiUrl) {
+        return apiUrl;
       }
-      return apiUrl;
     }
-    return devBaseUrl;
+    const fallback = process.env.API_URL ?? devBaseUrl;
+    return fallback;
   }
   return "/api";
 }
@@ -50,10 +51,16 @@ function createFetch(defaultHeaders?: HeadersInit): typeof fetch {
     init: Parameters<typeof fetch>[1] = {},
   ) => {
     const mergedHeaders = mergeHeaders(defaultHeaders, init?.headers);
+    if (!isServer) {
+      const token = getAccessToken();
+      if (token) {
+        mergedHeaders.set("authorization", `Bearer ${token}`);
+      }
+    }
     const finalInit: RequestInit = {
       ...init,
       headers: mergedHeaders,
-      credentials: init?.credentials ?? (isServer ? "omit" : "include"),
+      credentials: init?.credentials ?? "omit",
     };
     return fetch(input, finalInit);
   }) as typeof fetch;
@@ -61,10 +68,10 @@ function createFetch(defaultHeaders?: HeadersInit): typeof fetch {
   return Object.assign(wrapped, fetch);
 }
 
-type HonoClient = ReturnType<typeof hc<ApiApp>>;
+type HonoClient = ReturnType<typeof hc>;
 
 function buildClient(baseUrl: string, fetcher: typeof fetch): HonoClient {
-  return hc<ApiApp>(baseUrl, {
+  return hc(baseUrl, {
     fetch: fetcher,
   });
 }

@@ -9,7 +9,8 @@
     "lint": "bun x biome check",
     "db:migrate": "bun run scripts/migrate.mjs",
     "db:new": "bun run scripts/new-migration.mjs",
-    "db:codegen": "bun x kysely-codegen --dialect postgres --out-file src/types.ts"
+    "db:codegen": "bun x kysely-codegen --dialect postgres --out-file src/types.ts",
+    "test": "bun test"
   },
   "dependencies": {
     "kysely": "^0.28.7",

@@ -2,11 +2,13 @@ import { z } from "zod";
 
 import {
   ActionSchema,
+  ClassAreaSchema,
   ClassroomSchema,
   CourseLessonSchema,
   CourseSchema,
   HabitCheckinEventSchema,
   HabitSchema,
+  MaterialSchema,
   ObservationSchema,
   OrganizationSchema,
   RoleSchema,
@@ -16,8 +18,12 @@ import {
   StudentSummaryRecipientSchema,
   StudentSummarySchema,
   SubjectSchema,
+  TopicSchema,
   UserSchema,
+  WorkPeriodSchema,
+  WorkspaceInviteSchema,
 } from "./schemas";
+import { TimebackAnalyticsSummarySchema } from "./timeback";
 
 // API Response wrapper schemas
 export const ApiErrorSchema = z.object({
@@ -55,6 +61,15 @@ export const StudentDetailResponseSchema = ApiSuccessSchema(
   }),
 );
 
+export const StudentDashboardResponseSchema = ApiSuccessSchema(
+  z.object({
+    student: StudentSchema,
+    habits: z.array(HabitSchema),
+    habitCheckins: z.array(HabitCheckinEventSchema),
+    xp: TimebackAnalyticsSummarySchema.nullable(),
+  }),
+);
+
 export const StudentParentsListResponseSchema = ApiSuccessSchema(
   z.object({
     parents: z.array(StudentParentSchema),
@@ -64,6 +79,29 @@ export const StudentParentsListResponseSchema = ApiSuccessSchema(
 export const StudentParentDetailResponseSchema = ApiSuccessSchema(
   z.object({
     parent: StudentParentSchema,
+  }),
+);
+
+export const StudentParentMutateResponseSchema = ApiSuccessSchema(
+  z.object({
+    parent: StudentParentSchema,
+  }),
+);
+
+export const GuideDashboardStudentSchema = z.object({
+  student: StudentSchema,
+  habitsCount: z.number().nonnegative(),
+  lastObservationAt: z.string().nullable(),
+  lastSummaryAt: z.string().nullable(),
+  xpToday: z.number().nonnegative().nullable(),
+});
+
+export const GuideDashboardResponseSchema = ApiSuccessSchema(
+  z.object({
+    schedule: z.array(ActionSchema),
+    students: z.array(GuideDashboardStudentSchema),
+    observationCount: z.number().nonnegative(),
+    summaryCount: z.number().nonnegative(),
   }),
 );
 
@@ -155,6 +193,19 @@ export const HabitCheckinEventsListResponseSchema = ApiSuccessSchema(
   }),
 );
 
+export const WorkspaceInvitesListResponseSchema = ApiSuccessSchema(
+  z.object({
+    invites: z.array(WorkspaceInviteSchema),
+  }),
+);
+
+export const WorkspaceInviteDetailResponseSchema = ApiSuccessSchema(
+  z.object({
+    invite: WorkspaceInviteSchema,
+    organization: OrganizationSchema.pick({ id: true, name: true }),
+  }),
+);
+
 // Course API responses
 export const SubjectsListResponseSchema = ApiSuccessSchema(
   z.object({
@@ -171,6 +222,24 @@ export const CoursesListResponseSchema = ApiSuccessSchema(
 export const CourseLessonsListResponseSchema = ApiSuccessSchema(
   z.object({
     lessons: z.array(CourseLessonSchema),
+  }),
+);
+
+export const ClassAreasListResponseSchema = ApiSuccessSchema(
+  z.object({
+    classAreas: z.array(ClassAreaSchema),
+  }),
+);
+
+export const MaterialsListResponseSchema = ApiSuccessSchema(
+  z.object({
+    materials: z.array(MaterialSchema),
+  }),
+);
+
+export const TopicsListResponseSchema = ApiSuccessSchema(
+  z.object({
+    topics: z.array(TopicSchema),
   }),
 );
 
@@ -198,6 +267,18 @@ export const StudentSummaryDetailResponseSchema = ApiSuccessSchema(
   z.object({
     summary: StudentSummarySchema,
     recipients: z.array(StudentSummaryRecipientSchema),
+  }),
+);
+
+export const WorkPeriodsListResponseSchema = ApiSuccessSchema(
+  z.object({
+    workPeriods: z.array(WorkPeriodSchema),
+  }),
+);
+
+export const WorkPeriodDetailResponseSchema = ApiSuccessSchema(
+  z.object({
+    workPeriod: WorkPeriodSchema,
   }),
 );
 
@@ -240,6 +321,13 @@ export type StudentParentsListResponse = z.infer<
 export type StudentParentDetailResponse = z.infer<
   typeof StudentParentDetailResponseSchema
 >;
+export type StudentParentMutateResponse = z.infer<
+  typeof StudentParentMutateResponseSchema
+>;
+export type GuideDashboardStudent = z.infer<typeof GuideDashboardStudentSchema>;
+export type GuideDashboardResponse = z.infer<
+  typeof GuideDashboardResponseSchema
+>;
 export type ClassroomsListResponse = z.infer<
   typeof ClassroomsListResponseSchema
 >;
@@ -274,6 +362,11 @@ export type CoursesListResponse = z.infer<typeof CoursesListResponseSchema>;
 export type CourseLessonsListResponse = z.infer<
   typeof CourseLessonsListResponseSchema
 >;
+export type ClassAreasListResponse = z.infer<
+  typeof ClassAreasListResponseSchema
+>;
+export type MaterialsListResponse = z.infer<typeof MaterialsListResponseSchema>;
+export type TopicsListResponse = z.infer<typeof TopicsListResponseSchema>;
 export type StudentLessonsListResponse = z.infer<
   typeof StudentLessonsListResponseSchema
 >;
@@ -286,7 +379,19 @@ export type StudentSummariesListResponse = z.infer<
 export type StudentSummaryDetailResponse = z.infer<
   typeof StudentSummaryDetailResponseSchema
 >;
+export type WorkPeriodsListResponse = z.infer<
+  typeof WorkPeriodsListResponseSchema
+>;
+export type WorkPeriodDetailResponse = z.infer<
+  typeof WorkPeriodDetailResponseSchema
+>;
 export type LoginResponse = z.infer<typeof LoginResponseSchema>;
 export type CurrentUserResponse = z.infer<typeof CurrentUserResponseSchema>;
 export type TeamMember = z.infer<typeof TeamMemberSchema>;
 export type TeamListResponse = z.infer<typeof TeamListResponseSchema>;
+export type WorkspaceInvitesListResponse = z.infer<
+  typeof WorkspaceInvitesListResponseSchema
+>;
+export type WorkspaceInviteDetailResponse = z.infer<
+  typeof WorkspaceInviteDetailResponseSchema
+>;

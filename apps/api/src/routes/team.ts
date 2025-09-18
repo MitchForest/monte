@@ -1,5 +1,3 @@
-import "../lib/openapi";
-
 import { createRoute, OpenAPIHono, type z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
 import { ApiErrorSchema, TeamListResponseSchema } from "@monte/shared";

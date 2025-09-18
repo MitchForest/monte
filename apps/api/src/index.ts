@@ -1,67 +1,52 @@
-import "./lib/openapi";
-
-import { OpenAPIHono } from "@hono/zod-openapi";
 import { serve } from "bun";
-import { cors } from "hono/cors";
 
+import { createAPIApp, getCorsOrigins } from "./lib/app";
 import { HTTP_STATUS } from "./lib/http/status";
-import { authHandler } from "./routes/auth";
 import { classroomsRouter } from "./routes/classrooms";
 import { habitsRouter } from "./routes/habits";
+import { invitesRouter } from "./routes/invites";
 import { observationsRouter } from "./routes/observations";
+import { organizationsRouter } from "./routes/organizations";
+import { attendanceRouter } from "./routes/attendance";
 import { studentSummariesRouter } from "./routes/student-summaries";
+import { studentLessonsRouter } from "./routes/student-lessons";
+import { studentParentsRouter } from "./routes/student-parents";
 import { studentsRouter } from "./routes/students";
 import { tasksRouter } from "./routes/tasks";
 import { teamRouter } from "./routes/team";
 import { timebackAnalyticsRouter } from "./routes/timeback-analytics";
+import { timebackEventsRouter } from "./routes/timeback-events";
+import { curriculumRouter } from "./routes/curriculum";
+import { guideDashboardRouter } from "./routes/guide-dashboard";
 
-const defaultOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  process.env.NEXT_PUBLIC_APP_URL,
-  process.env.APP_URL,
-].filter((value): value is string => Boolean(value));
-
-const configuredOrigins = (process.env.APP_ORIGINS ?? "")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter((origin) => origin.length > 0);
-
-const allowedOrigins =
-  configuredOrigins.length > 0 ? configuredOrigins : defaultOrigins;
-const corsOrigins = allowedOrigins.length > 0 ? allowedOrigins : ["*"];
-
-const app = new OpenAPIHono();
-
-app.doc("/openapi.json", {
-  openapi: "3.0.0",
-  info: {
+const app = createAPIApp({
+  cors: {
+    origin: getCorsOrigins(),
+    credentials: true,
+  },
+  openapi: {
     title: "Monte API",
     version: "1.0.0",
+    description: "Monte API for education management",
   },
 });
 
-app.use(
-  "*",
-  cors({
-    origin: corsOrigins,
-    credentials: true,
-  }),
-);
-
-app.get("/health", (c) => {
-  return c.json({ status: "ok", timestamp: new Date().toISOString() });
-});
-
 const typedApp = app
-  .route("/auth", authHandler)
   .route("/students", studentsRouter)
+  .route("/students", studentParentsRouter)
   .route("/classrooms", classroomsRouter)
   .route("/observations", observationsRouter)
   .route("/student-summaries", studentSummariesRouter)
+  .route("/student-lessons", studentLessonsRouter)
   .route("/tasks", tasksRouter)
   .route("/habits", habitsRouter)
-  .route("/timeback/analytics", timebackAnalyticsRouter)
+  .route("/curriculum", curriculumRouter)
+  .route("/guide-dashboard", guideDashboardRouter)
+  .route("/attendance", attendanceRouter)
+  .route("/timeback-analytics", timebackAnalyticsRouter)
+  .route("/timeback-events", timebackEventsRouter)
+  .route("/invites", invitesRouter)
+  .route("/organizations", organizationsRouter)
   .route("/team", teamRouter);
 
 typedApp.notFound((c) => c.json({ error: "Not found" }, HTTP_STATUS.notFound));

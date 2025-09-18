@@ -1,5 +1,3 @@
-import "../lib/openapi";
-
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
 import {
@@ -14,6 +12,7 @@ import { respond } from "../lib/http/respond";
 import { HTTP_STATUS } from "../lib/http/status";
 import {
   createStudentSummary,
+  sendExistingStudentSummary,
   type StudentSummaryRequest,
 } from "../services/student-summaries";
 
@@ -49,6 +48,11 @@ const SummaryQuery = z.object({
 
 const SummaryParam = z.object({
   id: z.string().uuid(),
+});
+
+const SendSummaryBody = z.object({
+  parentIds: z.array(z.string().uuid()).optional(),
+  emails: z.array(z.string().email()).optional(),
 });
 
 const listStudentSummariesRoute = createRoute({
@@ -340,4 +344,91 @@ const router = routerWithDetail.openapi(
   },
 );
 
-export { router as studentSummariesRouter };
+const sendStudentSummaryRoute = createRoute({
+  method: "post",
+  path: "/:id/send",
+  tags: ["Student Summaries"],
+  request: {
+    params: SummaryParam,
+    body: {
+      content: {
+        "application/json": {
+          schema: SendSummaryBody,
+        },
+      },
+    },
+  },
+  responses: {
+    [HTTP_STATUS.ok]: {
+      description: "Student summary sent",
+      content: {
+        "application/json": {
+          schema: StudentSummaryDetailResponseSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.unauthorized]: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.internalServerError]: {
+      description: "Failed to send summary",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+  },
+});
+
+const studentSummariesRouter = router.openapi(
+  sendStudentSummaryRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
+      return respond(
+        sendStudentSummaryRoute,
+        c,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
+      );
+    }
+
+    const params = c.req.valid("param");
+    const body = SendSummaryBody.parse(c.req.valid("json"));
+
+    try {
+      const result = await sendExistingStudentSummary({
+        session,
+        summaryId: params.id,
+        parentIds: body.parentIds,
+        emails: body.emails,
+      });
+
+      const response = StudentSummaryDetailResponseSchema.parse({
+        data: {
+          summary: result.summary,
+          recipients: result.recipients,
+        },
+      });
+
+      return respond(sendStudentSummaryRoute, c, response);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to send summary";
+      return respond(
+        sendStudentSummaryRoute,
+        c,
+        { error: message },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
+
+export { studentSummariesRouter };

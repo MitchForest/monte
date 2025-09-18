@@ -1,22 +1,40 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import type { PropsWithChildren } from "react";
+import { useEffect } from "react";
+import { useAuth } from "react-oidc-context";
+
 import { AppSidebar } from "@/components/app/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import type { AuthenticatedSession } from "@/lib/auth/session";
 
-type AppShellProps = PropsWithChildren<{
-  session: AuthenticatedSession;
-}>;
+const isMockMode =
+  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
+  (!process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID &&
+    process.env.NODE_ENV !== "production");
 
-export function AppShell({ session, children }: AppShellProps) {
+type AppShellProps = PropsWithChildren;
+
+export function AppShell({ children }: AppShellProps) {
+  const auth = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isMockMode) {
+      return;
+    }
+    if (!auth.isLoading && !auth.isAuthenticated && !auth.activeNavigator) {
+      router.replace("/login");
+    }
+  }, [auth.isLoading, auth.isAuthenticated, auth.activeNavigator, router]);
+
   return (
     <SidebarProvider defaultOpen>
-      <AppSidebar initialUser={session.user} />
+      <AppSidebar />
       <SidebarRail />
       <SidebarInset className="bg-primary">
         <div className="flex h-screen flex-col p-2 md:p-3">

@@ -16,13 +16,13 @@ export type StudentsLookupResult = {
 export function useStudentsLookup(
   scope: string = "lookup",
 ): StudentsLookupResult {
-  const studentsQuery = useQuery({
+  const studentsQuery = useQuery<Student[]>({
     queryKey: ["students", { scope }],
     queryFn: ({ signal }: { signal?: AbortSignal }) =>
       listStudents({}, { signal }),
   });
 
-  const students = (studentsQuery.data ?? []) as Student[];
+  const students = studentsQuery.data ?? [];
   const studentsById = useMemo(() => {
     const map = new Map<string, Student>();
     for (const learner of students) {
@@ -35,6 +35,6 @@ export function useStudentsLookup(
     students,
     studentsById,
     isLoading: studentsQuery.isLoading,
-    isError: studentsQuery.isError ?? false,
+    isError: Boolean(studentsQuery.error),
   };
 }

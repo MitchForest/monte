@@ -5,7 +5,7 @@ import type {
   StudentSummary,
   StudentSummaryRecipient,
 } from "@monte/shared";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createStudentSummary } from "@/lib/api/endpoints";
+import { createStudentSummary, sendStudentSummary } from "@/lib/api/endpoints";
 
 import { VoiceInputButton } from "./voice-input-button";
 
@@ -35,6 +35,7 @@ export function StudentSummaryPanel({
   summaries,
   onSummaryCreated,
 }: StudentSummaryPanelProps) {
+  const queryClient = useQueryClient();
   const [scope, setScope] = useState<Scope>("today");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -58,6 +59,30 @@ export function StudentSummaryPanel({
     onError: (error: unknown) => {
       toast.error(
         error instanceof Error ? error.message : "Unable to generate summary",
+      );
+    },
+  });
+
+  const sendSummaryMutation = useMutation({
+    mutationFn: (input: {
+      summaryId: string;
+      parentIds?: string[];
+      emails?: string[];
+    }) =>
+      sendStudentSummary(input.summaryId, {
+        parentIds: input.parentIds,
+        emails: input.emails,
+      }),
+    onSuccess: () => {
+      toast.success("Summary sent");
+      queryClient.invalidateQueries({
+        queryKey: ["student-summaries", { studentId }],
+      });
+      queryClient.invalidateQueries({ queryKey: ["student", studentId] });
+    },
+    onError: (error: unknown) => {
+      toast.error(
+        error instanceof Error ? error.message : "Unable to send summary",
       );
     },
   });
@@ -123,6 +148,27 @@ export function StudentSummaryPanel({
       manualNotes:
         manualNotes.trim().length > 0 ? manualNotes.trim() : undefined,
       sendEmail: sendEmailPayload,
+    });
+  };
+
+  const handleSendLatest = () => {
+    if (!latestSummary) {
+      toast.error("Generate a summary first");
+      return;
+    }
+
+    const hasRecipients =
+      selectedParentIds.length > 0 || manualEmails.length > 0;
+
+    if (!hasRecipients) {
+      toast.error("Select at least one guardian or email");
+      return;
+    }
+
+    sendSummaryMutation.mutate({
+      summaryId: latestSummary.id,
+      parentIds: selectedParentIds.length > 0 ? selectedParentIds : undefined,
+      emails: manualEmails.length > 0 ? manualEmails : undefined,
     });
   };
 
@@ -357,6 +403,19 @@ export function StudentSummaryPanel({
                 {latestSummary.content}
               </p>
             </article>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                disabled={sendSummaryMutation.isPending}
+                onClick={handleSendLatest}
+                type="button"
+                variant="outline"
+              >
+                {sendSummaryMutation.isPending ? "Sending…" : "Send summary"}
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                Uses the selected guardians and emails without regenerating.
+              </span>
+            </div>
           </section>
         ) : null}
       </CardContent>

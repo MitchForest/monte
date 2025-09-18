@@ -1,85 +1,88 @@
-# @monte/web
+# @monte/web – Montessori Frontend
 
-The Monte web workspace is a Next.js 15 application that consumes the typed Hono API via TanStack React Query. It renders the authenticated Montessori workspace as well as the public marketing surface.
+The web workspace is a Next.js 15 application that consumes only the internal Monte API (`apps/api`). It never talks to Timeback directly—the BFF handles vendor calls and enforces policy for us.
 
-## Overview
+## Responsibilities
 
-- **Framework**: Next.js 15 (App Router, React 19 Server Components).
-- **Styling**: Tailwind CSS v4 with design tokens and Radix UI primitives.
-- **State & Data**: TanStack React Query, no global stores—queries/mutations only.
-- **Auth**: Better Auth client binding to the API routes.
-- **API Access**: Generated Hono client wrapped by `lib/api/endpoints.ts` with Zod validation.
-- **Notifications**: Sonner toasts.
+- Render the Montessori guide, student, and admin experiences.
+- Fetch data exclusively via typed helpers in `lib/api/endpoints.ts` that wrap the BFF.
+- Orchestrate state with TanStack React Query (no manual `fetch`).
+- Provide client-side validation/error handling while keeping the shared contracts intact.
+
+```
+(Timeback APIs) → @monte/timeback-clients → apps/api (BFF) → @monte/shared (contracts) → apps/web (UI)
+```
+
+## Technology
+
+- **Framework**: Next.js 15 (App Router) + React 19
+- **Styling**: Tailwind CSS v4, Radix primitives, Shadcn wrappers
+- **Data**: TanStack React Query with the shared Hono client
+- **Auth**: Better Auth client bindings
+- **Validation**: Zod schemas imported from `@monte/shared`
 
 ## Project Structure
 
 ```
 app/
-├── layout.tsx           # Root layout (QueryProvider + theme)
-├── (marketing)/         # Public marketing content
-└── (app)/               # Authenticated workspace routes
-    ├── layout.tsx       # Fetches Better Auth session, renders AppShell
-    ├── classrooms/      # Classrooms feature
-    ├── students/        # Students + habits feature
-    └── ...
+  layout.tsx                # Root layout (Query + Theme providers)
+  (marketing)/              # Public marketing surface
+  (app)/                    # Authenticated workspace
+    layout.tsx              # Loads session, renders AppShell
+    students/               # Student directory + detail routes
+    ...
 components/
-├── providers/           # React Query provider
-├── app/                 # App-level shell, page header, sidebar
-├── auth/                # Login/signup forms
-└── ui/                  # Tailwind + Radix wrappers
+  providers/                # React Query provider, auth provider
+  app/                      # Shell, navigation, shared widgets
+  ui/                       # Tailwind + Radix building blocks
 lib/
-├── api/                 # Hono client + typed endpoint helpers
-├── auth/                # Better Auth configuration + session helpers
-├── db/                  # Re-exported database utilities for server usage
-└── utils.ts             # Misc helpers
+  api/                      # Hono client + endpoint helpers (typed by @monte/shared)
+  auth/                     # Better Auth session utilities
+  utils.ts                  # Misc helpers
+hooks/                      # Reusable React Query hooks
 ```
 
-## Data Flow & Conventions
+## Data Flow
 
-1. **All network calls** go through `lib/api/endpoints.ts`. Each function (e.g., `listStudents`, `createClassroom`) invokes the shared Hono client and parses the response with the shared Zod schema. Never call `fetch` directly inside UI.
-2. **React Query usage**:
-   - Register new queries with meaningful keys (`['students', { search, classroomId }]`).
-   - Use `useMutation` for writes and invalidate related keys on success.
-   - Handle errors in `onError` and surface the message via `toast.error(...)`.
-3. **Server-side authentication**: The `(app)/layout.tsx` fetches the Better Auth session and renders `<AppShell>`; client components can use `authClient.useSession()` for live updates.
-4. **Accessibility-first components**: follow Radix semantics, avoid non-interactive click handlers, and respect the repo-wide accessibility rules.
+1. Endpoints in `lib/api/endpoints.ts` call the generated Hono client, pass through Zod schemas from `@monte/shared`, and return parsed data.
+2. Components use React Query (`useQuery`, `useMutation`) with those endpoint helpers.
+3. Success paths invalidate the appropriate query keys; errors raise toasts.
+4. Server Components can run queries inside route handlers by directly calling the endpoint helpers (they return promises that already perform validation).
 
-### Adding a New Feature Page
+## Commands
 
-1. Add schemas/types in `@monte/shared` + API route in `apps/api`.
-2. Create endpoint helpers in `lib/api/endpoints.ts` with Zod parsing.
-3. Build TanStack Query hooks within your page component (or factor into a hook file if reused).
-4. Render UI using existing components and Tailwind classes; respond to loading/error states with React Query status flags.
-5. Invalidate relevant queries in mutations to keep the cache synchronized.
+```bash
+bun run dev          # start Next.js (Turbopack)
+bun run build        # production build
+bun run start        # run built output
+bun run typecheck    # strict TypeScript checks
+bun run lint         # Biome lint rules
+```
+
+Scope commands:
+
+```bash
+bun --filter @monte/web dev
+bun --filter @monte/web typecheck
+```
 
 ## Environment Variables
+
+Copy `.env.example` to `.env` and set:
 
 ```env
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 BETTER_AUTH_URL=http://localhost:8787
 BETTER_AUTH_SECRET=super-secret
-NEXT_PUBLIC_SUPABASE_URL=...        # optional, only if Supabase features are enabled
-NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
-## Commands
+(Additional envs can be added per feature; avoid introducing vendor credentials here.)
 
-```bash
-bun run dev        # start Next.js with Turbopack
-bun run build      # production build
-bun run start      # run built app
-bun run typecheck  # TypeScript strict checks
-bun run lint       # Biome lint/format
-```
+## Adding a Feature Page
 
-## Testing & QA
+1. Define/extend contracts in `packages/shared` and expose the route in `apps/api`.
+2. Add endpoint helpers (and optional hooks) in `lib/api`.
+3. Build UI components that rely on React Query + shared primitives.
+4. Handle loading/error states explicitly for good UX.
 
-- Use React Testing Library (when added) against components that encapsulate logic.
-- Verify accessibility using browser tooling and ensure new components follow our rules (ARIA roles, label association, etc.).
-- `bun run typecheck` + `bun run lint` must pass before merging changes.
-
-## Future Work Guidelines
-
-- Prefer Server Components for layout/shell logic; client components (`"use client"`) should be limited to interactive regions.
-- Reuse `AppPageHeader`, buttons, tables, and other existing primitives to preserve UX consistency.
-- Update this README when introducing new architectural patterns, query key conventions, or shared hooks.
+This keeps the UI thin, predictable, and fully typed from the database to React components.

@@ -97,6 +97,13 @@ export type CreateStudentSummaryResult = {
   recipients: PersistResult["recipients"];
 };
 
+type SendExistingSummaryParams = {
+  session: AuthenticatedSession;
+  summaryId: string;
+  parentIds?: string[];
+  emails?: string[];
+};
+
 export function resolveTimespan(
   payload: SummaryRequest,
   reference: Date = new Date(),
@@ -507,3 +514,183 @@ export async function createStudentSummary({
 }
 
 export type StudentSummaryRequest = SummaryRequest;
+
+export async function sendExistingStudentSummary({
+  session,
+  summaryId,
+  parentIds,
+  emails,
+}: SendExistingSummaryParams): Promise<CreateStudentSummaryResult> {
+  const { summary, recipients: existingRecipients } = await withDbContext(
+    { userId: session.session.userId, orgId: session.session.orgId },
+    async (trx) => {
+      const record = await trx
+        .selectFrom("student_summaries")
+        .selectAll()
+        .where("id", "=", summaryId)
+        .where("org_id", "=", session.session.orgId)
+        .executeTakeFirst();
+
+      if (!record) {
+        throw new Error("Summary not found");
+      }
+
+      const summaryRecipients = await trx
+        .selectFrom("student_summary_recipients")
+        .selectAll()
+        .where("summary_id", "=", summaryId)
+        .execute();
+
+      return {
+        summary: {
+          ...record,
+          timespan_start:
+            record.timespan_start instanceof Date
+              ? record.timespan_start.toISOString()
+              : record.timespan_start,
+          timespan_end:
+            record.timespan_end instanceof Date
+              ? record.timespan_end.toISOString()
+              : record.timespan_end,
+          emailed_at:
+            record.emailed_at instanceof Date
+              ? record.emailed_at.toISOString()
+              : record.emailed_at,
+          created_at:
+            record.created_at instanceof Date
+              ? record.created_at.toISOString()
+              : record.created_at,
+        },
+        recipients: summaryRecipients.map((recipient) => ({
+          ...recipient,
+          delivered_at:
+            recipient.delivered_at instanceof Date
+              ? recipient.delivered_at.toISOString()
+              : recipient.delivered_at,
+          created_at:
+            recipient.created_at instanceof Date
+              ? recipient.created_at.toISOString()
+              : recipient.created_at,
+        })),
+      };
+    },
+  );
+
+  const emailSet = new Set<string>();
+  const normalizedEmails = emails ?? [];
+
+  for (const entry of normalizedEmails) {
+    if (entry) {
+      emailSet.add(entry.toLowerCase());
+    }
+  }
+
+  if (parentIds && parentIds.length > 0) {
+    const parentEmails = await withDbContext(
+      { userId: session.session.userId, orgId: session.session.orgId },
+      (trx) =>
+        trx
+          .selectFrom("student_parents")
+          .select(["id", "email"])
+          .where("student_id", "=", summary.student_id)
+          .where("id", "in", parentIds)
+          .execute(),
+    );
+
+    for (const parent of parentEmails) {
+      if (parent.email) {
+        emailSet.add(parent.email.toLowerCase());
+      }
+    }
+  }
+
+  if (emailSet.size === 0) {
+    throw new Error("No recipient emails provided");
+  }
+
+  const emailsToSend = Array.from(emailSet);
+
+  await sendSummaryEmail({
+    to: emailsToSend,
+    subject: summary.title,
+    html: `<div>${summary.content}</div>`,
+    text: summary.content,
+  });
+
+  await markSummaryEmailed(session, summary.id);
+
+  await withDbContext(
+    { userId: session.session.userId, orgId: session.session.orgId },
+    async (trx) => {
+      for (const email of emailsToSend) {
+        await trx
+          .insertInto("student_summary_recipients")
+          .values({
+            id: crypto.randomUUID(),
+            summary_id: summary.id,
+            parent_id: null,
+            email,
+            delivered_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            oneroster_user_id: null,
+          })
+          .onConflict((oc) =>
+            oc
+              .column("summary_id")
+              .column("email")
+              .doUpdateSet({ delivered_at: new Date().toISOString() }),
+          )
+          .execute();
+      }
+    },
+  );
+
+  const recipients = await withDbContext(
+    { userId: session.session.userId, orgId: session.session.orgId },
+    (trx) =>
+      trx
+        .selectFrom("student_summary_recipients")
+        .selectAll()
+        .where("summary_id", "=", summary.id)
+        .orderBy("created_at", "desc")
+        .execute(),
+  );
+
+  const normalizedRecipients = recipients.map((recipient) => ({
+    ...recipient,
+    delivered_at:
+      recipient.delivered_at instanceof Date
+        ? recipient.delivered_at.toISOString()
+        : recipient.delivered_at,
+    created_at:
+      recipient.created_at instanceof Date
+        ? recipient.created_at.toISOString()
+        : recipient.created_at,
+  }));
+
+  const normalizedSummary = {
+    ...summary,
+    scope: summary.scope as SummaryScope,
+    timespan_start:
+      summary.timespan_start instanceof Date
+        ? summary.timespan_start.toISOString()
+        : summary.timespan_start,
+    timespan_end:
+      summary.timespan_end instanceof Date
+        ? summary.timespan_end.toISOString()
+        : summary.timespan_end,
+    emailed_at:
+      summary.emailed_at instanceof Date
+        ? summary.emailed_at.toISOString()
+        : summary.emailed_at,
+    created_at:
+      summary.created_at instanceof Date
+        ? summary.created_at.toISOString()
+        : summary.created_at,
+  } satisfies PersistResult["summary"];
+
+  return {
+    summary: normalizedSummary,
+    recipients: normalizedRecipients,
+  };
+}

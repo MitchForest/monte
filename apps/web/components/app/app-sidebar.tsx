@@ -6,6 +6,7 @@ import {
   ClipboardCheck,
   GraduationCap,
   Home,
+  Library,
   LogOut,
   Moon,
   Settings,
@@ -17,6 +18,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useState, useTransition } from "react";
+import { useAuth } from "react-oidc-context";
 import { toast } from "sonner";
 import { UserSettingsModal } from "@/components/app/user-settings-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -38,12 +40,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { authClient } from "@/lib/auth/client";
-import { getAuthErrorMessage } from "@/lib/auth/errors";
-import type { AuthenticatedSession } from "@/lib/auth/session";
+
+import { setAccessToken } from "@/lib/auth/token-store";
+import { cn } from "@/lib/utils";
 
 const routes = [
   { href: "/home", label: "Home", icon: Home },
+  { href: "/guide", label: "Guide", icon: User },
+  { href: "/guide/my-class", label: "My class", icon: Users },
+  { href: "/guide/digital-album", label: "Digital album", icon: Library },
   { href: "/classrooms", label: "Classrooms", icon: GraduationCap },
   { href: "/students", label: "Students", icon: Users },
   { href: "/observations", label: "Observations", icon: ClipboardCheck },
@@ -61,35 +66,89 @@ function getInitials(name: string): string {
   return `${first}${last}`.toUpperCase();
 }
 
-type AppSidebarProps = {
-  initialUser: AuthenticatedSession["user"] | null;
+const isMockMode =
+  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
+  (!process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID &&
+    process.env.NODE_ENV !== "production");
+
+const mockUser = {
+  email: process.env.NEXT_PUBLIC_DEV_USER_EMAIL ?? "guide@example.com",
+  name: process.env.NEXT_PUBLIC_DEV_USER_NAME ?? "Guide User",
+  image: null as string | null,
 };
 
-export function AppSidebar({ initialUser }: AppSidebarProps) {
+export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const sessionAtom = authClient.useSession();
+  const auth = useAuth();
   const [isSigningOut, startSignOut] = useTransition();
   const { theme, setTheme } = useTheme();
   const [userSettingsOpen, setUserSettingsOpen] = useState(false);
 
-  const activeUser = sessionAtom.data?.user ?? initialUser;
-  const displayName = activeUser
-    ? activeUser.name?.trim() && activeUser.name.length > 0
-      ? activeUser.name
-      : activeUser.email
-    : "User";
+  const activeProfile = isMockMode
+    ? mockUser
+    : ((auth.user?.profile as {
+        email?: string;
+        name?: string;
+        picture?: string;
+        sub?: string;
+      }) ?? null);
+
+  const displayName =
+    activeProfile?.name && activeProfile.name.trim().length > 0
+      ? activeProfile.name
+      : (activeProfile?.email ?? "User");
   const initials = getInitials(displayName);
+
+  const avatarSrc = activeProfile
+    ? "picture" in activeProfile && activeProfile.picture
+      ? activeProfile.picture
+      : "image" in activeProfile && activeProfile.image
+        ? (activeProfile.image ?? undefined)
+        : activeProfile.email
+          ? `https://api.dicebear.com/7.x/micah/svg?seed=${activeProfile.email}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=200`
+          : undefined
+    : undefined;
+
+  const sidebarUser = activeProfile
+    ? {
+        id:
+          "sub" in activeProfile && activeProfile.sub
+            ? activeProfile.sub
+            : (activeProfile.email ?? mockUser.email),
+        email: activeProfile.email ?? mockUser.email,
+        name: activeProfile.name ?? null,
+        image:
+          ("picture" in activeProfile && activeProfile.picture
+            ? activeProfile.picture
+            : "image" in activeProfile
+              ? (activeProfile.image ?? null)
+              : null) ?? null,
+      }
+    : null;
 
   const handleSignOut = () => {
     startSignOut(async () => {
-      try {
-        await authClient.signOut();
+      if (isMockMode) {
+        setAccessToken(null);
         router.replace("/login");
         router.refresh();
-      } catch (err) {
-        const message = getAuthErrorMessage(err, "Unable to sign out.");
-        toast.error(message);
+        return;
+      }
+
+      try {
+        const logoutUri =
+          process.env.NEXT_PUBLIC_COGNITO_LOGOUT_URI ??
+          (typeof window !== "undefined"
+            ? `${window.location.origin}/login`
+            : undefined);
+
+        await auth.signoutRedirect({
+          post_logout_redirect_uri: logoutUri,
+        });
+        setAccessToken(null);
+      } catch (_error) {
+        toast.error("Unable to sign out.");
       }
     });
   };
@@ -99,8 +158,9 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-1.5">
           <span
-            className="text-3xl font-bold transition-all duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:scale-0"
-            style={{ fontFamily: "'DynaPuff', system-ui" }}
+            className={cn(
+              "font-brand text-3xl font-bold transition-all duration-200 group-data-[collapsible=icon]:opacity-0 group-data-[collapsible=icon]:scale-0",
+            )}
           >
             Monte
           </span>
@@ -144,13 +204,7 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
               type="button"
             >
               <Avatar className="h-8 w-8">
-                <AvatarImage
-                  alt={`${displayName}'s avatar`}
-                  src={
-                    activeUser?.image ||
-                    `https://api.dicebear.com/7.x/micah/svg?seed=${activeUser?.email || "default"}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf&size=200`
-                  }
-                />
+                <AvatarImage alt={`${displayName}'s avatar`} src={avatarSrc} />
                 <AvatarFallback className="bg-background text-primary font-semibold">
                   {initials}
                 </AvatarFallback>
@@ -194,7 +248,7 @@ export function AppSidebar({ initialUser }: AppSidebarProps) {
       <UserSettingsModal
         onOpenChange={setUserSettingsOpen}
         open={userSettingsOpen}
-        user={activeUser}
+        user={sidebarUser}
       />
     </Sidebar>
   );

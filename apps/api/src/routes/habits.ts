@@ -1,5 +1,3 @@
-import "../lib/openapi";
-
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
 import type { HabitSchedule } from "@monte/shared";
@@ -7,6 +5,7 @@ import {
   ApiErrorSchema,
   HabitCheckinDeletionResponseSchema,
   HabitCheckinDetailResponseSchema,
+  HabitCheckinEventsListResponseSchema,
   HabitDetailResponseSchema,
   HabitScheduleSchema,
   HabitSchema,
@@ -18,6 +17,11 @@ import { respond } from "../lib/http/respond";
 import { HTTP_STATUS } from "../lib/http/status";
 
 const routerBase = new OpenAPIHono();
+
+const ListHabitsQuery = z.object({
+  studentId: z.string().uuid().optional(),
+  active: z.coerce.boolean().optional(),
+});
 
 const CreateHabitBody = z.object({
   studentId: z.string().uuid(),
@@ -37,10 +41,19 @@ const HabitCheckinQuery = z.object({
   date: z.string().regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/),
 });
 
+const HabitCheckinListQuery = z.object({
+  startDate: z.string().regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/).optional(),
+  endDate: z.string().regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/).optional(),
+  limit: z.coerce.number().int().min(1).max(365).optional(),
+});
+
 const listHabitsRoute = createRoute({
   method: "get",
   path: "/",
   tags: ["Habits"],
+  request: {
+    query: ListHabitsQuery,
+  },
   responses: {
     [HTTP_STATUS.ok]: {
       description: "List habits",
@@ -80,11 +93,13 @@ const routerWithList = routerBase.openapi(listHabitsRoute, async (c) => {
     );
   }
 
+  const query = c.req.valid("query");
+
   try {
     const habits = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
-      (trx) =>
-        trx
+      (trx) => {
+        let builder = trx
           .selectFrom("habits")
           .select([
             "id",
@@ -96,8 +111,17 @@ const routerWithList = routerBase.openapi(listHabitsRoute, async (c) => {
             "created_at",
           ])
           .where("org_id", "=", session.session.orgId)
-          .orderBy("created_at", "desc")
-          .execute(),
+          .orderBy("created_at", "desc");
+
+        if (query.studentId) {
+          builder = builder.where("student_id", "=", query.studentId);
+        }
+        if (query.active !== undefined) {
+          builder = builder.where("active", "=", query.active);
+        }
+
+        return builder.execute();
+      },
     );
 
     const response = HabitsListResponseSchema.parse({
@@ -213,6 +237,145 @@ const routerWithCreate = routerWithList.openapi(createHabitRoute, async (c) => {
   }
 });
 
+const listHabitCheckinsRoute = createRoute({
+  method: "get",
+  path: "/:id/check-ins",
+  tags: ["Habits"],
+  request: {
+    params: HabitParam,
+    query: HabitCheckinListQuery,
+  },
+  responses: {
+    [HTTP_STATUS.ok]: {
+      description: "List habit check-ins",
+      content: {
+        "application/json": {
+          schema:
+            HabitCheckinEventsListResponseSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.unauthorized]: {
+      description: "Unauthorized",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.notFound]: {
+      description: "Habit not found",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+    [HTTP_STATUS.internalServerError]: {
+      description: "Failed to load check-ins",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
+  },
+});
+
+const routerWithCheckinList = routerWithCreate.openapi(
+  listHabitCheckinsRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
+      return respond(
+        listHabitCheckinsRoute,
+        c,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
+      );
+    }
+
+    const params = c.req.valid("param");
+    const query = c.req.valid("query");
+
+    try {
+      const habit = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        (trx) =>
+          trx
+            .selectFrom("habits")
+            .select(["id", "org_id"])
+            .where("id", "=", params.id)
+            .where("org_id", "=", session.session.orgId)
+            .executeTakeFirst(),
+      );
+
+      if (!habit) {
+        return respond(
+          listHabitCheckinsRoute,
+          c,
+          { error: "Habit not found" },
+          HTTP_STATUS.notFound,
+        );
+      }
+
+      const startDate = query.startDate
+        ? new Date(`${query.startDate}T00:00:00.000Z`)
+        : null;
+      const endDate = query.endDate
+        ? new Date(`${query.endDate}T23:59:59.999Z`)
+        : null;
+      const limit = query.limit ?? 90;
+
+      const events = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        async (trx) => {
+          let builder = trx
+            .selectFrom("habit_checkin_events")
+            .selectAll()
+            .where("habit_id", "=", habit.id)
+            .where("org_id", "=", session.session.orgId)
+            .orderBy("date", "desc")
+            .limit(limit);
+
+          if (startDate) {
+            builder = builder.where("date", ">=", startDate);
+          }
+          if (endDate) {
+            builder = builder.where("date", "<=", endDate);
+          }
+
+          const rows = await builder.execute();
+          return rows.map((row) => ({
+            ...row,
+            date:
+              row.date instanceof Date
+                ? row.date.toISOString().slice(0, 10)
+                : row.date,
+            created_at:
+              row.created_at instanceof Date
+                ? row.created_at.toISOString()
+                : row.created_at,
+          }));
+        },
+      );
+
+      const response = HabitCheckinEventsListResponseSchema.parse({
+        data: { events },
+      });
+
+      return respond(listHabitCheckinsRoute, c, response);
+    } catch (_error) {
+      return respond(
+        listHabitCheckinsRoute,
+        c,
+        { error: "Failed to load check-ins" },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
+
 const createHabitCheckinRoute = createRoute({
   method: "post",
   path: "/:id/check-ins",
@@ -263,7 +426,7 @@ const createHabitCheckinRoute = createRoute({
   },
 });
 
-const routerWithCheckin = routerWithCreate.openapi(
+const routerWithCheckin = routerWithCheckinList.openapi(
   createHabitCheckinRoute,
   async (c) => {
     const session = await getServerSession(c.req.raw);

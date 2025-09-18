@@ -21,6 +21,13 @@ export const LessonInstanceStatusSchema = z.enum([
 ]);
 export const SummaryScopeSchema = z.enum(["today", "this_week", "custom"]);
 
+export type Role = z.infer<typeof RoleSchema>;
+export type ActionStatus = z.infer<typeof ActionStatusSchema>;
+export type ActionType = z.infer<typeof ActionTypeSchema>;
+export type HabitSchedule = z.infer<typeof HabitScheduleSchema>;
+export type LessonInstanceStatus = z.infer<typeof LessonInstanceStatusSchema>;
+export type SummaryScope = z.infer<typeof SummaryScopeSchema>;
+
 // User schemas
 export const UserSchema = z.object({
   id: z.string(),
@@ -62,6 +69,7 @@ export const StudentSchema = z
     dob: z.string().nullable(),
     primary_classroom_id: z.string().nullable(),
     created_at: z.string(),
+    oneroster_user_id: z.string().nullable().optional(),
   })
   .extend({
     classroom: StudentClassroomSchema.nullable().optional(),
@@ -119,6 +127,23 @@ export const CourseLessonSchema = z.object({
   duration_minutes: z.number().nullable(),
   order_index: z.number(),
   created_at: z.string(),
+});
+
+export const ClassAreaSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+});
+
+export const MaterialSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  org_id: z.string().nullable(),
+});
+
+export const TopicSchema = z.object({
+  id: z.string(),
+  domain_id: z.string(),
+  name: z.string(),
 });
 
 // Observation schemas
@@ -222,6 +247,33 @@ export const HabitCheckinEventSchema = z.object({
   created_at: z.string(),
 });
 
+export const WorkPeriodSchema = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  student_id: z.string(),
+  oneroster_student_id: z.string().nullable(),
+  start_time: z.string(),
+  end_time: z.string().nullable(),
+  notes: z.string().nullable(),
+});
+
+export type WorkPeriod = z.infer<typeof WorkPeriodSchema>;
+
+export const WorkspaceInviteSchema = z.object({
+  id: z.string(),
+  org_id: z.string(),
+  code: z.string(),
+  email: z.string().email().nullable(),
+  role: RoleSchema,
+  created_by: z.string(),
+  max_uses: z.number().int().min(1),
+  used_count: z.number().int().min(0),
+  expires_at: z.string().nullable(),
+  redeemed_at: z.string().nullable(),
+  redeemed_by: z.string().nullable(),
+  created_at: z.string(),
+});
+
 // Auth schemas
 export const AuthSessionSchema = z.object({
   id: z.string(),
@@ -285,3 +337,4 @@ export type HabitCheckinEvent = z.infer<typeof HabitCheckinEventSchema>;
 export type AuthSession = z.infer<typeof AuthSessionSchema>;
 export type AuthAccount = z.infer<typeof AuthAccountSchema>;
 export type AuthVerification = z.infer<typeof AuthVerificationSchema>;
+export type WorkspaceInvite = z.infer<typeof WorkspaceInviteSchema>;

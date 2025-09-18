@@ -4,20 +4,20 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run --env-file=../../.env --hot src/index.ts",
+    "dev": "bun run --env-file=.env --hot src/index.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
-    "start": "bun run --env-file=../../.env dist/index.js",
+    "start": "bun run --env-file=.env dist/index.js",
     "typecheck": "bun x tsc --noEmit",
-    "lint": "bun x biome check"
+    "lint": "bun x biome check",
+    "test": "bun test"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.0",
     "@hono/zod-openapi": "^1.1.1",
     "@monte/database": "workspace:*",
     "@monte/shared": "workspace:*",
-    "@monte/timeback-sdk": "workspace:*",
-    "better-auth": "^1.3.10",
     "hono": "^4.9.7",
+    "jose": "^6.1.0",
     "openai": "^4.72.0",
     "resend": "^4.5.0",
     "zod": "^4.1.9"

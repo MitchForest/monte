@@ -1,80 +1,86 @@
-# @monte/api
+# @monte/api – Timeback Adapter & BFF
 
-The Monte API workspace is a Bun + Hono service that exposes organization-scoped REST endpoints. Every handler validates input and output with shared Zod schemas to keep the contract aligned with the web application.
+This workspace is the Backend-for-Frontend that the web app consumes. It sits between the generated Timeback SDK and our Montessori data, applying authorization, caching, and schema mapping before exposing a stable REST contract.
 
-## Stack
+## Responsibilities
 
-- **Runtime**: Bun 1.x
-- **Framework**: [Hono](https://hono.dev) with modular route files
-- **Database**: PostgreSQL accessed through Kysely
-- **Auth**: [Better Auth](https://better-auth.dev) with email/password flow
-- **Validation**: Zod schemas imported from `@monte/shared`
-- **Type Safety**: `withDbContext` transaction helper provides user/org context for RLS
+- **Timeback adapter** – wrap `@monte/timeback-clients` (OneRoster, Caliper, Powerpath, QTI), constrain it to the operations we use, and translate vendor payloads into internal contracts.
+- **Montessori data access** – read/write Postgres through `@monte/database` using `withDbContext` so row-level security stays in effect.
+- **Contract enforcement** – validate every request/response with the Zod schemas exported from `@monte/shared`.
+- **Stable BFF** – expose routes consumed by the web app; never leak vendor-specific shapes across the boundary.
 
-## Folder Layout
+```
+(Timeback APIs) ──► @monte/timeback-clients ──► apps/api ──► @monte/shared ──► apps/web
+                      (SDK)                     (adapter/BFF)   (contracts)      (UI)
+```
+
+## Project Structure
 
 ```
 src/
-├── index.ts         # App entry, CORS, route registration
+├── index.ts          # Hono app entry (CORS, OpenAPI metadata, route mounting)
 ├── lib/
-│   ├── auth/        # Better Auth setup + session helpers
-│   ├── http/        # HTTP helpers (status codes, responders)
-│   └── timeback/    # Optional TimeBack client bootstrap
-├── routes/          # Hono routers (students, classrooms, habits, tasks, observations, team, timeback-analytics)
-└── services/        # Domain services (AI summaries, TimeBack analytics, etc.)
+│   ├── auth/         # Better Auth session helpers
+│   ├── http/         # respond(), status codes, shared middleware
+│   └── timeback/     # Cached instances of generated clients + feature services
+├── routes/           # Hono routers per resource (students, habits, analytics, etc.)
+└── services/         # Domain logic that combines Timeback + Montessori data
 ```
 
-Each route file follows the same pattern:
+Each route has the same lifecycle:
 
-1. Import request/response schemas from `@monte/shared`.
-2. Parse query/body payloads with Zod before using them.
-3. Execute database work inside `withDbContext({ userId, orgId }, trx => ...)`.
-4. Parse the response object with the matching response schema before returning `respond(route, c, parsedPayload, status?)` so TypeScript narrows the payload to the declared status code.
-5. If the route relies on optional integrations (e.g., TimeBack), detect missing credentials and respond with a clear error instead of crashing at startup.
-
-## API Conventions
-
-- **Response Envelope**: all successful responses are `200..299` with `{ data: {...}, meta?: {...} }` defined via `ApiSuccessSchema`.
-- **Error Shape**: errors are `c.json({ error: string }, status)`; never return partial data on error.
-- **Multi-tenancy**: always scope queries by `session.session.orgId`. `withDbContext` injects those values into Postgres `app.*` settings so policies enforce isolation.
-- **New Routes**:
-  1. Define schemas/types in `packages/shared` (both payload + response).
-  2. Create route handler in `apps/api/src/routes` that validates both directions.
-  3. Register the router in `src/index.ts`.
-  4. Add corresponding typed endpoint helper to the web app.
+1. **Parse input** with the shared schema (`schema.parse(...)`).
+2. **Fetch vendor data** through a service (which calls the relevant Timeback client helper).
+3. **Join Montessori data** inside `withDbContext({ userId, orgId }, trx => ...)`.
+4. **Map to internal contract** and validate with the shared response schema.
+5. **Return via `respond(route, c, payload, status)`** so typing stays aligned with the OpenAPI declaration.
 
 ## Commands
 
 ```bash
-bun run dev        # start API with hot reload
-bun run build      # bundle for production
-bun run start      # run compiled output
-bun run typecheck  # TypeScript strict checks
-bun run lint       # Biome lint rules
+bun run dev          # start Hono with hot reload
+bun run build        # bundle for production
+bun run start        # run the built output
+bun run typecheck    # strict TypeScript checks
+bun run lint         # Biome lint
+bun run db:migrate   # apply migrations (delegates to @monte/database)
 ```
 
-## Environment Variables
+Use Turbo filters to scope:
+
+```bash
+bun --filter @monte/api dev
+bun --filter @monte/api typecheck
+```
+
+## Environment
+
+Copy `apps/api/.env.example` to `.env` and provide:
 
 ```env
 DATABASE_URL=postgresql://user:pass@localhost:5432/monte
-BETTER_AUTH_SECRET=super-secret
-BETTER_AUTH_URL=http://localhost:8787
 PORT=8787
-APP_ORIGINS=http://localhost:3000,http://localhost:3001
-# Optional TimeBack integration (leave blank to disable)
-TIMEBACK_CORE_URL=
-TIMEBACK_CORE_TOKEN=
-TIMEBACK_CALIPER_URL=
-TIMEBACK_CALIPER_TOKEN=
-TIMEBACK_NAMESPACE=
+APP_ORIGINS=http://localhost:3000
+BETTER_AUTH_URL=http://localhost:8787
+BETTER_AUTH_SECRET=super-secret
+
+# Optional Timeback integration (staging credentials recommended early on)
+TIMEBACK_ENVIRONMENT=staging
+ONEROSTER_STAGING_API_URL=...
+ONEROSTER_STAGING_CLIENT_ID=...
+ONEROSTER_STAGING_CLIENT_SECRET=...
+CALIPER_STAGING_API_URL=...
+CALIPER_STAGING_CLIENT_ID=...
+CALIPER_STAGING_CLIENT_SECRET=...
 ```
 
-## Adding a Route Example
+Leave Timeback variables empty to disable the integration during development; the app will stub those routes gracefully.
 
-1. **Shared Contract** – add `StudentProgressSchema` + `StudentProgressResponseSchema` to `@monte/shared`.
-2. **Route** – create `routes/student-progress.ts`, parse filters with Zod, run queries inside `withDbContext`, parse the outgoing payload with the shared schema.
-3. **Registration** – add `app.route('/student-progress', studentProgressRouter);` to `src/index.ts`.
-4. **Client helper** – add a function to `apps/web/lib/api/endpoints.ts` that calls `apiClient.studentProgress.$get()` and passes the response through the new schema.
-5. **React Query** – create/use a query key in the web app (`['studentProgress', studentId]`) with TanStack Query.
+## Adding a Route
 
-Following this process keeps backend and frontend identical and prevents contract drift.
+1. **Contracts** – extend `packages/shared/src/schemas.ts` and `api-types.ts` with the new request/response schema.
+2. **Service** – (optional) add a function in `src/services/...` that orchestrates Timeback + local data.
+3. **Route** – create `src/routes/<feature>.ts`, derive a typed `createRoute`, validate input/output, and register it in `src/index.ts`.
+4. **Client helper** – add the matching function in `apps/web/lib/api/endpoints.ts` so React Query can consume it.
+
+Keep this README updated if the adapter responsibilities or policies evolve.

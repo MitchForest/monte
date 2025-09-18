@@ -33,6 +33,17 @@
       },
       "performance": {
         "noBarrelFile": "off"
+      },
+      "style": {
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "@monte/shared-contracts": "Use @monte/shared instead.",
+              "@monte/shared-contracts/*": "Use @monte/shared instead."
+            }
+          }
+        }
       }
     },
     "domains": {

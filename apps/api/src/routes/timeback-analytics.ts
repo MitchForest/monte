@@ -1,5 +1,3 @@
-import "../lib/openapi";
-
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { ApiErrorSchema } from "@monte/shared";
 import {
@@ -10,6 +8,7 @@ import {
 import { getServerSession } from "../lib/auth/session";
 import { respond } from "../lib/http/respond";
 import { HTTP_STATUS } from "../lib/http/status";
+import { isCaliperConfigured } from "../lib/timeback/clients";
 import { getStudentXpSummary } from "../services/timeback/analytics";
 
 const AnalyticsQuerySchema = z.object({
@@ -74,6 +73,14 @@ const analyticsRoute = createRoute({
         },
       },
     },
+    [HTTP_STATUS.badRequest]: {
+      description: "TimeBack integration is not configured",
+      content: {
+        "application/json": {
+          schema: ApiErrorSchema as unknown as z.ZodTypeAny,
+        },
+      },
+    },
   },
 });
 
@@ -87,6 +94,15 @@ const timebackAnalyticsRouter = new OpenAPIHono().openapi(
         c,
         { error: "Unauthorized" },
         HTTP_STATUS.unauthorized,
+      );
+    }
+
+    if (!isCaliperConfigured()) {
+      return respond(
+        analyticsRoute,
+        c,
+        { error: "TimeBack Caliper integration is not configured" },
+        HTTP_STATUS.badRequest,
       );
     }
 

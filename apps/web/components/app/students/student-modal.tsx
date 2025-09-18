@@ -24,7 +24,9 @@ import { getStudent } from "@/lib/api/endpoints";
 
 import { StudentHabitsPanel } from "./student-habits-panel";
 import { StudentQuickActions } from "./student-quick-actions";
+import { StudentQuickCommunications } from "./student-quick-communications";
 import { StudentSummaryPanel } from "./student-summary-panel";
+import { StudentXpPanel } from "./student-xp-panel";
 
 export type StudentModalProps = {
   studentId: string | null;
@@ -137,6 +139,9 @@ export function StudentModal({ studentId, onClose }: StudentModalProps) {
               </div>
             ) : (
               <div className="space-y-6">
+                <StudentXpPanel
+                  studentId={student.oneroster_user_id ?? student.id}
+                />
                 <StudentQuickActions studentId={student.id} />
                 <StudentHabitsPanel
                   checkins={habitCheckins}
@@ -148,12 +153,15 @@ export function StudentModal({ studentId, onClose }: StudentModalProps) {
             {isLoading || !student ? (
               <Skeleton className="h-96 w-full rounded-3xl" />
             ) : (
-              <StudentSummaryPanel
-                onSummaryCreated={handleSummaryCreated}
-                parents={parents}
-                studentId={student.id}
-                summaries={summaries}
-              />
+              <div className="space-y-4">
+                <StudentSummaryPanel
+                  onSummaryCreated={handleSummaryCreated}
+                  parents={parents}
+                  studentId={student.id}
+                  summaries={summaries}
+                />
+                <StudentQuickCommunications />
+              </div>
             )}
           </div>
         </ScrollArea>

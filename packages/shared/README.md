@@ -1,42 +1,24 @@
-# @monte/shared
+# @monte/shared – Contracts & Utilities
 
-`@monte/shared` is the single source of truth for Monte domain contracts. It now also houses the generated TimeBack schemas so every workspace (API, web, SDK) relies on the same definitions.
+`@monte/shared` is the canonical source of our shared contracts and runtime
+utilities. Both the API and the web app consume these Zod schemas directly so
+we can guarantee request and response parity.
 
-## Contents
+## Responsibilities
 
-```
-src/
-├── api-types.ts    # Monte response envelopes (ApiSuccessSchema, etc.)
-├── schemas.ts      # Montessori domain Zod schemas
-├── types.ts        # Montessori domain TypeScript types
-├── utils.ts        # Shared utilities (cn, etc.)
-└── timeback/
-    ├── analytics.ts # Monte-defined helpers for TimeBack analytics summaries
-    ├── generated/   # Zod schemas & endpoint metadata generated from TimeBack OpenAPI specs
-    ├── envelope.ts  # Monte response helpers for TimeBack integrations
-    └── index.ts     # Barrel exports for TimeBack-related modules
-```
+- Define the DTOs, envelopes, and helpers that power cross-app contracts.
+- Validate and read strongly-typed environment variables with
+  `loadServerEnv/requireServerEnv`.
 
-## How TimeBack Shapes Arrive Here
-
-1. Run `bun --filter @monte/timeback-sdk update` to download the latest specs.
-2. The SDK’s `generate` script writes the output directly into `packages/shared/src/timeback/generated`.
-3. Re-export anything you need from `packages/shared` (e.g., `import { timeback } from "@monte/shared";`).
-4. Use the shared Zod schemas to parse responses in API routes or UI client helpers.
-
-By anchoring generated files inside `@monte/shared`, we guarantee the SDK, backend, and frontend use identical contracts without copy/paste.
-
-## End-To-End Type Safety
-
-- Define or update Zod schemas in `schemas.ts` (Monte domain) or rely on the generated TimeBack schemas under `timeback/generated`.
-- Use `ApiSuccessSchema` (or the TimeBack-specific `TimebackSuccessSchema`) to keep response envelopes consistent.
-- Re-export inferred types via `z.infer` so both runtime validation and TypeScript agree on shapes.
+Keep this package focused on declarative schemas and pure utilities—no direct
+data fetching or framework bindings. When contracts change, bump them here
+first, run `bun typecheck`, and let the failures guide the caller updates.
 
 ## Commands
 
 ```bash
-bun --filter @monte/shared typecheck
 bun --filter @monte/shared lint
+bun --filter @monte/shared typecheck
 ```
 
-Keep this package up to date whenever domain models or external contracts change; doing so prevents drift everywhere else.
+Formatting is handled by Biome at the repo root.

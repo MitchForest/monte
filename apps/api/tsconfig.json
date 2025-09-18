@@ -19,17 +19,17 @@
       "@monte/api/*": ["./src/*"],
       "@monte/shared": ["../../packages/shared/src/index.ts"],
       "@monte/shared/*": ["../../packages/shared/src/*"],
-      "@monte/shared/timeback": ["../../packages/shared/src/timeback/index.ts"],
-      "@monte/shared/timeback/*": ["../../packages/shared/src/timeback/*"],
-      "@monte/timeback-sdk": ["../../packages/timeback-sdk/src/index.ts"],
-      "@monte/timeback-sdk/*": ["../../packages/timeback-sdk/src/*"]
+      "@monte/timeback-clients": ["../../packages/timeback-clients/src/index.ts"],
+      "@monte/timeback-clients/*": ["../../packages/timeback-clients/src/*"]
     }
   },
   "include": [
     "src/**/*",
+    "types/**/*.d.ts",
+    "types/**/*.ts",
     "../../packages/shared/src/**/*",
     "../../packages/database/src/**/*",
-    "../../packages/timeback-sdk/src/**/*"
+    "../../packages/timeback-clients/src/**/*"
   ],
   "exclude": ["node_modules", "dist"]
 }

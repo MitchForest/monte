@@ -20,12 +20,11 @@
     "paths": {
       "@monte/shared": ["./packages/shared/src/index.ts"],
       "@monte/shared/*": ["./packages/shared/src/*"],
-      "@monte/shared/timeback": ["./packages/shared/src/timeback/index.ts"],
-      "@monte/shared/timeback/*": ["./packages/shared/src/timeback/*"],
+      "@monte/timeback-clients": ["./packages/timeback-clients/src/index.ts"],
+      "@monte/timeback-clients/*": ["./packages/timeback-clients/src/*"],
       "@monte/api": ["./apps/api/src/index.ts"],
-      "@monte/api/*": ["./apps/api/src/*"],
-      "@monte/timeback-sdk": ["./packages/timeback-sdk/src/index.ts"],
-      "@monte/timeback-sdk/*": ["./packages/timeback-sdk/src/*"]
-    }
+      "@monte/api/*": ["./apps/api/src/*"]
+    },
+    "disableSizeLimit": true
   }
 }

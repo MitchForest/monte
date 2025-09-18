@@ -1,6 +1,8 @@
 import { type Kysely, sql } from "kysely";
 import { getDb } from "./client";
-import type { Database } from "./types";
+import type { DB } from "./types";
+
+type Database = DB;
 
 export type DbContext = {
   userId?: string;
