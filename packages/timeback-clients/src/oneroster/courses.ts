@@ -1,14 +1,7 @@
 import type { z } from "zod";
-
-import {
-  callOneRosterOperation,
-  type OneRosterClient,
-} from "./client";
 import type { OperationByAlias } from "../http";
-import type {
-  OneRosterOperationAlias,
-  OneRosterOperationSpecs,
-} from "./generated/operation-specs";
+import { callOneRosterOperation, type OneRosterClient } from "./client";
+import type { OneRosterOperationSpecs } from "./generated/operation-specs";
 
 type GetAllCoursesOperation = OperationByAlias<
   OneRosterOperationSpecs,
@@ -38,8 +31,8 @@ export type GetCourseParams = {
   fields?: string;
 };
 
-const GET_ALL_COURSES_ALIAS = "getAllCourses" as OneRosterOperationAlias;
-const GET_COURSE_ALIAS = "getCourse" as OneRosterOperationAlias;
+const GET_ALL_COURSES_ALIAS: GetAllCoursesOperation["alias"] = "getAllCourses";
+const GET_COURSE_ALIAS: GetCourseOperation["alias"] = "getCourse";
 
 export async function listCourses(
   client: OneRosterClient,

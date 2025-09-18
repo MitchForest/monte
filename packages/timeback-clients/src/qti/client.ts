@@ -1,6 +1,7 @@
 import {
   callOperation,
   getOperationSpec,
+  type OperationByAlias,
   type OperationCallArgs,
   type OperationResponse,
 } from "../http";
@@ -25,7 +26,9 @@ export function createQtiClient(
   return client as QtiClient;
 }
 
-export function getQtiOperation<TAlias extends QtiOperationAlias>(alias: TAlias) {
+export function getQtiOperation<TAlias extends QtiOperationAlias>(
+  alias: TAlias,
+): OperationByAlias<QtiOperationSpecs, TAlias> | undefined {
   return getOperationSpec(operationSpecs, alias);
 }
 

@@ -15,7 +15,7 @@ export const BadRequestResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("invaliddata"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -37,7 +37,7 @@ export const UnauthorizedRequestResponse = z
                 .string()
                 .default("unauthorisedrequest"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -57,7 +57,7 @@ export const ForbiddenResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("forbidden"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -77,7 +77,7 @@ export const NotFoundResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("unknownobject"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -97,7 +97,7 @@ export const UnprocessableEntityResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("invaliddata"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -117,7 +117,7 @@ export const TooManyRequestsResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("server_busy"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -139,57 +139,11 @@ export const InternalServerErrorResponse = z
                 .string()
                 .default("internal_server_error"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
     imsx_error_details: z.array(z.record(z.string())).optional(),
-  })
-  .passthrough();
-export const ScoreScale = z
-  .object({
-    sourcedId: z.string().min(1).optional(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    title: z.string(),
-    type: z.string(),
-    class: z.object({ sourcedId: z.string() }).passthrough(),
-    course: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    scoreScaleValue: z.array(
-      z
-        .object({
-          itemValueLHS: z.string(),
-          itemValueRHS: z.string(),
-          value: z.string().optional(),
-          description: z.string().optional(),
-        })
-        .passthrough()
-    ),
-  })
-  .passthrough();
-export const createScoreScale_Body = z
-  .object({ scoreScale: ScoreScale })
-  .passthrough();
-export const createSchool_Body = z
-  .object({
-    org: z
-      .object({
-        sourcedId: z.string().min(1).optional(),
-        status: z.enum(["active", "tobedeleted"]).optional().default("active"),
-        metadata: z
-          .union([z.object({}).partial().passthrough(), z.null()])
-          .optional(),
-        name: z.string(),
-        type: z.string(),
-        identifier: z.union([z.string(), z.null()]).optional(),
-        parent: z
-          .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-          .optional(),
-      })
-      .passthrough(),
   })
   .passthrough();
 export const Org = z
@@ -231,113 +185,12 @@ export const Org = z
               sourcedId: z.string(),
               type: z.string(),
             })
-            .passthrough()
+            .passthrough(),
         ),
         z.null(),
       ])
       .default([]),
   })
-  .passthrough();
-export const Result = z
-  .object({
-    sourcedId: z.string().min(1).optional(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    lineItem: z.object({ sourcedId: z.string() }).passthrough(),
-    student: z.object({ sourcedId: z.string() }).passthrough(),
-    class: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    scoreScale: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    scoreStatus: z.enum([
-      "exempt",
-      "fully graded",
-      "not submitted",
-      "partially graded",
-      "submitted",
-    ]),
-    score: z.union([z.number(), z.null()]).optional(),
-    textScore: z.union([z.string(), z.null()]).optional(),
-    scoreDate: z.string().datetime({ offset: true }),
-    comment: z.union([z.string(), z.null()]).optional(),
-    learningObjectiveSet: z
-      .union([
-        z.array(
-          z
-            .object({
-              source: z.string(),
-              learningObjectiveResults: z.array(
-                z
-                  .object({
-                    learningObjectiveId: z.string(),
-                    score: z.number().optional(),
-                    textScore: z.string().optional(),
-                  })
-                  .passthrough()
-              ),
-            })
-            .passthrough()
-        ),
-        z.null(),
-      ])
-      .optional(),
-    inProgress: z.string().optional(),
-    incomplete: z.string().optional(),
-    late: z.string().optional(),
-    missing: z.string().optional(),
-  })
-  .passthrough();
-export const createResult_Body = z.object({ result: Result }).passthrough();
-export const LineItem = z
-  .object({
-    sourcedId: z.string().min(1).optional(),
-    status: z.enum(["active", "tobedeleted"]).optional().default("active"),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    title: z.string(),
-    description: z.union([z.string(), z.null()]).optional(),
-    assignDate: z.string().datetime({ offset: true }),
-    dueDate: z.string().datetime({ offset: true }),
-    class: z.object({ sourcedId: z.string() }).passthrough(),
-    school: z.object({ sourcedId: z.string() }).passthrough(),
-    category: z.object({ sourcedId: z.string() }).passthrough(),
-    gradingPeriod: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    academicSession: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    scoreScale: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    resultValueMin: z.union([z.number(), z.null()]).optional(),
-    resultValueMax: z.union([z.number(), z.null()]).optional(),
-    learningObjectiveSet: z
-      .union([
-        z.array(
-          z
-            .object({
-              source: z.string(),
-              learningObjectiveIds: z.array(z.string()),
-            })
-            .passthrough()
-        ),
-        z.null(),
-      ])
-      .optional(),
-  })
-  .passthrough();
-export const createLineItem_Body = z
-  .object({ lineItem: LineItem })
-  .passthrough();
-export const createResultForLineItem_Body = z
-  .object({ results: z.array(Result) })
-  .passthrough();
-export const createLineItemsForSchool_Body = z
-  .object({ lineItems: z.array(LineItem) })
   .passthrough();
 export const GradeEnum = z.enum([
   "-1",
@@ -366,66 +219,6 @@ export const SubjectEnum = z.enum([
   "FastMath",
   "Math",
 ]);
-export const createClass_Body = z
-  .object({
-    class: z
-      .object({
-        sourcedId: z.string().min(1).optional(),
-        status: z.enum(["active", "tobedeleted"]).optional().default("active"),
-        metadata: z
-          .union([z.object({}).partial().passthrough(), z.null()])
-          .optional(),
-        title: z.string(),
-        classCode: z.union([z.string(), z.null()]).optional(),
-        classType: z.enum(["homeroom", "scheduled"]).optional(),
-        location: z.union([z.string(), z.null()]).optional(),
-        grades: z
-          .array(
-            z.enum([
-              "-1",
-              "0",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-            ])
-          )
-          .optional(),
-        subjects: z
-          .array(
-            z.enum([
-              "Reading",
-              "Language",
-              "Vocabulary",
-              "Social Studies",
-              "Writing",
-              "Science",
-              "FastMath",
-              "Math",
-            ])
-          )
-          .optional(),
-        course: z.object({ sourcedId: z.string() }).passthrough(),
-        org: z.object({ sourcedId: z.string() }).passthrough(),
-        subjectCodes: z.array(z.string()).optional(),
-        periods: z.array(z.string()).optional(),
-        resources: z
-          .array(z.object({ sourcedId: z.string() }).passthrough())
-          .optional(),
-        terms: z.array(z.object({ sourcedId: z.string() }).passthrough()),
-      })
-      .passthrough(),
-  })
-  .passthrough();
 export const Class = z
   .object({
     sourcedId: z.string(),
@@ -465,7 +258,7 @@ export const Class = z
           sourcedId: z.string(),
           type: z.string(),
         })
-        .passthrough()
+        .passthrough(),
     ),
     subjectCodes: z.array(z.string()).optional(),
     periods: z.array(z.string()).optional(),
@@ -477,321 +270,19 @@ export const Class = z
             sourcedId: z.string(),
             type: z.string(),
           })
-          .passthrough()
+          .passthrough(),
       )
       .optional(),
-  })
-  .passthrough();
-export const updateClass_Body = z
-  .object({
-    class: z
-      .object({
-        status: z.enum(["active", "tobedeleted"]),
-        metadata: z.union([z.object({}).partial().passthrough(), z.null()]),
-        title: z.string(),
-        classCode: z.union([z.string(), z.null()]),
-        classType: z.enum(["homeroom", "scheduled"]),
-        location: z.union([z.string(), z.null()]),
-        grades: z.array(
-          z.enum([
-            "-1",
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "11",
-            "12",
-            "13",
-          ])
-        ),
-        subjects: z.array(
-          z.enum([
-            "Reading",
-            "Language",
-            "Vocabulary",
-            "Social Studies",
-            "Writing",
-            "Science",
-            "FastMath",
-            "Math",
-          ])
-        ),
-        subjectCodes: z.array(z.string()),
-        periods: z.array(z.string()),
-        resources: z.array(z.object({ sourcedId: z.string() }).passthrough()),
-        terms: z.array(z.object({ sourcedId: z.string() }).passthrough()),
-      })
-      .partial()
-      .passthrough(),
-  })
-  .passthrough();
-export const Category = z
-  .object({
-    sourcedId: z.string().min(1).optional(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    title: z.string(),
-    weight: z.union([z.number(), z.null()]).optional(),
-  })
-  .passthrough();
-export const createCategory_Body = z
-  .object({ category: Category })
-  .passthrough();
-export const AssessmentResult = z
-  .object({
-    sourcedId: z.string().min(1).optional(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    assessmentLineItem: z.object({ sourcedId: z.string() }).passthrough(),
-    student: z.object({ sourcedId: z.string() }).passthrough(),
-    score: z.union([z.number(), z.null()]).optional(),
-    textScore: z.union([z.string(), z.null()]).optional(),
-    scoreDate: z.string().datetime({ offset: true }),
-    scoreScale: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    scorePercentile: z.union([z.number(), z.null()]).optional(),
-    scoreStatus: z.enum([
-      "exempt",
-      "fully graded",
-      "not submitted",
-      "partially graded",
-      "submitted",
-    ]),
-    comment: z.union([z.string(), z.null()]).optional(),
-    learningObjectiveSet: z
-      .union([
-        z.array(
-          z
-            .object({
-              source: z.string(),
-              learningObjectiveResults: z.array(
-                z
-                  .object({
-                    learningObjectiveId: z.string(),
-                    score: z.number().optional(),
-                    textScore: z.string().optional(),
-                  })
-                  .passthrough()
-              ),
-            })
-            .passthrough()
-        ),
-        z.null(),
-      ])
-      .optional(),
-    inProgress: z.union([z.string(), z.null()]).optional(),
-    incomplete: z.union([z.string(), z.null()]).optional(),
-    late: z.union([z.string(), z.null()]).optional(),
-    missing: z.union([z.string(), z.null()]).optional(),
-  })
-  .passthrough();
-export const createAssessmentResult_Body = z
-  .object({ assessmentResult: AssessmentResult })
-  .passthrough();
-export const patchAssessmentResult_Body = z
-  .object({
-    assessmentResult: z
-      .object({
-        status: z.enum(["active", "tobedeleted"]),
-        metadata: z.object({}).partial().passthrough(),
-        assessmentLineItem: z.object({ sourcedId: z.string() }).passthrough(),
-        student: z.object({ sourcedId: z.string() }).passthrough(),
-        score: z.union([z.number(), z.null()]),
-        textScore: z.union([z.string(), z.null()]),
-        scoreDate: z.string().datetime({ offset: true }),
-        scoreScale: z.union([
-          z.object({ sourcedId: z.string() }).passthrough(),
-          z.null(),
-        ]),
-        scorePercentile: z.union([z.number(), z.null()]),
-        scoreStatus: z.enum([
-          "exempt",
-          "fully graded",
-          "not submitted",
-          "partially graded",
-          "submitted",
-        ]),
-        comment: z.union([z.string(), z.null()]),
-        learningObjectiveSet: z.union([
-          z.array(
-            z
-              .object({
-                source: z.string(),
-                learningObjectiveResults: z.array(
-                  z
-                    .object({
-                      learningObjectiveId: z.string(),
-                      score: z.number().optional(),
-                      textScore: z.string().optional(),
-                    })
-                    .passthrough()
-                ),
-              })
-              .passthrough()
-          ),
-          z.null(),
-        ]),
-        inProgress: z.union([z.string(), z.null()]),
-        incomplete: z.union([z.string(), z.null()]),
-        late: z.union([z.string(), z.null()]),
-        missing: z.union([z.string(), z.null()]),
-      })
-      .partial()
-      .passthrough(),
   })
   .passthrough();
 export const LearningObjectiveSet = z.union([
   z.array(
     z
       .object({ source: z.string(), learningObjectiveIds: z.array(z.string()) })
-      .passthrough()
+      .passthrough(),
   ),
   z.null(),
 ]);
-export const AssessmentLineItem = z
-  .object({
-    sourcedId: z.string().min(1).optional(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    title: z.string(),
-    description: z.union([z.string(), z.null()]).optional(),
-    class: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    parentAssessmentLineItem: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    scoreScale: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    resultValueMin: z.union([z.number(), z.null()]).optional(),
-    resultValueMax: z.union([z.number(), z.null()]).optional(),
-    component: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    componentResource: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    learningObjectiveSet: LearningObjectiveSet.optional(),
-    course: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-  })
-  .passthrough();
-export const createAssessmentLineItem_Body = z
-  .object({ assessmentLineItem: AssessmentLineItem })
-  .passthrough();
-export const patchAssessmentLineItem_Body = z
-  .object({
-    assessmentLineItem: z
-      .object({
-        status: z.enum(["active", "tobedeleted"]),
-        metadata: z.object({}).partial().passthrough(),
-        title: z.string(),
-        description: z.union([z.string(), z.null()]),
-        class: z.union([
-          z.object({ sourcedId: z.string() }).passthrough(),
-          z.null(),
-        ]),
-        parentAssessmentLineItem: z.union([
-          z.object({ sourcedId: z.string() }).passthrough(),
-          z.null(),
-        ]),
-        scoreScale: z.union([
-          z.object({ sourcedId: z.string() }).passthrough(),
-          z.null(),
-        ]),
-        resultValueMin: z.union([z.number(), z.null()]),
-        resultValueMax: z.union([z.number(), z.null()]),
-        component: z.union([
-          z.object({ sourcedId: z.string() }).passthrough(),
-          z.null(),
-        ]),
-        componentResource: z.union([
-          z.object({ sourcedId: z.string() }).passthrough(),
-          z.null(),
-        ]),
-        learningObjectiveSet: z.union([
-          z.array(
-            z
-              .object({
-                source: z.string(),
-                learningObjectiveIds: z.array(z.string()),
-              })
-              .passthrough()
-          ),
-          z.null(),
-        ]),
-        course: z.union([
-          z.object({ sourcedId: z.string() }).passthrough(),
-          z.null(),
-        ]),
-      })
-      .partial()
-      .passthrough(),
-  })
-  .passthrough();
-export const createResource_Body = z
-  .object({
-    resource: z
-      .object({
-        sourcedId: z.string().min(1).optional(),
-        status: z.enum(["active", "tobedeleted"]).optional(),
-        dateLastModified: z.string().datetime({ offset: true }).optional(),
-        metadata: z
-          .union([z.object({}).partial().passthrough(), z.null()])
-          .optional(),
-        title: z.string(),
-        roles: z.array(z.enum(["primary", "secondary"])).optional(),
-        importance: z.enum(["primary", "secondary"]).optional(),
-        vendorResourceId: z.string(),
-        vendorId: z.union([z.string(), z.null()]).optional(),
-        applicationId: z.union([z.string(), z.null()]).optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const Resource = z
-  .object({
-    sourcedId: z.string(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    title: z.string(),
-    roles: z.array(z.enum(["primary", "secondary"])).optional(),
-    importance: z.enum(["primary", "secondary"]).optional(),
-    vendorResourceId: z.string(),
-    vendorId: z.union([z.string(), z.null()]).optional(),
-    applicationId: z.union([z.string(), z.null()]).optional(),
-  })
-  .passthrough();
-export const updateResource_Body = z
-  .object({
-    resource: z
-      .object({
-        metadata: z.union([z.object({}).partial().passthrough(), z.null()]),
-        title: z.string(),
-        roles: z.array(z.enum(["primary", "secondary"])),
-        importance: z.enum(["primary", "secondary"]),
-        vendorResourceId: z.string(),
-        vendorId: z.union([z.string(), z.null()]),
-        applicationId: z.union([z.string(), z.null()]),
-      })
-      .partial()
-      .passthrough(),
-  })
-  .passthrough();
 export const Demographics = z
   .object({
     sourcedId: z.string(),
@@ -816,131 +307,6 @@ export const Demographics = z
     publicSchoolResidenceStatus: z.union([z.string(), z.null()]),
   })
   .passthrough();
-export const createUser_Body = z
-  .object({
-    user: z
-      .object({
-        sourcedId: z.string().min(1).optional(),
-        metadata: z
-          .union([
-            z
-              .object({
-                onboarding: z.record(
-                  z.union([
-                    z.object({ state: z.string() }),
-                    z.object({ state: z.string() }),
-                    z.object({
-                      state: z.string(),
-                      completedAt: z.string().optional(),
-                      courseId: z.union([z.string(), z.null()]).optional(),
-                    }),
-                  ])
-                ),
-                isTestUser: z.boolean(),
-              })
-              .partial()
-              .passthrough(),
-            z.null(),
-          ])
-          .optional(),
-        status: z.enum(["active", "tobedeleted"]).optional().default("active"),
-        userMasterIdentifier: z.union([z.string(), z.null()]).optional(),
-        username: z.union([z.string(), z.null()]).optional(),
-        userIds: z
-          .array(
-            z.object({ type: z.string(), identifier: z.string() }).passthrough()
-          )
-          .optional(),
-        enabledUser: z.union([z.boolean(), z.enum(["true", "false"])]),
-        givenName: z.string(),
-        familyName: z.string(),
-        middleName: z.union([z.string(), z.null()]).optional(),
-        roles: z
-          .array(
-            z
-              .object({
-                roleType: z.enum(["primary", "secondary"]),
-                role: z.enum([
-                  "administrator",
-                  "aide",
-                  "guardian",
-                  "parent",
-                  "proctor",
-                  "relative",
-                  "student",
-                  "teacher",
-                ]),
-                org: z.object({ sourcedId: z.string() }).passthrough(),
-                userProfile: z.string().optional(),
-                metadata: z
-                  .union([
-                    z
-                      .object({
-                        timebackRole: z.enum([
-                          "head_of_school",
-                          "dean_of_parents",
-                          "campus_coordinator",
-                          "head_guide",
-                          "lead_guide",
-                          "guide",
-                          "guide_assistant",
-                          "reading_specialist",
-                          "parent",
-                          "student",
-                        ]),
-                      })
-                      .partial()
-                      .passthrough(),
-                    z.null(),
-                  ])
-                  .optional(),
-                beginDate: z.union([z.string(), z.null()]).optional(),
-                endDate: z.union([z.string(), z.null()]).optional(),
-              })
-              .passthrough()
-          )
-          .min(1),
-        primaryOrg: z
-          .object({ sourcedId: z.string() })
-          .passthrough()
-          .optional(),
-        email: z.string().email(),
-        preferredFirstName: z.union([z.string(), z.null()]).optional(),
-        preferredMiddleName: z.union([z.string(), z.null()]).optional(),
-        preferredLastName: z.union([z.string(), z.null()]).optional(),
-        pronouns: z.union([z.string(), z.null()]).optional(),
-        grades: z
-          .array(
-            z.enum([
-              "-1",
-              "0",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-            ])
-          )
-          .optional(),
-        password: z.union([z.string(), z.null()]).optional(),
-        sms: z.union([z.string(), z.null()]).optional(),
-        phone: z.union([z.string(), z.null()]).optional(),
-        agents: z
-          .array(z.object({ sourcedId: z.string() }).passthrough())
-          .optional()
-          .default([]),
-      })
-      .passthrough(),
-  })
-  .passthrough();
 export const User = z
   .object({
     sourcedId: z.string(),
@@ -951,7 +317,7 @@ export const User = z
     username: z.union([z.string(), z.null()]).optional(),
     userIds: z
       .array(
-        z.object({ type: z.string(), identifier: z.string() }).passthrough()
+        z.object({ type: z.string(), identifier: z.string() }).passthrough(),
       )
       .optional(),
     enabledUser: z.enum(["true", "false"]),
@@ -987,7 +353,7 @@ export const User = z
             beginDate: z.union([z.string(), z.null()]).optional(),
             endDate: z.union([z.string(), z.null()]).optional(),
           })
-          .passthrough()
+          .passthrough(),
       )
       .default([]),
     agents: z
@@ -1018,7 +384,7 @@ export const User = z
               "courseComponent",
             ]),
           })
-          .passthrough()
+          .passthrough(),
       )
       .default([]),
     userProfiles: z
@@ -1050,11 +416,11 @@ export const User = z
                     username: z.string(),
                     password: z.union([z.string(), z.null()]).optional(),
                   })
-                  .passthrough()
+                  .passthrough(),
               )
               .default([]),
           })
-          .passthrough()
+          .passthrough(),
       )
       .default([]),
     primaryOrg: z
@@ -1079,668 +445,609 @@ export const User = z
     demographics: z.union([Demographics, z.null()]).optional(),
   })
   .passthrough();
-export const registerStudentCredentials_Body = z
+export const OneRosterGetAgentForResponse = z
+  .object({ users: z.array(User) })
+  .passthrough();
+export const OneRosterGetAgentsResponse = z
+  .object({ agents: z.array(User) })
+  .passthrough();
+export const OneRosterGetAllAssessmentLineItemsResponse = z
   .object({
-    applicationName: z.string().min(1),
-    credentials: z
-      .object({ username: z.string(), password: z.string() })
-      .passthrough(),
+    assessmentLineItems: z.array(
+      z
+        .object({
+          sourcedId: z.string().min(1).optional(),
+          status: z.enum(["active", "tobedeleted"]),
+          dateLastModified: z.string().datetime({ offset: true }).optional(),
+          metadata: z.object({}).partial().passthrough().nullish(),
+          title: z.string(),
+          description: z.union([z.string(), z.null()]).optional(),
+          class: z
+            .union([
+              z.object({ sourcedId: z.string() }).passthrough(),
+              z.null(),
+            ])
+            .optional(),
+          parentAssessmentLineItem: z
+            .union([
+              z.object({ sourcedId: z.string() }).passthrough(),
+              z.null(),
+            ])
+            .optional(),
+          scoreScale: z
+            .union([
+              z.object({ sourcedId: z.string() }).passthrough(),
+              z.null(),
+            ])
+            .optional(),
+          resultValueMin: z.union([z.number(), z.null()]).optional(),
+          resultValueMax: z.union([z.number(), z.null()]).optional(),
+          component: z
+            .union([
+              z.object({ sourcedId: z.string() }).passthrough(),
+              z.null(),
+            ])
+            .optional(),
+          componentResource: z
+            .union([
+              z.object({ sourcedId: z.string() }).passthrough(),
+              z.null(),
+            ])
+            .optional(),
+          learningObjectiveSet: LearningObjectiveSet.optional(),
+          course: z
+            .union([
+              z.object({ sourcedId: z.string() }).passthrough(),
+              z.null(),
+            ])
+            .optional(),
+        })
+        .passthrough(),
+    ),
+    totalCount: z.number(),
+    pageCount: z.number(),
+    pageNumber: z.number(),
+    offset: z.number(),
+    limit: z.number(),
   })
   .passthrough();
-export const AcademicSession = z
+export const OneRosterGetAllAssessmentResultsResponse = z
   .object({
-    sourcedId: z.string(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    title: z.string(),
-    startDate: z.string(),
-    endDate: z.string(),
-    type: z.enum(["gradingPeriod", "semester", "schoolYear", "term"]),
-    parent: z
-      .union([
-        z
-          .object({
-            href: z.string().url(),
-            sourcedId: z.string(),
-            type: z.enum([
-              "academicSession",
-              "assessmentLineItem",
-              "category",
-              "class",
-              "course",
-              "demographics",
-              "enrollment",
-              "gradingPeriod",
-              "lineItem",
-              "org",
-              "resource",
-              "result",
-              "scoreScale",
-              "student",
-              "teacher",
-              "term",
-              "user",
-              "componentResource",
-              "courseComponent",
-            ]),
-          })
-          .passthrough(),
-        z.null(),
-      ])
-      .optional(),
-    schoolYear: z.number(),
-    org: z
-      .object({
-        href: z.string().url(),
-        sourcedId: z.string(),
-        type: z.enum([
-          "academicSession",
-          "assessmentLineItem",
-          "category",
-          "class",
-          "course",
-          "demographics",
-          "enrollment",
-          "gradingPeriod",
-          "lineItem",
-          "org",
-          "resource",
-          "result",
-          "scoreScale",
-          "student",
-          "teacher",
-          "term",
-          "user",
-          "componentResource",
-          "courseComponent",
-        ]),
-      })
-      .passthrough(),
-    children: z
-      .union([
-        z.array(
-          z
+    assessmentResults: z.array(
+      z
+        .object({
+          sourcedId: z.string().min(1).optional(),
+          status: z.enum(["active", "tobedeleted"]),
+          dateLastModified: z.string().datetime({ offset: true }).optional(),
+          metadata: z.object({}).partial().passthrough().nullish(),
+          assessmentLineItem: z.object({ sourcedId: z.string() }).passthrough(),
+          student: z.object({ sourcedId: z.string() }).passthrough(),
+          score: z.union([z.number(), z.null()]).optional(),
+          textScore: z.union([z.string(), z.null()]).optional(),
+          scoreDate: z.string().datetime({ offset: true }),
+          scoreScale: z
+            .union([
+              z.object({ sourcedId: z.string() }).passthrough(),
+              z.null(),
+            ])
+            .optional(),
+          scorePercentile: z.union([z.number(), z.null()]).optional(),
+          scoreStatus: z.enum([
+            "exempt",
+            "fully graded",
+            "not submitted",
+            "partially graded",
+            "submitted",
+          ]),
+          comment: z.union([z.string(), z.null()]).optional(),
+          learningObjectiveSet: z
+            .union([
+              z.array(
+                z
+                  .object({
+                    source: z.string(),
+                    learningObjectiveResults: z.array(
+                      z
+                        .object({
+                          learningObjectiveId: z.string(),
+                          score: z.number().optional(),
+                          textScore: z.string().optional(),
+                        })
+                        .passthrough(),
+                    ),
+                  })
+                  .passthrough(),
+              ),
+              z.null(),
+            ])
+            .optional(),
+          inProgress: z.union([z.string(), z.null()]).optional(),
+          incomplete: z.union([z.string(), z.null()]).optional(),
+          late: z.union([z.string(), z.null()]).optional(),
+          missing: z.union([z.string(), z.null()]).optional(),
+        })
+        .passthrough(),
+    ),
+    totalCount: z.number(),
+    pageCount: z.number(),
+    pageNumber: z.number(),
+    offset: z.number(),
+    limit: z.number(),
+  })
+  .passthrough();
+export const OneRosterGetAllClassesResponse = z
+  .object({
+    classes: z.array(
+      z
+        .object({
+          sourcedId: z.string(),
+          status: z.enum(["active", "tobedeleted"]),
+          dateLastModified: z.string().datetime({ offset: true }).optional(),
+          metadata: z.object({}).partial().passthrough().nullish(),
+          title: z.string(),
+          classCode: z.union([z.string(), z.null()]),
+          classType: z.enum(["homeroom", "scheduled"]),
+          location: z.union([z.string(), z.null()]),
+          grades: z.array(GradeEnum).optional(),
+          subjects: z.array(SubjectEnum).optional(),
+          course: z.union([
+            z
+              .object({
+                href: z.string().url(),
+                sourcedId: z.string(),
+                type: z.string(),
+              })
+              .passthrough(),
+            z.null(),
+          ]),
+          school: z.union([
+            z
+              .object({
+                href: z.string().url(),
+                sourcedId: z.string(),
+                type: z.string(),
+              })
+              .passthrough(),
+            z.null(),
+          ]),
+          terms: z.array(
+            z
+              .object({
+                href: z.string().url(),
+                sourcedId: z.string(),
+                type: z.string(),
+              })
+              .passthrough(),
+          ),
+          subjectCodes: z.array(z.string()).optional(),
+          periods: z.array(z.string()).optional(),
+          resources: z
+            .array(
+              z
+                .object({
+                  href: z.string().url(),
+                  sourcedId: z.string(),
+                  type: z.string(),
+                })
+                .passthrough(),
+            )
+            .optional(),
+        })
+        .passthrough(),
+    ),
+    totalCount: z.number(),
+    pageCount: z.number(),
+    pageNumber: z.number(),
+    offset: z.number(),
+    limit: z.number(),
+  })
+  .passthrough();
+export const OneRosterGetAllCoursesResponse = z
+  .object({
+    courses: z.array(
+      z
+        .object({
+          sourcedId: z.string().min(1).optional(),
+          status: z.enum(["active", "tobedeleted"]),
+          dateLastModified: z.string().datetime({ offset: true }).optional(),
+          metadata: z.object({}).partial().passthrough().nullish(),
+          title: z.string(),
+          academicSession: z
+            .union([
+              z.object({ sourcedId: z.string() }).passthrough(),
+              z.null(),
+            ])
+            .optional(),
+          schoolYear: z
+            .union([
+              z
+                .object({
+                  href: z.string().url(),
+                  sourcedId: z.string(),
+                  type: z.enum([
+                    "academicSession",
+                    "assessmentLineItem",
+                    "category",
+                    "class",
+                    "course",
+                    "demographics",
+                    "enrollment",
+                    "gradingPeriod",
+                    "lineItem",
+                    "org",
+                    "resource",
+                    "result",
+                    "scoreScale",
+                    "student",
+                    "teacher",
+                    "term",
+                    "user",
+                    "componentResource",
+                    "courseComponent",
+                  ]),
+                })
+                .passthrough(),
+              z.null(),
+            ])
+            .optional(),
+          courseCode: z.union([z.string(), z.null()]).optional(),
+          grades: z.union([z.array(GradeEnum), z.null()]).optional(),
+          subjects: z.union([z.array(SubjectEnum), z.null()]).optional(),
+          subjectCodes: z.union([z.array(z.string()), z.null()]).optional(),
+          org: z.object({ sourcedId: z.string() }).passthrough(),
+          level: z.union([z.string(), z.null()]).optional(),
+          gradingScheme: z.union([z.string(), z.null()]).optional(),
+          resources: z
+            .union([
+              z.array(
+                z
+                  .object({
+                    href: z.string().url(),
+                    sourcedId: z.string(),
+                    type: z.enum([
+                      "academicSession",
+                      "assessmentLineItem",
+                      "category",
+                      "class",
+                      "course",
+                      "demographics",
+                      "enrollment",
+                      "gradingPeriod",
+                      "lineItem",
+                      "org",
+                      "resource",
+                      "result",
+                      "scoreScale",
+                      "student",
+                      "teacher",
+                      "term",
+                      "user",
+                      "componentResource",
+                      "courseComponent",
+                    ]),
+                  })
+                  .passthrough(),
+              ),
+              z.null(),
+            ])
+            .optional(),
+        })
+        .passthrough(),
+    ),
+    totalCount: z.number(),
+    pageCount: z.number(),
+    pageNumber: z.number(),
+    offset: z.number(),
+    limit: z.number(),
+  })
+  .passthrough();
+export const OneRosterGetAllStudentsResponse = z
+  .object({
+    users: z.array(
+      z
+        .object({
+          sourcedId: z.string(),
+          status: z.enum(["active", "tobedeleted"]),
+          dateLastModified: z.string().datetime({ offset: true }).optional(),
+          metadata: z.object({}).partial().passthrough().nullish(),
+          userMasterIdentifier: z.union([z.string(), z.null()]).optional(),
+          username: z.union([z.string(), z.null()]).optional(),
+          userIds: z
+            .array(
+              z
+                .object({ type: z.string(), identifier: z.string() })
+                .passthrough(),
+            )
+            .optional(),
+          enabledUser: z.enum(["true", "false"]),
+          givenName: z.string(),
+          familyName: z.string(),
+          middleName: z.union([z.string(), z.null()]).optional(),
+          roles: z
+            .array(
+              z
+                .object({
+                  roleType: z.enum(["primary", "secondary"]),
+                  role: z.enum([
+                    "administrator",
+                    "aide",
+                    "guardian",
+                    "parent",
+                    "proctor",
+                    "relative",
+                    "student",
+                    "teacher",
+                  ]),
+                  org: z
+                    .object({
+                      href: z.string().url(),
+                      sourcedId: z.string(),
+                      type: z.string(),
+                    })
+                    .passthrough(),
+                  userProfile: z.string().optional(),
+                  metadata: z
+                    .union([z.object({}).partial().passthrough(), z.null()])
+                    .optional(),
+                  beginDate: z.union([z.string(), z.null()]).optional(),
+                  endDate: z.union([z.string(), z.null()]).optional(),
+                })
+                .passthrough(),
+            )
+            .default([]),
+          agents: z
+            .array(
+              z
+                .object({
+                  href: z.string().url(),
+                  sourcedId: z.string(),
+                  type: z.enum([
+                    "academicSession",
+                    "assessmentLineItem",
+                    "category",
+                    "class",
+                    "course",
+                    "demographics",
+                    "enrollment",
+                    "gradingPeriod",
+                    "lineItem",
+                    "org",
+                    "resource",
+                    "result",
+                    "scoreScale",
+                    "student",
+                    "teacher",
+                    "term",
+                    "user",
+                    "componentResource",
+                    "courseComponent",
+                  ]),
+                })
+                .passthrough(),
+            )
+            .default([]),
+          userProfiles: z
+            .array(
+              z
+                .object({
+                  profileId: z.string(),
+                  profileType: z.string(),
+                  vendorId: z.string(),
+                  applicationId: z.string(),
+                  description: z.union([z.string(), z.null()]).optional(),
+                  app: z
+                    .object({
+                      sourcedId: z.string(),
+                      name: z.string(),
+                      description: z.union([z.string(), z.null()]).optional(),
+                      domain: z.array(z.string()),
+                      metadata: z
+                        .union([z.object({}).partial().passthrough(), z.null()])
+                        .optional(),
+                    })
+                    .passthrough(),
+                  credentials: z
+                    .array(
+                      z
+                        .object({
+                          id: z.string(),
+                          type: z.string(),
+                          username: z.string(),
+                          password: z.union([z.string(), z.null()]).optional(),
+                        })
+                        .passthrough(),
+                    )
+                    .default([]),
+                })
+                .passthrough(),
+            )
+            .default([]),
+          primaryOrg: z
             .object({
               href: z.string().url(),
               sourcedId: z.string(),
-              type: z.enum([
-                "academicSession",
-                "assessmentLineItem",
-                "category",
-                "class",
-                "course",
-                "demographics",
-                "enrollment",
-                "gradingPeriod",
-                "lineItem",
-                "org",
-                "resource",
-                "result",
-                "scoreScale",
-                "student",
-                "teacher",
-                "term",
-                "user",
-                "componentResource",
-                "courseComponent",
-              ]),
+              type: z.string(),
+              name: z.union([z.string(), z.null()]).optional(),
             })
             .passthrough()
-        ),
-        z.null(),
-      ])
-      .optional(),
+            .optional(),
+          identifier: z.union([z.string(), z.null()]).optional(),
+          email: z.string().email(),
+          preferredFirstName: z.union([z.string(), z.null()]).optional(),
+          preferredMiddleName: z.union([z.string(), z.null()]).optional(),
+          preferredLastName: z.union([z.string(), z.null()]).optional(),
+          pronouns: z.union([z.string(), z.null()]).optional(),
+          grades: z.array(GradeEnum).optional(),
+          password: z.union([z.string(), z.null()]).optional(),
+          sms: z.union([z.string(), z.null()]).optional(),
+          phone: z.union([z.string(), z.null()]).optional(),
+          demographics: z.union([Demographics, z.null()]).optional(),
+        })
+        .passthrough(),
+    ),
+    totalCount: z.number(),
+    pageCount: z.number(),
+    pageNumber: z.number(),
+    offset: z.number(),
+    limit: z.number(),
   })
   .passthrough();
-export const addTeacherToClass_Body = z
+export const OneRosterGetAllUsersResponse = z
   .object({
-    enrollment: z
-      .object({
-        user: z.object({ sourcedId: z.string() }).passthrough(),
-        primary: z
-          .union([z.boolean(), z.enum(["true", "false"])])
-          .optional()
-          .default("false"),
-        beginDate: z.string().optional(),
-        endDate: z.string().optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createOrg_Body = z
-  .object({
-    org: z
-      .object({
-        sourcedId: z.string().min(1).optional(),
-        status: z.enum(["active", "tobedeleted"]).optional().default("active"),
-        metadata: z
-          .union([z.object({}).partial().passthrough(), z.null()])
-          .optional(),
-        name: z.string(),
-        type: z.enum([
-          "department",
-          "school",
-          "district",
-          "local",
-          "state",
-          "national",
-        ]),
-        identifier: z.union([z.string(), z.null()]).optional(),
-        parent: z
-          .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-          .optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createGradingPeriod_Body = z
-  .object({
-    academicSession: z
-      .object({
-        sourcedId: z.string(),
-        status: z.enum(["active", "tobedeleted"]),
-        dateLastModified: z.string().datetime({ offset: true }).optional(),
-        metadata: z.object({}).partial().passthrough().nullish(),
-        title: z.string(),
-        startDate: z.string(),
-        endDate: z.string(),
-        type: z.string(),
-        parent: z
-          .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-          .optional(),
-        schoolYear: z.string(),
-        org: z.object({ sourcedId: z.string() }).passthrough(),
-        children: z
-          .union([
-            z.array(
-              z
-                .object({
-                  href: z.string().url(),
-                  sourcedId: z.string(),
-                  type: z.enum([
-                    "academicSession",
-                    "assessmentLineItem",
-                    "category",
-                    "class",
-                    "course",
-                    "demographics",
-                    "enrollment",
-                    "gradingPeriod",
-                    "lineItem",
-                    "org",
-                    "resource",
-                    "result",
-                    "scoreScale",
-                    "student",
-                    "teacher",
-                    "term",
-                    "user",
-                    "componentResource",
-                    "courseComponent",
-                  ]),
-                })
-                .passthrough()
-            ),
-            z.null(),
-          ])
-          .optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createGradingPeriodForTerm_Body = z
-  .object({
-    academicSession: z
-      .object({
-        sourcedId: z.string(),
-        status: z.enum(["active", "tobedeleted"]),
-        dateLastModified: z.string().datetime({ offset: true }).optional(),
-        metadata: z.object({}).partial().passthrough().nullish(),
-        title: z.string(),
-        startDate: z.string(),
-        endDate: z.string(),
-        type: z.string(),
-        parent: z
-          .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-          .optional(),
-        schoolYear: z.string(),
-        org: z.object({ sourcedId: z.string() }).passthrough(),
-        children: z
-          .union([
-            z.array(
-              z
-                .object({
-                  href: z.string().url(),
-                  sourcedId: z.string(),
-                  type: z.enum([
-                    "academicSession",
-                    "assessmentLineItem",
-                    "category",
-                    "class",
-                    "course",
-                    "demographics",
-                    "enrollment",
-                    "gradingPeriod",
-                    "lineItem",
-                    "org",
-                    "resource",
-                    "result",
-                    "scoreScale",
-                    "student",
-                    "teacher",
-                    "term",
-                    "user",
-                    "componentResource",
-                    "courseComponent",
-                  ]),
-                })
-                .passthrough()
-            ),
-            z.null(),
-          ])
-          .optional(),
-        tenantId: z.union([z.string(), z.null()]),
-        clientAppId: z.union([z.string(), z.null()]),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createEnrollment_Body = z
-  .object({
-    enrollment: z
-      .object({
-        sourcedId: z.string().min(1).optional(),
-        status: z.enum(["active", "tobedeleted"]).optional().default("active"),
-        metadata: z
-          .object({
-            goals: z
-              .object({
-                dailyXp: z.number(),
-                dailyLessons: z.number(),
-                dailyActiveMinutes: z.number(),
-                dailyAccuracy: z.number(),
-                dailyMasteredUnits: z.number(),
-              })
-              .partial(),
-            metrics: z
-              .object({ totalXp: z.number(), totalLessons: z.number() })
-              .partial(),
-          })
-          .partial()
-          .passthrough()
-          .optional(),
-        role: z.enum(["administrator", "proctor", "student", "teacher"]),
-        primary: z
-          .union([z.boolean(), z.enum(["true", "false"])])
-          .optional()
-          .default("false"),
-        beginDate: z.string().optional(),
-        endDate: z.string().optional(),
-        user: z.object({ sourcedId: z.string() }).passthrough(),
-        class: z.object({ sourcedId: z.string() }).passthrough(),
-        school: z.object({ sourcedId: z.string() }).passthrough().optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const Enrollment = z
-  .object({
-    sourcedId: z.string(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    role: z.enum(["administrator", "proctor", "student", "teacher"]),
-    primary: z.union([z.enum(["true", "false"]), z.null()]).default("false"),
-    beginDate: z.union([z.string(), z.null()]),
-    endDate: z.union([z.string(), z.null()]),
-    user: z
-      .object({
-        href: z.string().url(),
-        sourcedId: z.string(),
-        type: z.string(),
-        name: z.string().optional(),
-      })
-      .passthrough(),
-    class: z
-      .object({
-        href: z.string().url(),
-        sourcedId: z.string(),
-        type: z.string(),
-        name: z.string().optional(),
-      })
-      .passthrough(),
-    school: z
-      .object({
-        href: z.string().url(),
-        sourcedId: z.string(),
-        type: z.string(),
-        name: z.string().optional(),
-      })
-      .passthrough(),
-    course: z
-      .object({
-        href: z.string().url(),
-        sourcedId: z.string(),
-        type: z.string(),
-        name: z.string().optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const updateEnrollment_Body = z
-  .object({
-    enrollment: z
-      .object({
-        status: z.enum(["active", "tobedeleted"]).optional(),
-        metadata: z
-          .object({
-            goals: z
-              .object({
-                dailyXp: z.number(),
-                dailyLessons: z.number(),
-                dailyActiveMinutes: z.number(),
-                dailyAccuracy: z.number(),
-                dailyMasteredUnits: z.number(),
-              })
-              .partial(),
-            metrics: z
-              .object({ totalXp: z.number(), totalLessons: z.number() })
-              .partial(),
-          })
-          .partial()
-          .passthrough()
-          .optional(),
-        role: z.enum(["administrator", "proctor", "student", "teacher"]),
-        primary: z
-          .union([z.boolean(), z.enum(["true", "false"])])
-          .optional()
-          .default("false"),
-        beginDate: z.string().optional(),
-        endDate: z.string().optional(),
-        user: z.object({ sourcedId: z.string() }).passthrough(),
-        class: z.object({ sourcedId: z.string() }).passthrough(),
-        school: z.object({ sourcedId: z.string() }).passthrough().optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const partiallyUpdateEnrollment_Body = z
-  .object({
-    enrollment: z
-      .object({
-        status: z.enum(["active", "tobedeleted"]),
-        metadata: z
-          .object({
-            goals: z
-              .object({
-                dailyXp: z.number(),
-                dailyLessons: z.number(),
-                dailyActiveMinutes: z.number(),
-                dailyAccuracy: z.number(),
-                dailyMasteredUnits: z.number(),
-              })
-              .partial(),
-            metrics: z
-              .object({ totalXp: z.number(), totalLessons: z.number() })
-              .partial(),
-          })
-          .partial()
-          .passthrough(),
-        role: z.enum(["administrator", "proctor", "student", "teacher"]),
-        primary: z
-          .union([z.boolean(), z.enum(["true", "false"])])
-          .default("false"),
-        beginDate: z.string(),
-        endDate: z.string(),
-        user: z.object({ sourcedId: z.string() }).passthrough(),
-        class: z.object({ sourcedId: z.string() }).passthrough(),
-        school: z.object({ sourcedId: z.string() }).passthrough(),
-      })
-      .partial()
-      .passthrough(),
-  })
-  .passthrough();
-export const postDemographics_Body = z
-  .object({
-    demographics: z
-      .object({
-        sourcedId: z.string(),
-        status: z.enum(["active", "tobedeleted"]).optional().default("active"),
-        metadata: z
-          .union([z.object({}).partial().passthrough(), z.null()])
-          .optional(),
-        birthDate: z.union([z.string(), z.null()]).optional(),
-        sex: z.union([z.enum(["male", "female"]), z.null()]).optional(),
-        americanIndianOrAlaskaNative: z
-          .union([z.enum(["true", "false"]), z.null()])
-          .optional(),
-        asian: z.union([z.enum(["true", "false"]), z.null()]).optional(),
-        blackOrAfricanAmerican: z
-          .union([z.enum(["true", "false"]), z.null()])
-          .optional(),
-        nativeHawaiianOrOtherPacificIslander: z
-          .union([z.enum(["true", "false"]), z.null()])
-          .optional(),
-        white: z.union([z.enum(["true", "false"]), z.null()]).optional(),
-        demographicRaceTwoOrMoreRaces: z
-          .union([z.enum(["true", "false"]), z.null()])
-          .optional(),
-        hispanicOrLatinoEthnicity: z
-          .union([z.enum(["true", "false"]), z.null()])
-          .optional(),
-        countryOfBirthCode: z.union([z.string(), z.null()]).optional(),
-        stateOfBirthAbbreviation: z.union([z.string(), z.null()]).optional(),
-        cityOfBirth: z.union([z.string(), z.null()]).optional(),
-        publicSchoolResidenceStatus: z.union([z.string(), z.null()]).optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createCourse_Body = z
-  .object({
-    course: z
-      .object({
-        sourcedId: z.string().min(1).optional(),
-        status: z.enum(["active", "tobedeleted"]),
-        dateLastModified: z.string().datetime({ offset: true }).optional(),
-        metadata: z.object({}).partial().passthrough().nullish(),
-        title: z.string(),
-        academicSession: z
-          .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-          .optional(),
-        schoolYear: z
-          .union([
-            z
-              .object({
-                href: z.string().url(),
-                sourcedId: z.string(),
-                type: z.enum([
-                  "academicSession",
-                  "assessmentLineItem",
-                  "category",
-                  "class",
-                  "course",
-                  "demographics",
-                  "enrollment",
-                  "gradingPeriod",
-                  "lineItem",
-                  "org",
-                  "resource",
-                  "result",
-                  "scoreScale",
-                  "student",
-                  "teacher",
-                  "term",
-                  "user",
-                  "componentResource",
-                  "courseComponent",
-                ]),
-              })
-              .passthrough(),
-            z.null(),
-          ])
-          .optional(),
-        courseCode: z.union([z.string(), z.null()]).optional(),
-        grades: z
-          .union([
-            z.array(
-              z.enum([
-                "-1",
-                "0",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9",
-                "10",
-                "11",
-                "12",
-                "13",
-              ])
-            ),
-            z.null(),
-          ])
-          .optional(),
-        subjects: z
-          .union([
-            z.array(
-              z.enum([
-                "Reading",
-                "Language",
-                "Vocabulary",
-                "Social Studies",
-                "Writing",
-                "Science",
-                "FastMath",
-                "Math",
-              ])
-            ),
-            z.null(),
-          ])
-          .optional(),
-        subjectCodes: z.union([z.array(z.string()), z.null()]).optional(),
-        org: z.object({ sourcedId: z.string() }).passthrough(),
-        level: z.union([z.string(), z.null()]).optional(),
-        gradingScheme: z.union([z.string(), z.null()]).optional(),
-        resources: z
-          .union([
-            z.array(
-              z
-                .object({
-                  href: z.string().url(),
-                  sourcedId: z.string(),
-                  type: z.enum([
-                    "academicSession",
-                    "assessmentLineItem",
-                    "category",
-                    "class",
-                    "course",
-                    "demographics",
-                    "enrollment",
-                    "gradingPeriod",
-                    "lineItem",
-                    "org",
-                    "resource",
-                    "result",
-                    "scoreScale",
-                    "student",
-                    "teacher",
-                    "term",
-                    "user",
-                    "componentResource",
-                    "courseComponent",
-                  ]),
-                })
-                .passthrough()
-            ),
-            z.null(),
-          ])
-          .optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createComponentResource_Body = z
-  .object({
-    componentResource: z
-      .object({
-        sourcedId: z.string(),
-        status: z.enum(["active", "tobedeleted"]),
-        dateLastModified: z.string().datetime({ offset: true }).optional(),
-        metadata: z.object({}).partial().passthrough().nullish(),
-        courseComponent: z.object({ sourcedId: z.string() }).passthrough(),
-        resource: z.object({ sourcedId: z.string() }).passthrough(),
-        title: z.string(),
-        sortOrder: z.number().optional().default(0),
-        lessonType: z
-          .union([
-            z.enum([
-              "powerpath-100",
-              "quiz",
-              "test-out",
-              "placement",
-              "unit-test",
-              "alpha-read-article",
-            ]),
-            z.null(),
-          ])
-          .optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createCourseComponent_Body = z
-  .object({
-    courseComponent: z
-      .object({
-        sourcedId: z.string().min(1).optional(),
-        status: z.enum(["active", "tobedeleted"]),
-        dateLastModified: z.string().datetime({ offset: true }).optional(),
-        metadata: z.object({}).partial().passthrough().nullish(),
-        course: z.object({ sourcedId: z.string() }).passthrough(),
-        courseComponent: z
-          .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-          .optional(),
-        parent: z
-          .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-          .optional(),
-        title: z.string(),
-        sortOrder: z.number().optional(),
-        prerequisites: z.union([z.array(z.string()), z.null()]).optional(),
-        prerequisiteCriteria: z.union([z.string(), z.null()]).optional(),
-        unlockDate: z.string().optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createCourseStructure_Body = z
-  .object({
-    courseStructure: z.record(
+    users: z.array(
       z
         .object({
-          url: z.string(),
-          skillCode: z.string(),
-          lessonCode: z.string(),
-          title: z.string(),
-          "unit-title": z.string(),
-          status: z.string(),
-          xp: z.number(),
-          stimulus: z
-            .object({ title: z.string(), identifier: z.string() })
+          sourcedId: z.string(),
+          status: z.enum(["active", "tobedeleted"]),
+          dateLastModified: z.string().datetime({ offset: true }).optional(),
+          metadata: z.object({}).partial().passthrough().nullish(),
+          userMasterIdentifier: z.union([z.string(), z.null()]).optional(),
+          username: z.union([z.string(), z.null()]).optional(),
+          userIds: z
+            .array(
+              z
+                .object({ type: z.string(), identifier: z.string() })
+                .passthrough(),
+            )
+            .optional(),
+          enabledUser: z.enum(["true", "false"]),
+          givenName: z.string(),
+          familyName: z.string(),
+          middleName: z.union([z.string(), z.null()]).optional(),
+          roles: z
+            .array(
+              z
+                .object({
+                  roleType: z.enum(["primary", "secondary"]),
+                  role: z.enum([
+                    "administrator",
+                    "aide",
+                    "guardian",
+                    "parent",
+                    "proctor",
+                    "relative",
+                    "student",
+                    "teacher",
+                  ]),
+                  org: z
+                    .object({
+                      href: z.string().url(),
+                      sourcedId: z.string(),
+                      type: z.string(),
+                    })
+                    .passthrough(),
+                  userProfile: z.string().optional(),
+                  metadata: z
+                    .union([z.object({}).partial().passthrough(), z.null()])
+                    .optional(),
+                  beginDate: z.union([z.string(), z.null()]).optional(),
+                  endDate: z.union([z.string(), z.null()]).optional(),
+                })
+                .passthrough(),
+            )
+            .default([]),
+          agents: z
+            .array(
+              z
+                .object({
+                  href: z.string().url(),
+                  sourcedId: z.string(),
+                  type: z.enum([
+                    "academicSession",
+                    "assessmentLineItem",
+                    "category",
+                    "class",
+                    "course",
+                    "demographics",
+                    "enrollment",
+                    "gradingPeriod",
+                    "lineItem",
+                    "org",
+                    "resource",
+                    "result",
+                    "scoreScale",
+                    "student",
+                    "teacher",
+                    "term",
+                    "user",
+                    "componentResource",
+                    "courseComponent",
+                  ]),
+                })
+                .passthrough(),
+            )
+            .default([]),
+          userProfiles: z
+            .array(
+              z
+                .object({
+                  profileId: z.string(),
+                  profileType: z.string(),
+                  vendorId: z.string(),
+                  applicationId: z.string(),
+                  description: z.union([z.string(), z.null()]).optional(),
+                  app: z
+                    .object({
+                      sourcedId: z.string(),
+                      name: z.string(),
+                      description: z.union([z.string(), z.null()]).optional(),
+                      domain: z.array(z.string()),
+                      metadata: z
+                        .union([z.object({}).partial().passthrough(), z.null()])
+                        .optional(),
+                    })
+                    .passthrough(),
+                  credentials: z
+                    .array(
+                      z
+                        .object({
+                          id: z.string(),
+                          type: z.string(),
+                          username: z.string(),
+                          password: z.union([z.string(), z.null()]).optional(),
+                        })
+                        .passthrough(),
+                    )
+                    .default([]),
+                })
+                .passthrough(),
+            )
+            .default([]),
+          primaryOrg: z
+            .object({
+              href: z.string().url(),
+              sourcedId: z.string(),
+              type: z.string(),
+              name: z.union([z.string(), z.null()]).optional(),
+            })
             .passthrough()
             .optional(),
-          video: z
-            .object({ url: z.string(), title: z.string() })
-            .passthrough()
-            .optional(),
+          identifier: z.union([z.string(), z.null()]).optional(),
+          email: z.string().email(),
+          preferredFirstName: z.union([z.string(), z.null()]).optional(),
+          preferredMiddleName: z.union([z.string(), z.null()]).optional(),
+          preferredLastName: z.union([z.string(), z.null()]).optional(),
+          pronouns: z.union([z.string(), z.null()]).optional(),
+          grades: z.array(GradeEnum).optional(),
+          password: z.union([z.string(), z.null()]).optional(),
+          sms: z.union([z.string(), z.null()]).optional(),
+          phone: z.union([z.string(), z.null()]).optional(),
+          demographics: z.union([Demographics, z.null()]).optional(),
         })
-        .passthrough()
+        .passthrough(),
     ),
+    totalCount: z.number(),
+    pageCount: z.number(),
+    pageNumber: z.number(),
+    offset: z.number(),
+    limit: z.number(),
+  })
+  .passthrough();
+export const OneRosterGetClassResponse = z
+  .object({ class: Class })
+  .passthrough();
+export const OneRosterGetCourseResponse = z
+  .object({
     course: z
       .object({
         sourcedId: z.string().min(1).optional(),
@@ -1784,47 +1091,8 @@ export const createCourseStructure_Body = z
           ])
           .optional(),
         courseCode: z.union([z.string(), z.null()]).optional(),
-        grades: z
-          .union([
-            z.array(
-              z.enum([
-                "-1",
-                "0",
-                "1",
-                "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7",
-                "8",
-                "9",
-                "10",
-                "11",
-                "12",
-                "13",
-              ])
-            ),
-            z.null(),
-          ])
-          .optional(),
-        subjects: z
-          .union([
-            z.array(
-              z.enum([
-                "Reading",
-                "Language",
-                "Vocabulary",
-                "Social Studies",
-                "Writing",
-                "Science",
-                "FastMath",
-                "Math",
-              ])
-            ),
-            z.null(),
-          ])
-          .optional(),
+        grades: z.union([z.array(GradeEnum), z.null()]).optional(),
+        subjects: z.union([z.array(SubjectEnum), z.null()]).optional(),
         subjectCodes: z.union([z.array(z.string()), z.null()]).optional(),
         org: z.object({ sourcedId: z.string() }).passthrough(),
         level: z.union([z.string(), z.null()]).optional(),
@@ -1858,7 +1126,7 @@ export const createCourseStructure_Body = z
                     "courseComponent",
                   ]),
                 })
-                .passthrough()
+                .passthrough(),
             ),
             z.null(),
           ])
@@ -1867,26 +1135,66 @@ export const createCourseStructure_Body = z
       .passthrough(),
   })
   .passthrough();
-export const postAcademicSession_Body = z
+export const OneRosterGetOrgResponse = z.object({ org: Org }).passthrough();
+export const OneRosterGetStudentResponse = z
+  .object({ user: User })
+  .passthrough();
+export const OneRosterGetStudentsForClassResponse = z
   .object({
-    academicSession: z
-      .object({
-        sourcedId: z.string(),
-        status: z.enum(["active", "tobedeleted"]),
-        dateLastModified: z.string().datetime({ offset: true }).optional(),
-        metadata: z.object({}).partial().passthrough().nullish(),
-        title: z.string(),
-        startDate: z.string(),
-        endDate: z.string(),
-        type: z.enum(["gradingPeriod", "semester", "schoolYear", "term"]),
-        parent: z
-          .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-          .optional(),
-        schoolYear: z.string(),
-        org: z.object({ sourcedId: z.string() }).passthrough(),
-        children: z
-          .union([
-            z.array(
+    students: z.array(
+      z
+        .object({
+          sourcedId: z.string(),
+          status: z.enum(["active", "tobedeleted"]),
+          dateLastModified: z.string().datetime({ offset: true }).optional(),
+          metadata: z.object({}).partial().passthrough().nullish(),
+          userMasterIdentifier: z.union([z.string(), z.null()]).optional(),
+          username: z.union([z.string(), z.null()]).optional(),
+          userIds: z
+            .array(
+              z
+                .object({ type: z.string(), identifier: z.string() })
+                .passthrough(),
+            )
+            .optional(),
+          enabledUser: z.enum(["true", "false"]),
+          givenName: z.string(),
+          familyName: z.string(),
+          middleName: z.union([z.string(), z.null()]).optional(),
+          roles: z
+            .array(
+              z
+                .object({
+                  roleType: z.enum(["primary", "secondary"]),
+                  role: z.enum([
+                    "administrator",
+                    "aide",
+                    "guardian",
+                    "parent",
+                    "proctor",
+                    "relative",
+                    "student",
+                    "teacher",
+                  ]),
+                  org: z
+                    .object({
+                      href: z.string().url(),
+                      sourcedId: z.string(),
+                      type: z.string(),
+                    })
+                    .passthrough(),
+                  userProfile: z.string().optional(),
+                  metadata: z
+                    .union([z.object({}).partial().passthrough(), z.null()])
+                    .optional(),
+                  beginDate: z.union([z.string(), z.null()]).optional(),
+                  endDate: z.union([z.string(), z.null()]).optional(),
+                })
+                .passthrough(),
+            )
+            .default([]),
+          agents: z
+            .array(
               z
                 .object({
                   href: z.string().url(),
@@ -1913,76 +1221,138 @@ export const postAcademicSession_Body = z
                     "courseComponent",
                   ]),
                 })
-                .passthrough()
-            ),
-            z.null(),
-          ])
-          .optional(),
-      })
-      .passthrough(),
+                .passthrough(),
+            )
+            .default([]),
+          userProfiles: z
+            .array(
+              z
+                .object({
+                  profileId: z.string(),
+                  profileType: z.string(),
+                  vendorId: z.string(),
+                  applicationId: z.string(),
+                  description: z.union([z.string(), z.null()]).optional(),
+                  app: z
+                    .object({
+                      sourcedId: z.string(),
+                      name: z.string(),
+                      description: z.union([z.string(), z.null()]).optional(),
+                      domain: z.array(z.string()),
+                      metadata: z
+                        .union([z.object({}).partial().passthrough(), z.null()])
+                        .optional(),
+                    })
+                    .passthrough(),
+                  credentials: z
+                    .array(
+                      z
+                        .object({
+                          id: z.string(),
+                          type: z.string(),
+                          username: z.string(),
+                          password: z.union([z.string(), z.null()]).optional(),
+                        })
+                        .passthrough(),
+                    )
+                    .default([]),
+                })
+                .passthrough(),
+            )
+            .default([]),
+          primaryOrg: z
+            .object({
+              href: z.string().url(),
+              sourcedId: z.string(),
+              type: z.string(),
+              name: z.union([z.string(), z.null()]).optional(),
+            })
+            .passthrough()
+            .optional(),
+          identifier: z.union([z.string(), z.null()]).optional(),
+          email: z.string().email(),
+          preferredFirstName: z.union([z.string(), z.null()]).optional(),
+          preferredMiddleName: z.union([z.string(), z.null()]).optional(),
+          preferredLastName: z.union([z.string(), z.null()]).optional(),
+          pronouns: z.union([z.string(), z.null()]).optional(),
+          grades: z.array(GradeEnum).optional(),
+          password: z.union([z.string(), z.null()]).optional(),
+          sms: z.union([z.string(), z.null()]).optional(),
+          phone: z.union([z.string(), z.null()]).optional(),
+          demographics: z.union([Demographics, z.null()]).optional(),
+        })
+        .passthrough(),
+    ),
+    totalCount: z.number(),
+    pageCount: z.number(),
+    pageNumber: z.number(),
+    offset: z.number(),
+    limit: z.number(),
   })
   .passthrough();
+export const OneRosterGetUserResponse = z.object({ user: User }).passthrough();
+export const OneRosterGetUserWithDemographicsResponse = z
+  .object({ user: User })
+  .passthrough();
 
+export type BadRequestResponse = z.infer<typeof BadRequestResponse>;
+export type UnauthorizedRequestResponse = z.infer<
+  typeof UnauthorizedRequestResponse
+>;
+export type ForbiddenResponse = z.infer<typeof ForbiddenResponse>;
+export type NotFoundResponse = z.infer<typeof NotFoundResponse>;
+export type UnprocessableEntityResponse = z.infer<
+  typeof UnprocessableEntityResponse
+>;
+export type TooManyRequestsResponse = z.infer<typeof TooManyRequestsResponse>;
+export type InternalServerErrorResponse = z.infer<
+  typeof InternalServerErrorResponse
+>;
+export type Org = z.infer<typeof Org>;
+export type GradeEnum = z.infer<typeof GradeEnum>;
+export type SubjectEnum = z.infer<typeof SubjectEnum>;
 export type Class = z.infer<typeof Class>;
-export type AssessmentLineItem = z.infer<typeof AssessmentLineItem>;
+export type LearningObjectiveSet = z.infer<typeof LearningObjectiveSet>;
 export type Demographics = z.infer<typeof Demographics>;
 export type User = z.infer<typeof User>;
-
-const schemaCollection = {
-  BadRequestResponse,
-  UnauthorizedRequestResponse,
-  ForbiddenResponse,
-  NotFoundResponse,
-  UnprocessableEntityResponse,
-  TooManyRequestsResponse,
-  InternalServerErrorResponse,
-  ScoreScale,
-  createScoreScale_Body,
-  createSchool_Body,
-  Org,
-  Result,
-  createResult_Body,
-  LineItem,
-  createLineItem_Body,
-  createResultForLineItem_Body,
-  createLineItemsForSchool_Body,
-  GradeEnum,
-  SubjectEnum,
-  createClass_Body,
-  Class,
-  updateClass_Body,
-  Category,
-  createCategory_Body,
-  AssessmentResult,
-  createAssessmentResult_Body,
-  patchAssessmentResult_Body,
-  LearningObjectiveSet,
-  AssessmentLineItem,
-  createAssessmentLineItem_Body,
-  patchAssessmentLineItem_Body,
-  createResource_Body,
-  Resource,
-  updateResource_Body,
-  Demographics,
-  createUser_Body,
-  User,
-  registerStudentCredentials_Body,
-  AcademicSession,
-  addTeacherToClass_Body,
-  createOrg_Body,
-  createGradingPeriod_Body,
-  createGradingPeriodForTerm_Body,
-  createEnrollment_Body,
-  Enrollment,
-  updateEnrollment_Body,
-  partiallyUpdateEnrollment_Body,
-  postDemographics_Body,
-  createCourse_Body,
-  createComponentResource_Body,
-  createCourseComponent_Body,
-  createCourseStructure_Body,
-  postAcademicSession_Body,
-} as const;
-
-export const schemas = schemaCollection;
-export type SchemaRegistry = typeof schemas;
+export type OneRosterGetAgentForResponse = z.infer<
+  typeof OneRosterGetAgentForResponse
+>;
+export type OneRosterGetAgentsResponse = z.infer<
+  typeof OneRosterGetAgentsResponse
+>;
+export type OneRosterGetAllAssessmentLineItemsResponse = z.infer<
+  typeof OneRosterGetAllAssessmentLineItemsResponse
+>;
+export type OneRosterGetAllAssessmentResultsResponse = z.infer<
+  typeof OneRosterGetAllAssessmentResultsResponse
+>;
+export type OneRosterGetAllClassesResponse = z.infer<
+  typeof OneRosterGetAllClassesResponse
+>;
+export type OneRosterGetAllCoursesResponse = z.infer<
+  typeof OneRosterGetAllCoursesResponse
+>;
+export type OneRosterGetAllStudentsResponse = z.infer<
+  typeof OneRosterGetAllStudentsResponse
+>;
+export type OneRosterGetAllUsersResponse = z.infer<
+  typeof OneRosterGetAllUsersResponse
+>;
+export type OneRosterGetClassResponse = z.infer<
+  typeof OneRosterGetClassResponse
+>;
+export type OneRosterGetCourseResponse = z.infer<
+  typeof OneRosterGetCourseResponse
+>;
+export type OneRosterGetOrgResponse = z.infer<typeof OneRosterGetOrgResponse>;
+export type OneRosterGetStudentResponse = z.infer<
+  typeof OneRosterGetStudentResponse
+>;
+export type OneRosterGetStudentsForClassResponse = z.infer<
+  typeof OneRosterGetStudentsForClassResponse
+>;
+export type OneRosterGetUserResponse = z.infer<typeof OneRosterGetUserResponse>;
+export type OneRosterGetUserWithDemographicsResponse = z.infer<
+  typeof OneRosterGetUserWithDemographicsResponse
+>;

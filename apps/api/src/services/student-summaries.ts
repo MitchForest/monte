@@ -104,6 +104,14 @@ type SendExistingSummaryParams = {
   emails?: string[];
 };
 
+function toIsoString(value: Date | string): string {
+  return value instanceof Date ? value.toISOString() : value;
+}
+
+function toIsoStringOrNull(value: Date | string | null): string | null {
+  return value === null ? null : toIsoString(value);
+}
+
 export function resolveTimespan(
   payload: SummaryRequest,
   reference: Date = new Date(),
@@ -436,22 +444,10 @@ async function persistSummary(
       const normalizedSummary: PersistResult["summary"] = {
         ...summary,
         scope: payload.scope,
-        created_at:
-          summary.created_at instanceof Date
-            ? summary.created_at.toISOString()
-            : summary.created_at,
-        timespan_start:
-          summary.timespan_start instanceof Date
-            ? summary.timespan_start.toISOString()
-            : summary.timespan_start,
-        timespan_end:
-          summary.timespan_end instanceof Date
-            ? summary.timespan_end.toISOString()
-            : summary.timespan_end,
-        emailed_at:
-          summary.emailed_at instanceof Date
-            ? summary.emailed_at.toISOString()
-            : summary.emailed_at,
+        created_at: toIsoString(summary.created_at),
+        timespan_start: toIsoStringOrNull(summary.timespan_start),
+        timespan_end: toIsoStringOrNull(summary.timespan_end),
+        emailed_at: toIsoStringOrNull(summary.emailed_at),
       };
 
       return {
@@ -521,7 +517,7 @@ export async function sendExistingStudentSummary({
   parentIds,
   emails,
 }: SendExistingSummaryParams): Promise<CreateStudentSummaryResult> {
-  const { summary, recipients: existingRecipients } = await withDbContext(
+  const { summary } = await withDbContext(
     { userId: session.session.userId, orgId: session.session.orgId },
     async (trx) => {
       const record = await trx
@@ -563,14 +559,8 @@ export async function sendExistingStudentSummary({
         },
         recipients: summaryRecipients.map((recipient) => ({
           ...recipient,
-          delivered_at:
-            recipient.delivered_at instanceof Date
-              ? recipient.delivered_at.toISOString()
-              : recipient.delivered_at,
-          created_at:
-            recipient.created_at instanceof Date
-              ? recipient.created_at.toISOString()
-              : recipient.created_at,
+          delivered_at: toIsoStringOrNull(recipient.delivered_at),
+          created_at: toIsoString(recipient.created_at),
         })),
       };
     },
@@ -658,35 +648,17 @@ export async function sendExistingStudentSummary({
 
   const normalizedRecipients = recipients.map((recipient) => ({
     ...recipient,
-    delivered_at:
-      recipient.delivered_at instanceof Date
-        ? recipient.delivered_at.toISOString()
-        : recipient.delivered_at,
-    created_at:
-      recipient.created_at instanceof Date
-        ? recipient.created_at.toISOString()
-        : recipient.created_at,
+    delivered_at: toIsoStringOrNull(recipient.delivered_at),
+    created_at: toIsoString(recipient.created_at),
   }));
 
   const normalizedSummary = {
     ...summary,
     scope: summary.scope as SummaryScope,
-    timespan_start:
-      summary.timespan_start instanceof Date
-        ? summary.timespan_start.toISOString()
-        : summary.timespan_start,
-    timespan_end:
-      summary.timespan_end instanceof Date
-        ? summary.timespan_end.toISOString()
-        : summary.timespan_end,
-    emailed_at:
-      summary.emailed_at instanceof Date
-        ? summary.emailed_at.toISOString()
-        : summary.emailed_at,
-    created_at:
-      summary.created_at instanceof Date
-        ? summary.created_at.toISOString()
-        : summary.created_at,
+    timespan_start: toIsoStringOrNull(summary.timespan_start),
+    timespan_end: toIsoStringOrNull(summary.timespan_end),
+    emailed_at: toIsoStringOrNull(summary.emailed_at),
+    created_at: toIsoString(summary.created_at),
   } satisfies PersistResult["summary"];
 
   return {

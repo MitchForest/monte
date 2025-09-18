@@ -4,9 +4,9 @@ import type {
   OperationBody,
   OperationByAlias,
   OperationCallArgs,
-  OperationResponse,
   OperationError,
   OperationParameter,
+  OperationResponse,
   OperationSpec,
   OperationSpecMap,
 } from "../types";
@@ -50,7 +50,8 @@ async function executeOperation<
 
   const pathArgs = (args as { path?: Record<string, unknown> }).path ?? {};
   const queryArgs = (args as { query?: Record<string, unknown> }).query ?? {};
-  const headerArgs = (args as { headers?: Record<string, unknown> }).headers ?? {};
+  const headerArgs =
+    (args as { headers?: Record<string, unknown> }).headers ?? {};
   const bodyArg = (args as { body?: unknown }).body;
 
   const definedQueryKeys = new Set<string>();
@@ -134,7 +135,11 @@ async function executeOperation<
   const payload = await readResponsePayload(response);
 
   if (!response.ok) {
-    const normalizedPayload = await parseErrorPayload(operation, response, payload);
+    const normalizedPayload = await parseErrorPayload(
+      operation,
+      response,
+      payload,
+    );
     throw TimebackClientError.httpError({
       service: client.service,
       environment: client.environment,
@@ -293,7 +298,8 @@ function serializeBody(
         issues: [
           {
             code: "custom",
-            message: "Expected an object or FormData for multipart request body",
+            message:
+              "Expected an object or FormData for multipart request body",
             path: ["body"],
           },
         ],
@@ -326,13 +332,18 @@ function serializeBody(
         issues: [
           {
             code: "custom",
-            message: "Expected an object for x-www-form-urlencoded request body",
+            message:
+              "Expected an object for x-www-form-urlencoded request body",
             path: ["body"],
           },
         ],
       });
     }
-    ensureContentType(headers, body.contentTypes, "application/x-www-form-urlencoded");
+    ensureContentType(
+      headers,
+      body.contentTypes,
+      "application/x-www-form-urlencoded",
+    );
     const searchParams = new URLSearchParams();
     for (const [key, formValue] of Object.entries(value)) {
       if (formValue === undefined || formValue === null) {
@@ -366,7 +377,8 @@ function serializeBody(
       issues: [
         {
           code: "custom",
-          message: "Expected ArrayBuffer, TypedArray, or Blob for binary request body",
+          message:
+            "Expected ArrayBuffer, TypedArray, or Blob for binary request body",
           path: ["body"],
         },
       ],
@@ -422,7 +434,11 @@ function serializeHeaderValue(value: unknown): string {
   return JSON.stringify(value);
 }
 
-function appendQueryValue(params: URLSearchParams, key: string, value: unknown): void {
+function appendQueryValue(
+  params: URLSearchParams,
+  key: string,
+  value: unknown,
+): void {
   if (value === undefined || value === null) {
     return;
   }
@@ -442,7 +458,9 @@ function appendQueryValue(params: URLSearchParams, key: string, value: unknown):
 function appendFormData(formData: FormData, key: string, value: unknown) {
   const isBlob = typeof Blob !== "undefined" && value instanceof Blob;
   const isFile =
-    typeof File !== "undefined" && typeof File === "function" && value instanceof File;
+    typeof File !== "undefined" &&
+    typeof File === "function" &&
+    value instanceof File;
   if (isBlob || isFile) {
     formData.append(key, value as Blob);
     return;

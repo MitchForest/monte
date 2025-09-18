@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
 import { NotebookText, Sparkles } from "lucide-react";
+import { useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,7 +29,8 @@ const demoObservations: StudentObservationItem[] = [
     id: "obs-1",
     createdAt: new Date().toISOString(),
     author: "Guide Rivera",
-    summary: "Invited a younger child to join sweeping work and showed patience.",
+    summary:
+      "Invited a younger child to join sweeping work and showed patience.",
   },
   {
     id: "obs-2",
@@ -44,7 +45,8 @@ export function StudentObservationsPanel({
   onCreateObservation,
 }: StudentObservationsPanelProps) {
   const entries = useMemo(
-    () => (observations && observations.length > 0 ? observations : demoObservations),
+    () =>
+      observations && observations.length > 0 ? observations : demoObservations,
     [observations],
   );
 
@@ -56,14 +58,11 @@ export function StudentObservationsPanel({
             <NotebookText className="size-5 text-primary" /> Observations
           </CardTitle>
           <CardDescription>
-            Capture quick Montessori notes to share during debriefs or family updates.
+            Capture quick Montessori notes to share during debriefs or family
+            updates.
           </CardDescription>
         </div>
-        <Button
-          onClick={onCreateObservation}
-          size="sm"
-          type="button"
-        >
+        <Button onClick={onCreateObservation} size="sm" type="button">
           New observation
         </Button>
       </CardHeader>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { Mic, Send } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,7 +30,12 @@ export function StudentQuickCommunications() {
             variant="outline"
             size="sm"
             className="gap-2"
-            onClick={() => setNote((current) => `${current ? `${current} ` : ""}🎉 Great job completing math work today!`)}
+            onClick={() =>
+              setNote(
+                (current) =>
+                  `${current ? `${current} ` : ""}🎉 Great job completing math work today!`,
+              )
+            }
           >
             <Mic className="size-4" /> Voice-to-text
           </Button>

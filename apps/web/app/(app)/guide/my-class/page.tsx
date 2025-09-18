@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { Flame, Sparkles, Users } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import { AppPageHeader } from "@/components/app/page-header";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 
 const mockStudents = [
@@ -53,8 +60,10 @@ const quickActions = [
 ];
 
 export default function GuideMyClassPage() {
-  const [attendance, setAttendance] = useState<Record<string, boolean>>(
-    () => Object.fromEntries(mockStudents.map((student) => [student.id, student.attendance])),
+  const [attendance, setAttendance] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(
+      mockStudents.map((student) => [student.id, student.attendance]),
+    ),
   );
   const [activeAction, setActiveAction] = useState("observation");
 
@@ -113,7 +122,8 @@ export default function GuideMyClassPage() {
               );
             })}
             <div className="rounded-2xl border border-dashed border-border/60 bg-background/70 p-4 text-sm text-muted-foreground">
-              {presentCount} of {mockStudents.length} students are marked present.
+              {presentCount} of {mockStudents.length} students are marked
+              present.
             </div>
           </CardContent>
         </Card>
@@ -224,7 +234,9 @@ export default function GuideMyClassPage() {
                   <TableRow key={student.id}>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="font-medium text-foreground">{student.name}</span>
+                        <span className="font-medium text-foreground">
+                          {student.name}
+                        </span>
                         <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
                           {student.classroom}
                         </span>

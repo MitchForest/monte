@@ -2,7 +2,11 @@ import { describe, expect, it } from "bun:test";
 
 import type { OperationResponse } from "../../../http";
 import type { PowerpathOperationSpecs } from "../../generated/operation-specs";
-import { __testing, getCourseProgressSummary } from "../course-progress";
+import {
+  __testing,
+  type CourseProgressLineItem,
+  getCourseProgressSummary,
+} from "../course-progress";
 
 const testClient = {} as import("../../client").PowerpathClient;
 
@@ -69,8 +73,12 @@ function createResult(
     status: "active",
     dateLastModified: undefined,
     metadata: overrides.metadata ?? {},
-    assessmentLineItem: { sourcedId: "ali" } as CourseProgressLineItem["results"][number]["assessmentLineItem"],
-    student: { sourcedId: "student-1" } as CourseProgressLineItem["results"][number]["student"],
+    assessmentLineItem: {
+      sourcedId: "ali",
+    } as CourseProgressLineItem["results"][number]["assessmentLineItem"],
+    student: {
+      sourcedId: "student-1",
+    } as CourseProgressLineItem["results"][number]["student"],
     score: null,
     textScore: null,
     scoreDate:

@@ -12,8 +12,8 @@ import { respond } from "../lib/http/respond";
 import { HTTP_STATUS } from "../lib/http/status";
 import {
   createStudentSummary,
-  sendExistingStudentSummary,
   type StudentSummaryRequest,
+  sendExistingStudentSummary,
 } from "../services/student-summaries";
 
 const routerBase = new OpenAPIHono();

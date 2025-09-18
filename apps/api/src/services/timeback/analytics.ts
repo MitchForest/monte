@@ -16,6 +16,10 @@ import { getAllowedTimebackOrgs } from "../../lib/timeback/orgs";
 
 const DEFAULT_EVENT_LIMIT = 100;
 
+function toDateBucket(value: string): string {
+  return value.slice(0, 10);
+}
+
 const coerceNumber = (value: unknown): number | null => {
   if (typeof value === "number" && Number.isFinite(value)) {
     return value;
@@ -263,19 +267,13 @@ function buildFactsQuery(filters: TimebackAnalyticsFilters) {
     .where("student_id", "=", filters.studentId);
 
   if (filters.startTime) {
-    query = query.where(
-      "date_bucket",
-      ">=",
-      new Date(filters.startTime.slice(0, 10)),
-    );
+    const startBucket = toDateBucket(filters.startTime);
+    query = query.where("date_bucket", ">=", startBucket);
   }
 
   if (filters.endTime) {
-    query = query.where(
-      "date_bucket",
-      "<=",
-      new Date(filters.endTime.slice(0, 10)),
-    );
+    const endBucket = toDateBucket(filters.endTime);
+    query = query.where("date_bucket", "<=", endBucket);
   }
 
   if (allowlist.size > 0) {

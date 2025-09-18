@@ -2,7 +2,6 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
 import {
   ApiErrorSchema,
-  StudentParentDetailResponseSchema,
   StudentParentMutateResponseSchema,
   StudentParentsListResponseSchema,
 } from "@monte/shared";
@@ -169,74 +168,77 @@ const createParentRoute = createRoute({
   },
 });
 
-const routerWithCreate = routerWithList.openapi(createParentRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      createParentRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
-    );
-  }
+const routerWithCreate = routerWithList.openapi(
+  createParentRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
+      return respond(
+        createParentRoute,
+        c,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
+      );
+    }
 
-  const params = c.req.valid("param");
-  const body = c.req.valid("json");
+    const params = c.req.valid("param");
+    const body = c.req.valid("json");
 
-  const student = await withDbContext(
-    { userId: session.session.userId, orgId: session.session.orgId },
-    (trx) =>
-      trx
-        .selectFrom("students")
-        .select(["id"])
-        .where("id", "=", params.studentId)
-        .where("org_id", "=", session.session.orgId)
-        .executeTakeFirst(),
-  );
-
-  if (!student) {
-    return respond(
-      createParentRoute,
-      c,
-      { error: "Student not found" },
-      HTTP_STATUS.notFound,
-    );
-  }
-
-  try {
-    const parent = await withDbContext(
+    const student = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
       (trx) =>
         trx
-          .insertInto("student_parents")
-          .values({
-            id: crypto.randomUUID(),
-            student_id: params.studentId,
-            name: body.name,
-            email: body.email ?? null,
-            phone: body.phone ?? null,
-            relation: body.relation ?? null,
-            preferred_contact_method: body.preferredContactMethod ?? null,
-            created_at: new Date().toISOString(),
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow(),
+          .selectFrom("students")
+          .select(["id"])
+          .where("id", "=", params.studentId)
+          .where("org_id", "=", session.session.orgId)
+          .executeTakeFirst(),
     );
 
-    const response = StudentParentMutateResponseSchema.parse({
-      data: { parent },
-    });
+    if (!student) {
+      return respond(
+        createParentRoute,
+        c,
+        { error: "Student not found" },
+        HTTP_STATUS.notFound,
+      );
+    }
 
-    return respond(createParentRoute, c, response, HTTP_STATUS.created);
-  } catch (_error) {
-    return respond(
-      createParentRoute,
-      c,
-      { error: "Failed to create parent" },
-      HTTP_STATUS.internalServerError,
-    );
-  }
-});
+    try {
+      const parent = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        (trx) =>
+          trx
+            .insertInto("student_parents")
+            .values({
+              id: crypto.randomUUID(),
+              student_id: params.studentId,
+              name: body.name,
+              email: body.email ?? null,
+              phone: body.phone ?? null,
+              relation: body.relation ?? null,
+              preferred_contact_method: body.preferredContactMethod ?? null,
+              created_at: new Date().toISOString(),
+            })
+            .returningAll()
+            .executeTakeFirstOrThrow(),
+      );
+
+      const response = StudentParentMutateResponseSchema.parse({
+        data: { parent },
+      });
+
+      return respond(createParentRoute, c, response, HTTP_STATUS.created);
+    } catch (_error) {
+      return respond(
+        createParentRoute,
+        c,
+        { error: "Failed to create parent" },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
 
 const updateParentRoute = createRoute({
   method: "patch",
@@ -280,96 +282,99 @@ const updateParentRoute = createRoute({
   },
 });
 
-const routerWithUpdate = routerWithCreate.openapi(updateParentRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      updateParentRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
-    );
-  }
-
-  const params = c.req.valid("param");
-  const body = c.req.valid("json");
-
-  try {
-    const parent = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      async (trx) => {
-        const studentExists = await trx
-          .selectFrom("students")
-          .select(["id"])
-          .where("id", "=", params.studentId)
-          .where("org_id", "=", session.session.orgId)
-          .executeTakeFirst();
-
-        if (!studentExists) {
-          return null;
-        }
-
-        const update: Record<string, unknown> = {};
-        if (body.name !== undefined) {
-          update.name = body.name;
-        }
-        if (body.email !== undefined) {
-          update.email = body.email;
-        }
-        if (body.phone !== undefined) {
-          update.phone = body.phone;
-        }
-        if (body.relation !== undefined) {
-          update.relation = body.relation;
-        }
-        if (body.preferredContactMethod !== undefined) {
-          update.preferred_contact_method = body.preferredContactMethod;
-        }
-
-        const updated = await trx
-          .updateTable("student_parents")
-          .set(update)
-          .where("id", "=", params.parentId)
-          .where("student_id", "=", params.studentId)
-          .returningAll()
-          .executeTakeFirst();
-
-        return updated ?? undefined;
-      },
-    );
-
-    if (parent === null) {
+const routerWithUpdate = routerWithCreate.openapi(
+  updateParentRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
       return respond(
         updateParentRoute,
         c,
-        { error: "Student not found" },
-        HTTP_STATUS.notFound,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
       );
     }
 
-    if (!parent) {
+    const params = c.req.valid("param");
+    const body = c.req.valid("json");
+
+    try {
+      const parent = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        async (trx) => {
+          const studentExists = await trx
+            .selectFrom("students")
+            .select(["id"])
+            .where("id", "=", params.studentId)
+            .where("org_id", "=", session.session.orgId)
+            .executeTakeFirst();
+
+          if (!studentExists) {
+            return null;
+          }
+
+          const update: Record<string, unknown> = {};
+          if (body.name !== undefined) {
+            update.name = body.name;
+          }
+          if (body.email !== undefined) {
+            update.email = body.email;
+          }
+          if (body.phone !== undefined) {
+            update.phone = body.phone;
+          }
+          if (body.relation !== undefined) {
+            update.relation = body.relation;
+          }
+          if (body.preferredContactMethod !== undefined) {
+            update.preferred_contact_method = body.preferredContactMethod;
+          }
+
+          const updated = await trx
+            .updateTable("student_parents")
+            .set(update)
+            .where("id", "=", params.parentId)
+            .where("student_id", "=", params.studentId)
+            .returningAll()
+            .executeTakeFirst();
+
+          return updated ?? undefined;
+        },
+      );
+
+      if (parent === null) {
+        return respond(
+          updateParentRoute,
+          c,
+          { error: "Student not found" },
+          HTTP_STATUS.notFound,
+        );
+      }
+
+      if (!parent) {
+        return respond(
+          updateParentRoute,
+          c,
+          { error: "Parent not found" },
+          HTTP_STATUS.notFound,
+        );
+      }
+
+      const response = StudentParentMutateResponseSchema.parse({
+        data: { parent },
+      });
+
+      return respond(updateParentRoute, c, response);
+    } catch (_error) {
       return respond(
         updateParentRoute,
         c,
-        { error: "Parent not found" },
-        HTTP_STATUS.notFound,
+        { error: "Failed to update parent" },
+        HTTP_STATUS.internalServerError,
       );
     }
-
-    const response = StudentParentMutateResponseSchema.parse({
-      data: { parent },
-    });
-
-    return respond(updateParentRoute, c, response);
-  } catch (_error) {
-    return respond(
-      updateParentRoute,
-      c,
-      { error: "Failed to update parent" },
-      HTTP_STATUS.internalServerError,
-    );
-  }
-});
+  },
+);
 
 const deleteParentRoute = createRoute({
   method: "delete",

@@ -10,7 +10,12 @@ export type HttpMethod =
   | "patch"
   | "trace";
 
-export type RequestFormat = "json" | "form-data" | "form-url" | "binary" | "text";
+export type RequestFormat =
+  | "json"
+  | "form-data"
+  | "form-url"
+  | "binary"
+  | "text";
 
 export type OperationParameterLocation = "path" | "query" | "header";
 
@@ -50,7 +55,10 @@ export type OperationSpec = {
 
 export type OperationSpecMap = Record<string, OperationSpec>;
 
-export type OperationAlias<Map extends OperationSpecMap> = Extract<keyof Map, string>;
+export type OperationAlias<Map extends OperationSpecMap> = Extract<
+  keyof Map,
+  string
+>;
 
 export type OperationByAlias<
   Map extends OperationSpecMap,
@@ -59,10 +67,10 @@ export type OperationByAlias<
 
 type Simplify<Type> = { [Key in keyof Type]: Type[Key] } & {};
 
-type ParameterForLocation<Spec extends OperationSpec, Location extends OperationParameterLocation> = Extract<
-  Spec["parameters"][number],
-  { location: Location }
->;
+type ParameterForLocation<
+  Spec extends OperationSpec,
+  Location extends OperationParameterLocation,
+> = Extract<Spec["parameters"][number], { location: Location }>;
 
 type ParameterSchemas<
   Spec extends OperationSpec,
@@ -80,7 +88,10 @@ type ParameterInputs<
   Spec extends OperationSpec,
   Location extends OperationParameterLocation,
 > = {
-  [Name in keyof ParameterSchemas<Spec, Location>]: ParameterSchemas<Spec, Location>[Name] extends z.ZodTypeAny
+  [Name in keyof ParameterSchemas<Spec, Location>]: ParameterSchemas<
+    Spec,
+    Location
+  >[Name] extends z.ZodTypeAny
     ? z.input<ParameterSchemas<Spec, Location>[Name]>
     : never;
 };
@@ -96,7 +107,7 @@ type BuildParameterArgs<
 > = ParameterInputs<Spec, Location> extends infer Inputs
   ? Inputs extends Record<string, unknown>
     ? keyof Inputs extends never
-      ? {}
+      ? Record<never, never>
       : Simplify<
           {
             [Name in Extract<
@@ -104,49 +115,62 @@ type BuildParameterArgs<
               keyof Inputs
             >]: Inputs[Name];
           } & {
-            [Name in Exclude<keyof Inputs, RequiredParameterNames<Spec, Location>>]?: Inputs[Name];
+            [Name in Exclude<
+              keyof Inputs,
+              RequiredParameterNames<Spec, Location>
+            >]?: Inputs[Name];
           }
         >
-    : {}
-  : {};
+    : Record<never, never>
+  : Record<never, never>;
 
-type PathArgs<Spec extends OperationSpec> = BuildParameterArgs<Spec, "path"> extends infer PathInput
+type PathArgs<Spec extends OperationSpec> = BuildParameterArgs<
+  Spec,
+  "path"
+> extends infer PathInput
   ? PathInput extends Record<string, unknown>
     ? keyof PathInput extends never
-      ? {}
+      ? Record<never, never>
       : { path: PathInput }
-    : {}
-  : {};
+    : Record<never, never>
+  : Record<never, never>;
 
-type QueryArgs<Spec extends OperationSpec> = BuildParameterArgs<Spec, "query"> extends infer QueryInput
+type QueryArgs<Spec extends OperationSpec> = BuildParameterArgs<
+  Spec,
+  "query"
+> extends infer QueryInput
   ? QueryInput extends Record<string, unknown>
     ? keyof QueryInput extends never
-      ? {}
+      ? Record<never, never>
       : RequiredParameterNames<Spec, "query"> extends never
         ? { query?: QueryInput }
         : { query: QueryInput }
-    : {}
-  : {};
+    : Record<never, never>
+  : Record<never, never>;
 
-type HeaderArgs<Spec extends OperationSpec> = BuildParameterArgs<Spec, "header"> extends infer HeaderInput
+type HeaderArgs<Spec extends OperationSpec> = BuildParameterArgs<
+  Spec,
+  "header"
+> extends infer HeaderInput
   ? HeaderInput extends Record<string, unknown>
     ? keyof HeaderInput extends never
-      ? {}
+      ? Record<never, never>
       : RequiredParameterNames<Spec, "header"> extends never
         ? { headers?: HeaderInput }
         : { headers: HeaderInput }
-    : {}
-  : {};
+    : Record<never, never>
+  : Record<never, never>;
 
-type BodyArgs<Spec extends OperationSpec> = Spec["body"] extends infer BodyDefinition
-  ? BodyDefinition extends OperationBody
-    ? BodyDefinition["schema"] extends z.ZodTypeAny
-      ? BodyDefinition["required"] extends true
-        ? { body: z.input<BodyDefinition["schema"]> }
-        : { body?: z.input<BodyDefinition["schema"]> }
-      : {}
-    : {}
-  : {};
+type BodyArgs<Spec extends OperationSpec> =
+  Spec["body"] extends infer BodyDefinition
+    ? BodyDefinition extends OperationBody
+      ? BodyDefinition["schema"] extends z.ZodTypeAny
+        ? BodyDefinition["required"] extends true
+          ? { body: z.input<BodyDefinition["schema"]> }
+          : { body?: z.input<BodyDefinition["schema"]> }
+        : Record<never, never>
+      : Record<never, never>
+    : Record<never, never>;
 
 export type OperationCallArgs<
   Map extends OperationSpecMap,
@@ -155,8 +179,7 @@ export type OperationCallArgs<
   PathArgs<OperationByAlias<Map, Alias>> &
     QueryArgs<OperationByAlias<Map, Alias>> &
     HeaderArgs<OperationByAlias<Map, Alias>> &
-    BodyArgs<OperationByAlias<Map, Alias>> &
-    {
+    BodyArgs<OperationByAlias<Map, Alias>> & {
       requestInit?: Omit<RequestInit, "method">;
     }
 >;

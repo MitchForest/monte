@@ -1,24 +1,14 @@
 import type { z } from "zod";
-
-import {
-  callOneRosterOperation,
-  type OneRosterClient,
-} from "./client";
 import type { OperationByAlias } from "../http";
-import type {
-  OneRosterOperationAlias,
-  OneRosterOperationSpecs,
-} from "./generated/operation-specs";
+import { callOneRosterOperation, type OneRosterClient } from "./client";
+import type { OneRosterOperationSpecs } from "./generated/operation-specs";
 
 type GetAllUsersOperation = OperationByAlias<
   OneRosterOperationSpecs,
   "getAllUsers"
 >;
 
-type GetUserOperation = OperationByAlias<
-  OneRosterOperationSpecs,
-  "getUser"
->;
+type GetUserOperation = OperationByAlias<OneRosterOperationSpecs, "getUser">;
 
 type GetUserWithDemographicsOperation = OperationByAlias<
   OneRosterOperationSpecs,
@@ -58,12 +48,12 @@ export type GetUserParams = {
   fields?: string;
 };
 
-const GET_ALL_USERS_ALIAS = "getAllUsers" as OneRosterOperationAlias;
-const GET_USER_ALIAS = "getUser" as OneRosterOperationAlias;
-const GET_USER_WITH_DEMOGRAPHICS_ALIAS =
-  "getUserWithDemographics" as OneRosterOperationAlias;
-const GET_AGENTS_ALIAS = "getAgents" as OneRosterOperationAlias;
-const GET_AGENT_FOR_ALIAS = "getAgentFor" as OneRosterOperationAlias;
+const GET_ALL_USERS_ALIAS: GetAllUsersOperation["alias"] = "getAllUsers";
+const GET_USER_ALIAS: GetUserOperation["alias"] = "getUser";
+const GET_USER_WITH_DEMOGRAPHICS_ALIAS: GetUserWithDemographicsOperation["alias"] =
+  "getUserWithDemographics";
+const GET_AGENTS_ALIAS: GetAgentsOperation["alias"] = "getAgents";
+const GET_AGENT_FOR_ALIAS: GetAgentForOperation["alias"] = "getAgentFor";
 
 export async function listUsers(
   client: OneRosterClient,

@@ -33,7 +33,10 @@ export function StudentCommunicationsPanel({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2 text-sm">
-          <label className="text-xs uppercase tracking-[0.2em] text-muted-foreground" htmlFor="communication-draft">
+          <label
+            className="text-xs uppercase tracking-[0.2em] text-muted-foreground"
+            htmlFor="communication-draft"
+          >
             Draft update
           </label>
           <Textarea
@@ -43,15 +46,27 @@ export function StudentCommunicationsPanel({
           />
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" type="button" onClick={onDraftUpdate} className="gap-2">
+          <Button
+            size="sm"
+            type="button"
+            onClick={onDraftUpdate}
+            className="gap-2"
+          >
             <MailPlus className="size-4" /> Save draft
           </Button>
-          <Button size="sm" variant="outline" type="button" onClick={onSendUpdate} className="gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            type="button"
+            onClick={onSendUpdate}
+            className="gap-2"
+          >
             <Send className="size-4" /> Send now
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          Tip: use the AI summary above to jump start your notes, then personalize for guardians.
+          Tip: use the AI summary above to jump start your notes, then
+          personalize for guardians.
         </p>
       </CardContent>
     </Card>

@@ -42,8 +42,14 @@ const HabitCheckinQuery = z.object({
 });
 
 const HabitCheckinListQuery = z.object({
-  startDate: z.string().regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/).optional(),
-  endDate: z.string().regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/).optional(),
+  startDate: z
+    .string()
+    .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
+    .optional(),
+  endDate: z
+    .string()
+    .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
+    .optional(),
   limit: z.coerce.number().int().min(1).max(365).optional(),
 });
 

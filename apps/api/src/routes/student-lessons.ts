@@ -1,9 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
-import type {
-  LessonInstanceStatus,
-  StudentLesson,
-} from "@monte/shared";
+import type { LessonInstanceStatus, StudentLesson } from "@monte/shared";
 import {
   ApiErrorSchema,
   StudentLessonDetailResponseSchema,
@@ -132,70 +129,73 @@ const listStudentLessonsRoute = createRoute({
   },
 });
 
-const routerWithList = routerBase.openapi(listStudentLessonsRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      listStudentLessonsRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
-    );
-  }
+const routerWithList = routerBase.openapi(
+  listStudentLessonsRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
+      return respond(
+        listStudentLessonsRoute,
+        c,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
+      );
+    }
 
-  const query = c.req.valid("query");
+    const query = c.req.valid("query");
 
-  try {
-    const lessons = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      async (trx) => {
-        let builder = trx
-          .selectFrom("student_lessons")
-          .selectAll()
-          .where("org_id", "=", session.session.orgId)
-          .orderBy("updated_at", "desc")
-          .limit(query.limit ?? 100);
+    try {
+      const lessons = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        async (trx) => {
+          let builder = trx
+            .selectFrom("student_lessons")
+            .selectAll()
+            .where("org_id", "=", session.session.orgId)
+            .orderBy("updated_at", "desc")
+            .limit(query.limit ?? 100);
 
-        if (query.studentId) {
-          builder = builder.where("student_id", "=", query.studentId);
-        }
-        if (query.status) {
-          builder = builder.where("status", "=", query.status);
-        }
-        if (query.scheduledFrom) {
-          builder = builder.where(
-            "scheduled_for",
-            ">=",
-            new Date(query.scheduledFrom),
-          );
-        }
-        if (query.scheduledTo) {
-          builder = builder.where(
-            "scheduled_for",
-            "<=",
-            new Date(query.scheduledTo),
-          );
-        }
+          if (query.studentId) {
+            builder = builder.where("student_id", "=", query.studentId);
+          }
+          if (query.status) {
+            builder = builder.where("status", "=", query.status);
+          }
+          if (query.scheduledFrom) {
+            builder = builder.where(
+              "scheduled_for",
+              ">=",
+              new Date(query.scheduledFrom),
+            );
+          }
+          if (query.scheduledTo) {
+            builder = builder.where(
+              "scheduled_for",
+              "<=",
+              new Date(query.scheduledTo),
+            );
+          }
 
-        const rows = await builder.execute();
-        return rows.map((row) => normalizeLesson(row as StudentLessonRow));
-      },
-    );
+          const rows = await builder.execute();
+          return rows.map((row) => normalizeLesson(row as StudentLessonRow));
+        },
+      );
 
-    const response = StudentLessonsListResponseSchema.parse({
-      data: { lessons },
-    });
+      const response = StudentLessonsListResponseSchema.parse({
+        data: { lessons },
+      });
 
-    return respond(listStudentLessonsRoute, c, response);
-  } catch (_error) {
-    return respond(
-      listStudentLessonsRoute,
-      c,
-      { error: "Failed to load lessons" },
-      HTTP_STATUS.internalServerError,
-    );
-  }
-});
+      return respond(listStudentLessonsRoute, c, response);
+    } catch (_error) {
+      return respond(
+        listStudentLessonsRoute,
+        c,
+        { error: "Failed to load lessons" },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
 
 const createStudentLessonRoute = createRoute({
   method: "post",
@@ -238,71 +238,74 @@ const createStudentLessonRoute = createRoute({
   },
 });
 
-const routerWithCreate = routerWithList.openapi(createStudentLessonRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      createStudentLessonRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
-    );
-  }
+const routerWithCreate = routerWithList.openapi(
+  createStudentLessonRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
+      return respond(
+        createStudentLessonRoute,
+        c,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
+      );
+    }
 
-  const body = c.req.valid("json");
+    const body = c.req.valid("json");
 
-  const status: LessonInstanceStatus =
-    (body.status as LessonInstanceStatus | undefined) ??
-    (body.scheduledFor ? "scheduled" : "unscheduled");
-  const timestamp = new Date(Date.now()).toISOString();
+    const status: LessonInstanceStatus =
+      (body.status as LessonInstanceStatus | undefined) ??
+      (body.scheduledFor ? "scheduled" : "unscheduled");
+    const timestamp = new Date(Date.now()).toISOString();
 
-  try {
-    const lesson = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      async (trx) =>
-        trx
-          .insertInto("student_lessons")
-          .values({
-            id: crypto.randomUUID(),
-            org_id: session.session.orgId,
-            student_id: body.studentId,
-            course_lesson_id: body.courseLessonId ?? null,
-            custom_title: body.customTitle ?? null,
-            notes: body.notes ?? null,
-            status,
-            scheduled_for: body.scheduledFor ?? null,
-            completed_at: status === "completed" ? timestamp : null,
-            assigned_by_user_id:
-              body.assignedByUserId ?? session.session.userId,
-            rescheduled_from_id: body.rescheduledFromId ?? null,
-            created_at: timestamp,
-            updated_at: timestamp,
-            oneroster_student_id: null,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow(),
-    );
+    try {
+      const lesson = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        async (trx) =>
+          trx
+            .insertInto("student_lessons")
+            .values({
+              id: crypto.randomUUID(),
+              org_id: session.session.orgId,
+              student_id: body.studentId,
+              course_lesson_id: body.courseLessonId ?? null,
+              custom_title: body.customTitle ?? null,
+              notes: body.notes ?? null,
+              status,
+              scheduled_for: body.scheduledFor ?? null,
+              completed_at: status === "completed" ? timestamp : null,
+              assigned_by_user_id:
+                body.assignedByUserId ?? session.session.userId,
+              rescheduled_from_id: body.rescheduledFromId ?? null,
+              created_at: timestamp,
+              updated_at: timestamp,
+              oneroster_student_id: null,
+            })
+            .returningAll()
+            .executeTakeFirstOrThrow(),
+      );
 
-    const normalized = normalizeLesson(lesson as StudentLessonRow);
-    const response = StudentLessonDetailResponseSchema.parse({
-      data: { lesson: normalized },
-    });
+      const normalized = normalizeLesson(lesson as StudentLessonRow);
+      const response = StudentLessonDetailResponseSchema.parse({
+        data: { lesson: normalized },
+      });
 
-    return respond(
-      createStudentLessonRoute,
-      c,
-      response,
-      HTTP_STATUS.created,
-    );
-  } catch (_error) {
-    return respond(
-      createStudentLessonRoute,
-      c,
-      { error: "Failed to create lesson" },
-      HTTP_STATUS.internalServerError,
-    );
-  }
-});
+      return respond(
+        createStudentLessonRoute,
+        c,
+        response,
+        HTTP_STATUS.created,
+      );
+    } catch (_error) {
+      return respond(
+        createStudentLessonRoute,
+        c,
+        { error: "Failed to create lesson" },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
 
 const getStudentLessonRoute = createRoute({
   method: "get",
@@ -339,55 +342,58 @@ const getStudentLessonRoute = createRoute({
   },
 });
 
-const routerWithDetail = routerWithCreate.openapi(getStudentLessonRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      getStudentLessonRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
-    );
-  }
-
-  const params = c.req.valid("param");
-
-  try {
-    const lesson = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      (trx) =>
-        trx
-          .selectFrom("student_lessons")
-          .selectAll()
-          .where("id", "=", params.id)
-          .where("org_id", "=", session.session.orgId)
-          .executeTakeFirst(),
-    );
-
-    if (!lesson) {
+const routerWithDetail = routerWithCreate.openapi(
+  getStudentLessonRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
       return respond(
         getStudentLessonRoute,
         c,
-        { error: "Lesson not found" },
-        HTTP_STATUS.notFound,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
       );
     }
 
-    const normalized = normalizeLesson(lesson as StudentLessonRow);
-    const response = StudentLessonDetailResponseSchema.parse({
-      data: { lesson: normalized },
-    });
+    const params = c.req.valid("param");
 
-    return respond(getStudentLessonRoute, c, response);
-  } catch (_error) {
-    return respond(
-      getStudentLessonRoute,
-      c,
-      { error: "Failed to load lesson" },
-      HTTP_STATUS.internalServerError,
-    );
-  }
-});
+    try {
+      const lesson = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        (trx) =>
+          trx
+            .selectFrom("student_lessons")
+            .selectAll()
+            .where("id", "=", params.id)
+            .where("org_id", "=", session.session.orgId)
+            .executeTakeFirst(),
+      );
+
+      if (!lesson) {
+        return respond(
+          getStudentLessonRoute,
+          c,
+          { error: "Lesson not found" },
+          HTTP_STATUS.notFound,
+        );
+      }
+
+      const normalized = normalizeLesson(lesson as StudentLessonRow);
+      const response = StudentLessonDetailResponseSchema.parse({
+        data: { lesson: normalized },
+      });
+
+      return respond(getStudentLessonRoute, c, response);
+    } catch (_error) {
+      return respond(
+        getStudentLessonRoute,
+        c,
+        { error: "Failed to load lesson" },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
 
 const updateStudentLessonRoute = createRoute({
   method: "patch",

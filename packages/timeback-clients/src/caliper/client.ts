@@ -7,9 +7,9 @@ import {
 import type { CreateServiceClientOptions, ServiceClient } from "../internal";
 import { createServiceClient } from "../internal";
 import {
-  operationSpecs,
   type CaliperOperationAlias,
   type CaliperOperationSpecs,
+  operationSpecs,
 } from "./generated/operation-specs";
 
 export type CaliperClient = ServiceClient & { service: "caliper" };
@@ -25,7 +25,9 @@ export function createCaliperClient(
   return client as CaliperClient;
 }
 
-export function getCaliperOperation<TAlias extends CaliperOperationAlias>(alias: TAlias) {
+export function getCaliperOperation<TAlias extends CaliperOperationAlias>(
+  alias: TAlias,
+) {
   return getOperationSpec(operationSpecs, alias);
 }
 

@@ -79,7 +79,8 @@ export default function StudentsPage() {
 
   const habitsQuery = useQuery<Habit[]>({
     queryKey: ["habits"],
-    queryFn: ({ signal }: { signal?: AbortSignal }) => listHabits({}, { signal }),
+    queryFn: ({ signal }: { signal?: AbortSignal }) =>
+      listHabits({}, { signal }),
   });
 
   useEffect(() => {

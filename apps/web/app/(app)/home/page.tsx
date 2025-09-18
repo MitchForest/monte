@@ -114,7 +114,11 @@ export default function StudentHomePage() {
       if (!activeStudent?.id) {
         return Promise.resolve(null);
       }
-      return getStudentDashboard(activeStudent.id, { range: "daily" }, { signal });
+      return getStudentDashboard(
+        activeStudent.id,
+        { range: "daily" },
+        { signal },
+      );
     },
   });
 

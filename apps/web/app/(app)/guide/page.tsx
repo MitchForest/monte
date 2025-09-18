@@ -2,12 +2,24 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { CalendarClock, CircleDot, Loader2, PartyPopper, Users } from "lucide-react";
+import {
+  CalendarClock,
+  CircleDot,
+  Loader2,
+  PartyPopper,
+  Users,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { AppPageHeader } from "@/components/app/page-header";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -146,7 +158,9 @@ export default function GuideHomePage() {
   const queryClient = useQueryClient();
   const [attendance, setAttendance] = useState<AttendanceState>({});
   const [showOnlyPresent, setShowOnlyPresent] = useState(false);
-  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>([]);
+  const [attendanceRecords, setAttendanceRecords] = useState<
+    AttendanceRecord[]
+  >([]);
   const todayKey = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   const dashboardQuery = useQuery({
@@ -414,7 +428,8 @@ export default function GuideHomePage() {
           ) : (
             <>
               <p className="mb-4 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                {presentCount} of {studentEntries.length} students marked present
+                {presentCount} of {studentEntries.length} students marked
+                present
               </p>
               <Table>
                 <TableHeader>
@@ -422,74 +437,74 @@ export default function GuideHomePage() {
                     <TableHead>Student</TableHead>
                     <TableHead>Attendance</TableHead>
                     <TableHead>XP (daily)</TableHead>
-                  <TableHead>Habits</TableHead>
-                  <TableHead>Last observation</TableHead>
-                  <TableHead>Parent update</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredEntries.map((entry) => {
-                  const present = attendance[entry.student.id] ?? false;
-                  const lastObservation = entry.lastObservationAt
-                    ? new Date(entry.lastObservationAt)
-                    : null;
-                  const lastSummary = entry.lastSummaryAt
-                    ? new Date(entry.lastSummaryAt)
-                    : null;
+                    <TableHead>Habits</TableHead>
+                    <TableHead>Last observation</TableHead>
+                    <TableHead>Parent update</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredEntries.map((entry) => {
+                    const present = attendance[entry.student.id] ?? false;
+                    const lastObservation = entry.lastObservationAt
+                      ? new Date(entry.lastObservationAt)
+                      : null;
+                    const lastSummary = entry.lastSummaryAt
+                      ? new Date(entry.lastSummaryAt)
+                      : null;
 
-                  return (
-                    <TableRow key={entry.student.id}>
-                      <TableCell>
-                        <div className="flex flex-col">
-                          <span className="font-medium text-foreground">
-                            {entry.student.full_name}
+                    return (
+                      <TableRow key={entry.student.id}>
+                        <TableCell>
+                          <div className="flex flex-col">
+                            <span className="font-medium text-foreground">
+                              {entry.student.full_name}
+                            </span>
+                            <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                              {entry.student.classroom?.name ?? "Unassigned"}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <AttendanceToggle
+                            present={present}
+                            onChange={(next) =>
+                              handleAttendanceChange(entry.student.id, next)
+                            }
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <StudentXpCell xp={entry.xpToday} />
+                        </TableCell>
+                        <TableCell>
+                          <span className="rounded-full bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
+                            {entry.habitsCount} tracked
                           </span>
-                          <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                            {entry.student.classroom?.name ?? "Unassigned"}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <AttendanceToggle
-                          present={present}
-                          onChange={(next) =>
-                            handleAttendanceChange(entry.student.id, next)
-                          }
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <StudentXpCell xp={entry.xpToday} />
-                      </TableCell>
-                      <TableCell>
-                        <span className="rounded-full bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
-                          {entry.habitsCount} tracked
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        {lastObservation ? (
-                          <span className="text-xs text-muted-foreground">
-                            {format(lastObservation, "MMM d")}
-                          </span>
-                        ) : (
-                          <span className="text-xs text-muted-foreground">
-                            None yet
-                          </span>
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        {lastSummary ? (
-                          <span className="text-xs text-muted-foreground">
-                            {format(lastSummary, "MMM d")}
-                          </span>
-                        ) : (
-                          <Button disabled size="sm" variant="outline">
-                            Draft
-                          </Button>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                        </TableCell>
+                        <TableCell>
+                          {lastObservation ? (
+                            <span className="text-xs text-muted-foreground">
+                              {format(lastObservation, "MMM d")}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">
+                              None yet
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {lastSummary ? (
+                            <span className="text-xs text-muted-foreground">
+                              {format(lastSummary, "MMM d")}
+                            </span>
+                          ) : (
+                            <Button disabled size="sm" variant="outline">
+                              Draft
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </>

@@ -3,10 +3,7 @@ import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
-import {
-  getZodClientTemplateContext,
-  maybePretty,
-} from "openapi-zod-client";
+import { getZodClientTemplateContext, maybePretty } from "openapi-zod-client";
 import type {
   OpenAPIObject,
   OperationObject,
@@ -75,6 +72,30 @@ const SERVICE_TYPE_PREFIX: ServiceTypePrefix = {
   qti: "Qti",
 };
 
+const OPERATION_ALLOWLIST: Partial<Record<Service, ReadonlySet<string>>> = {
+  oneroster: new Set([
+    "getAllClasses",
+    "getClass",
+    "getAllCourses",
+    "getCourse",
+    "getAllStudents",
+    "getStudentsForClass",
+    "getStudent",
+    "getAllUsers",
+    "getUser",
+    "getUserWithDemographics",
+    "getAgents",
+    "getAgentFor",
+    "getOrg",
+    "getAllAssessmentLineItems",
+    "getAllAssessmentResults",
+  ]),
+  powerpath: new Set(["getCourseProgress"]),
+  // Generate full spec when allowlist entry is undefined.
+  caliper: new Set(),
+  qti: new Set(),
+};
+
 const HTTP_METHODS = [
   "get",
   "put",
@@ -140,21 +161,44 @@ async function generateForService(
 
     const metadataByAlias = buildOperationMetadata(openApiDoc);
 
-    const schemaNames = new Set(Object.keys(context.schemas));
+    const schemaNameRegistry = new Set(Object.keys(context.schemas));
     const servicePrefix = SERVICE_TYPE_PREFIX[service];
 
     await removeLegacyFile(join(outputDir, "operations.ts"));
 
+    const additionalSchemas = new Map<string, string>();
+    const usedSchemaNames = new Set<string>();
+
+    const { source: operationSpecsSource } = buildOperationSpecsFile(
+      context,
+      metadataByAlias,
+      schemaNameRegistry,
+      service,
+      servicePrefix,
+      usedSchemaNames,
+      additionalSchemas,
+    );
+
+    resolveSchemaDependencies(
+      usedSchemaNames,
+      context.schemas,
+      schemaNameRegistry,
+    );
+
+    const schemasSource = buildSchemasFile(
+      context,
+      additionalSchemas,
+      usedSchemaNames,
+    );
+
     await writeGeneratedFile(
       join(outputDir, "schemas.ts"),
-      sanitizeSchemaCode(buildSchemasFile(context)),
+      sanitizeSchemaCode(schemasSource),
     );
 
     await writeGeneratedFile(
       join(outputDir, "operation-specs.ts"),
-      sanitizeSchemaCode(
-        buildOperationSpecsFile(context, metadataByAlias, schemaNames, servicePrefix),
-      ),
+      sanitizeSchemaCode(operationSpecsSource),
     );
 
     await writeGeneratedFile(
@@ -177,40 +221,49 @@ async function generateForService(
   }
 }
 
-function buildSchemasFile(context: TemplateContext): string {
+function buildSchemasFile(
+  context: TemplateContext,
+  additionalSchemas: Map<string, string>,
+  usedSchemaNames: Set<string>,
+): string {
   const lines: string[] = [];
+
+  const additionalEntries = Array.from(additionalSchemas.entries()).sort(
+    (a, b) => a[0].localeCompare(b[0]),
+  );
+
+  const baseEntries: Array<readonly [string, string]> = [];
+  for (const [name, schema] of Object.entries(context.schemas)) {
+    if (usedSchemaNames.has(name)) {
+      baseEntries.push([name, schema]);
+    }
+  }
+
+  const schemaEntries = [...baseEntries, ...additionalEntries];
+
+  if (schemaEntries.length === 0) {
+    return "export {};";
+  }
 
   lines.push('import { z } from "zod";');
   lines.push("");
 
-  for (const [name, schema] of Object.entries(context.schemas)) {
+  for (const [name, schema] of schemaEntries) {
     lines.push(`export const ${name} = ${schema};`);
   }
 
-  if (Object.keys(context.schemas).length > 0) {
+  if (schemaEntries.length > 0) {
     lines.push("");
   }
 
-  for (const name of Object.keys(context.schemas)) {
-    if (context.emittedType?.[name]) {
+  const emittedNames = new Set(schemaEntries.map(([name]) => name));
+
+  for (const [name] of schemaEntries) {
+    const shouldEmitType =
+      context.emittedType?.[name] ?? emittedNames.has(name);
+    if (shouldEmitType) {
       lines.push(`export type ${name} = z.infer<typeof ${name}>;`);
     }
-  }
-
-  if (Object.keys(context.schemas).length > 0) {
-    lines.push("");
-    lines.push("const schemaCollection = {");
-    for (const name of Object.keys(context.schemas)) {
-      lines.push(`  ${name},`);
-    }
-    lines.push("} as const;");
-    lines.push("");
-    lines.push("export const schemas = schemaCollection;");
-    lines.push("export type SchemaRegistry = typeof schemas;");
-  } else {
-    lines.push("");
-    lines.push("export const schemas = {} as const;");
-    lines.push("export type SchemaRegistry = typeof schemas;");
   }
 
   return lines.join("\n");
@@ -219,20 +272,23 @@ function buildSchemasFile(context: TemplateContext): string {
 function buildOperationSpecsFile(
   context: TemplateContext,
   metadataByAlias: Map<string, OperationMetadata>,
-  schemaNames: ReadonlySet<string>,
+  schemaRegistry: Set<string>,
+  service: Service,
   servicePrefix: string,
-): string {
+  usedSchemaNames: Set<string>,
+  additionalSchemas: Map<string, string>,
+): { source: string; operationSchemaNames: Set<string> } {
   const lines: string[] = [];
+  const operationSchemaNames = new Set<string>();
 
-  lines.push('import { z } from "zod";');
-  lines.push('import type { OperationSpecMap } from "../../types";');
-  lines.push('import * as schemas from "./schemas";');
-  lines.push("");
-  lines.push("function defineOperationSpecs<const T extends OperationSpecMap>(specs: T): T {");
+  lines.push(
+    "function defineOperationSpecs<const T extends OperationSpecMap>(specs: T): T {",
+  );
   lines.push("  return specs;");
   lines.push("}");
   lines.push("");
-  lines.push("export const operationSpecs = defineOperationSpecs({");
+
+  const operationBlocks: string[] = [];
 
   for (const endpoint of context.endpoints) {
     const alias = endpoint.alias;
@@ -241,60 +297,133 @@ function buildOperationSpecsFile(
       continue;
     }
 
-    lines.push(`  ${alias}: {`);
-    lines.push(`    alias: "${alias}",`);
-    lines.push(`    method: "${endpoint.method}",`);
-    lines.push(`    path: "${endpoint.path}",`);
-    lines.push(`    pathTemplate: ${JSON.stringify(metadata.pathTemplate)},`);
+    const allowlist = OPERATION_ALLOWLIST[service];
+    if (allowlist && !allowlist.has(alias)) {
+      continue;
+    }
+
+    const blockLines: string[] = [];
+    blockLines.push(`  ${alias}: {`);
+    blockLines.push(`    alias: "${alias}",`);
+    blockLines.push(`    method: "${endpoint.method}",`);
+    blockLines.push(`    path: "${endpoint.path}",`);
+    blockLines.push(
+      `    pathTemplate: ${JSON.stringify(metadata.pathTemplate)},`,
+    );
 
     if (endpoint.description) {
-      lines.push(`    description: ${JSON.stringify(endpoint.description)},`);
+      blockLines.push(
+        `    description: ${JSON.stringify(endpoint.description)},`,
+      );
     }
 
     if (endpoint.requestFormat) {
-      lines.push(`    requestFormat: "${endpoint.requestFormat}",`);
+      blockLines.push(`    requestFormat: "${endpoint.requestFormat}",`);
     }
 
     const parameterLines = buildParameterLines(
       endpoint.parameters ?? [],
       metadata,
-      schemaNames,
+      schemaRegistry,
+      usedSchemaNames,
     );
-    lines.push("    parameters: [");
+    blockLines.push("    parameters: [");
     if (parameterLines.length > 0) {
       for (const parameterLine of parameterLines) {
-        lines.push(parameterLine);
+        blockLines.push(parameterLine);
       }
     }
-    lines.push("    ] as const,");
+    blockLines.push("    ] as const,");
 
     if (metadata.body) {
       const bodyDefinition = buildBodyDefinition(
+        alias,
         endpoint.parameters ?? [],
         metadata.body,
-        schemaNames,
+        schemaRegistry,
+        servicePrefix,
+        usedSchemaNames,
+        operationSchemaNames,
+        additionalSchemas,
       );
       if (bodyDefinition) {
-        lines.push(`    body: ${bodyDefinition},`);
+        blockLines.push(`    body: ${bodyDefinition},`);
       }
     }
 
-    lines.push(
-      `    response: ${rewriteSchemaExpression(endpoint.response, schemaNames)},`,
+    const responseExpression = rewriteSchemaExpression(
+      endpoint.response,
+      schemaRegistry,
     );
+    collectSchemaReferences(
+      responseExpression,
+      usedSchemaNames,
+      schemaRegistry,
+      responseExpression.startsWith("z.") ? undefined : operationSchemaNames,
+    );
+    const namedResponse = ensureNamedSchema(
+      responseExpression,
+      alias,
+      "Response",
+      additionalSchemas,
+      schemaRegistry,
+      servicePrefix,
+      usedSchemaNames,
+      operationSchemaNames,
+    );
+    blockLines.push(`    response: ${namedResponse},`);
 
-    const errorLines = buildErrorLines(endpoint.errors ?? [], schemaNames);
-    lines.push("    errors: [");
+    const errorLines = buildErrorLines(
+      endpoint.errors ?? [],
+      schemaRegistry,
+      usedSchemaNames,
+      operationSchemaNames,
+    );
+    blockLines.push("    errors: [");
     if (errorLines.length > 0) {
       for (const errorLine of errorLines) {
-        lines.push(errorLine);
+        blockLines.push(errorLine);
       }
     }
-    lines.push("    ] as const,");
-    lines.push("  },");
+    blockLines.push("    ] as const,");
+    blockLines.push("  },");
+    operationBlocks.push(blockLines.join("\n"));
   }
 
-  lines.push("} as const satisfies OperationSpecMap);");
+  const chunkSize = 1;
+  const chunkCount = Math.ceil(operationBlocks.length / chunkSize);
+
+  for (let index = 0; index < chunkCount; index += 1) {
+    const start = index * chunkSize;
+    const end = start + chunkSize;
+    lines.push(`const operationSpecMapChunk${index} = {`);
+    for (const block of operationBlocks.slice(start, end)) {
+      lines.push(block);
+    }
+    lines.push("} as const satisfies OperationSpecMap;");
+    lines.push("");
+  }
+
+  if (chunkCount === 0) {
+    lines.push(
+      "const operationSpecMap = {} as const satisfies OperationSpecMap;",
+    );
+  } else {
+    const intersection = Array.from(
+      { length: chunkCount },
+      (_value, index) => `typeof operationSpecMapChunk${index}`,
+    ).join(" & ");
+
+    lines.push(`const operationSpecMap: ${intersection} = {`);
+    for (let index = 0; index < chunkCount; index += 1) {
+      lines.push(`  ...operationSpecMapChunk${index},`);
+    }
+    lines.push("} as const satisfies OperationSpecMap;");
+  }
+  lines.push("");
+  lines.push(
+    "export const operationSpecs: typeof operationSpecMap = defineOperationSpecs(operationSpecMap);",
+  );
   lines.push("");
   lines.push(
     `export type ${servicePrefix}OperationSpecs = typeof operationSpecs;`,
@@ -303,15 +432,131 @@ function buildOperationSpecsFile(
     `export type ${servicePrefix}OperationAlias = keyof ${servicePrefix}OperationSpecs;`,
   );
 
-  return lines.join("\n");
+  const schemaImports = Array.from(operationSchemaNames).sort();
+  const usesZod = lines.some((line) => line.includes("z."));
+  const headerLines: string[] = [];
+  if (usesZod) {
+    headerLines.push('import { z } from "zod";');
+  }
+  headerLines.push('import type { OperationSpecMap } from "../../types";');
+  if (schemaImports.length > 0) {
+    headerLines.push(
+      `import { ${schemaImports.join(", ")} } from "./schemas";`,
+    );
+  }
+  headerLines.push("");
+
+  const source = [...headerLines, ...lines].join("\n");
+  return { source, operationSchemaNames };
 }
 
 function buildIndexFile(servicePrefix: string): string {
   return [
-    'export * from "./schemas";',
+    `export type { ${servicePrefix}OperationAlias, ${servicePrefix}OperationSpecs } from "./operation-specs";`,
     `export { operationSpecs } from "./operation-specs";`,
-    `export type { ${servicePrefix}OperationSpecs, ${servicePrefix}OperationAlias } from "./operation-specs";`,
+    'export * from "./schemas";',
   ].join("\n");
+}
+
+function toPascalCase(value: string): string {
+  return value
+    .split(/[^a-zA-Z0-9]+/)
+    .filter((segment) => segment.length > 0)
+    .map((segment) => segment[0].toUpperCase() + segment.slice(1))
+    .join("");
+}
+
+function ensureNamedSchema(
+  expression: string,
+  alias: string,
+  suffix: string,
+  additionalSchemas: Map<string, string>,
+  schemaRegistry: Set<string>,
+  servicePrefix: string,
+  usedSchemaNames: Set<string>,
+  operationSchemaNames?: Set<string>,
+): string {
+  if (!expression.startsWith("z.")) {
+    collectSchemaReferences(
+      expression,
+      usedSchemaNames,
+      schemaRegistry,
+      operationSchemaNames,
+    );
+    return expression;
+  }
+
+  collectSchemaReferences(expression, usedSchemaNames, schemaRegistry);
+
+  const baseName = `${servicePrefix}${toPascalCase(alias)}${suffix}`;
+  let candidate = baseName;
+  let counter = 1;
+  while (schemaRegistry.has(candidate) || additionalSchemas.has(candidate)) {
+    candidate = `${baseName}${counter}`;
+    counter += 1;
+  }
+
+  const normalizedExpression = expression.replace(/\bschemas\./g, "");
+  additionalSchemas.set(candidate, normalizedExpression);
+  usedSchemaNames.add(candidate);
+  schemaRegistry.add(candidate);
+  if (operationSchemaNames) {
+    operationSchemaNames.add(candidate);
+  }
+  return candidate;
+}
+
+function collectSchemaReferences(
+  expression: string,
+  usedSchemaNames: Set<string>,
+  schemaRegistry: Set<string>,
+  operationSchemaNames?: Set<string>,
+): void {
+  for (const name of schemaRegistry) {
+    if (usedSchemaNames.has(name)) {
+      continue;
+    }
+    const regex = new RegExp(`\\b${name}\\b`);
+    if (regex.test(expression)) {
+      usedSchemaNames.add(name);
+      if (operationSchemaNames) {
+        operationSchemaNames.add(name);
+      }
+    }
+  }
+}
+
+function resolveSchemaDependencies(
+  usedSchemaNames: Set<string>,
+  schemaDefinitions: Record<string, string>,
+  schemaRegistry: Set<string>,
+): void {
+  const queue = Array.from(usedSchemaNames);
+  const visited = new Set<string>();
+
+  while (queue.length > 0) {
+    const name = queue.pop();
+    if (!name || visited.has(name)) {
+      continue;
+    }
+    visited.add(name);
+
+    const definition = schemaDefinitions[name];
+    if (!definition) {
+      continue;
+    }
+
+    for (const candidate of schemaRegistry) {
+      if (usedSchemaNames.has(candidate)) {
+        continue;
+      }
+      const regex = new RegExp(`\\b${candidate}\\b`);
+      if (regex.test(definition)) {
+        usedSchemaNames.add(candidate);
+        queue.push(candidate);
+      }
+    }
+  }
 }
 
 function buildParameterLines(
@@ -322,7 +567,8 @@ function buildParameterLines(
     schema: string;
   }>,
   metadata: OperationMetadata,
-  schemaNames: ReadonlySet<string>,
+  schemaRegistry: Set<string>,
+  usedSchemaNames: Set<string>,
 ): string[] {
   const lines: string[] = [];
 
@@ -333,7 +579,9 @@ function buildParameterLines(
     }
 
     const lookupName =
-      location === "path" ? sanitizeParameterName(parameter.name, location) : parameter.name;
+      location === "path"
+        ? sanitizeParameterName(parameter.name, location)
+        : parameter.name;
     const requirement = metadata.parameters.get(
       createParameterKey(location, lookupName),
     );
@@ -345,11 +593,16 @@ function buildParameterLines(
     fieldLines.push(`  location: "${location}",`);
     fieldLines.push(`  required: ${required ? "true" : "false"},`);
     if (parameter.description) {
-      fieldLines.push(`  description: ${JSON.stringify(parameter.description)},`);
+      fieldLines.push(
+        `  description: ${JSON.stringify(parameter.description)},`,
+      );
     }
-    fieldLines.push(
-      `  schema: ${rewriteSchemaExpression(parameter.schema, schemaNames)},`,
+    const schemaExpression = rewriteSchemaExpression(
+      parameter.schema,
+      schemaRegistry,
     );
+    collectSchemaReferences(schemaExpression, usedSchemaNames, schemaRegistry);
+    fieldLines.push(`  schema: ${schemaExpression},`);
     fieldLines.push("},");
 
     const block = fieldLines.map((line) => `      ${line}`).join("\n");
@@ -360,6 +613,7 @@ function buildParameterLines(
 }
 
 function buildBodyDefinition(
+  alias: string,
   parameters: Array<{
     name: string;
     type?: string;
@@ -367,10 +621,14 @@ function buildBodyDefinition(
     schema: string;
   }>,
   bodyMetadata: OperationBodyMetadata,
-  schemaNames: ReadonlySet<string>,
+  schemaRegistry: Set<string>,
+  servicePrefix: string,
+  usedSchemaNames: Set<string>,
+  operationSchemaNames: Set<string>,
+  additionalSchemas: Map<string, string>,
 ): string | undefined {
-  const bodyParameter = parameters.find((parameter) =>
-    normalizeParameterLocation(parameter.type) === "body",
+  const bodyParameter = parameters.find(
+    (parameter) => normalizeParameterLocation(parameter.type) === "body",
   );
 
   if (!bodyParameter) {
@@ -381,12 +639,31 @@ function buildBodyDefinition(
   segments.push("{");
   segments.push(`  required: ${bodyMetadata.required ? "true" : "false"},`);
   if (bodyParameter.description ?? bodyMetadata.description) {
-    const description = bodyParameter.description ?? bodyMetadata.description ?? "";
+    const description =
+      bodyParameter.description ?? bodyMetadata.description ?? "";
     segments.push(`  description: ${JSON.stringify(description)},`);
   }
-  segments.push(
-    `  schema: ${rewriteSchemaExpression(bodyParameter.schema, schemaNames)},`,
+  const schemaExpression = rewriteSchemaExpression(
+    bodyParameter.schema,
+    schemaRegistry,
   );
+  collectSchemaReferences(
+    schemaExpression,
+    usedSchemaNames,
+    schemaRegistry,
+    operationSchemaNames,
+  );
+  const namedSchema = ensureNamedSchema(
+    schemaExpression,
+    alias,
+    "RequestBody",
+    additionalSchemas,
+    schemaRegistry,
+    servicePrefix,
+    usedSchemaNames,
+    operationSchemaNames,
+  );
+  segments.push(`  schema: ${namedSchema},`);
   segments.push(
     `  contentTypes: ${JSON.stringify([...bodyMetadata.contentTypes])} as const,`,
   );
@@ -413,7 +690,9 @@ function buildErrorLines(
     description?: string;
     schema: string;
   }>,
-  schemaNames: ReadonlySet<string>,
+  schemaRegistry: Set<string>,
+  usedSchemaNames: Set<string>,
+  operationSchemaNames: Set<string>,
 ): string[] {
   const lines: string[] = [];
 
@@ -428,9 +707,17 @@ function buildErrorLines(
     if (error.description) {
       errorLines.push(`  description: ${JSON.stringify(error.description)},`);
     }
-    errorLines.push(
-      `  schema: ${rewriteSchemaExpression(error.schema, schemaNames)},`,
+    const schemaExpression = rewriteSchemaExpression(
+      error.schema,
+      schemaRegistry,
     );
+    collectSchemaReferences(
+      schemaExpression,
+      usedSchemaNames,
+      schemaRegistry,
+      schemaExpression.startsWith("z.") ? undefined : operationSchemaNames,
+    );
+    errorLines.push(`  schema: ${schemaExpression},`);
     errorLines.push("},");
 
     const block = errorLines.map((line) => `      ${line}`).join("\n");
@@ -440,10 +727,14 @@ function buildErrorLines(
   return lines;
 }
 
-function buildOperationMetadata(openApiDoc: OpenAPIObject): Map<string, OperationMetadata> {
+function buildOperationMetadata(
+  openApiDoc: OpenAPIObject,
+): Map<string, OperationMetadata> {
   const entries = new Map<string, OperationMetadata>();
 
-  for (const [pathTemplate, pathItemValue] of Object.entries(openApiDoc.paths ?? {})) {
+  for (const [pathTemplate, pathItemValue] of Object.entries(
+    openApiDoc.paths ?? {},
+  )) {
     const pathItem = pathItemValue as PathItemObject;
     const baseParameters = pathItem.parameters ?? [];
 
@@ -458,7 +749,11 @@ function buildOperationMetadata(openApiDoc: OpenAPIObject): Map<string, Operatio
       }
 
       const alias = computeAlias(method, pathTemplate, operation);
-      const parameterMap = collectParameters(baseParameters, operation.parameters ?? [], openApiDoc);
+      const parameterMap = collectParameters(
+        baseParameters,
+        operation.parameters ?? [],
+        openApiDoc,
+      );
       const parameterRequirements = new Map<string, ParameterRequirement>();
 
       for (const parameter of parameterMap.values()) {
@@ -579,12 +874,19 @@ function computeAlias(
   return `${method}${sanitizedPath}`;
 }
 
-function normalizeParameterLocation(type?: string): "path" | "query" | "header" | "body" | undefined {
+function normalizeParameterLocation(
+  type?: string,
+): "path" | "query" | "header" | "body" | undefined {
   if (!type) {
     return undefined;
   }
   const value = type.toLowerCase();
-  if (value === "path" || value === "query" || value === "header" || value === "body") {
+  if (
+    value === "path" ||
+    value === "query" ||
+    value === "header" ||
+    value === "body"
+  ) {
     return value;
   }
   if (value === "headers") {
@@ -597,9 +899,7 @@ function sanitizeParameterName(name: string, location: string): string {
   if (location !== "path") {
     return name;
   }
-  const segments = name
-    .split(/[-_]/)
-    .filter((segment) => segment.length > 0);
+  const segments = name.split(/[-_]/).filter((segment) => segment.length > 0);
   if (segments.length === 0) {
     return name;
   }
@@ -625,7 +925,7 @@ function rewriteSchemaExpression(
   const reserved = new Set(["z"]);
   let result = "";
   let token = "";
-  let inString: false | "'" | "\"" | "`" = false;
+  let inString: false | "'" | '"' | "`" = false;
   let escaping = false;
 
   const flushToken = () => {
@@ -633,7 +933,7 @@ function rewriteSchemaExpression(
       return;
     }
     if (schemaNames.has(token) && !reserved.has(token)) {
-      result += `schemas.${token}`;
+      result += token;
     } else {
       result += token;
     }
@@ -678,27 +978,38 @@ function rewriteSchemaExpression(
 }
 
 function sanitizeSchemaCode(code: string): string {
-  const withoutNullEnums = code.replace(/z\.enum\(\[(.*?)\]\)/gs, (match, inner) => {
-    if (!/\bnull\b/.test(inner)) {
-      return match;
-    }
-    const values = inner
-      .split(",")
-      .map((part) => part.trim())
-      .filter((part) => part.length > 0 && part !== "null");
-    return `z.enum([${values.join(", ")}])`;
-  });
+  const withoutNullEnums = code.replace(
+    /z\.enum\(\[(.*?)\]\)/gs,
+    (match, inner) => {
+      if (!/\bnull\b/.test(inner)) {
+        return match;
+      }
+      const values = inner
+        .split(",")
+        .map((part) => part.trim())
+        .filter((part) => part.length > 0 && part !== "null");
+      return `z.enum([${values.join(", ")}])`;
+    },
+  );
 
   const withLazyAnnotations = withoutNullEnums.replace(
     /const ([A-Z][A-Za-z0-9_]*) = z\.lazy/g,
     "const $1: z.ZodLazy<z.ZodTypeAny> = z.lazy",
   );
 
-  return withLazyAnnotations.replace(/z\.discriminatedUnion\(\s*"[^"]+",\s*\[/g, "z.union([");
+  return withLazyAnnotations.replace(
+    /z\.discriminatedUnion\(\s*"[^"]+",\s*\[/g,
+    "z.union([",
+  );
 }
 
-async function writeGeneratedFile(path: string, contents: string): Promise<void> {
-  const formatted = maybePretty(`${FILE_HEADER}\n${contents}`, { filepath: path });
+async function writeGeneratedFile(
+  path: string,
+  contents: string,
+): Promise<void> {
+  const formatted = maybePretty(`${FILE_HEADER}\n${contents}`, {
+    filepath: path,
+  });
   const normalized = formatted.endsWith("\n") ? formatted : `${formatted}\n`;
   await writeFile(path, normalized, "utf8");
 }

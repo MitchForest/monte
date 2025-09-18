@@ -1,24 +1,14 @@
 import type { z } from "zod";
-
-import {
-  callOneRosterOperation,
-  type OneRosterClient,
-} from "./client";
 import type { OperationByAlias } from "../http";
-import type {
-  OneRosterOperationAlias,
-  OneRosterOperationSpecs,
-} from "./generated/operation-specs";
+import { callOneRosterOperation, type OneRosterClient } from "./client";
+import type { OneRosterOperationSpecs } from "./generated/operation-specs";
 
 type GetAllClassesOperation = OperationByAlias<
   OneRosterOperationSpecs,
   "getAllClasses"
 >;
 
-type GetClassOperation = OperationByAlias<
-  OneRosterOperationSpecs,
-  "getClass"
->;
+type GetClassOperation = OperationByAlias<OneRosterOperationSpecs, "getClass">;
 
 export type OneRosterClassList = z.infer<GetAllClassesOperation["response"]>;
 export type OneRosterClass = OneRosterClassList["classes"][number];
@@ -38,8 +28,8 @@ export type GetClassParams = {
   fields?: string;
 };
 
-const GET_ALL_CLASSES_ALIAS = "getAllClasses" as OneRosterOperationAlias;
-const GET_CLASS_ALIAS = "getClass" as OneRosterOperationAlias;
+const GET_ALL_CLASSES_ALIAS: GetAllClassesOperation["alias"] = "getAllClasses";
+const GET_CLASS_ALIAS: GetClassOperation["alias"] = "getClass";
 
 export async function listClasses(
   client: OneRosterClient,

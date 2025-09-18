@@ -162,9 +162,13 @@ async function ensureOrganizationFromOneRoster(orgSourcedId: string) {
 
   if (client) {
     try {
-      const orgResponse = await oneroster.callOneRosterOperation(client, "getOrg", {
-        path: { sourcedId: orgSourcedId },
-      });
+      const orgResponse = await oneroster.callOneRosterOperation(
+        client,
+        "getOrg",
+        {
+          path: { sourcedId: orgSourcedId },
+        },
+      );
       name = orgResponse.org.name ?? name;
     } catch (error) {
       const message =
@@ -220,9 +224,13 @@ async function syncOneRosterMemberships(
   }
 
   try {
-    const userResponse = await oneroster.callOneRosterOperation(client, "getUser", {
-      path: { sourcedId: onerosterUserId },
-    });
+    const userResponse = await oneroster.callOneRosterOperation(
+      client,
+      "getUser",
+      {
+        path: { sourcedId: onerosterUserId },
+      },
+    );
 
     const roles = userResponse.user.roles ?? [];
     const resolvedOrgIds: string[] = [];

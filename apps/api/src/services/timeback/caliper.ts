@@ -1,5 +1,5 @@
+import type { Json } from "@monte/database";
 import { db } from "@monte/database";
-import type { JsonValue } from "kysely";
 import { oneroster } from "@monte/timeback-clients";
 import { sql } from "kysely";
 import { z } from "zod";
@@ -145,7 +145,7 @@ export async function ingestCaliperEvents(
             org_id: orgId,
             xp_earned: xpEarned,
             timespent_active_seconds: activeSeconds,
-            payload: event as JsonValue,
+            payload: event as Json,
           })
           .onConflict((oc) => oc.column("event_id").doNothing())
           .execute();

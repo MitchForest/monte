@@ -2,9 +2,9 @@ import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
 import {
   ApiErrorSchema,
+  type WorkPeriod,
   WorkPeriodDetailResponseSchema,
   WorkPeriodsListResponseSchema,
-  type WorkPeriod,
 } from "@monte/shared";
 
 import { getServerSession } from "../lib/auth/session";
@@ -15,7 +15,10 @@ const routerBase = new OpenAPIHono();
 
 const ListAttendanceQuery = z.object({
   studentId: z.string().uuid().optional(),
-  date: z.string().regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/).optional(),
+  date: z
+    .string()
+    .regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)
+    .optional(),
   limit: z.coerce.number().int().min(1).max(200).optional(),
 });
 
@@ -39,10 +42,12 @@ const AttendanceParam = z.object({
   id: z.string().uuid(),
 });
 
-function normalizeWorkPeriod(row: Omit<WorkPeriod, "start_time" | "end_time"> & {
-  start_time: string | Date;
-  end_time: string | Date | null;
-}): WorkPeriod {
+function normalizeWorkPeriod(
+  row: Omit<WorkPeriod, "start_time" | "end_time"> & {
+    start_time: string | Date;
+    end_time: string | Date | null;
+  },
+): WorkPeriod {
   let startTime: string;
   if (typeof row.start_time === "string") {
     startTime = row.start_time;
@@ -211,82 +216,83 @@ const createAttendanceRoute = createRoute({
   },
 });
 
-const routerWithCreate = routerWithList.openapi(createAttendanceRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      createAttendanceRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
-    );
-  }
-
-  const body = c.req.valid("json");
-  const startTimeIso = body.startTime ?? new Date(Date.now()).toISOString();
-
-  try {
-    const student = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      (trx) =>
-        trx
-          .selectFrom("students")
-          .select([
-            "id",
-            "org_id",
-            "oneroster_user_id",
-          ])
-          .where("id", "=", body.studentId)
-          .where("org_id", "=", session.session.orgId)
-          .executeTakeFirst(),
-    );
-
-    if (!student) {
+const routerWithCreate = routerWithList.openapi(
+  createAttendanceRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
       return respond(
         createAttendanceRoute,
         c,
-        { error: "Student not found" },
-        HTTP_STATUS.notFound,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
       );
     }
 
-    const workPeriod = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      async (trx) =>
-        trx
-          .insertInto("work_periods")
-          .values({
-            id: crypto.randomUUID(),
-            org_id: session.session.orgId,
-            student_id: student.id,
-            oneroster_student_id: student.oneroster_user_id ?? null,
-            start_time: startTimeIso,
-            end_time: null,
-            notes: body.notes ?? null,
-          })
-          .returningAll()
-          .executeTakeFirstOrThrow(),
-    );
+    const body = c.req.valid("json");
+    const startTimeIso = body.startTime ?? new Date(Date.now()).toISOString();
 
-    const normalized = normalizeWorkPeriod(workPeriod as WorkPeriod & {
-      start_time: string | Date;
-      end_time: string | Date | null;
-    });
+    try {
+      const student = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        (trx) =>
+          trx
+            .selectFrom("students")
+            .select(["id", "org_id", "oneroster_user_id"])
+            .where("id", "=", body.studentId)
+            .where("org_id", "=", session.session.orgId)
+            .executeTakeFirst(),
+      );
 
-    const response = WorkPeriodDetailResponseSchema.parse({
-      data: { workPeriod: normalized },
-    });
+      if (!student) {
+        return respond(
+          createAttendanceRoute,
+          c,
+          { error: "Student not found" },
+          HTTP_STATUS.notFound,
+        );
+      }
 
-    return respond(createAttendanceRoute, c, response, HTTP_STATUS.created);
-  } catch (_error) {
-    return respond(
-      createAttendanceRoute,
-      c,
-      { error: "Failed to record attendance" },
-      HTTP_STATUS.internalServerError,
-    );
-  }
-});
+      const workPeriod = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        async (trx) =>
+          trx
+            .insertInto("work_periods")
+            .values({
+              id: crypto.randomUUID(),
+              org_id: session.session.orgId,
+              student_id: student.id,
+              oneroster_student_id: student.oneroster_user_id ?? null,
+              start_time: startTimeIso,
+              end_time: null,
+              notes: body.notes ?? null,
+            })
+            .returningAll()
+            .executeTakeFirstOrThrow(),
+      );
+
+      const normalized = normalizeWorkPeriod(
+        workPeriod as WorkPeriod & {
+          start_time: string | Date;
+          end_time: string | Date | null;
+        },
+      );
+
+      const response = WorkPeriodDetailResponseSchema.parse({
+        data: { workPeriod: normalized },
+      });
+
+      return respond(createAttendanceRoute, c, response, HTTP_STATUS.created);
+    } catch (_error) {
+      return respond(
+        createAttendanceRoute,
+        c,
+        { error: "Failed to record attendance" },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
 
 const getAttendanceRoute = createRoute({
   method: "get",
@@ -323,59 +329,64 @@ const getAttendanceRoute = createRoute({
   },
 });
 
-const routerWithDetail = routerWithCreate.openapi(getAttendanceRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      getAttendanceRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
-    );
-  }
-
-  const params = c.req.valid("param");
-
-  try {
-    const workPeriod = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      (trx) =>
-        trx
-          .selectFrom("work_periods")
-          .selectAll()
-          .where("id", "=", params.id)
-          .where("org_id", "=", session.session.orgId)
-          .executeTakeFirst(),
-    );
-
-    if (!workPeriod) {
+const routerWithDetail = routerWithCreate.openapi(
+  getAttendanceRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
       return respond(
         getAttendanceRoute,
         c,
-        { error: "Attendance record not found" },
-        HTTP_STATUS.notFound,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
       );
     }
 
-    const normalized = normalizeWorkPeriod(workPeriod as WorkPeriod & {
-      start_time: string | Date;
-      end_time: string | Date | null;
-    });
+    const params = c.req.valid("param");
 
-    const response = WorkPeriodDetailResponseSchema.parse({
-      data: { workPeriod: normalized },
-    });
+    try {
+      const workPeriod = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        (trx) =>
+          trx
+            .selectFrom("work_periods")
+            .selectAll()
+            .where("id", "=", params.id)
+            .where("org_id", "=", session.session.orgId)
+            .executeTakeFirst(),
+      );
 
-    return respond(getAttendanceRoute, c, response);
-  } catch (_error) {
-    return respond(
-      getAttendanceRoute,
-      c,
-      { error: "Failed to load attendance" },
-      HTTP_STATUS.internalServerError,
-    );
-  }
-});
+      if (!workPeriod) {
+        return respond(
+          getAttendanceRoute,
+          c,
+          { error: "Attendance record not found" },
+          HTTP_STATUS.notFound,
+        );
+      }
+
+      const normalized = normalizeWorkPeriod(
+        workPeriod as WorkPeriod & {
+          start_time: string | Date;
+          end_time: string | Date | null;
+        },
+      );
+
+      const response = WorkPeriodDetailResponseSchema.parse({
+        data: { workPeriod: normalized },
+      });
+
+      return respond(getAttendanceRoute, c, response);
+    } catch (_error) {
+      return respond(
+        getAttendanceRoute,
+        c,
+        { error: "Failed to load attendance" },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
 
 const updateAttendanceRoute = createRoute({
   method: "patch",
@@ -479,10 +490,12 @@ const attendanceRouter = routerWithDetail.openapi(
         );
       }
 
-      const normalized = normalizeWorkPeriod(workPeriod as WorkPeriod & {
-        start_time: string | Date;
-        end_time: string | Date | null;
-      });
+      const normalized = normalizeWorkPeriod(
+        workPeriod as WorkPeriod & {
+          start_time: string | Date;
+          end_time: string | Date | null;
+        },
+      );
 
       const response = WorkPeriodDetailResponseSchema.parse({
         data: { workPeriod: normalized },

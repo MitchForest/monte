@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
 import { format } from "date-fns";
 import { CheckCircle, Circle, Clock3, Plus } from "lucide-react";
+import { type ReactNode, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +37,6 @@ type StudentLessonsTableProps = {
   lessons?: StudentLessonItem[] | null;
   onCreateLesson?: () => void;
 };
-
 
 const statusIconMap: Record<StudentLessonItem["status"], ReactNode> = {
   completed: <CheckCircle className="size-4 text-primary" />,
@@ -90,7 +89,9 @@ export function StudentLessonsTable({
       case "provided":
         return source.filter((entry) => entry.type === "provided");
       case "needed":
-        return source.filter((entry) => entry.status === "needed" || entry.assignedGuideMissing);
+        return source.filter(
+          (entry) => entry.status === "needed" || entry.assignedGuideMissing,
+        );
       case "scheduled":
         return source.filter((entry) => entry.status === "scheduled");
       default:
@@ -142,7 +143,8 @@ export function StudentLessonsTable({
       <CardContent>
         {filteredLessons.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-border/60 bg-background/70 p-6 text-sm text-muted-foreground">
-            No lessons yet. Add a Montessori presentation or schedule a follow-up.
+            No lessons yet. Add a Montessori presentation or schedule a
+            follow-up.
           </div>
         ) : (
           <Table>

@@ -1,6 +1,7 @@
 import {
   callOperation,
   getOperationSpec,
+  type OperationByAlias,
   type OperationCallArgs,
   type OperationResponse,
 } from "../http";
@@ -25,7 +26,9 @@ export function createPowerpathClient(
   return client as PowerpathClient;
 }
 
-export function getPowerpathOperation<TAlias extends PowerpathOperationAlias>(alias: TAlias) {
+export function getPowerpathOperation<TAlias extends PowerpathOperationAlias>(
+  alias: TAlias,
+): OperationByAlias<PowerpathOperationSpecs, TAlias> | undefined {
   return getOperationSpec(operationSpecs, alias);
 }
 

@@ -1,14 +1,7 @@
 import type { z } from "zod";
-
-import {
-  callOneRosterOperation,
-  type OneRosterClient,
-} from "./client";
 import type { OperationByAlias } from "../http";
-import type {
-  OneRosterOperationAlias,
-  OneRosterOperationSpecs,
-} from "./generated/operation-specs";
+import { callOneRosterOperation, type OneRosterClient } from "./client";
+import type { OneRosterOperationSpecs } from "./generated/operation-specs";
 
 type GetAllStudentsOperation = OperationByAlias<
   OneRosterOperationSpecs,
@@ -52,10 +45,11 @@ export type ListClassStudentsParams = ListStudentsParams & {
 };
 
 const DEFAULT_LIMIT = 200;
-const GET_ALL_STUDENTS_ALIAS = "getAllStudents" as OneRosterOperationAlias;
-const GET_CLASS_STUDENTS_ALIAS =
-  "getStudentsForClass" as OneRosterOperationAlias;
-const GET_STUDENT_ALIAS = "getStudent" as OneRosterOperationAlias;
+const GET_ALL_STUDENTS_ALIAS: GetAllStudentsOperation["alias"] =
+  "getAllStudents";
+const GET_CLASS_STUDENTS_ALIAS: GetStudentsForClassOperation["alias"] =
+  "getStudentsForClass";
+const GET_STUDENT_ALIAS: GetStudentOperation["alias"] = "getStudent";
 
 export async function listStudents(
   client: OneRosterClient,

@@ -2,30 +2,6 @@
 
 import { z } from "zod";
 
-export const createTestAssignment_Body = z
-  .object({
-    student: z.string(),
-    subject: z.string(),
-    grade: z.enum([
-      "-1",
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-    ]),
-    testName: z.string().optional(),
-  })
-  .passthrough();
 export const BadRequestResponse = z
   .object({
     imsx_codeMajor: z.string().default("failure"),
@@ -39,7 +15,7 @@ export const BadRequestResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("invaliddata"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -61,7 +37,7 @@ export const UnauthorizedRequestResponse = z
                 .string()
                 .default("unauthorisedrequest"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -81,7 +57,7 @@ export const ForbiddenResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("forbidden"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -101,7 +77,7 @@ export const NotFoundResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("unknownobject"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -121,7 +97,7 @@ export const UnprocessableEntityResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("invaliddata"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -141,7 +117,7 @@ export const TooManyRequestsResponse = z
               imsx_codeMinorFieldName: z.string().default("TargetEndSystem"),
               imsx_codeMinorFieldValue: z.string().default("server_busy"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
@@ -163,716 +139,163 @@ export const InternalServerErrorResponse = z
                 .string()
                 .default("internal_server_error"),
             })
-            .passthrough()
+            .passthrough(),
         ),
       })
       .passthrough(),
     imsx_error_details: z.array(z.record(z.string())).optional(),
   })
   .passthrough();
-export const GradeEnum = z.enum([
-  "-1",
-  "0",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "11",
-  "12",
-  "13",
-]);
-export const SubjectEnum = z.enum([
-  "Reading",
-  "Language",
-  "Vocabulary",
-  "Social Studies",
-  "Writing",
-  "Science",
-  "FastMath",
-  "Math",
-]);
-export const resetUserPlacement_Body = z
+export const PowerpathGetCourseProgressResponse = z
   .object({
-    student: z.string(),
-    subject: z.enum([
-      "Reading",
-      "Language",
-      "Vocabulary",
-      "Social Studies",
-      "Writing",
-      "Science",
-      "FastMath",
-      "Math",
-    ]),
-  })
-  .passthrough();
-export const assignTest_Body = z
-  .object({
-    userId: z.string(),
-    subject: z.enum(["Math", "Reading", "Language", "Science"]),
-  })
-  .passthrough();
-export const CreateExternalTestOutInput = z
-  .object({
-    courseId: z.string(),
-    lessonTitle: z.string().optional(),
-    launchUrl: z.string().optional(),
-    toolProvider: z.enum(["edulastic", "mastery-track"]),
-    unitTitle: z.string().optional(),
-    courseComponentSourcedId: z.string().optional(),
-    vendorId: z.string().optional(),
-    description: z.string().optional(),
-    resourceMetadata: z.null().optional(),
-    grades: z.array(
-      z.enum([
-        "-1",
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13",
-      ])
-    ),
-    lessonType: z.string(),
-    xp: z.number(),
-  })
-  .passthrough();
-export const CreateExternalPlacementInput = z
-  .object({
-    courseId: z.string(),
-    lessonTitle: z.string().optional(),
-    launchUrl: z.string().optional(),
-    toolProvider: z.enum(["edulastic", "mastery-track"]),
-    unitTitle: z.string().optional(),
-    courseComponentSourcedId: z.string().optional(),
-    vendorId: z.string().optional(),
-    description: z.string().optional(),
-    resourceMetadata: z.null().optional(),
-    grades: z.array(
-      z.enum([
-        "-1",
-        "0",
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
-        "13",
-      ])
-    ),
-    lessonType: z.string(),
-    courseIdOnFail: z.union([z.string(), z.null()]).optional(),
-    xp: z.number().optional(),
-  })
-  .passthrough();
-export const createExternalPlacementTest_Body = z.union([
-  CreateExternalTestOutInput,
-  CreateExternalPlacementInput,
-]);
-export const CreateInternalQtiTestInput = z
-  .object({
-    courseId: z.string(),
-    lessonType: z.enum([
-      "powerpath-100",
-      "quiz",
-      "test-out",
-      "placement",
-      "unit-test",
-      "alpha-read-article",
-    ]),
-    lessonTitle: z.string().optional(),
-    unitTitle: z.string().optional(),
-    courseComponentSourcedId: z.string().optional(),
-    resourceMetadata: z.null().optional(),
-    xp: z.number().optional(),
-    grades: z
-      .array(
-        z.enum([
-          "-1",
-          "0",
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-        ])
-      )
-      .optional(),
-    courseIdOnFail: z.union([z.string(), z.null()]).optional(),
-    testType: z.string(),
-    qti: z
-      .object({
-        url: z.string().url(),
-        title: z.string().optional(),
-        metadata: z.object({}).partial().passthrough().optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const CreateInternalAssessmentBankInput = z
-  .object({
-    courseId: z.string(),
-    lessonType: z.enum([
-      "powerpath-100",
-      "quiz",
-      "test-out",
-      "placement",
-      "unit-test",
-      "alpha-read-article",
-    ]),
-    lessonTitle: z.string().optional(),
-    unitTitle: z.string().optional(),
-    courseComponentSourcedId: z.string().optional(),
-    resourceMetadata: z.null().optional(),
-    xp: z.number().optional(),
-    grades: z
-      .array(
-        z.enum([
-          "-1",
-          "0",
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "11",
-          "12",
-          "13",
-        ])
-      )
-      .optional(),
-    courseIdOnFail: z.union([z.string(), z.null()]).optional(),
-    testType: z.string(),
-    assessmentBank: z
-      .object({
-        resources: z
-          .array(
-            z
-              .object({
-                url: z.string().url(),
-                title: z.string().optional(),
-                metadata: z.object({}).partial().passthrough().optional(),
-              })
-              .passthrough()
-          )
-          .min(1),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const createInternalTest_Body = z.union([
-  CreateInternalQtiTestInput,
-  CreateInternalAssessmentBankInput,
-]);
-export const makeExternalTestAssignment_Body = z
-  .object({
-    student: z.string(),
-    lesson: z.string(),
-    applicationName: z.string().optional(),
-    testId: z.string().optional(),
-    skipCourseEnrollment: z.boolean().optional(),
-  })
-  .passthrough();
-export const TestOutResult = z
-  .object({
-    lessonType: z.string(),
-    lessonId: z.union([z.string(), z.null()]),
-    finalized: z.boolean(),
-    toolProvider: z.union([z.string(), z.null()]),
-    attempt: z.number().optional(),
-    credentials: z
-      .object({ email: z.string().email(), password: z.string() })
-      .passthrough()
-      .optional(),
-    assignmentId: z.string().optional(),
-    classId: z.string().optional(),
-    testUrl: z.string().url().optional(),
-    testId: z.string().optional(),
-  })
-  .passthrough();
-export const createLessonPlan_Body = z
-  .object({
-    courseId: z.string(),
-    userId: z.string(),
-    classId: z.string().optional(),
-  })
-  .passthrough();
-export const Resource = z
-  .object({
-    sourcedId: z.string(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    title: z.string(),
-    roles: z.array(z.enum(["primary", "secondary"])).optional(),
-    importance: z.enum(["primary", "secondary"]).optional(),
-    vendorResourceId: z.string(),
-    vendorId: z.union([z.string(), z.null()]).optional(),
-    applicationId: z.union([z.string(), z.null()]).optional(),
-  })
-  .passthrough();
-export const LessonPlanTreeComponent: z.ZodLazy<z.ZodTypeAny> = z.lazy(() =>
-  z
-    .object({
-      id: z.string(),
-      sourcedId: z.string(),
-      status: z.enum(["active", "tobedeleted"]),
-      title: z.string(),
-      sortOrder: z.string().optional(),
-      unlockDate: z.string().optional(),
-      metadata: z.object({}).partial().passthrough().optional(),
-      prerequisites: z.array(z.string()).optional(),
-      prerequisiteCriteria: z.string().optional(),
-      componentResources: z
-        .array(
-          z
-            .object({
-              tenantId: z.union([z.string(), z.null()]),
-              clientAppId: z.union([z.string(), z.null()]),
-              id: z.string(),
-              sortOrder: z.string().optional(),
-              metadata: z.object({}).partial().passthrough().optional(),
-              courseComponentSourcedId: z.string(),
-              resource: Resource,
-            })
-            .passthrough()
-        )
-        .optional(),
-      subComponents: z.array(LessonPlanTreeComponent).optional(),
-    })
-    .passthrough()
-);
-export const SetSkippedCommand = z.object({
-  type: z.string(),
-  payload: z.object({
-    target: z
-      .object({ type: z.enum(["component", "resource"]), id: z.string() })
-      .passthrough(),
-    value: z.boolean(),
-  }),
-});
-export const AddCustomResourceCommand = z.object({
-  type: z.string(),
-  payload: z.object({
-    resource_id: z.string(),
-    parent_component_id: z.string(),
-    skipped: z.boolean().optional().default(false),
-  }),
-});
-export const MoveItemBeforeCommand = z.object({
-  type: z.string(),
-  payload: z.object({
-    target: z
-      .object({ type: z.enum(["component", "resource"]), id: z.string() })
-      .passthrough(),
-    reference_id: z.string(),
-  }),
-});
-export const MoveItemAfterCommand = z.object({
-  type: z.string(),
-  payload: z.object({
-    target: z
-      .object({ type: z.enum(["component", "resource"]), id: z.string() })
-      .passthrough(),
-    reference_id: z.string(),
-  }),
-});
-export const MoveItemToStartCommand = z.object({
-  type: z.string(),
-  payload: z.object({
-    target: z
-      .object({ type: z.enum(["component", "resource"]), id: z.string() })
-      .passthrough(),
-  }),
-});
-export const MoveItemToEndCommand = z.object({
-  type: z.string(),
-  payload: z.object({
-    target: z
-      .object({ type: z.enum(["component", "resource"]), id: z.string() })
-      .passthrough(),
-  }),
-});
-export const ChangeItemParentCommand = z.object({
-  type: z.string(),
-  payload: z
-    .object({
-      target: z
-        .object({ type: z.enum(["component", "resource"]), id: z.string() })
-        .passthrough(),
-      new_parent_id: z.string(),
-      position: z.enum(["start", "end"]).optional().default("end"),
-    })
-    .passthrough(),
-});
-export const storeOperation_Body = z.object({
-  operation: z.union([
-    SetSkippedCommand,
-    AddCustomResourceCommand,
-    MoveItemBeforeCommand,
-    MoveItemAfterCommand,
-    MoveItemToStartCommand,
-    MoveItemToEndCommand,
-    ChangeItemParentCommand,
-  ]),
-  reason: z.string().optional(),
-});
-export const LessonPlanStructureNode: z.ZodLazy<z.ZodTypeAny> = z.lazy(() =>
-  z
-    .object({
-      componentResourceId: z.string().optional(),
-      componentId: z.string().optional(),
-      type: z.enum(["component", "resource"]),
-      title: z.string(),
-      order: z.string(),
-      skipped: z.boolean(),
-      itemId: z.string(),
-      componentResources: z.array(LessonPlanStructureNode).optional(),
-      subComponents: z.array(LessonPlanStructureNode).optional(),
-    })
-    .passthrough()
-);
-export const updateStudentItemResponse_Body = z
-  .object({
-    studentId: z.string().min(1),
-    componentResourceId: z.string().min(1),
-    result: z
-      .object({
-        status: z.enum(["active", "tobedeleted"]),
-        metadata: z.object({}).partial().passthrough().nullish(),
-        score: z.union([z.number(), z.null()]).optional(),
-        textScore: z.union([z.string(), z.null()]).optional(),
-        scoreDate: z.string().datetime({ offset: true }),
-        scorePercentile: z.union([z.number(), z.null()]).optional(),
-        scoreStatus: z.enum([
-          "exempt",
-          "fully graded",
-          "not submitted",
-          "partially graded",
-          "submitted",
-        ]),
-        comment: z.union([z.string(), z.null()]).optional(),
-        learningObjectiveSet: z
-          .union([
-            z.array(
+    lineItems: z.array(
+      z.union([
+        z
+          .object({
+            type: z.string(),
+            assessmentLineItemSourcedId: z.string(),
+            courseComponentSourcedId: z.string(),
+            title: z.string(),
+            results: z.array(
               z
                 .object({
-                  source: z.string(),
-                  learningObjectiveResults: z.array(
-                    z
-                      .object({
-                        learningObjectiveId: z.string(),
-                        score: z.number().optional(),
-                        textScore: z.string().optional(),
-                      })
-                      .passthrough()
-                  ),
+                  sourcedId: z.string().min(1).optional(),
+                  status: z.enum(["active", "tobedeleted"]),
+                  dateLastModified: z
+                    .string()
+                    .datetime({ offset: true })
+                    .optional(),
+                  metadata: z.object({}).partial().passthrough().nullish(),
+                  score: z.union([z.number(), z.null()]).optional(),
+                  textScore: z.union([z.string(), z.null()]).optional(),
+                  scoreDate: z.string().datetime({ offset: true }),
+                  scoreScale: z
+                    .union([
+                      z.object({ sourcedId: z.string() }).passthrough(),
+                      z.null(),
+                    ])
+                    .optional(),
+                  scorePercentile: z.union([z.number(), z.null()]).optional(),
+                  scoreStatus: z.enum([
+                    "exempt",
+                    "fully graded",
+                    "not submitted",
+                    "partially graded",
+                    "submitted",
+                  ]),
+                  comment: z.union([z.string(), z.null()]).optional(),
+                  learningObjectiveSet: z
+                    .union([
+                      z.array(
+                        z
+                          .object({
+                            source: z.string(),
+                            learningObjectiveResults: z.array(
+                              z
+                                .object({
+                                  learningObjectiveId: z.string(),
+                                  score: z.number().optional(),
+                                  textScore: z.string().optional(),
+                                })
+                                .passthrough(),
+                            ),
+                          })
+                          .passthrough(),
+                      ),
+                      z.null(),
+                    ])
+                    .optional(),
+                  inProgress: z.union([z.string(), z.null()]).optional(),
+                  incomplete: z.union([z.string(), z.null()]).optional(),
+                  late: z.union([z.string(), z.null()]).optional(),
+                  missing: z.union([z.string(), z.null()]).optional(),
                 })
-                .passthrough()
+                .passthrough(),
             ),
-            z.null(),
-          ])
-          .optional(),
-        inProgress: z.union([z.string(), z.null()]).optional(),
-        incomplete: z.union([z.string(), z.null()]).optional(),
-        late: z.union([z.string(), z.null()]).optional(),
-        missing: z.union([z.string(), z.null()]).optional(),
-      })
-      .passthrough(),
-  })
-  .passthrough();
-export const LearningObjectiveSet = z.union([
-  z.array(
-    z
-      .object({ source: z.string(), learningObjectiveIds: z.array(z.string()) })
-      .passthrough()
-  ),
-  z.null(),
-]);
-export const AssessmentLineItem = z
-  .object({
-    sourcedId: z.string().min(1).optional(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    title: z.string(),
-    description: z.union([z.string(), z.null()]).optional(),
-    class: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    parentAssessmentLineItem: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    scoreScale: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    resultValueMin: z.union([z.number(), z.null()]).optional(),
-    resultValueMax: z.union([z.number(), z.null()]).optional(),
-    component: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    componentResource: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    learningObjectiveSet: LearningObjectiveSet.optional(),
-    course: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-  })
-  .passthrough();
-export const AssessmentResult = z
-  .object({
-    sourcedId: z.string().min(1).optional(),
-    status: z.enum(["active", "tobedeleted"]),
-    dateLastModified: z.string().datetime({ offset: true }).optional(),
-    metadata: z.object({}).partial().passthrough().nullish(),
-    assessmentLineItem: z.object({ sourcedId: z.string() }).passthrough(),
-    student: z.object({ sourcedId: z.string() }).passthrough(),
-    score: z.union([z.number(), z.null()]).optional(),
-    textScore: z.union([z.string(), z.null()]).optional(),
-    scoreDate: z.string().datetime({ offset: true }),
-    scoreScale: z
-      .union([z.object({ sourcedId: z.string() }).passthrough(), z.null()])
-      .optional(),
-    scorePercentile: z.union([z.number(), z.null()]).optional(),
-    scoreStatus: z.enum([
-      "exempt",
-      "fully graded",
-      "not submitted",
-      "partially graded",
-      "submitted",
-    ]),
-    comment: z.union([z.string(), z.null()]).optional(),
-    learningObjectiveSet: z
-      .union([
-        z.array(
-          z
-            .object({
-              source: z.string(),
-              learningObjectiveResults: z.array(
-                z
-                  .object({
-                    learningObjectiveId: z.string(),
-                    score: z.number().optional(),
-                    textScore: z.string().optional(),
-                  })
-                  .passthrough()
-              ),
-            })
-            .passthrough()
-        ),
-        z.null(),
-      ])
-      .optional(),
-    inProgress: z.union([z.string(), z.null()]).optional(),
-    incomplete: z.union([z.string(), z.null()]).optional(),
-    late: z.union([z.string(), z.null()]).optional(),
-    missing: z.union([z.string(), z.null()]).optional(),
-  })
-  .passthrough();
-export const createNewAttempt_Body = z
-  .object({ student: z.string(), lesson: z.string() })
-  .passthrough();
-export const PowerPath100ProgressResult = z
-  .object({
-    lessonType: z.string(),
-    remainingQuestionsPerDifficulty: z
-      .object({ easy: z.number(), medium: z.number(), hard: z.number() })
-      .passthrough(),
-    score: z.number(),
-    seenQuestions: z.array(
-      z
-        .object({
-          id: z.string(),
-          index: z.number(),
-          title: z.string(),
-          url: z.string().url(),
-          difficulty: z.enum(["easy", "medium", "hard"]).default("medium"),
-          humanApproved: z.union([z.boolean(), z.null()]).optional(),
-          content: z
-            .object({ type: z.string().optional(), rawXml: z.string() })
-            .passthrough()
-            .optional(),
-          response: z.union([z.string(), z.array(z.string())]).optional(),
-          responses: z
-            .record(z.union([z.string(), z.array(z.string())]))
-            .optional(),
-          correct: z.boolean().optional(),
-          result: z
-            .object({
-              outcomes: z.record(z.string()).optional(),
-              score: z.number(),
-              feedback: z.string(),
-            })
-            .passthrough()
-            .optional(),
-          learningObjectives: z.array(z.string()).optional(),
-        })
-        .passthrough()
+          })
+          .passthrough(),
+        z
+          .object({
+            type: z.string(),
+            assessmentLineItemSourcedId: z.string(),
+            courseComponentResourceSourcedId: z.string(),
+            title: z.string(),
+            results: z.array(
+              z
+                .object({
+                  sourcedId: z.string().min(1).optional(),
+                  status: z.enum(["active", "tobedeleted"]),
+                  dateLastModified: z
+                    .string()
+                    .datetime({ offset: true })
+                    .optional(),
+                  metadata: z.object({}).partial().passthrough().nullish(),
+                  score: z.union([z.number(), z.null()]).optional(),
+                  textScore: z.union([z.string(), z.null()]).optional(),
+                  scoreDate: z.string().datetime({ offset: true }),
+                  scoreScale: z
+                    .union([
+                      z.object({ sourcedId: z.string() }).passthrough(),
+                      z.null(),
+                    ])
+                    .optional(),
+                  scorePercentile: z.union([z.number(), z.null()]).optional(),
+                  scoreStatus: z.enum([
+                    "exempt",
+                    "fully graded",
+                    "not submitted",
+                    "partially graded",
+                    "submitted",
+                  ]),
+                  comment: z.union([z.string(), z.null()]).optional(),
+                  learningObjectiveSet: z
+                    .union([
+                      z.array(
+                        z
+                          .object({
+                            source: z.string(),
+                            learningObjectiveResults: z.array(
+                              z
+                                .object({
+                                  learningObjectiveId: z.string(),
+                                  score: z.number().optional(),
+                                  textScore: z.string().optional(),
+                                })
+                                .passthrough(),
+                            ),
+                          })
+                          .passthrough(),
+                      ),
+                      z.null(),
+                    ])
+                    .optional(),
+                  inProgress: z.union([z.string(), z.null()]).optional(),
+                  incomplete: z.union([z.string(), z.null()]).optional(),
+                  late: z.union([z.string(), z.null()]).optional(),
+                  missing: z.union([z.string(), z.null()]).optional(),
+                })
+                .passthrough(),
+            ),
+          })
+          .passthrough(),
+      ]),
     ),
-    attempt: z.number(),
-    xp: z.union([z.number(), z.null()]),
-    multiplier: z.union([z.number(), z.null()]),
-    accuracy: z.number(),
-    correctQuestions: z.number(),
-    totalQuestions: z.number(),
   })
-  .passthrough();
-export const PowerPathTestQuestion = z
-  .object({
-    id: z.string(),
-    index: z.number(),
-    title: z.string(),
-    url: z.string().url(),
-    difficulty: z.enum(["easy", "medium", "hard"]).default("medium"),
-    humanApproved: z.union([z.boolean(), z.null()]).optional(),
-    content: z
-      .object({ type: z.string().optional(), rawXml: z.string() })
-      .passthrough()
-      .optional(),
-    response: z.union([z.string(), z.array(z.string())]).optional(),
-    responses: z.record(z.union([z.string(), z.array(z.string())])).optional(),
-    correct: z.boolean().optional(),
-    result: z
-      .object({
-        outcomes: z.record(z.string()).optional(),
-        score: z.number(),
-        feedback: z.string(),
-      })
-      .passthrough()
-      .optional(),
-    learningObjectives: z.array(z.string()).optional(),
-  })
-  .passthrough();
-export const UpdateStudentQuestionResponseInput = z
-  .object({
-    student: z.string(),
-    question: z.string(),
-    response: z.union([z.string(), z.array(z.string())]).optional(),
-    responses: z.record(z.union([z.string(), z.array(z.string())])).optional(),
-    lesson: z.string(),
-  })
-  .passthrough();
-export const PowerPath100UpdateStudentQuestionResponseResult = z
-  .object({
-    lessonType: z.string(),
-    powerpathScore: z.number(),
-    responseResult: z
-      .object({
-        isCorrect: z.boolean(),
-        score: z.number(),
-        feedback: z.unknown().optional(),
-      })
-      .passthrough(),
-    questionResult: z.unknown().optional(),
-    testResult: z.unknown().optional(),
-    accuracy: z.number(),
-    correctQuestions: z.number(),
-    totalQuestions: z.number(),
-    xp: z.union([z.number(), z.null()]),
-    multiplier: z.union([z.number(), z.null()]),
-  })
-  .passthrough();
-export const QuizUpdateStudentQuestionResponseResult = z
-  .object({ questionResult: z.unknown().optional(), lessonType: z.string() })
-  .passthrough();
-export const TestOutUpdateStudentQuestionResponseResult = z
-  .object({ questionResult: z.unknown().optional(), lessonType: z.string() })
-  .passthrough();
-export const PlacementUpdateStudentQuestionResponseResult = z
-  .object({ questionResult: z.unknown().optional(), lessonType: z.string() })
-  .passthrough();
-export const UnitTestUpdateStudentQuestionResponseResult = z
-  .object({ questionResult: z.unknown().optional(), lessonType: z.string() })
   .passthrough();
 
-export type Resource = z.infer<typeof Resource>;
-export type LessonPlanTreeComponent = z.infer<typeof LessonPlanTreeComponent>;
-export type LessonPlanStructureNode = z.infer<typeof LessonPlanStructureNode>;
-export type AssessmentLineItem = z.infer<typeof AssessmentLineItem>;
-
-const schemaCollection = {
-  createTestAssignment_Body,
-  BadRequestResponse,
-  UnauthorizedRequestResponse,
-  ForbiddenResponse,
-  NotFoundResponse,
-  UnprocessableEntityResponse,
-  TooManyRequestsResponse,
-  InternalServerErrorResponse,
-  GradeEnum,
-  SubjectEnum,
-  resetUserPlacement_Body,
-  assignTest_Body,
-  CreateExternalTestOutInput,
-  CreateExternalPlacementInput,
-  createExternalPlacementTest_Body,
-  CreateInternalQtiTestInput,
-  CreateInternalAssessmentBankInput,
-  createInternalTest_Body,
-  makeExternalTestAssignment_Body,
-  TestOutResult,
-  createLessonPlan_Body,
-  Resource,
-  LessonPlanTreeComponent,
-  SetSkippedCommand,
-  AddCustomResourceCommand,
-  MoveItemBeforeCommand,
-  MoveItemAfterCommand,
-  MoveItemToStartCommand,
-  MoveItemToEndCommand,
-  ChangeItemParentCommand,
-  storeOperation_Body,
-  LessonPlanStructureNode,
-  updateStudentItemResponse_Body,
-  LearningObjectiveSet,
-  AssessmentLineItem,
-  AssessmentResult,
-  createNewAttempt_Body,
-  PowerPath100ProgressResult,
-  PowerPathTestQuestion,
-  UpdateStudentQuestionResponseInput,
-  PowerPath100UpdateStudentQuestionResponseResult,
-  QuizUpdateStudentQuestionResponseResult,
-  TestOutUpdateStudentQuestionResponseResult,
-  PlacementUpdateStudentQuestionResponseResult,
-  UnitTestUpdateStudentQuestionResponseResult,
-} as const;
-
-export const schemas = schemaCollection;
-export type SchemaRegistry = typeof schemas;
+export type BadRequestResponse = z.infer<typeof BadRequestResponse>;
+export type UnauthorizedRequestResponse = z.infer<
+  typeof UnauthorizedRequestResponse
+>;
+export type ForbiddenResponse = z.infer<typeof ForbiddenResponse>;
+export type NotFoundResponse = z.infer<typeof NotFoundResponse>;
+export type UnprocessableEntityResponse = z.infer<
+  typeof UnprocessableEntityResponse
+>;
+export type TooManyRequestsResponse = z.infer<typeof TooManyRequestsResponse>;
+export type InternalServerErrorResponse = z.infer<
+  typeof InternalServerErrorResponse
+>;
+export type PowerpathGetCourseProgressResponse = z.infer<
+  typeof PowerpathGetCourseProgressResponse
+>;

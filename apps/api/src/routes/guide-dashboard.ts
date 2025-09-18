@@ -1,4 +1,4 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
+import { createRoute, OpenAPIHono, type z } from "@hono/zod-openapi";
 import { withDbContext } from "@monte/database";
 import {
   ActionSchema,
@@ -47,7 +47,9 @@ const guideDashboardRoute = createRoute({
 
 function startOfDay(): Date {
   const now = new Date();
-  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  return new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
 }
 
 function endOfDay(): Date {
@@ -138,10 +140,7 @@ router.openapi(guideDashboardRoute, async (c) => {
 
         const habitsByStudent = await trx
           .selectFrom("habits")
-          .select((eb) => [
-            "student_id",
-            eb.fn.countAll<string>().as("count"),
-          ])
+          .select((eb) => ["student_id", eb.fn.countAll<string>().as("count")])
           .where("org_id", "=", session.session.orgId)
           .groupBy("student_id")
           .execute();
@@ -168,10 +167,7 @@ router.openapi(guideDashboardRoute, async (c) => {
 
         const xpFacts = await trx
           .selectFrom("xp_facts_daily")
-          .select([
-            "student_id",
-            "xp_total",
-          ])
+          .select(["student_id", "xp_total"])
           .where("org_id", "=", session.session.orgId)
           .where("date_bucket", "=", todayStart.toISOString().slice(0, 10))
           .execute();
@@ -199,7 +195,10 @@ router.openapi(guideDashboardRoute, async (c) => {
           lastObservationByStudent,
           lastSummaryByStudent,
           xpFacts,
-          observationCount: Number.parseInt(observationCountRow?.count ?? "0", 10),
+          observationCount: Number.parseInt(
+            observationCountRow?.count ?? "0",
+            10,
+          ),
           summaryCount: Number.parseInt(summaryCountRow?.count ?? "0", 10),
         };
       },
@@ -244,7 +243,9 @@ router.openapi(guideDashboardRoute, async (c) => {
         full_name: row.full_name,
         avatar_url: row.avatar_url,
         dob:
-          row.dob instanceof Date ? row.dob.toISOString().slice(0, 10) : row.dob,
+          row.dob instanceof Date
+            ? row.dob.toISOString().slice(0, 10)
+            : row.dob,
         primary_classroom_id: row.primary_classroom_id,
         created_at:
           row.created_at instanceof Date

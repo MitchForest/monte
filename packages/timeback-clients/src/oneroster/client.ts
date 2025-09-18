@@ -1,15 +1,16 @@
 import {
   callOperation,
   getOperationSpec,
+  type OperationByAlias,
   type OperationCallArgs,
   type OperationResponse,
 } from "../http";
 import type { CreateServiceClientOptions, ServiceClient } from "../internal";
 import { createServiceClient } from "../internal";
 import {
-  operationSpecs,
   type OneRosterOperationAlias,
   type OneRosterOperationSpecs,
+  operationSpecs,
 } from "./generated/operation-specs";
 
 export type OneRosterClient = ServiceClient & { service: "oneroster" };
@@ -27,7 +28,7 @@ export function createOneRosterClient(
 
 export function getOneRosterOperation<TAlias extends OneRosterOperationAlias>(
   alias: TAlias,
-) {
+): OperationByAlias<OneRosterOperationSpecs, TAlias> | undefined {
   return getOperationSpec(operationSpecs, alias);
 }
 

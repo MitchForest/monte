@@ -12,21 +12,23 @@ import type {
 } from "@monte/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { type ChangeEvent, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { AppPageHeader } from "@/components/app/page-header";
-import { StudentHabitsPanel } from "@/components/app/students/student-habits-panel";
+import { StudentCommunicationsPanel } from "@/components/app/students/student-communications-panel";
 import { StudentHabitsHistory } from "@/components/app/students/student-habits-history";
+import { StudentHabitsPanel } from "@/components/app/students/student-habits-panel";
+import type { StudentLessonItem } from "@/components/app/students/student-lessons-table";
 import { StudentLessonsTable } from "@/components/app/students/student-lessons-table";
 import { StudentModal } from "@/components/app/students/student-modal";
 import { StudentObservationsPanel } from "@/components/app/students/student-observations-panel";
-import { StudentCommunicationsPanel } from "@/components/app/students/student-communications-panel";
 import { StudentSummaryPanel } from "@/components/app/students/student-summary-panel";
 import { StudentXpPanel } from "@/components/app/students/student-xp-panel";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   createStudentParent,
@@ -92,7 +94,6 @@ function StudentDetailPageInner({ studentId }: { studentId: string }) {
       listStudentLessons({ studentId }, { signal }),
   });
 
-
   const student = studentQuery.data?.student ?? null;
   const parents = studentQuery.data?.parents ?? [];
   const habits = studentQuery.data?.habits ?? [];
@@ -128,23 +129,27 @@ function StudentDetailPageInner({ studentId }: { studentId: string }) {
       );
     },
   });
-  const lessonItems = useMemo(() => {
+  const lessonItems = useMemo<StudentLessonItem[] | null>(() => {
     if (!lessons || lessons.length === 0) {
       return null;
     }
-    return lessons.map((lesson) => ({
-      id: lesson.id,
-      title: lesson.custom_title ?? lesson.notes ?? "Lesson",
-      status:
+    return lessons.map((lesson) => {
+      const status: StudentLessonItem["status"] =
         lesson.status === "completed"
           ? "completed"
           : lesson.status === "scheduled"
             ? "scheduled"
-            : "needed",
-      guide: lesson.assigned_by_user_id,
-      scheduledFor: lesson.scheduled_for,
-      type: lesson.course_lesson_id ? "provided" : "custom",
-    }));
+            : "needed";
+
+      return {
+        id: lesson.id,
+        title: lesson.custom_title ?? lesson.notes ?? "Lesson",
+        status,
+        guide: lesson.assigned_by_user_id,
+        scheduledFor: lesson.scheduled_for,
+        type: lesson.course_lesson_id ? "provided" : "custom",
+      } satisfies StudentLessonItem;
+    });
   }, [lessons]);
 
   const handleCreateParent = () => {
@@ -166,7 +171,9 @@ function StudentDetailPageInner({ studentId }: { studentId: string }) {
       email:
         newParentEmail.trim().length > 0 ? newParentEmail.trim() : undefined,
       relation:
-        newParentRelation.trim().length > 0 ? newParentRelation.trim() : undefined,
+        newParentRelation.trim().length > 0
+          ? newParentRelation.trim()
+          : undefined,
     });
   };
 
@@ -182,13 +189,10 @@ function StudentDetailPageInner({ studentId }: { studentId: string }) {
     }));
   }, [observations]);
 
-
   const latestSummaries = useMemo(
     () => summaries.slice(0, MAX_ITEMS),
     [summaries],
   );
-
-
 
   const handleSummaryCreated = (payload: {
     summary: StudentSummary;
@@ -311,12 +315,16 @@ function StudentDetailPageInner({ studentId }: { studentId: string }) {
               </h3>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Input
-                  onChange={(event) => setNewParentName(event.target.value)}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    setNewParentName(event.target.value)
+                  }
                   placeholder="Guardian name"
                   value={newParentName}
                 />
                 <Input
-                  onChange={(event) => setNewParentEmail(event.target.value)}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    setNewParentEmail(event.target.value)
+                  }
                   placeholder="Email (optional)"
                   type="email"
                   value={newParentEmail}
@@ -324,7 +332,9 @@ function StudentDetailPageInner({ studentId }: { studentId: string }) {
               </div>
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <Input
-                  onChange={(event) => setNewParentRelation(event.target.value)}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    setNewParentRelation(event.target.value)
+                  }
                   placeholder="Relationship"
                   value={newParentRelation}
                 />
@@ -367,7 +377,9 @@ function StudentDetailPageInner({ studentId }: { studentId: string }) {
       </section>
 
       <section className="px-6">
-        <StudentObservationsPanel observations={observationItems ?? undefined} />
+        <StudentObservationsPanel
+          observations={observationItems ?? undefined}
+        />
       </section>
 
       <StudentModal

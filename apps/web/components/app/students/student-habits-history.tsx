@@ -1,8 +1,8 @@
 "use client";
 
 import type { Habit, HabitCheckinEvent } from "@monte/shared";
-import { useMemo, useState } from "react";
 import { CalendarRange, Check } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export type HabitHistoryEntry = {
   id: string;
@@ -158,7 +165,9 @@ export function StudentHabitsHistory({
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Check className="size-4 text-primary" />
-                    <span className="text-sm text-foreground">{entry.name}</span>
+                    <span className="text-sm text-foreground">
+                      {entry.name}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">

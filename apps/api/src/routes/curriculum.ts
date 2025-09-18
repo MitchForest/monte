@@ -92,34 +92,37 @@ const listSubjectsRoute = createRoute({
   },
 });
 
-const routerWithSubjects = routerWithAreas.openapi(listSubjectsRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      listSubjectsRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
+const routerWithSubjects = routerWithAreas.openapi(
+  listSubjectsRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
+      return respond(
+        listSubjectsRoute,
+        c,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
+      );
+    }
+
+    const subjects = await withDbContext(
+      { userId: session.session.userId, orgId: session.session.orgId },
+      (trx) =>
+        trx
+          .selectFrom("subjects")
+          .selectAll()
+          .where("org_id", "=", session.session.orgId)
+          .orderBy("name", "asc")
+          .execute(),
     );
-  }
 
-  const subjects = await withDbContext(
-    { userId: session.session.userId, orgId: session.session.orgId },
-    (trx) =>
-      trx
-        .selectFrom("subjects")
-        .selectAll()
-        .where("org_id", "=", session.session.orgId)
-        .orderBy("name", "asc")
-        .execute(),
-  );
+    const response = SubjectsListResponseSchema.parse({
+      data: { subjects },
+    });
 
-  const response = SubjectsListResponseSchema.parse({
-    data: { subjects },
-  });
-
-  return respond(listSubjectsRoute, c, response);
-});
+    return respond(listSubjectsRoute, c, response);
+  },
+);
 
 const ListCoursesQuery = z.object({
   subjectId: z.string().uuid().optional(),
@@ -153,45 +156,48 @@ const listCoursesRoute = createRoute({
   },
 });
 
-const routerWithCourses = routerWithSubjects.openapi(listCoursesRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      listCoursesRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
+const routerWithCourses = routerWithSubjects.openapi(
+  listCoursesRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
+      return respond(
+        listCoursesRoute,
+        c,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
+      );
+    }
+
+    const query = c.req.valid("query");
+
+    const courses = await withDbContext(
+      { userId: session.session.userId, orgId: session.session.orgId },
+      async (trx) => {
+        let builder = trx
+          .selectFrom("courses")
+          .selectAll()
+          .where("org_id", "=", session.session.orgId)
+          .orderBy("name", "asc");
+
+        if (query.subjectId) {
+          builder = builder.where("subject_id", "=", query.subjectId);
+        }
+        if (query.search) {
+          builder = builder.where("name", "ilike", `%${query.search}%`);
+        }
+
+        return builder.execute();
+      },
     );
-  }
 
-  const query = c.req.valid("query");
+    const response = CoursesListResponseSchema.parse({
+      data: { courses },
+    });
 
-  const courses = await withDbContext(
-    { userId: session.session.userId, orgId: session.session.orgId },
-    async (trx) => {
-      let builder = trx
-        .selectFrom("courses")
-        .selectAll()
-        .where("org_id", "=", session.session.orgId)
-        .orderBy("name", "asc");
-
-      if (query.subjectId) {
-        builder = builder.where("subject_id", "=", query.subjectId);
-      }
-      if (query.search) {
-        builder = builder.where("name", "ilike", `%${query.search}%`);
-      }
-
-      return builder.execute();
-    },
-  );
-
-  const response = CoursesListResponseSchema.parse({
-    data: { courses },
-  });
-
-  return respond(listCoursesRoute, c, response);
-});
+    return respond(listCoursesRoute, c, response);
+  },
+);
 
 const CourseParam = z.object({
   id: z.string().uuid(),
@@ -388,11 +394,7 @@ const curriculumRouter = routerWithMaterials.openapi(
     const topics = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
       (trx) =>
-        trx
-          .selectFrom("topics")
-          .selectAll()
-          .orderBy("name", "asc")
-          .execute(),
+        trx.selectFrom("topics").selectAll().orderBy("name", "asc").execute(),
     );
 
     const response = TopicsListResponseSchema.parse({

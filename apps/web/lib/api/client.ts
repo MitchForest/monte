@@ -1,3 +1,4 @@
+import type { ApiApp } from "@monte/api";
 import { hc } from "hono/client";
 
 import { getAccessToken } from "@/lib/auth/token-store";
@@ -68,10 +69,10 @@ function createFetch(defaultHeaders?: HeadersInit): typeof fetch {
   return Object.assign(wrapped, fetch);
 }
 
-type HonoClient = ReturnType<typeof hc>;
+type HonoClient = ReturnType<typeof hc<ApiApp>>;
 
 function buildClient(baseUrl: string, fetcher: typeof fetch): HonoClient {
-  return hc(baseUrl, {
+  return hc<ApiApp>(baseUrl, {
     fetch: fetcher,
   });
 }
@@ -83,6 +84,7 @@ function instantiateClient(headers?: HeadersInit) {
 }
 
 const defaultClient = instantiateClient();
+const defaultFetch = createFetch();
 
 export type ApiClient = HonoClient;
 export const apiClient: ApiClient = defaultClient;
@@ -92,4 +94,16 @@ export function createApiClient(options?: CreateApiClientOptions): ApiClient {
     return defaultClient;
   }
   return instantiateClient(options.headers);
+}
+
+export function getApiBaseUrl(): string {
+  return resolveBaseUrl();
+}
+
+export async function apiFetch(
+  path: string,
+  init: RequestInit = {},
+): Promise<Response> {
+  const url = new URL(path, getApiBaseUrl());
+  return defaultFetch(url.toString(), init);
 }

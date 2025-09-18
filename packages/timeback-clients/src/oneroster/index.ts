@@ -25,9 +25,9 @@ export {
   type OneRosterCourseList,
 } from "./courses";
 export {
-  operationSpecs,
   type OneRosterOperationAlias,
   type OneRosterOperationSpecs,
+  operationSpecs,
 } from "./generated/operation-specs";
 export {
   type GradeMasteryCandidate,

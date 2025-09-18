@@ -2,22 +2,22 @@ import { serve } from "bun";
 
 import { createAPIApp, getCorsOrigins } from "./lib/app";
 import { HTTP_STATUS } from "./lib/http/status";
+import { attendanceRouter } from "./routes/attendance";
 import { classroomsRouter } from "./routes/classrooms";
+import { curriculumRouter } from "./routes/curriculum";
+import { guideDashboardRouter } from "./routes/guide-dashboard";
 import { habitsRouter } from "./routes/habits";
 import { invitesRouter } from "./routes/invites";
 import { observationsRouter } from "./routes/observations";
 import { organizationsRouter } from "./routes/organizations";
-import { attendanceRouter } from "./routes/attendance";
-import { studentSummariesRouter } from "./routes/student-summaries";
 import { studentLessonsRouter } from "./routes/student-lessons";
 import { studentParentsRouter } from "./routes/student-parents";
+import { studentSummariesRouter } from "./routes/student-summaries";
 import { studentsRouter } from "./routes/students";
 import { tasksRouter } from "./routes/tasks";
 import { teamRouter } from "./routes/team";
 import { timebackAnalyticsRouter } from "./routes/timeback-analytics";
 import { timebackEventsRouter } from "./routes/timeback-events";
-import { curriculumRouter } from "./routes/curriculum";
-import { guideDashboardRouter } from "./routes/guide-dashboard";
 
 const app = createAPIApp({
   cors: {

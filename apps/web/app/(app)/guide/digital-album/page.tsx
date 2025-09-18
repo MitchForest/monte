@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Library, NotebookTabs, Plus } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AppPageHeader } from "@/components/app/page-header";
 import { Button } from "@/components/ui/button";
@@ -38,7 +38,9 @@ export default function DigitalAlbumPage() {
   const coursesQuery = useQuery({
     queryKey: ["curriculum", "courses", selectedAreaId],
     queryFn: () =>
-      selectedAreaId ? listCourses({ subjectId: selectedAreaId }) : listCourses(),
+      selectedAreaId
+        ? listCourses({ subjectId: selectedAreaId })
+        : listCourses(),
     enabled: Boolean(selectedAreaId),
   });
 
@@ -50,7 +52,9 @@ export default function DigitalAlbumPage() {
 
   const areas = areasQuery.data ?? [];
   const selectedArea = useMemo(() => {
-    return areas.find((area) => area.id === selectedAreaId) ?? areas.at(0) ?? null;
+    return (
+      areas.find((area) => area.id === selectedAreaId) ?? areas.at(0) ?? null
+    );
   }, [areas, selectedAreaId]);
 
   const materials = materialsQuery.data ?? [];
@@ -120,7 +124,8 @@ export default function DigitalAlbumPage() {
                 {selectedArea?.name ?? "Curriculum"}
               </CardTitle>
               <CardDescription>
-                Select lessons to build a custom storyline for a student or small group.
+                Select lessons to build a custom storyline for a student or
+                small group.
               </CardDescription>
             </div>
             <Button size="sm" className="rounded-full gap-2" type="button">
@@ -132,37 +137,41 @@ export default function DigitalAlbumPage() {
               <p className="rounded-2xl border border-dashed border-border/60 bg-background/70 px-4 py-6 text-sm text-muted-foreground">
                 No lessons available for this area yet.
               </p>
-            ) : lessonOptions.map((lesson) => {
-              const identifier = lesson.id ?? lesson.label;
-              const isSelected = identifier ? selectedLessons.includes(identifier) : false;
-              return (
-                <button
-                  key={identifier ?? lesson.label}
-                  type="button"
-                  className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
-                    isSelected
-                      ? "border-primary/60 bg-primary/10 text-primary"
-                      : "border-border/60 bg-background/70 text-muted-foreground"
-                  }`}
-                  onClick={() =>
-                    setSelectedLessons((current) =>
-                      !identifier
-                        ? current
-                        : isSelected
-                          ? current.filter((item) => item !== identifier)
-                          : [...current, identifier],
-                    )
-                  }
-                >
-                  <span className="text-sm font-medium text-foreground">
-                    {lesson.label}
-                  </span>
-                  <span className="text-xs uppercase tracking-[0.2em]">
-                    {isSelected ? "Selected" : "Tap to include"}
-                  </span>
-                </button>
-              );
-            })}
+            ) : (
+              lessonOptions.map((lesson) => {
+                const identifier = lesson.id ?? lesson.label;
+                const isSelected = identifier
+                  ? selectedLessons.includes(identifier)
+                  : false;
+                return (
+                  <button
+                    key={identifier ?? lesson.label}
+                    type="button"
+                    className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+                      isSelected
+                        ? "border-primary/60 bg-primary/10 text-primary"
+                        : "border-border/60 bg-background/70 text-muted-foreground"
+                    }`}
+                    onClick={() =>
+                      setSelectedLessons((current) =>
+                        !identifier
+                          ? current
+                          : isSelected
+                            ? current.filter((item) => item !== identifier)
+                            : [...current, identifier],
+                      )
+                    }
+                  >
+                    <span className="text-sm font-medium text-foreground">
+                      {lesson.label}
+                    </span>
+                    <span className="text-xs uppercase tracking-[0.2em]">
+                      {isSelected ? "Selected" : "Tap to include"}
+                    </span>
+                  </button>
+                );
+              })
+            )}
           </CardContent>
         </Card>
       </section>

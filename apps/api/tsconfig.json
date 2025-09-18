@@ -19,7 +19,9 @@
       "@monte/api/*": ["./src/*"],
       "@monte/shared": ["../../packages/shared/src/index.ts"],
       "@monte/shared/*": ["../../packages/shared/src/*"],
-      "@monte/timeback-clients": ["../../packages/timeback-clients/src/index.ts"],
+      "@monte/timeback-clients": [
+        "../../packages/timeback-clients/src/index.ts"
+      ],
       "@monte/timeback-clients/*": ["../../packages/timeback-clients/src/*"]
     }
   },

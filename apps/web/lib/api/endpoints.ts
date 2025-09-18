@@ -2,17 +2,22 @@ import type { HabitSchedule } from "@monte/shared";
 import {
   ActionDetailResponseSchema,
   ActionsListResponseSchema,
+  ClassAreasListResponseSchema,
   ClassroomCreatedResponseSchema,
   ClassroomsListResponseSchema,
+  CourseLessonsListResponseSchema,
+  CoursesListResponseSchema,
+  GuideDashboardResponseSchema,
   HabitCheckinDeletionResponseSchema,
   HabitCheckinDetailResponseSchema,
   HabitCheckinEventsListResponseSchema,
   HabitDetailResponseSchema,
   HabitsListResponseSchema,
+  MaterialsListResponseSchema,
   ObservationDetailResponseSchema,
   ObservationsListResponseSchema,
-  StudentDetailResponseSchema,
   StudentDashboardResponseSchema,
+  StudentDetailResponseSchema,
   StudentLessonDetailResponseSchema,
   StudentLessonsListResponseSchema,
   StudentParentMutateResponseSchema,
@@ -20,18 +25,13 @@ import {
   StudentSummariesListResponseSchema,
   StudentSummaryDetailResponseSchema,
   StudentsListResponseSchema,
+  SubjectsListResponseSchema,
   TeamListResponseSchema,
+  TopicsListResponseSchema,
   WorkPeriodDetailResponseSchema,
   WorkPeriodsListResponseSchema,
   WorkspaceInviteDetailResponseSchema,
   WorkspaceInvitesListResponseSchema,
-  ClassAreasListResponseSchema,
-  SubjectsListResponseSchema,
-  CoursesListResponseSchema,
-  CourseLessonsListResponseSchema,
-  MaterialsListResponseSchema,
-  TopicsListResponseSchema,
-  GuideDashboardResponseSchema,
 } from "@monte/shared";
 import {
   TimebackAnalyticsResponseSchema,
@@ -39,114 +39,65 @@ import {
 } from "@monte/shared/timeback";
 import { z } from "zod";
 
-import type { ApiClient } from "./client";
 import { apiClient } from "./client";
 
 type RequestOptions = {
   signal?: AbortSignal;
 };
 
-type ObservationsClient = ApiClient["observations"] & {
-  $post: (args: {
-    json: {
-      content: string;
-      studentId?: string | null;
-      audioUrl?: string | null;
-    };
-  }) => Promise<Response>;
+type EndpointArgs = {
+  param?: Record<string, unknown>;
+  json?: unknown;
+  query?: Record<string, unknown>;
 };
 
-type ActionsClient = ApiClient["tasks"] & {
-  $post: (args: {
-    json: {
-      title: string;
-      description?: string | null;
-      studentId: string;
-      dueDate?: string | null;
-      type: "task" | "lesson";
-      assignedToUserId?: string | null;
-    };
-  }) => Promise<Response>;
-  ":id": {
-    $patch: (args: {
-      param: { id: string };
-      json: {
-        title?: string;
-        description?: string | null;
-        status?: "pending" | "in_progress" | "completed" | "cancelled";
-        dueDate?: string | null;
-        assignedToUserId?: string | null;
-      };
-    }) => Promise<Response>;
+type EndpointInit = {
+  init?: {
+    signal?: AbortSignal;
   };
 };
 
-const client = apiClient as ApiClient & {
-  observations: ObservationsClient;
-  tasks: ActionsClient;
+type ApiEndpoint = {
+  $get: (args?: EndpointArgs, init?: EndpointInit) => Promise<Response>;
+  $post: (args?: EndpointArgs, init?: EndpointInit) => Promise<Response>;
+  $patch: (args?: EndpointArgs, init?: EndpointInit) => Promise<Response>;
+  $delete: (args?: EndpointArgs, init?: EndpointInit) => Promise<Response>;
+} & {
+  [segment: string]: ApiEndpoint;
 };
 
-const rawClient = apiClient as Record<string, any>;
-
-type TimebackAnalyticsClient = {
-  xp: {
-    $get: (
-      args: {
-        query: {
-          studentId: string;
-          startTime?: string;
-          endTime?: string;
-          eventType?: string;
-          limit?: number;
-        };
-      },
-      init?: Parameters<ApiClient["students"]["$get"]>[1],
-    ) => Promise<Response>;
-  };
+type ApiClientShape = {
+  team: ApiEndpoint;
+  classrooms: ApiEndpoint;
+  students: ApiEndpoint;
+  tasks: ApiEndpoint;
+  habits: ApiEndpoint;
+  observations: ApiEndpoint;
+  invites: ApiEndpoint;
+  organizations: ApiEndpoint;
+  attendance: ApiEndpoint;
+  curriculum: ApiEndpoint;
+  "guide-dashboard": ApiEndpoint;
+  "student-lessons": ApiEndpoint;
+  "student-summaries": ApiEndpoint;
+  "timeback-analytics": ApiEndpoint;
 };
 
-const timebackAnalyticsClient = (
-  apiClient as unknown as { "timeback-analytics": TimebackAnalyticsClient }
-)["timeback-analytics"];
-
-type InvitesClient = {
-  $get: (
-    args?: unknown,
-    init?: Parameters<ApiClient["students"]["$get"]>[1],
-  ) => Promise<Response>;
-  $post: (args: {
-    json: {
-      email?: string;
-      role?: "administrator" | "teacher" | "student" | "parent";
-      expiresInDays?: number;
-      maxUses?: number;
-    };
-  }) => Promise<Response>;
-  lookup: {
-    $post: (args: { json: { code: string } }) => Promise<Response>;
-  };
-  redeem: {
-    $post: (args: { json: { code: string } }) => Promise<Response>;
-  };
-  ":id": {
-    send: {
-      $post: (args: {
-        param: { id: string };
-        json: { email?: string };
-      }) => Promise<Response>;
-    };
-  };
-};
-
-type OrganizationsClient = {
-  $post: (args: { json: { name: string } }) => Promise<Response>;
-};
-
-const invitesClient = (apiClient as unknown as { invites: InvitesClient })
-  .invites;
-const organizationsClient = (
-  apiClient as unknown as { organizations: OrganizationsClient }
-).organizations;
+const client = apiClient as unknown as ApiClientShape;
+const teamClient = client.team;
+const classroomsClient = client.classrooms;
+const studentsClient = client.students;
+const tasksClient = client.tasks;
+const habitsClient = client.habits;
+const observationsClient = client.observations;
+const invitesClient = client.invites;
+const organizationsClient = client.organizations;
+const attendanceClient = client.attendance;
+const curriculumClient = client.curriculum;
+const guideDashboardClient = client["guide-dashboard"];
+const studentLessonsClient = client["student-lessons"];
+const studentSummariesClient = client["student-summaries"];
+const timebackAnalyticsClient = client["timeback-analytics"];
 
 async function handleResponse<T>(
   promise: Promise<Response>,
@@ -177,7 +128,7 @@ async function handleResponse<T>(
 
 export async function listTeamMembers(options: RequestOptions = {}) {
   const response = await handleResponse(
-    client.team.$get(
+    teamClient.$get(
       undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
     ),
@@ -195,7 +146,7 @@ export async function listClassrooms(
   options: RequestOptions = {},
 ) {
   const response = await handleResponse(
-    client.classrooms.$get(
+    classroomsClient.$get(
       {
         query:
           params.search && params.search.trim().length > 0
@@ -216,7 +167,7 @@ type CreateClassroomInput = {
 
 export async function createClassroom(input: CreateClassroomInput) {
   const response = await handleResponse(
-    client.classrooms.$post({
+    classroomsClient.$post({
       json: {
         name: input.name,
         guideIds: input.guideIds,
@@ -237,7 +188,7 @@ export async function listStudents(
   options: RequestOptions = {},
 ) {
   const response = await handleResponse(
-    client.students.$get(
+    studentsClient.$get(
       {
         query: {
           ...(params.search && params.search.trim().length > 0
@@ -277,7 +228,7 @@ export async function createStudent(input: CreateStudentInput) {
   }
 
   const response = await handleResponse(
-    client.students.$post({ json: payload }),
+    studentsClient.$post({ json: payload }),
     StudentDetailResponseSchema,
   );
   return response.data.student;
@@ -285,7 +236,7 @@ export async function createStudent(input: CreateStudentInput) {
 
 export async function getStudent(id: string) {
   const response = await handleResponse(
-    client.students[":id"].$get({ param: { id } }),
+    studentsClient[":id"].$get({ param: { id } }),
     StudentDetailResponseSchema,
   );
   return response.data;
@@ -312,13 +263,13 @@ export async function getStudentDashboard(
   }
 
   const response = await handleResponse(
-    (rawClient.students as any)[":id"].dashboard.$get(
+    studentsClient[":id"].dashboard.$get(
       {
         param: { id },
         query,
       },
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     StudentDashboardResponseSchema,
   );
 
@@ -335,9 +286,9 @@ type CreateStudentParentInput = {
 
 export async function listStudentParents(studentId: string) {
   const response = await handleResponse(
-    (rawClient.students as any)[":studentId"].parents.$get({
+    studentsClient[":studentId"].parents.$get({
       param: { studentId },
-    }) as Promise<Response>,
+    }),
     StudentParentsListResponseSchema,
   );
 
@@ -349,7 +300,7 @@ export async function createStudentParent(
   input: CreateStudentParentInput,
 ) {
   const response = await handleResponse(
-    (rawClient.students as any)[":studentId"].parents.$post({
+    studentsClient[":studentId"].parents.$post({
       param: { studentId },
       json: {
         name: input.name,
@@ -358,7 +309,7 @@ export async function createStudentParent(
         relation: input.relation ?? null,
         preferredContactMethod: input.preferredContactMethod ?? null,
       },
-    }) as Promise<Response>,
+    }),
     StudentParentMutateResponseSchema,
   );
 
@@ -388,10 +339,10 @@ export async function updateStudentParent(
   }
 
   const response = await handleResponse(
-    (rawClient.students as any)[":studentId"].parents[":parentId"].$patch({
+    studentsClient[":studentId"].parents[":parentId"].$patch({
       param: { studentId, parentId },
       json: payload,
-    }) as Promise<Response>,
+    }),
     StudentParentMutateResponseSchema,
   );
 
@@ -399,7 +350,7 @@ export async function updateStudentParent(
 }
 
 export async function deleteStudentParent(studentId: string, parentId: string) {
-  await (rawClient.students as any)[":studentId"].parents[":parentId"].$delete({
+  await studentsClient[":studentId"].parents[":parentId"].$delete({
     param: { studentId, parentId },
   });
 }
@@ -422,7 +373,7 @@ export async function listHabits(
   }
 
   const response = await handleResponse(
-    client.habits.$get(
+    habitsClient.$get(
       Object.keys(query).length > 0 ? { query } : undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
     ),
@@ -438,7 +389,7 @@ type HabitCheckinInput = {
 
 export async function createHabitCheckin(input: HabitCheckinInput) {
   const response = await handleResponse(
-    client.habits[":id"]["check-ins"].$post({
+    habitsClient[":id"]["check-ins"].$post({
       param: { id: input.habitId },
       json: { date: input.date },
     }),
@@ -449,7 +400,7 @@ export async function createHabitCheckin(input: HabitCheckinInput) {
 
 export async function deleteHabitCheckin(input: HabitCheckinInput) {
   const response = await handleResponse(
-    client.habits[":id"]["check-ins"].$delete({
+    habitsClient[":id"]["check-ins"].$delete({
       param: { id: input.habitId },
       query: { date: input.date },
     }),
@@ -481,13 +432,13 @@ export async function listHabitCheckins(
   }
 
   const response = await handleResponse(
-    (rawClient.habits as any)[":id"]["check-ins"].$get(
+    habitsClient[":id"]["check-ins"].$get(
       {
         param: { id: params.habitId },
         query,
       },
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     HabitCheckinEventsListResponseSchema,
   );
   return response.data.events;
@@ -502,7 +453,7 @@ export async function listStudentSummaries(
   options: RequestOptions = {},
 ) {
   const response = await handleResponse(
-    client["student-summaries"].$get(
+    studentSummariesClient.$get(
       {
         query: params.studentId ? { studentId: params.studentId } : {},
       },
@@ -543,10 +494,10 @@ export async function listStudentLessons(
   }
 
   const response = await handleResponse(
-    (rawClient["student-lessons"] as any).$get(
+    studentLessonsClient.$get(
       Object.keys(query).length > 0 ? { query } : undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     StudentLessonsListResponseSchema,
   );
 
@@ -566,7 +517,7 @@ type CreateStudentLessonInput = {
 
 export async function createStudentLesson(input: CreateStudentLessonInput) {
   const response = await handleResponse(
-    (rawClient["student-lessons"] as any).$post({
+    studentLessonsClient.$post({
       json: {
         studentId: input.studentId,
         courseLessonId: input.courseLessonId ?? null,
@@ -577,7 +528,7 @@ export async function createStudentLesson(input: CreateStudentLessonInput) {
         assignedByUserId: input.assignedByUserId ?? null,
         rescheduledFromId: input.rescheduledFromId ?? null,
       },
-    }) as Promise<Response>,
+    }),
     StudentLessonDetailResponseSchema,
   );
 
@@ -586,9 +537,9 @@ export async function createStudentLesson(input: CreateStudentLessonInput) {
 
 export async function getStudentLesson(id: string) {
   const response = await handleResponse(
-    (rawClient["student-lessons"] as any)[":id"].$get({
+    studentLessonsClient[":id"].$get({
       param: { id },
-    }) as Promise<Response>,
+    }),
     StudentLessonDetailResponseSchema,
   );
 
@@ -631,10 +582,10 @@ export async function updateStudentLesson(input: UpdateStudentLessonInput) {
   }
 
   const response = await handleResponse(
-    (rawClient["student-lessons"] as any)[":id"].$patch({
+    studentLessonsClient[":id"].$patch({
       param: { id: input.id },
       json: payload,
-    }) as Promise<Response>,
+    }),
     StudentLessonDetailResponseSchema,
   );
 
@@ -660,7 +611,7 @@ type CreateStudentSummaryInput = {
 
 export async function createStudentSummary(input: CreateStudentSummaryInput) {
   const response = await handleResponse(
-    client["student-summaries"].$post({ json: input }),
+    studentSummariesClient.$post({ json: input }),
     StudentSummaryDetailResponseSchema,
   );
   return response.data;
@@ -668,7 +619,7 @@ export async function createStudentSummary(input: CreateStudentSummaryInput) {
 
 export async function getStudentSummary(id: string) {
   const response = await handleResponse(
-    client["student-summaries"][":id"].$get({ param: { id } }),
+    studentSummariesClient[":id"].$get({ param: { id } }),
     StudentSummaryDetailResponseSchema,
   );
   return response.data;
@@ -679,13 +630,13 @@ export async function sendStudentSummary(
   input: { parentIds?: string[]; emails?: string[] },
 ) {
   const response = await handleResponse(
-    (rawClient["student-summaries"] as any)[":id"].send.$post({
+    studentSummariesClient[":id"].send.$post({
       param: { id },
       json: {
         parentIds: input.parentIds,
         emails: input.emails,
       },
-    }) as Promise<Response>,
+    }),
     StudentSummaryDetailResponseSchema,
   );
 
@@ -701,7 +652,7 @@ export async function listObservations(
   options: RequestOptions = {},
 ) {
   const response = await handleResponse(
-    client.observations.$get(
+    observationsClient.$get(
       {
         query: params.studentId ? { studentId: params.studentId } : {},
       },
@@ -720,7 +671,7 @@ type CreateObservationInput = {
 
 export async function createObservation(input: CreateObservationInput) {
   const response = await handleResponse(
-    client.observations.$post({
+    observationsClient.$post({
       json: {
         content: input.content,
         studentId: input.studentId ?? null,
@@ -744,7 +695,7 @@ export async function listActions(
   options: RequestOptions = {},
 ) {
   const response = await handleResponse(
-    client.tasks.$get(
+    tasksClient.$get(
       {
         query: {
           type: params.type,
@@ -779,7 +730,7 @@ type CreateActionInput = {
 
 export async function createAction(input: CreateActionInput) {
   const response = await handleResponse(
-    client.tasks.$post({
+    tasksClient.$post({
       json: {
         title: input.title,
         description: input.description ?? null,
@@ -829,7 +780,7 @@ export async function updateAction(input: UpdateActionInput) {
   }
 
   const response = await handleResponse(
-    client.tasks[":id"].$patch({
+    tasksClient[":id"].$patch({
       param: { id: input.id },
       json: payload,
     }),
@@ -860,10 +811,10 @@ export async function listAttendance(
   }
 
   const response = await handleResponse(
-    (rawClient.attendance as any).$get(
+    attendanceClient.$get(
       Object.keys(query).length > 0 ? { query } : undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     WorkPeriodsListResponseSchema,
   );
 
@@ -878,13 +829,13 @@ type CreateAttendanceInput = {
 
 export async function createAttendance(input: CreateAttendanceInput) {
   const response = await handleResponse(
-    (rawClient.attendance as any).$post({
+    attendanceClient.$post({
       json: {
         studentId: input.studentId,
         startTime: input.startTime,
         notes: input.notes ?? null,
       },
-    }) as Promise<Response>,
+    }),
     WorkPeriodDetailResponseSchema,
   );
 
@@ -911,10 +862,10 @@ export async function updateAttendance(input: UpdateAttendanceInput) {
   }
 
   const response = await handleResponse(
-    (rawClient.attendance as any)[":id"].$patch({
+    attendanceClient[":id"].$patch({
       param: { id: input.id },
       json: payload,
-    }) as Promise<Response>,
+    }),
     WorkPeriodDetailResponseSchema,
   );
 
@@ -922,7 +873,7 @@ export async function updateAttendance(input: UpdateAttendanceInput) {
 }
 
 export async function deleteAttendance(id: string) {
-  await (rawClient.attendance as any)[":id"].$delete({
+  await attendanceClient[":id"].$delete({
     param: { id },
   });
 }
@@ -935,7 +886,7 @@ type CreateHabitInput = {
 
 export async function createHabit(input: CreateHabitInput) {
   const response = await handleResponse(
-    client.habits.$post({
+    habitsClient.$post({
       json: {
         studentId: input.studentId,
         name: input.name,
@@ -1049,28 +1000,21 @@ export async function getStudentXpSummary(
 
 export async function listClassAreas(options: RequestOptions = {}) {
   const response = await handleResponse(
-    (rawClient.curriculum as any).areas.$get(
+    curriculumClient.areas.$get(
       undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     ClassAreasListResponseSchema,
   );
   return response.data.classAreas;
 }
 
-type ListSubjectsParams = {
-  // reserved for future filters
-};
-
-export async function listSubjects(
-  _params: ListSubjectsParams = {},
-  options: RequestOptions = {},
-) {
+export async function listSubjects(options: RequestOptions = {}) {
   const response = await handleResponse(
-    (rawClient.curriculum as any).subjects.$get(
+    curriculumClient.subjects.$get(
       undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     SubjectsListResponseSchema,
   );
   return response.data.subjects;
@@ -1094,10 +1038,10 @@ export async function listCourses(
   }
 
   const response = await handleResponse(
-    (rawClient.curriculum as any).courses.$get(
+    curriculumClient.courses.$get(
       Object.keys(query).length > 0 ? { query } : undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     CoursesListResponseSchema,
   );
   return response.data.courses;
@@ -1105,9 +1049,9 @@ export async function listCourses(
 
 export async function listCourseLessons(courseId: string) {
   const response = await handleResponse(
-    (rawClient.curriculum as any).courses[":id"].lessons.$get({
+    curriculumClient.courses[":id"].lessons.$get({
       param: { id: courseId },
-    }) as Promise<Response>,
+    }),
     CourseLessonsListResponseSchema,
   );
   return response.data.lessons;
@@ -1115,10 +1059,10 @@ export async function listCourseLessons(courseId: string) {
 
 export async function listMaterials(options: RequestOptions = {}) {
   const response = await handleResponse(
-    (rawClient.curriculum as any).materials.$get(
+    curriculumClient.materials.$get(
       undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     MaterialsListResponseSchema,
   );
   return response.data.materials;
@@ -1126,10 +1070,10 @@ export async function listMaterials(options: RequestOptions = {}) {
 
 export async function listTopics(options: RequestOptions = {}) {
   const response = await handleResponse(
-    (rawClient.curriculum as any).topics.$get(
+    curriculumClient.topics.$get(
       undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     TopicsListResponseSchema,
   );
   return response.data.topics;
@@ -1137,10 +1081,10 @@ export async function listTopics(options: RequestOptions = {}) {
 
 export async function getGuideDashboard(options: RequestOptions = {}) {
   const response = await handleResponse(
-    (rawClient["guide-dashboard"] as any).$get(
+    guideDashboardClient.$get(
       undefined,
       options.signal ? { init: { signal: options.signal } } : undefined,
-    ) as Promise<Response>,
+    ),
     GuideDashboardResponseSchema,
   );
 

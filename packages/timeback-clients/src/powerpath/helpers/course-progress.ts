@@ -10,7 +10,8 @@ type GetCourseProgressResponse = OperationResponse<
   "getCourseProgress"
 >;
 
-type CourseProgressLineItem = GetCourseProgressResponse["lineItems"][number];
+export type CourseProgressLineItem =
+  GetCourseProgressResponse["lineItems"][number];
 
 type CourseProgressOperationArgs = PowerpathOperationArgs<"getCourseProgress">;
 

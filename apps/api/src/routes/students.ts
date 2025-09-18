@@ -3,8 +3,8 @@ import { withDbContext } from "@monte/database";
 import type { Student } from "@monte/shared";
 import {
   ApiErrorSchema,
-  StudentDetailResponseSchema,
   StudentDashboardResponseSchema,
+  StudentDetailResponseSchema,
   StudentSchema,
   StudentsListResponseSchema,
 } from "@monte/shared";
@@ -13,13 +13,13 @@ import { getServerSession } from "../lib/auth/session";
 import { respond } from "../lib/http/respond";
 import { HTTP_STATUS } from "../lib/http/status";
 import {
-  listStudentsForOrganization,
-  syncStudentByRosterId,
-} from "../services/timeback/roster";
-import {
   getStudentXpSummary,
   TimebackUnavailableError,
 } from "../services/timeback/analytics";
+import {
+  listStudentsForOrganization,
+  syncStudentByRosterId,
+} from "../services/timeback/roster";
 
 function dedupeById<T extends { id: string }>(items: T[]): T[] {
   const byId = new Map<string, T>();
@@ -295,237 +295,236 @@ const getStudentRoute = createRoute({
   },
 });
 
-const routerWithDetail = routerWithCreate.openapi(getStudentRoute, async (c) => {
-  const session = await getServerSession(c.req.raw);
-  if (!session) {
-    return respond(
-      getStudentRoute,
-      c,
-      { error: "Unauthorized" },
-      HTTP_STATUS.unauthorized,
-    );
-  }
-
-  const params = c.req.valid("param");
-
-  try {
-    const overlay = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      (trx) =>
-        trx
-          .selectFrom("students")
-          .leftJoin(
-            "classrooms",
-            "classrooms.id",
-            "students.primary_classroom_id",
-          )
-          .select([
-            "students.id as id",
-            "students.org_id as org_id",
-            "students.full_name as full_name",
-            "students.avatar_url as avatar_url",
-            "students.dob as dob",
-            "students.primary_classroom_id as primary_classroom_id",
-            "students.created_at as created_at",
-            "students.oneroster_user_id as oneroster_user_id",
-            "classrooms.id as classroom_id",
-            "classrooms.name as classroom_name",
-          ])
-          .where("students.org_id", "=", session.session.orgId)
-          .where((eb) =>
-            eb.or([
-              eb("students.id", "=", params.id),
-              eb("students.oneroster_user_id", "=", params.id),
-            ]),
-          )
-          .executeTakeFirst(),
-    );
-
-    const rosterCandidates = new Set<string>();
-    if (overlay?.oneroster_user_id) {
-      rosterCandidates.add(overlay.oneroster_user_id);
-    }
-    rosterCandidates.add(params.id);
-
-    let studentRecord: Student | null = null;
-    let rosterUserId: string | null = null;
-
-    for (const candidate of rosterCandidates) {
-      if (!candidate) {
-        continue;
-      }
-      const synced = await syncStudentByRosterId(session, candidate);
-      if (synced) {
-        studentRecord = synced;
-        rosterUserId = candidate;
-        break;
-      }
-    }
-
-    if (!studentRecord && overlay) {
-      studentRecord = mapOverlayRowToStudent(overlay);
-    }
-
-    if (!studentRecord) {
+const routerWithDetail = routerWithCreate.openapi(
+  getStudentRoute,
+  async (c) => {
+    const session = await getServerSession(c.req.raw);
+    if (!session) {
       return respond(
         getStudentRoute,
         c,
-        { error: "Student not found" },
-        HTTP_STATUS.notFound,
+        { error: "Unauthorized" },
+        HTTP_STATUS.unauthorized,
       );
     }
 
-    const montessori = await withDbContext(
-      { userId: session.session.userId, orgId: session.session.orgId },
-      async (trx) => {
-        const parents = overlay
-          ? await trx
-              .selectFrom("student_parents")
-              .select([
-                "id",
-                "student_id",
-                "name",
-                "email",
-                "phone",
-                "relation",
-                "preferred_contact_method",
-                "created_at",
-              ])
-              .where("student_id", "=", overlay.id)
-              .orderBy("created_at", "asc")
-              .execute()
-          : [];
+    const params = c.req.valid("param");
 
-        const habitRows =
-          overlay?.id || rosterUserId
+    try {
+      const overlay = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        (trx) =>
+          trx
+            .selectFrom("students")
+            .leftJoin(
+              "classrooms",
+              "classrooms.id",
+              "students.primary_classroom_id",
+            )
+            .select([
+              "students.id as id",
+              "students.org_id as org_id",
+              "students.full_name as full_name",
+              "students.avatar_url as avatar_url",
+              "students.dob as dob",
+              "students.primary_classroom_id as primary_classroom_id",
+              "students.created_at as created_at",
+              "students.oneroster_user_id as oneroster_user_id",
+              "classrooms.id as classroom_id",
+              "classrooms.name as classroom_name",
+            ])
+            .where("students.org_id", "=", session.session.orgId)
+            .where((eb) =>
+              eb.or([
+                eb("students.id", "=", params.id),
+                eb("students.oneroster_user_id", "=", params.id),
+              ]),
+            )
+            .executeTakeFirst(),
+      );
+
+      const rosterCandidates = new Set<string>();
+      if (overlay?.oneroster_user_id) {
+        rosterCandidates.add(overlay.oneroster_user_id);
+      }
+      rosterCandidates.add(params.id);
+
+      let studentRecord: Student | null = null;
+      let rosterUserId: string | null = null;
+
+      for (const candidate of rosterCandidates) {
+        if (!candidate) {
+          continue;
+        }
+        const synced = await syncStudentByRosterId(session, candidate);
+        if (synced) {
+          studentRecord = synced;
+          rosterUserId = candidate;
+          break;
+        }
+      }
+
+      if (!studentRecord && overlay) {
+        studentRecord = mapOverlayRowToStudent(overlay);
+      }
+
+      if (!studentRecord) {
+        return respond(
+          getStudentRoute,
+          c,
+          { error: "Student not found" },
+          HTTP_STATUS.notFound,
+        );
+      }
+
+      const montessori = await withDbContext(
+        { userId: session.session.userId, orgId: session.session.orgId },
+        async (trx) => {
+          const parents = overlay
             ? await trx
-                .selectFrom("habits")
-                .selectAll()
-                .where((eb) => {
-                  const overlayId = overlay?.id ?? null;
-                  const rosterId = rosterUserId ?? null;
-                  if (overlayId && rosterId) {
-                    return eb.or([
-                      eb("student_id", "=", overlayId),
-                      eb("oneroster_student_id", "=", rosterId),
-                    ]);
-                  }
-                  if (overlayId) {
-                    return eb("student_id", "=", overlayId);
-                  }
-                  if (rosterId) {
-                    return eb("oneroster_student_id", "=", rosterId);
-                  }
-                  return eb.lit(false);
-                })
-                .orderBy("created_at", "desc")
+                .selectFrom("student_parents")
+                .select([
+                  "id",
+                  "student_id",
+                  "name",
+                  "email",
+                  "phone",
+                  "relation",
+                  "preferred_contact_method",
+                  "created_at",
+                ])
+                .where("student_id", "=", overlay.id)
+                .orderBy("created_at", "asc")
                 .execute()
             : [];
 
-        const summaryRows =
-          overlay?.id || rosterUserId
-            ? await trx
-                .selectFrom("student_summaries")
-                .selectAll()
-                .where((eb) => {
-                  const overlayId = overlay?.id ?? null;
-                  const rosterId = rosterUserId ?? null;
-                  if (overlayId && rosterId) {
-                    return eb.or([
-                      eb("student_id", "=", overlayId),
-                      eb("oneroster_student_id", "=", rosterId),
-                    ]);
-                  }
-                  if (overlayId) {
-                    return eb("student_id", "=", overlayId);
-                  }
-                  if (rosterId) {
-                    return eb("oneroster_student_id", "=", rosterId);
-                  }
-                  return eb.lit(false);
-                })
-                .orderBy("created_at", "desc")
-                .limit(5)
-                .execute()
-            : [];
+          const habitRows =
+            overlay?.id || rosterUserId
+              ? await trx
+                  .selectFrom("habits")
+                  .selectAll()
+                  .where((eb) => {
+                    const overlayId = overlay?.id ?? null;
+                    const rosterId = rosterUserId ?? null;
+                    if (overlayId && rosterId) {
+                      return eb.or([
+                        eb("student_id", "=", overlayId),
+                        eb("oneroster_student_id", "=", rosterId),
+                      ]);
+                    }
+                    if (overlayId) {
+                      return eb("student_id", "=", overlayId);
+                    }
+                    if (rosterId) {
+                      return eb("oneroster_student_id", "=", rosterId);
+                    }
+                    return eb.lit(false);
+                  })
+                  .orderBy("created_at", "desc")
+                  .execute()
+              : [];
 
-        const checkinRows =
-          overlay?.id || rosterUserId
-            ? await trx
-                .selectFrom("habit_checkin_events")
-                .innerJoin(
-                  "habits",
-                  "habits.id",
-                  "habit_checkin_events.habit_id",
-                )
-                .selectAll("habit_checkin_events")
-                .where((eb) => {
-                  const overlayId = overlay?.id ?? null;
-                  const rosterId = rosterUserId ?? null;
-                  if (overlayId && rosterId) {
-                    return eb.or([
-                      eb("habits.student_id", "=", overlayId),
-                      eb("habits.oneroster_student_id", "=", rosterId),
-                    ]);
-                  }
-                  if (overlayId) {
-                    return eb("habits.student_id", "=", overlayId);
-                  }
-                  if (rosterId) {
-                    return eb(
-                      "habits.oneroster_student_id",
-                      "=",
-                      rosterId,
-                    );
-                  }
-                  return eb.lit(false);
-                })
-                .orderBy("habit_checkin_events.date", "desc")
-                .limit(200)
-                .execute()
-            : [];
+          const summaryRows =
+            overlay?.id || rosterUserId
+              ? await trx
+                  .selectFrom("student_summaries")
+                  .selectAll()
+                  .where((eb) => {
+                    const overlayId = overlay?.id ?? null;
+                    const rosterId = rosterUserId ?? null;
+                    if (overlayId && rosterId) {
+                      return eb.or([
+                        eb("student_id", "=", overlayId),
+                        eb("oneroster_student_id", "=", rosterId),
+                      ]);
+                    }
+                    if (overlayId) {
+                      return eb("student_id", "=", overlayId);
+                    }
+                    if (rosterId) {
+                      return eb("oneroster_student_id", "=", rosterId);
+                    }
+                    return eb.lit(false);
+                  })
+                  .orderBy("created_at", "desc")
+                  .limit(5)
+                  .execute()
+              : [];
 
-        const habitCheckins = checkinRows.map((row) => ({
-          ...row,
-          date:
-            row.date instanceof Date
-              ? row.date.toISOString().slice(0, 10)
-              : row.date,
-          created_at:
-            row.created_at instanceof Date
-              ? row.created_at.toISOString()
-              : row.created_at,
-        }));
+          const checkinRows =
+            overlay?.id || rosterUserId
+              ? await trx
+                  .selectFrom("habit_checkin_events")
+                  .innerJoin(
+                    "habits",
+                    "habits.id",
+                    "habit_checkin_events.habit_id",
+                  )
+                  .selectAll("habit_checkin_events")
+                  .where((eb) => {
+                    const overlayId = overlay?.id ?? null;
+                    const rosterId = rosterUserId ?? null;
+                    if (overlayId && rosterId) {
+                      return eb.or([
+                        eb("habits.student_id", "=", overlayId),
+                        eb("habits.oneroster_student_id", "=", rosterId),
+                      ]);
+                    }
+                    if (overlayId) {
+                      return eb("habits.student_id", "=", overlayId);
+                    }
+                    if (rosterId) {
+                      return eb("habits.oneroster_student_id", "=", rosterId);
+                    }
+                    return eb.lit(false);
+                  })
+                  .orderBy("habit_checkin_events.date", "desc")
+                  .limit(200)
+                  .execute()
+              : [];
 
-        return {
-          parents,
-          habits: dedupeById(habitRows),
-          summaries: dedupeById(summaryRows),
-          habitCheckins,
-        };
-      },
-    );
+          const habitCheckins = checkinRows.map((row) => ({
+            ...row,
+            date:
+              row.date instanceof Date
+                ? row.date.toISOString().slice(0, 10)
+                : row.date,
+            created_at:
+              row.created_at instanceof Date
+                ? row.created_at.toISOString()
+                : row.created_at,
+          }));
 
-    const response = StudentDetailResponseSchema.parse({
-      data: {
-        student: studentRecord,
-        parents: montessori.parents,
-        habits: montessori.habits,
-        summaries: montessori.summaries,
-        habitCheckins: montessori.habitCheckins,
-      },
-    });
+          return {
+            parents,
+            habits: dedupeById(habitRows),
+            summaries: dedupeById(summaryRows),
+            habitCheckins,
+          };
+        },
+      );
 
-    return respond(getStudentRoute, c, response);
-  } catch (_error) {
-    return respond(
-      getStudentRoute,
-      c,
-      { error: "Failed to fetch student" },
-      HTTP_STATUS.internalServerError,
-    );
-  }
-});
+      const response = StudentDetailResponseSchema.parse({
+        data: {
+          student: studentRecord,
+          parents: montessori.parents,
+          habits: montessori.habits,
+          summaries: montessori.summaries,
+          habitCheckins: montessori.habitCheckins,
+        },
+      });
+
+      return respond(getStudentRoute, c, response);
+    } catch (_error) {
+      return respond(
+        getStudentRoute,
+        c,
+        { error: "Failed to fetch student" },
+        HTTP_STATUS.internalServerError,
+      );
+    }
+  },
+);
 
 function resolveDashboardWindow(query: z.infer<typeof DashboardQuery>) {
   if (query.start && query.end) {
@@ -589,134 +588,131 @@ const dashboardRoute = createRoute({
   },
 });
 
-const studentsRouter = routerWithDetail.openapi(
-  dashboardRoute,
-  async (c) => {
-    const session = await getServerSession(c.req.raw);
-    if (!session) {
+const studentsRouter = routerWithDetail.openapi(dashboardRoute, async (c) => {
+  const session = await getServerSession(c.req.raw);
+  if (!session) {
+    return respond(
+      dashboardRoute,
+      c,
+      { error: "Unauthorized" },
+      HTTP_STATUS.unauthorized,
+    );
+  }
+
+  const params = c.req.valid("param");
+  const query = c.req.valid("query");
+  const window = resolveDashboardWindow(query);
+
+  try {
+    const studentDetail = await withDbContext(
+      { userId: session.session.userId, orgId: session.session.orgId },
+      async (trx) =>
+        trx
+          .selectFrom("students")
+          .leftJoin(
+            "classrooms",
+            "classrooms.id",
+            "students.primary_classroom_id",
+          )
+          .select([
+            "students.id as id",
+            "students.org_id as org_id",
+            "students.full_name as full_name",
+            "students.avatar_url as avatar_url",
+            "students.dob as dob",
+            "students.primary_classroom_id as primary_classroom_id",
+            "students.created_at as created_at",
+            "students.oneroster_user_id as oneroster_user_id",
+            "classrooms.id as classroom_id",
+            "classrooms.name as classroom_name",
+          ])
+          .where("students.id", "=", params.id)
+          .where("students.org_id", "=", session.session.orgId)
+          .executeTakeFirst(),
+    );
+
+    if (!studentDetail) {
       return respond(
         dashboardRoute,
         c,
-        { error: "Unauthorized" },
-        HTTP_STATUS.unauthorized,
+        { error: "Student not found" },
+        HTTP_STATUS.notFound,
       );
     }
 
-    const params = c.req.valid("param");
-    const query = c.req.valid("query");
-    const window = resolveDashboardWindow(query);
+    const studentRecord = mapOverlayRowToStudent(studentDetail);
+
+    const [habits, checkins] = await withDbContext(
+      { userId: session.session.userId, orgId: session.session.orgId },
+      async (trx) => {
+        const habitRows = await trx
+          .selectFrom("habits")
+          .selectAll()
+          .where("student_id", "=", studentDetail.id)
+          .orderBy("created_at", "desc")
+          .execute();
+
+        const checkinRows = await trx
+          .selectFrom("habit_checkin_events")
+          .selectAll()
+          .where("student_id", "=", studentDetail.id)
+          .where("date", ">=", new Date(window.start))
+          .where("date", "<=", new Date(window.end))
+          .orderBy("date", "desc")
+          .limit(200)
+          .execute();
+
+        const normalizedCheckins = checkinRows.map((row) => ({
+          ...row,
+          date:
+            row.date instanceof Date
+              ? row.date.toISOString().slice(0, 10)
+              : row.date,
+          created_at:
+            row.created_at instanceof Date
+              ? row.created_at.toISOString()
+              : row.created_at,
+        }));
+
+        return [dedupeById(habitRows), normalizedCheckins] as const;
+      },
+    );
+
+    let xpSummary = null;
 
     try {
-      const studentDetail = await withDbContext(
-        { userId: session.session.userId, orgId: session.session.orgId },
-        async (trx) =>
-          trx
-            .selectFrom("students")
-            .leftJoin(
-              "classrooms",
-              "classrooms.id",
-              "students.primary_classroom_id",
-            )
-            .select([
-              "students.id as id",
-              "students.org_id as org_id",
-              "students.full_name as full_name",
-              "students.avatar_url as avatar_url",
-              "students.dob as dob",
-              "students.primary_classroom_id as primary_classroom_id",
-              "students.created_at as created_at",
-              "students.oneroster_user_id as oneroster_user_id",
-              "classrooms.id as classroom_id",
-              "classrooms.name as classroom_name",
-            ])
-            .where("students.id", "=", params.id)
-            .where("students.org_id", "=", session.session.orgId)
-            .executeTakeFirst(),
-      );
-
-      if (!studentDetail) {
-        return respond(
-          dashboardRoute,
-          c,
-          { error: "Student not found" },
-          HTTP_STATUS.notFound,
-        );
-      }
-
-      const studentRecord = mapOverlayRowToStudent(studentDetail);
-
-      const [habits, checkins] = await withDbContext(
-        { userId: session.session.userId, orgId: session.session.orgId },
-        async (trx) => {
-          const habitRows = await trx
-            .selectFrom("habits")
-            .selectAll()
-            .where("student_id", "=", studentDetail.id)
-            .orderBy("created_at", "desc")
-            .execute();
-
-          const checkinRows = await trx
-            .selectFrom("habit_checkin_events")
-            .selectAll()
-            .where("student_id", "=", studentDetail.id)
-            .where("date", ">=", new Date(window.start))
-            .where("date", "<=", new Date(window.end))
-            .orderBy("date", "desc")
-            .limit(200)
-            .execute();
-
-          const normalizedCheckins = checkinRows.map((row) => ({
-            ...row,
-            date:
-              row.date instanceof Date
-                ? row.date.toISOString().slice(0, 10)
-                : row.date,
-            created_at:
-              row.created_at instanceof Date
-                ? row.created_at.toISOString()
-                : row.created_at,
-          }));
-
-          return [dedupeById(habitRows), normalizedCheckins] as const;
-        },
-      );
-
-      let xpSummary = null;
-
-      try {
-        xpSummary = await getStudentXpSummary({
-          studentId: studentRecord.oneroster_user_id ?? studentRecord.id,
-          startTime: window.start,
-          endTime: window.end,
-        });
-      } catch (error) {
-        if (!(error instanceof TimebackUnavailableError)) {
-          throw error;
-        }
-        xpSummary = null;
-      }
-
-      const response = StudentDashboardResponseSchema.parse({
-        data: {
-          student: studentRecord,
-          habits,
-          habitCheckins: checkins,
-          xp: xpSummary,
-        },
+      xpSummary = await getStudentXpSummary({
+        studentId: studentRecord.oneroster_user_id ?? studentRecord.id,
+        startTime: window.start,
+        endTime: window.end,
       });
-
-      return respond(dashboardRoute, c, response);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to load dashboard";
-      return respond(
-        dashboardRoute,
-        c,
-        { error: message },
-        HTTP_STATUS.internalServerError,
-      );
+      if (!(error instanceof TimebackUnavailableError)) {
+        throw error;
+      }
+      xpSummary = null;
     }
-  },
-);
+
+    const response = StudentDashboardResponseSchema.parse({
+      data: {
+        student: studentRecord,
+        habits,
+        habitCheckins: checkins,
+        xp: xpSummary,
+      },
+    });
+
+    return respond(dashboardRoute, c, response);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to load dashboard";
+    return respond(
+      dashboardRoute,
+      c,
+      { error: message },
+      HTTP_STATUS.internalServerError,
+    );
+  }
+});
 
 export { studentsRouter };
