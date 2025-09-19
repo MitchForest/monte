@@ -9,22 +9,20 @@ import {
 } from "react-oidc-context";
 
 import { devAccessToken, isMockAuthMode } from "@/lib/auth/config";
+import { syncSessionCookie } from "@/lib/auth/session-sync";
 import { setAccessToken } from "@/lib/auth/token-store";
+import { publicEnv } from "@/lib/env";
 
-const DEFAULT_AUTHORITY =
-  process.env.NEXT_PUBLIC_COGNITO_AUTHORITY ??
-  "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_H5aVRMERg";
-const DEFAULT_SCOPE =
-  process.env.NEXT_PUBLIC_COGNITO_SCOPE ?? "openid email profile";
+const DEFAULT_AUTHORITY = publicEnv.cognitoAuthority;
+const DEFAULT_SCOPE = publicEnv.cognitoScope;
 const isMockMode = isMockAuthMode;
 
 function resolveRedirectUri(): string | undefined {
   if (typeof window === "undefined") {
-    return process.env.NEXT_PUBLIC_COGNITO_REDIRECT_URI;
+    return publicEnv.cognitoRedirectUri ?? undefined;
   }
   return (
-    process.env.NEXT_PUBLIC_COGNITO_REDIRECT_URI ??
-    `${window.location.origin}/auth/callback`
+    publicEnv.cognitoRedirectUri ?? `${window.location.origin}/auth/callback`
   );
 }
 
@@ -32,7 +30,17 @@ function AuthSync() {
   const auth = useAuth();
 
   useEffect(() => {
-    setAccessToken(auth.user?.access_token ?? null);
+    const token = auth.user?.access_token ?? null;
+    setAccessToken(token);
+
+    if (isMockMode) {
+      return;
+    }
+
+    const controller = new AbortController();
+    void syncSessionCookie(token, { signal: controller.signal });
+
+    return () => controller.abort();
   }, [auth.user]);
 
   return null;
@@ -48,6 +56,9 @@ export function AuthProvider({ children }: ProviderProps) {
   useEffect(() => {
     if (isMockMode) {
       setAccessToken(mockToken);
+      const controller = new AbortController();
+      void syncSessionCookie(mockToken, { signal: controller.signal });
+      return () => controller.abort();
     }
   }, [mockToken]);
 
@@ -56,7 +67,7 @@ export function AuthProvider({ children }: ProviderProps) {
       return null;
     }
 
-    const clientId = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID;
+    const clientId = publicEnv.cognitoClientId;
     const authority = DEFAULT_AUTHORITY;
     const redirectUri = resolveRedirectUri();
 

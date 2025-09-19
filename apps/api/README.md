@@ -24,13 +24,15 @@ Following this pattern keeps OpenAPI docs accurate and prevents accidentally lea
 | --- | ------- |
 | `PORT` | HTTP port for the Bun server (default 8787). |
 | `API_URL` | Base URL advertised in the generated OpenAPI spec (useful in production). |
-| `APP_ORIGINS` | Comma-separated list used by `getCorsOrigins()` to configure CORS. |
+| `APP_URL` / `APP_ORIGINS` | Used by CORS helpers to permit browser requests. |
 | `DATABASE_URL` | Postgres connection string consumed by `@monte/database`. |
-| `COGNITO_AUTHORITY` / `COGNITO_AUDIENCE` | Cognito issuer + audience for validating Bearer tokens. |
-| `DEV_AUTH_BYPASS` + `DEV_*` | Enable a seeded dev user/org for local work without Cognito. |
+| `COGNITO_AUTHORITY` / `COGNITO_AUDIENCE` / `COGNITO_CLIENT_ID` | Cognito issuer, audience, and client ID used to verify bearer tokens. |
+| `DEV_AUTH_BYPASS` + `DEV_*` | Enable and configure the seeded dev user/org for local work without Cognito (includes `DEV_USER_ROLE`). |
 | `DEFAULT_ORGANIZATION_ID` | Optional fallback org id when a user has no membership. |
+| `MONTE_ONEROSTER_ORG_ID` | Default OneRoster organization used by bootstrap scripts. |
 | `TIMEBACK_ORG_ALLOWLIST` | Comma-separated Timeback org IDs we allow to sync. Leave blank to allow all. |
-| `TIMEBACK_*` / `ONEROSTER_*` / `CALIPER_*` | Service-specific client credentials. Forwarded to the generated clients. |
+| `TIMEBACK_CALIPER_TOKEN` / `TIMEBACK_CALIPER_WEBHOOK_URL` / `TIMEBACK_WORKER_TOKEN` | Secrets used by the Caliper webhook + worker endpoints. |
+| `TIMEBACK_*` / `ONEROSTER_*` / `CALIPER_*` / `POWERPATH_*` / `QTI_*` | Service-specific client credentials forwarded to `@monte/timeback-clients`. |
 | `OPENAI_API_KEY` | Required for AI-generated summaries (`lib/integrations/openai`). |
 | `RESEND_API_KEY` / `RESEND_FROM_ADDRESS` | Transactional email for summaries and invites. |
 

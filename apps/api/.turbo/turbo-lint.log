@@ -1,2 +1,3 @@
-$ bun x biome check
-Checked 38 files in 98ms. No fixes applied.
+
+[0m[2m[35m$[0m [2m[1mbun x biome check[0m
+[0m[34mChecked [0m[0m[34m54[0m[0m[34m [0m[0m[34mfiles[0m[0m[34m in [0m[0m[34m96[0m[0m[2m[34mms[0m[0m[34m.[0m[0m[34m No fixes applied.[0m

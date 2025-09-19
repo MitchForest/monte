@@ -1,3 +1,4 @@
+import { createEnvLoader } from "@monte/shared/env";
 import { z } from "zod";
 
 export type TimebackService = "qti" | "oneroster" | "caliper" | "powerpath";
@@ -203,17 +204,14 @@ type ServiceConfigOptions = {
   requireCredentials?: boolean;
 };
 
-let cachedEnv: RawTimebackEnv | null = null;
+const envLoader = createEnvLoader(RawEnvSchema);
 
 export function loadTimebackEnv(): RawTimebackEnv {
-  if (!cachedEnv) {
-    cachedEnv = RawEnvSchema.parse(process.env);
-  }
-  return cachedEnv;
+  return envLoader.load();
 }
 
 export function resetTimebackEnvCache(): void {
-  cachedEnv = null;
+  envLoader.reset();
 }
 
 export function getTimebackServiceConfig(

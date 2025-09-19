@@ -13,13 +13,11 @@ declare global {
 }
 
 function createPool(): Pool {
-  const { DATABASE_URL, DATABASE_SSL_MODE, DATABASE_SSL_REJECT_UNAUTHORIZED } =
-    {
-      ...loadServerEnv(),
-      DATABASE_SSL_MODE: process.env.DATABASE_SSL_MODE,
-      DATABASE_SSL_REJECT_UNAUTHORIZED:
-        process.env.DATABASE_SSL_REJECT_UNAUTHORIZED,
-    } as Record<string, string | undefined>;
+  const env = loadServerEnv();
+  const DATABASE_URL = env.DATABASE_URL;
+  const DATABASE_SSL_MODE = process.env.DATABASE_SSL_MODE;
+  const DATABASE_SSL_REJECT_UNAUTHORIZED =
+    process.env.DATABASE_SSL_REJECT_UNAUTHORIZED;
 
   const databaseUrl = DATABASE_URL ?? requireServerEnv("DATABASE_URL");
 

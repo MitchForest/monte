@@ -7,6 +7,7 @@ import {
   type StudentXpSummary,
   StudentXpSummarySchema,
 } from "@monte/shared/student";
+import { caliper } from "@monte/timeback-clients";
 import { z } from "zod";
 
 import {
@@ -27,8 +28,9 @@ const StudentXpFiltersSchema = z.object({
 
 export type StudentXpFilters = z.infer<typeof StudentXpFiltersSchema>;
 
-function toDateBucket(value: string): string {
-  return value.slice(0, 10);
+function toDateBucket(value: string): Date {
+  const bucket = value.slice(0, 10);
+  return new Date(`${bucket}T00:00:00Z`);
 }
 
 const coerceNumber = (value: unknown): number | null => {
@@ -333,43 +335,13 @@ async function fetchSummaryFromCaliper(
   caliperClient: NonNullable<ReturnType<typeof getCaliperClient>>,
   filters: StudentXpFilters,
 ): Promise<StudentXpSummary> {
-  const query: Record<string, unknown> = {
+  const payload = await caliper.listCaliperEvents(caliperClient, {
     actorId: filters.studentId,
+    startDate: filters.startTime,
+    endDate: filters.endTime,
+    eventType: filters.eventType,
     limit: filters.limit ?? DEFAULT_EVENT_LIMIT,
-  };
-
-  if (filters.startTime) {
-    query.startDate = filters.startTime;
-  }
-
-  if (filters.endTime) {
-    query.endDate = filters.endTime;
-  }
-
-  if (filters.eventType) {
-    query.eventType = filters.eventType;
-  }
-
-  const searchParams = new URLSearchParams();
-  for (const [key, value] of Object.entries(query)) {
-    if (value === undefined || value === null) {
-      continue;
-    }
-    searchParams.set(key, String(value));
-  }
-
-  const url =
-    searchParams.size > 0
-      ? `/caliper/events?${searchParams.toString()}`
-      : "/caliper/events";
-
-  const response = await caliperClient.fetch(url, { method: "GET" });
-
-  if (!response.ok) {
-    throw new Error(`TimeBack Caliper request failed (${response.status})`);
-  }
-
-  const payload = (await response.json()) as unknown;
+  });
 
   const events = extractEventsFromResponse(payload).map((rawEvent) =>
     normalizeEvent(rawEvent),

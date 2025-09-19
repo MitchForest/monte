@@ -292,6 +292,9 @@ function buildOperationSpecsFile(
 
   for (const endpoint of context.endpoints) {
     const alias = endpoint.alias;
+    if (!alias) {
+      continue;
+    }
     const metadata = metadataByAlias.get(alias);
     if (!metadata) {
       continue;
@@ -980,14 +983,14 @@ function rewriteSchemaExpression(
 function sanitizeSchemaCode(code: string): string {
   const withoutNullEnums = code.replace(
     /z\.enum\(\[(.*?)\]\)/gs,
-    (match, inner) => {
+    (match: string, inner: string) => {
       if (!/\bnull\b/.test(inner)) {
         return match;
       }
       const values = inner
         .split(",")
-        .map((part) => part.trim())
-        .filter((part) => part.length > 0 && part !== "null");
+        .map((part: string) => part.trim())
+        .filter((part: string) => part.length > 0 && part !== "null");
       return `z.enum([${values.join(", ")}])`;
     },
   );

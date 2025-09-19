@@ -1,9 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-
-import type { ImpersonationSelection } from "@/lib/impersonation/store";
 import { useImpersonationContext } from "@/components/providers/impersonation-provider";
+import type { ImpersonationSelection } from "@/lib/impersonation/store";
 
 export function useImpersonation() {
   const context = useImpersonationContext();

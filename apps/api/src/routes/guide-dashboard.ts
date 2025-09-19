@@ -169,7 +169,7 @@ router.openapi(guideDashboardRoute, async (c) => {
           .selectFrom("xp_facts_daily")
           .select(["student_id", "xp_total"])
           .where("org_id", "=", session.session.orgId)
-          .where("date_bucket", "=", todayStart.toISOString().slice(0, 10))
+          .where("date_bucket", "=", todayStart)
           .execute();
 
         const observationCountRow = await trx

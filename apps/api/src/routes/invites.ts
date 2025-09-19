@@ -363,6 +363,8 @@ router.openapi(redeemInviteRoute, async (c) => {
             user_id: session.session.userId,
             role,
             created_at: new Date().toISOString(),
+            oneroster_user_id: session.session.userId,
+            oneroster_org_id: orgId,
           })
           .onConflict((oc) =>
             oc

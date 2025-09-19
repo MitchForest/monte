@@ -2,6 +2,8 @@ import { swaggerUI } from "@hono/swagger-ui";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { cors } from "hono/cors";
 
+import { loadApiEnv } from "./env";
+
 export type APIAppConfig = {
   cors?: Parameters<typeof cors>[0];
   openapi?: {
@@ -20,6 +22,7 @@ export function createAPIApp(config: APIAppConfig = {}) {
   }
 
   // Configure OpenAPI documentation
+  const env = loadApiEnv();
   const openApiConfig = {
     openapi: "3.1.0",
     info: {
@@ -29,9 +32,9 @@ export function createAPIApp(config: APIAppConfig = {}) {
     },
     servers: [
       {
-        url: process.env.API_URL ?? "http://localhost:8080",
+        url: env.API_URL ?? "http://localhost:8080",
         description:
-          process.env.NODE_ENV === "production" ? "Production" : "Development",
+          env.NODE_ENV === "production" ? "Production" : "Development",
       },
     ],
   };
@@ -56,23 +59,4 @@ export function createAPIApp(config: APIAppConfig = {}) {
   });
 
   return app;
-}
-
-export function getCorsOrigins(): string[] {
-  const defaultOrigins = [
-    "http://localhost:3000",
-    "http://localhost:3001",
-    process.env.NEXT_PUBLIC_APP_URL,
-    process.env.APP_URL,
-  ].filter((value): value is string => Boolean(value));
-
-  const configuredOrigins = (process.env.APP_ORIGINS ?? "")
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter((origin) => origin.length > 0);
-
-  const allowedOrigins =
-    configuredOrigins.length > 0 ? configuredOrigins : defaultOrigins;
-
-  return allowedOrigins.length > 0 ? allowedOrigins : ["*"];
 }

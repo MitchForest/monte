@@ -1,5 +1,6 @@
 import { type Database, withDbContext } from "@monte/database";
 import type { Student } from "@monte/shared";
+import { logger } from "@monte/shared";
 import { oneroster } from "@monte/timeback-clients";
 import type { Kysely } from "kysely";
 
@@ -137,7 +138,7 @@ export async function listStudentsForOrganization(
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unknown OneRoster error";
-    process.stderr.write(`Failed to fetch OneRoster students: ${message}\n`);
+    logger.error("Failed to fetch OneRoster students", { message });
     return listLocalStudents(context, {
       search,
       classroomId: args.classroomId,
@@ -177,7 +178,7 @@ export async function syncStudentByRosterId(
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unknown OneRoster error";
-    process.stderr.write(`Failed to sync OneRoster student: ${message}\n`);
+    logger.error("Failed to sync OneRoster student", { message });
     return null;
   }
 }
@@ -326,6 +327,8 @@ async function queryStudents(
       "classrooms.name as classroom_name",
     ])
     .where("students.org_id", "=", orgId)
+    .where("students.status", "=", "active")
+    .where("students.deleted_at", "is", null)
     .orderBy("students.full_name", "asc");
 
   if (options.onlyCustom) {
@@ -346,6 +349,9 @@ async function queryStudents(
       "=",
       options.classroomId,
     );
+    query = query
+      .where("classrooms.status", "=", "active")
+      .where("classrooms.deleted_at", "is", null);
   }
 
   if (options.rosterIds) {

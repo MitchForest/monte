@@ -9,7 +9,16 @@
     "start": "bun run --env-file=.env dist/index.js",
     "typecheck": "bun x tsc --noEmit",
     "lint": "bun x biome check",
-    "test": "bun test"
+    "test": "bun test",
+    "seed:monte:progress": "bun run --env-file=.env scripts/seed-monte-progress.ts",
+    "sync:roster": "bun run --env-file=.env scripts/sync-timeback-roster.ts",
+    "register:caliper-webhook": "bun run --env-file=.env scripts/register-caliper-webhook.ts",
+    "timeback:create-monte": "bun run --env-file=.env scripts/create-timeback-monte.ts",
+    "timeback:process-events": "bun run --env-file=.env scripts/process-timeback-events.ts",
+    "timeback:replay-events": "bun run --env-file=.env scripts/replay-timeback-events.ts",
+    "timeback:queue:show": "bun run --env-file=.env scripts/show-queue.ts",
+    "timeback:metrics:list": "bun run --env-file=.env scripts/list-sync-metrics.ts",
+    "timeback:sync-state": "bun run --env-file=.env scripts/list-sync-state.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.0",

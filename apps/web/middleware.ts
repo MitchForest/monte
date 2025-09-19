@@ -1,12 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+import { isAuthMockEnabled } from "./lib/env";
+
 const PUBLIC_ROUTES = new Set(["/", "/login", "/signup"]);
 const AUTH_ROUTES = new Set(["/login", "/signup"]);
 
-const MOCK_AUTH =
-  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" ||
-  !process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID;
+const MOCK_AUTH = isAuthMockEnabled();
 
 async function getSession(request: NextRequest): Promise<boolean> {
   try {

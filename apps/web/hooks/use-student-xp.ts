@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   endOfDay,
@@ -8,6 +7,7 @@ import {
   startOfMonth,
   startOfWeek,
 } from "date-fns";
+import { useMemo } from "react";
 
 import { getStudentXpSummary } from "@/lib/api/endpoints";
 

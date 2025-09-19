@@ -1,21 +1,78 @@
 import { getDb } from "@monte/database";
+import { logger, MONTE_SESSION_COOKIE } from "@monte/shared";
 import { oneroster } from "@monte/timeback-clients";
 import { createRemoteJWKSet, jwtVerify } from "jose";
 
+import { loadApiEnv, resetApiEnv } from "../env";
 import { getOneRosterClient } from "../timeback/clients";
 
-const DEFAULT_ISSUER =
-  process.env.COGNITO_AUTHORITY ??
+const FALLBACK_ISSUER =
   "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_H5aVRMERg";
-const DEFAULT_JWKS =
-  process.env.COGNITO_JWKS_URI ?? `${DEFAULT_ISSUER}/.well-known/jwks.json`;
-const DEFAULT_SCOPE_AUDIENCE = process.env.COGNITO_AUDIENCE;
 
-const isBypassEnabled =
-  process.env.DEV_AUTH_BYPASS === "true" ||
-  (!process.env.COGNITO_CLIENT_ID && process.env.NODE_ENV !== "production");
+function resolveIssuer(): string {
+  return loadApiEnv().COGNITO_AUTHORITY ?? FALLBACK_ISSUER;
+}
 
-const jwks = createRemoteJWKSet(new URL(DEFAULT_JWKS));
+function resolveJwksUrl(): string {
+  const env = loadApiEnv();
+  return env.COGNITO_JWKS_URI ?? `${resolveIssuer()}/.well-known/jwks.json`;
+}
+
+function resolveAudience(): string | undefined {
+  return loadApiEnv().COGNITO_AUDIENCE;
+}
+
+function isDevBypassEnabled(): boolean {
+  const env = loadApiEnv();
+  return (
+    env.DEV_AUTH_BYPASS === "true" ||
+    (!env.COGNITO_CLIENT_ID && env.NODE_ENV !== "production")
+  );
+}
+
+function readBearerToken(header: string | null): string | null {
+  if (!header) {
+    return null;
+  }
+  const token = header.replace(/^Bearer\s+/i, "").trim();
+  return token.length > 0 ? token : null;
+}
+
+function readCookieValue(request: Request, name: string): string | null {
+  const cookieHeader = request.headers.get("cookie");
+  if (!cookieHeader) {
+    return null;
+  }
+
+  const pairs = cookieHeader.split(";");
+  for (const pair of pairs) {
+    const [rawKey, ...rawValueParts] = pair.split("=");
+    if (!rawKey) {
+      continue;
+    }
+    if (rawKey.trim() !== name) {
+      continue;
+    }
+    const rawValue = rawValueParts.join("=").trim();
+    if (!rawValue) {
+      return null;
+    }
+    try {
+      return decodeURIComponent(rawValue);
+    } catch {
+      return rawValue;
+    }
+  }
+
+  return null;
+}
+
+let jwks = createRemoteJWKSet(new URL(resolveJwksUrl()));
+
+export function resetAuthSessionEnv(): void {
+  resetApiEnv();
+  jwks = createRemoteJWKSet(new URL(resolveJwksUrl()));
+}
 
 export type AuthenticatedSession = {
   session: {
@@ -41,19 +98,20 @@ export type AuthenticatedSession = {
 };
 
 export async function ensureDevUser(): Promise<AuthenticatedSession> {
-  const email = process.env.DEV_USER_EMAIL ?? "guide@example.com";
-  const name = process.env.DEV_USER_NAME ?? "Guide User";
-  const orgName = process.env.DEV_ORG_NAME ?? "Development School";
+  const env = loadApiEnv();
+  const email = env.DEV_USER_EMAIL ?? "guide@example.com";
+  const name = env.DEV_USER_NAME ?? "Guide User";
+  const orgName = env.DEV_ORG_NAME ?? "Development School";
   const orgIdFromEnv =
-    process.env.DEV_ORGANIZATION_ID?.trim() ??
-    process.env.DEFAULT_ORGANIZATION_ID?.trim() ??
+    env.DEV_ORGANIZATION_ID?.trim() ??
+    env.DEFAULT_ORGANIZATION_ID?.trim() ??
     null;
-  const orgRosterId = process.env.DEV_ONEROSTER_ORG_ID?.trim() ?? null;
+  const orgRosterId = env.DEV_ONEROSTER_ORG_ID?.trim() ?? null;
   const rosterUserId =
-    process.env.DEV_ONEROSTER_USER_ID?.trim() ??
-    process.env.DEV_ONEROSTER_ID?.trim() ??
+    env.DEV_ONEROSTER_USER_ID?.trim() ??
+    env.DEV_ONEROSTER_ID?.trim() ??
     undefined;
-  const rawRole = process.env.DEV_USER_ROLE?.trim()?.toLowerCase();
+  const rawRole = env.DEV_USER_ROLE?.trim()?.toLowerCase();
   const role: "administrator" | "teacher" | "student" | "parent" =
     rawRole === "teacher" || rawRole === "student" || rawRole === "parent"
       ? rawRole
@@ -152,6 +210,8 @@ export async function ensureDevUser(): Promise<AuthenticatedSession> {
       org_id: organization.id,
       user_id: user.id,
       role,
+      oneroster_user_id: user.oneroster_user_id ?? user.id,
+      oneroster_org_id: organization.oneroster_sourced_id ?? organization.id,
     })
     .onConflict((oc) =>
       oc.constraint("org_memberships_org_id_user_id_key").doUpdateSet({ role }),
@@ -269,9 +329,10 @@ async function ensureOrganizationFromOneRoster(orgSourcedId: string) {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "OneRoster org fetch failed";
-      process.stderr.write(
-        `Failed to fetch OneRoster org ${orgSourcedId}: ${message}\n`,
-      );
+      logger.error("Failed to fetch OneRoster org", {
+        orgSourcedId,
+        message,
+      });
     }
   }
 
@@ -368,9 +429,7 @@ async function syncOneRosterMemberships(
       error instanceof Error
         ? error.message
         : "OneRoster membership synchronisation failed";
-    process.stderr.write(
-      `Failed to synchronise OneRoster memberships: ${message}\n`,
-    );
+    logger.error("Failed to synchronise OneRoster memberships", { message });
     return [];
   }
 }
@@ -378,20 +437,18 @@ async function syncOneRosterMemberships(
 export async function getServerSession(
   request: Request,
 ): Promise<AuthenticatedSession | null> {
-  const authHeader = request.headers.get("authorization");
-  if (!authHeader) {
-    return isBypassEnabled ? ensureDevUser() : null;
-  }
-
-  const token = authHeader.replace(/^Bearer\s+/i, "").trim();
+  const env = loadApiEnv();
+  const headerToken = readBearerToken(request.headers.get("authorization"));
+  const cookieToken = readCookieValue(request, MONTE_SESSION_COOKIE);
+  const token = headerToken ?? cookieToken;
   if (!token) {
-    return isBypassEnabled ? ensureDevUser() : null;
+    return isDevBypassEnabled() ? ensureDevUser() : null;
   }
 
   try {
     const { payload } = await jwtVerify(token, jwks, {
-      issuer: DEFAULT_ISSUER,
-      audience: DEFAULT_SCOPE_AUDIENCE,
+      issuer: resolveIssuer(),
+      audience: resolveAudience(),
     });
 
     const email = String(payload.email ?? "").toLowerCase();
@@ -401,7 +458,7 @@ export async function getServerSession(
       (payload.sub ? String(payload.sub) : undefined);
 
     if (!email) {
-      process.stderr.write("OIDC token missing email claim\n");
+      logger.error("OIDC token missing email claim");
       return null;
     }
 
@@ -432,9 +489,17 @@ export async function getServerSession(
 
     if (!membership) {
       const fallbackOrgId =
-        rosterOrgIds[0] ?? process.env.DEFAULT_ORGANIZATION_ID ?? null;
+        rosterOrgIds[0] ?? env.DEFAULT_ORGANIZATION_ID ?? null;
 
       if (fallbackOrgId) {
+        const fallbackOrgRecord = await db
+          .selectFrom("organizations")
+          .select(["id", "oneroster_sourced_id"])
+          .where("id", "=", fallbackOrgId)
+          .executeTakeFirst();
+        const fallbackOnerosterId =
+          fallbackOrgRecord?.oneroster_sourced_id ?? fallbackOrgId;
+
         await db
           .insertInto("org_memberships")
           .values({
@@ -442,6 +507,8 @@ export async function getServerSession(
             org_id: fallbackOrgId,
             user_id: user.id,
             role: "teacher",
+            oneroster_user_id: user.oneroster_user_id ?? user.id,
+            oneroster_org_id: fallbackOnerosterId,
           })
           .onConflict((oc) => oc.doNothing())
           .execute();
@@ -453,7 +520,7 @@ export async function getServerSession(
     if (!membership) {
       const fallbackOrg = await db
         .selectFrom("organizations")
-        .select(["id as org_id"])
+        .select(["id as org_id", "oneroster_sourced_id"])
         .orderBy("created_at", "asc")
         .executeTakeFirst();
 
@@ -465,6 +532,9 @@ export async function getServerSession(
             org_id: fallbackOrg.org_id,
             user_id: user.id,
             role: "teacher",
+            oneroster_user_id: user.oneroster_user_id ?? user.id,
+            oneroster_org_id:
+              fallbackOrg.oneroster_sourced_id ?? fallbackOrg.org_id,
           })
           .onConflict((oc) =>
             oc.constraint("org_memberships_org_id_user_id_key").doNothing(),
@@ -517,7 +587,7 @@ export async function getServerSession(
       error instanceof Error
         ? error.message
         : "Unknown token verification error";
-    process.stderr.write(`Failed to verify access token: ${message}\n`);
-    return isBypassEnabled ? ensureDevUser() : null;
+    logger.error("Failed to verify access token", { message });
+    return isDevBypassEnabled() ? ensureDevUser() : null;
   }
 }

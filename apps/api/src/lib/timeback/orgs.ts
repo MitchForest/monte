@@ -1,9 +1,9 @@
-const ALLOWLIST_ENV = "TIMEBACK_ORG_ALLOWLIST";
+import { loadApiEnv, resetApiEnv } from "../env";
 
 let cachedAllowlist: Set<string> | null = null;
 
 function parseAllowlist(): Set<string> {
-  const raw = process.env[ALLOWLIST_ENV];
+  const raw = loadApiEnv().TIMEBACK_ORG_ALLOWLIST;
   if (!raw) {
     return new Set();
   }
@@ -23,6 +23,7 @@ export function getAllowedTimebackOrgs(): Set<string> {
 
 export function resetAllowedTimebackOrgs(): void {
   cachedAllowlist = null;
+  resetApiEnv();
 }
 
 export function isOrgAllowed(orgId: string | null | undefined): boolean {

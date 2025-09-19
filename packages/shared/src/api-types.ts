@@ -298,6 +298,7 @@ export const TeamListResponseSchema = ApiSuccessSchema(
 export const StudentParentOverviewSchema = StudentParentSchema.extend({
   studentId: z.string(),
   studentName: z.string().nullable(),
+  source: z.enum(["timeback", "local"]),
 });
 
 export const ParentsListResponseSchema = ApiSuccessSchema(

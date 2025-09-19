@@ -6,6 +6,7 @@ export const HTTP_STATUS = {
   unauthorized: 401,
   forbidden: 403,
   notFound: 404,
+  conflict: 409,
   badGateway: 502,
   serviceUnavailable: 503,
   internalServerError: 500,

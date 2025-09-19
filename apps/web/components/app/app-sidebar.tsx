@@ -3,11 +3,11 @@
 import { useQuery } from "@tanstack/react-query";
 import type { LucideIcon } from "lucide-react";
 import {
+  CalendarClock,
   CheckSquare,
   ChevronDown,
   ClipboardCheck,
   Flame,
-  GraduationCap,
   Home,
   Library,
   LineChart,
@@ -53,6 +53,7 @@ import { getCurrentUser } from "@/lib/api/endpoints";
 import { isMockAuthMode } from "@/lib/auth/config";
 import { setAccessToken } from "@/lib/auth/token-store";
 import { useAuthSafe } from "@/lib/auth/use-auth";
+import { publicEnv } from "@/lib/env";
 import type { Persona } from "@/lib/persona";
 import { resolvePersona } from "@/lib/persona";
 import { cn } from "@/lib/utils";
@@ -82,12 +83,12 @@ const PARENT_ROUTES: SidebarRoute[] = [
 
 const GUIDE_ROUTES: SidebarRoute[] = [
   { href: "/guide", label: "Home", icon: Home },
-  { href: "/guide/my-class", label: "My class", icon: Users },
-  { href: "/guide/digital-album", label: "Digital album", icon: Library },
-  { href: "/classrooms", label: "Classrooms", icon: GraduationCap },
-  { href: "/students", label: "Students", icon: User },
+  { href: "/students", label: "Students", icon: Users },
   { href: "/observations", label: "Observations", icon: ClipboardCheck },
+  { href: "/schedule", label: "Schedule", icon: CalendarClock },
   { href: "/tasks", label: "Tasks", icon: CheckSquare },
+  { href: "/parents", label: "Parents", icon: Mail },
+  { href: "/guide/digital-album", label: "Digital album", icon: Library },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -100,6 +101,19 @@ function routesForPersona(persona: Persona): SidebarRoute[] {
     default:
       return GUIDE_ROUTES;
   }
+}
+
+function matchScore(pathname: string, href: string): number {
+  if (href === "/") {
+    return pathname === "/" ? 1 : -1;
+  }
+
+  if (pathname === href) {
+    return href.length;
+  }
+
+  const normalizedHref = href.endsWith("/") ? href : `${href}/`;
+  return pathname.startsWith(normalizedHref) ? href.length : -1;
 }
 
 function getInitials(name: string): string {
@@ -115,8 +129,8 @@ function getInitials(name: string): string {
 const isMockMode = isMockAuthMode;
 
 const mockUser = {
-  email: process.env.NEXT_PUBLIC_DEV_USER_EMAIL ?? "guide@example.com",
-  name: process.env.NEXT_PUBLIC_DEV_USER_NAME ?? "Guide User",
+  email: publicEnv.devUserEmail,
+  name: publicEnv.devUserName,
   image: null as string | null,
 };
 
@@ -140,6 +154,20 @@ export function AppSidebar() {
     [role, selection],
   );
   const menuRoutes = useMemo(() => routesForPersona(persona), [persona]);
+  const activeRouteHref = useMemo(() => {
+    let matchedHref: string | null = null;
+    let bestScore = -1;
+
+    for (const route of menuRoutes) {
+      const score = matchScore(pathname, route.href);
+      if (score > bestScore) {
+        bestScore = score;
+        matchedHref = route.href;
+      }
+    }
+
+    return matchedHref;
+  }, [menuRoutes, pathname]);
 
   const activeProfile = isMockMode
     ? mockUser
@@ -194,7 +222,7 @@ export function AppSidebar() {
 
       try {
         const logoutUri =
-          process.env.NEXT_PUBLIC_COGNITO_LOGOUT_URI ??
+          publicEnv.cognitoLogoutUri ??
           (typeof window !== "undefined"
             ? `${window.location.origin}/login`
             : undefined);
@@ -229,9 +257,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {menuRoutes.map((route) => {
                 const Icon = route.icon;
-                const isActive =
-                  pathname === route.href ||
-                  (route.href !== "/" && pathname.startsWith(`${route.href}/`));
+                const isActive = activeRouteHref === route.href;
                 return (
                   <SidebarMenuItem key={route.href}>
                     <Link

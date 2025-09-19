@@ -220,19 +220,25 @@ const routerWithCreate = routerWithList.openapi(
       const student = await withDbContext(
         { userId: session.session.userId, orgId: session.session.orgId },
         (trx) =>
-          trx
-            .insertInto("students")
-            .values({
-              id: crypto.randomUUID(),
-              org_id: session.session.orgId,
-              full_name: body.full_name,
-              dob: body.dob ?? null,
-              primary_classroom_id: body.primary_classroom_id ?? null,
-              avatar_url: body.avatar_url ?? null,
-              created_at: new Date().toISOString(),
-            })
-            .returningAll()
-            .executeTakeFirstOrThrow(),
+          trx.transaction().execute(async (nested) => {
+            const studentId = crypto.randomUUID();
+            const inserted = await nested
+              .insertInto("students")
+              .values({
+                id: studentId,
+                org_id: session.session.orgId,
+                full_name: body.full_name,
+                dob: body.dob ?? null,
+                primary_classroom_id: body.primary_classroom_id ?? null,
+                avatar_url: body.avatar_url ?? null,
+                created_at: new Date().toISOString(),
+                oneroster_user_id: studentId,
+                oneroster_org_id: session.session.orgId,
+              })
+              .returningAll()
+              .executeTakeFirstOrThrow();
+            return inserted;
+          }),
       );
 
       const parsedStudent = StudentSchema.parse(student);

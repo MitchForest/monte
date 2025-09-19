@@ -1,8 +1,5 @@
-const rawClientId = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID ?? "";
-const trimmedClientId = rawClientId.trim();
+import { isAuthMockEnabled, publicEnv } from "@/lib/env";
 
-export const isMockAuthMode =
-  process.env.NEXT_PUBLIC_AUTH_MOCK === "true" || trimmedClientId.length === 0;
+export const isMockAuthMode = isAuthMockEnabled();
 
-export const devAccessToken =
-  process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN ?? "dev-access-token";
+export const devAccessToken = publicEnv.devAccessToken;

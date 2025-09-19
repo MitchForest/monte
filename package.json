@@ -11,6 +11,7 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
+    "ci": "turbo run lint typecheck test",
     "format": "biome format --write .",
     "db:migrate": "bun --filter @monte/database db:migrate",
     "db:codegen": "bun --filter @monte/database db:codegen"

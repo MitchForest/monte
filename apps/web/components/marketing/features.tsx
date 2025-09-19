@@ -1,121 +1,218 @@
-import type { LucideIcon } from "lucide-react";
-import {
-  CalendarClock,
-  ClipboardList,
-  MessageSquareHeart,
-  NotepadText,
-  Sparkles,
-  UsersRound,
-} from "lucide-react";
+"use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CheckCircle2, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 
-type Feature = {
-  title: string;
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+type AudienceHighlight = {
   description: string;
-  detail: string;
-  icon: LucideIcon;
+  title: string;
 };
 
-const features: Feature[] = [
+const guideHighlights: AudienceHighlight[] = [
   {
-    title: "Observation studio",
     description:
-      "Capture Montessori observations in seconds with prompts that mirror AMI language and pedagogy.",
-    detail:
-      "Guides collaborate in real time and auto-share highlights with families.",
-    icon: NotepadText,
+      "Realtime mastery insights that surface strengths, gaps, and growth trends for every child.",
+    title: "Student Tracking",
   },
   {
-    title: "Prepared daily rhythm",
     description:
-      "Plan work cycles, practical life rotations, and environments with reusable templates.",
-    detail: "Alerts keep the team aligned without interruptive pings.",
-    icon: CalendarClock,
+      "Plan blended work cycles with reusable templates aligned to your environments and materials.",
+    title: "Lesson Planning",
   },
   {
-    title: "Family storytelling",
     description:
-      "Send beautiful photo journals and announcements that reinforce Montessori practice at home.",
-    detail: "Every update respects privacy preferences and translations.",
-    icon: MessageSquareHeart,
+      "Capture observations with Montessori language prompts and shareable notes in seconds.",
+    title: "Observations",
   },
   {
-    title: "Whole-child analytics",
     description:
-      "See progress by plane of development, materials, and executive function skills.",
-    detail:
-      "Spot trends early with gentle insights instead of dashboards built for factories.",
-    icon: Sparkles,
+      "Assign follow-ups, prep materials, and coordinate staff tasks from a single calm queue.",
+    title: "Tasks Management",
   },
   {
-    title: "Task orchestration",
     description:
-      "Delegate follow-ups, prepare materials, and document meetings in one calm queue.",
-    detail:
-      "Integrates with the observations you already record—no duplicate entry.",
-    icon: ClipboardList,
+      "Explore the complete Montessori curriculum with scope, sequence, and multi-age guidance.",
+    title: "Full Curriculum",
   },
   {
-    title: "Community care",
     description:
-      "Manage admissions, sibling notes, and staff onboarding with sensitive access controls.",
-    detail: "SAML, two-factor, and audit trails keep admins confident.",
-    icon: UsersRound,
+      "Send beautiful updates and announcements that reinforce the prepared environment at home.",
+    title: "Parent Communications",
+  },
+];
+
+const studentHighlights: AudienceHighlight[] = [
+  {
+    description:
+      "Adaptive presentations that honor choice and keep learners in productive flow states.",
+    title: "Personalized, AI-powered learning",
+  },
+  {
+    description:
+      "Self-directed menus that complement hands-on materials and respect Montessori autonomy.",
+    title: "Independent, self-guided exploration",
+  },
+  {
+    description:
+      "Motivation loops rooted in learning science that celebrate effort, mastery, and curiosity.",
+    title: "Learning science-backed motivation model",
+  },
+  {
+    description:
+      "Monte learners gain roughly twice the academic growth of peers in just two focused hours a day.",
+    title: "Learn 2× as fast as peers in two hours per day",
   },
 ];
 
 export function MarketingFeatures() {
+  const [activeTab, setActiveTab] = useState("guides");
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const updateFromHash = () => {
+      const { hash } = window.location;
+      if (hash === "#students") {
+        setActiveTab("students");
+      } else if (hash === "#guides") {
+        setActiveTab("guides");
+      }
+    };
+
+    updateFromHash();
+    window.addEventListener("hashchange", updateFromHash);
+    return () => {
+      window.removeEventListener("hashchange", updateFromHash);
+    };
+  }, []);
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const hash = value === "students" ? "#students" : "#guides";
+    const { pathname, search } = window.location;
+    window.history.replaceState(null, "", `${pathname}${search}${hash}`);
+  };
+
   return (
     <section
-      aria-labelledby="features"
+      aria-labelledby="community-heading"
       className="mx-auto mt-24 max-w-6xl px-4 md:px-6"
-      id="features"
+      id="guides"
     >
       <div className="text-center">
         <p className="font-medium text-muted-foreground text-sm uppercase tracking-[0.3em]">
-          Product
+          Community
         </p>
-        <h2 className="mt-4 text-balance font-semibold text-3xl text-foreground tracking-tight sm:text-4xl">
-          Everything your Montessori team needs in one gentle workspace
+        <h2
+          className="mt-4 text-balance font-semibold text-3xl text-foreground tracking-tight sm:text-4xl"
+          id="community-heading"
+        >
+          Tools that honor Montessori guides and inspire students
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Monte respects the cadence of Montessori classrooms with thoughtful
-          workflows and calming interfaces your team will actually enjoy using.
+          Monte delivers a complete curriculum, actionable analytics, and joyful
+          learning experiences without replacing the prepared environment.
         </p>
       </div>
-      <div className="mt-12 grid gap-6 md:grid-cols-2">
-        {features.map((feature) => {
-          const Icon = feature.icon;
-          return (
-            <Card
-              className="h-full rounded-3xl border border-border/70 bg-background/95 shadow-md"
-              key={feature.title}
-            >
-              <CardHeader className="gap-4">
-                <span className="inline-flex size-12 items-center justify-center rounded-full border border-border/80 bg-primary/10 text-primary">
-                  <Icon className="size-5" />
-                </span>
-                <CardTitle className="font-semibold text-xl">
-                  {feature.title}
-                </CardTitle>
-                <CardDescription className="text-base leading-relaxed">
-                  {feature.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-muted-foreground text-sm">
-                {feature.detail}
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+      <Tabs className="mt-12" onValueChange={handleTabChange} value={activeTab}>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <TabsList className="grid w-full grid-cols-2 gap-2 sm:w-auto">
+            <TabsTrigger value="guides">For Guides</TabsTrigger>
+            <TabsTrigger value="students">For Students</TabsTrigger>
+          </TabsList>
+          <div className="text-sm text-muted-foreground sm:max-w-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background px-3 py-1 font-medium text-primary text-xs">
+              <Sparkles aria-hidden="true" className="size-3.5" />
+              Montessori-aligned delivery
+            </span>
+            <p className="mt-3">
+              Switch between perspectives to see how Monte supports guides and
+              students without disrupting the prepared environment.
+            </p>
+          </div>
+        </div>
+        <TabsContent value="guides">
+          <Card className="rounded-3xl border border-border/70 bg-background/95 shadow-md">
+            <CardHeader className="space-y-3">
+              <CardTitle className="font-semibold text-2xl">
+                Prepared guides
+              </CardTitle>
+              <p className="text-base text-muted-foreground">
+                A calm workspace that keeps teams coordinated, compliant, and
+                centered on each child.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <ul className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
+                {guideHighlights.map((item) => (
+                  <li
+                    className="flex gap-3 rounded-2xl border border-border/60 bg-background/80 px-4 py-3"
+                    key={item.title}
+                  >
+                    <CheckCircle2
+                      aria-hidden="true"
+                      className="mt-0.5 size-5 text-primary"
+                    />
+                    <div>
+                      <p className="font-medium text-foreground">
+                        {item.title}
+                      </p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {item.description}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="students" id="students">
+          <Card className="rounded-3xl border border-border/70 bg-background/95 shadow-md">
+            <CardHeader className="space-y-3">
+              <CardTitle className="font-semibold text-2xl">
+                Inspired students
+              </CardTitle>
+              <p className="text-base text-muted-foreground">
+                Digital work choices that respect autonomy, fund intrinsic
+                motivation, and accelerate growth.
+              </p>
+            </CardHeader>
+            <CardContent>
+              <ul className="grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
+                {studentHighlights.map((item) => (
+                  <li
+                    className="flex gap-3 rounded-2xl border border-border/60 bg-background/80 px-4 py-3"
+                    key={item.title}
+                  >
+                    <CheckCircle2
+                      aria-hidden="true"
+                      className="mt-0.5 size-5 text-primary"
+                    />
+                    <div>
+                      <p className="font-medium text-foreground">
+                        {item.title}
+                      </p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {item.description}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </section>
   );
 }

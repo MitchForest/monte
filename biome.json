@@ -14,9 +14,7 @@
       "dist",
       "build",
       ".turbo",
-      "apps/web/components/ui",
-      "apps/web/hooks/use-mobile.ts",
-      "packages/timeback-sdk"
+      "packages/database/src/types.ts"
     ]
   },
   "formatter": {

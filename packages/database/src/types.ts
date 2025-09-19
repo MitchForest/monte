@@ -1,11 +1,12 @@
-import type {
-  ActionStatus,
-  ActionType,
-  HabitSchedule,
-  LessonInstanceStatus,
-  Role,
-} from "@monte/shared";
 import type { ColumnType } from "kysely";
+
+export type ActionStatus =
+  | "cancelled"
+  | "completed"
+  | "in_progress"
+  | "pending";
+
+export type ActionType = "lesson" | "task";
 
 export type AuthAalLevel = "aal1" | "aal2" | "aal3";
 
@@ -29,6 +30,8 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
+export type HabitSchedule = "custom" | "daily" | "weekdays";
+
 export type Int8 = ColumnType<
   string,
   bigint | number | string,
@@ -47,7 +50,11 @@ export type JsonPrimitive = boolean | number | string | null;
 
 export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 
+export type LessonInstanceStatus = "completed" | "scheduled" | "unscheduled";
+
 export type Numeric = ColumnType<string, number | string, number | string>;
+
+export type Role = "administrator" | "parent" | "student" | "teacher";
 
 export type TagType =
   | "class_area"
@@ -369,11 +376,14 @@ export interface ClassroomGuides {
 
 export interface Classrooms {
   created_at: Generated<Timestamp>;
+  deleted_at: Timestamp | null;
   id: Generated<string>;
   name: string;
-  oneroster_class_id: string | null;
-  oneroster_org_id: string | null;
+  oneroster_class_id: string;
+  oneroster_org_id: string;
   org_id: string;
+  status: Generated<string>;
+  synced_at: Generated<Timestamp>;
 }
 
 export interface CourseLessons {
@@ -389,13 +399,16 @@ export interface CourseLessons {
 
 export interface Courses {
   created_at: Generated<Timestamp>;
+  deleted_at: Timestamp | null;
   description: string | null;
   id: Generated<string>;
   name: string;
-  oneroster_course_id: string | null;
-  oneroster_org_id: string | null;
+  oneroster_course_id: string;
+  oneroster_org_id: string;
   org_id: string;
+  status: Generated<string>;
   subject_id: string | null;
+  synced_at: Generated<Timestamp>;
 }
 
 export interface Domains {
@@ -458,6 +471,19 @@ export interface ExtensionsPgStatStatements {
 export interface ExtensionsPgStatStatementsInfo {
   dealloc: Int8 | null;
   stats_reset: Timestamp | null;
+}
+
+export interface Guardians {
+  deleted_at: Timestamp | null;
+  email: string | null;
+  id: Generated<string>;
+  name: string;
+  org_id: string | null;
+  phone: string | null;
+  relation: string | null;
+  sourced_id: string;
+  status: Generated<string>;
+  synced_at: Generated<Timestamp>;
 }
 
 export interface HabitCheckinEvents {
@@ -526,11 +552,14 @@ export interface Organizations {
 
 export interface OrgMemberships {
   created_at: Generated<Timestamp>;
+  deleted_at: Timestamp | null;
   id: Generated<string>;
-  oneroster_org_id: string | null;
-  oneroster_user_id: string | null;
+  oneroster_org_id: string;
+  oneroster_user_id: string;
   org_id: string;
   role: Role;
+  status: Generated<string>;
+  synced_at: Generated<Timestamp>;
   user_id: string;
 }
 
@@ -558,6 +587,15 @@ export interface RealtimeSubscription {
   filters: Generated<string[]>;
   id: Generated<Int8>;
   subscription_id: string;
+}
+
+export interface RosterAudit {
+  change_type: string;
+  entity: string;
+  entity_id: string | null;
+  id: Generated<string>;
+  occurred_at: Generated<Timestamp>;
+  payload: Json | null;
 }
 
 export interface StorageBuckets {
@@ -626,6 +664,13 @@ export interface StorageS3MultipartUploadsParts {
   version: string;
 }
 
+export interface StudentGuardians {
+  guardian_id: string;
+  relation: string | null;
+  student_sourced_id: string;
+  synced_at: Generated<Timestamp>;
+}
+
 export interface StudentLessons {
   assigned_by_user_id: string | null;
   completed_at: Timestamp | null;
@@ -645,40 +690,31 @@ export interface StudentLessons {
 
 export interface StudentParents {
   created_at: Generated<Timestamp>;
+  deleted_at: Timestamp | null;
   email: string | null;
   id: Generated<string>;
   name: string;
   phone: string | null;
   preferred_contact_method: string | null;
   relation: string | null;
+  status: Generated<string>;
   student_id: string;
+  synced_at: Generated<Timestamp>;
 }
 
 export interface Students {
   avatar_url: string | null;
   created_at: Generated<Timestamp>;
+  deleted_at: Timestamp | null;
   dob: Timestamp | null;
   full_name: string;
   id: Generated<string>;
-  oneroster_org_id: string | null;
-  oneroster_user_id: string | null;
+  oneroster_org_id: string;
+  oneroster_user_id: string;
   org_id: string;
   primary_classroom_id: string | null;
-}
-
-export interface TimebackEvents {
-  action: string;
-  actor_user_id: string;
-  class_id: string | null;
-  course_id: string | null;
-  event_id: string;
-  event_time: Timestamp;
-  event_type: string;
-  ingested_at: Generated<Timestamp>;
-  org_id: string;
-  payload: Json;
-  timespent_active_seconds: number;
-  xp_earned: number;
+  status: Generated<string>;
+  synced_at: Generated<Timestamp>;
 }
 
 export interface StudentSummaries {
@@ -714,6 +750,63 @@ export interface Subjects {
   org_id: string;
 }
 
+export interface SyncMetrics {
+  created_at: Generated<Timestamp>;
+  entity: string;
+  id: Generated<string>;
+  metadata: Json | null;
+  recorded_at: Generated<Timestamp>;
+  value: number;
+}
+
+export interface SyncState {
+  cursor: string | null;
+  entity: string;
+  error_message: string | null;
+  last_hash: string | null;
+  last_run_at: Timestamp | null;
+  success: boolean | null;
+  updated_at: Generated<Timestamp>;
+}
+
+export interface TimebackEventQueue {
+  attempts: Generated<number>;
+  created_at: Generated<Timestamp>;
+  event_id: string;
+  id: Generated<string>;
+  last_error: string | null;
+  next_attempt_at: Generated<Timestamp>;
+  payload: Json;
+  processed_at: Timestamp | null;
+  scheduled_at: Generated<Timestamp>;
+  status: Generated<string>;
+  updated_at: Generated<Timestamp>;
+}
+
+export interface TimebackEvents {
+  action: string;
+  actor_user_id: string;
+  class_id: string | null;
+  course_id: string | null;
+  event_id: string;
+  event_time: Timestamp;
+  event_type: string;
+  ingested_at: Generated<Timestamp>;
+  org_id: string;
+  payload: Json;
+  timespent_active_seconds: Generated<number>;
+  xp_earned: Generated<number>;
+}
+
+export interface TimebackEventsDlq {
+  created_at: Generated<Timestamp>;
+  error_message: string;
+  event_id: string | null;
+  id: Generated<string>;
+  payload: Json;
+  retries: Generated<number>;
+}
+
 export interface Topics {
   domain_id: string;
   id: Generated<string>;
@@ -729,14 +822,6 @@ export interface Users {
   name: string | null;
   oneroster_user_id: string | null;
   updated_at: Generated<Timestamp>;
-}
-
-export interface XpFactsDaily {
-  date_bucket: ColumnType<string, string | Date, string | Date>;
-  last_event_at: Timestamp;
-  org_id: string;
-  student_id: string;
-  xp_total: number;
 }
 
 export interface VaultDecryptedSecrets {
@@ -796,6 +881,14 @@ export interface WorkspaceInvites {
   used_count: Generated<number>;
 }
 
+export interface XpFactsDaily {
+  date_bucket: Timestamp;
+  last_event_at: Timestamp;
+  org_id: string;
+  student_id: string;
+  xp_total: Generated<number>;
+}
+
 export interface DB {
   action_tags: ActionTags;
   actions: Actions;
@@ -829,6 +922,7 @@ export interface DB {
   domains: Domains;
   "extensions.pg_stat_statements": ExtensionsPgStatStatements;
   "extensions.pg_stat_statements_info": ExtensionsPgStatStatementsInfo;
+  guardians: Guardians;
   habit_checkin_events: HabitCheckinEvents;
   habit_checkins: HabitCheckins;
   habits: Habits;
@@ -840,24 +934,30 @@ export interface DB {
   "realtime.messages": RealtimeMessages;
   "realtime.schema_migrations": RealtimeSchemaMigrations;
   "realtime.subscription": RealtimeSubscription;
+  roster_audit: RosterAudit;
   "storage.buckets": StorageBuckets;
   "storage.migrations": StorageMigrations;
   "storage.objects": StorageObjects;
   "storage.s3_multipart_uploads": StorageS3MultipartUploads;
   "storage.s3_multipart_uploads_parts": StorageS3MultipartUploadsParts;
+  student_guardians: StudentGuardians;
   student_lessons: StudentLessons;
   student_parents: StudentParents;
   student_summaries: StudentSummaries;
   student_summary_recipients: StudentSummaryRecipients;
   students: Students;
   subjects: Subjects;
-  topics: Topics;
+  sync_metrics: SyncMetrics;
+  sync_state: SyncState;
+  timeback_event_queue: TimebackEventQueue;
   timeback_events: TimebackEvents;
+  timeback_events_dlq: TimebackEventsDlq;
+  topics: Topics;
   users: Users;
-  xp_facts_daily: XpFactsDaily;
   "vault.decrypted_secrets": VaultDecryptedSecrets;
   "vault.secrets": VaultSecrets;
   work_period_items: WorkPeriodItems;
   work_periods: WorkPeriods;
   workspace_invites: WorkspaceInvites;
+  xp_facts_daily: XpFactsDaily;
 }

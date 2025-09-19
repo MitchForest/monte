@@ -203,13 +203,16 @@ const router = routerWithList.openapi(createClassroomRoute, async (c) => {
     const classroom = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
       async (trx) => {
+        const classroomId = crypto.randomUUID();
         const created = await trx
           .insertInto("classrooms")
           .values({
-            id: crypto.randomUUID(),
+            id: classroomId,
             org_id: session.session.orgId,
             name: body.name.trim(),
             created_at: new Date().toISOString(),
+            oneroster_class_id: classroomId,
+            oneroster_org_id: session.session.orgId,
           })
           .returning(["id", "org_id", "name", "created_at"])
           .executeTakeFirstOrThrow();

@@ -22,7 +22,6 @@ components/
 lib/
   api/                    # Hono client + typed endpoint helpers
   auth/                   # Token store used by client-side fetch
-  db/                     # Thin re-export of @monte/database for server actions
   utils.ts                # Tailwind convenience helpers
 hooks/                    # React Query hooks built on top of lib/api
 ```
@@ -42,9 +41,9 @@ hooks/                    # React Query hooks built on top of lib/api
 Storing raw responses outside of React Query or skipping schema parsing breaks our guarantees, so please stick with the helpers.
 
 ## Authentication
-- By default we use Cognito via OIDC (`react-oidc-context`). The provider lives in `components/providers/auth-provider.tsx` and keeps the access token in a tiny in-memory store (`lib/auth/token-store.ts`).
+- We use Cognito via OIDC (`react-oidc-context`). The provider lives in `components/providers/auth-provider.tsx`, keeps the access token in memory (`lib/auth/token-store.ts`), and mirrors it into an httpOnly cookie via `/api/auth/session` so server code can talk to the API without leaking secrets to the browser.
 - Set `NEXT_PUBLIC_AUTH_MOCK=true` and fill `NEXT_PUBLIC_DEV_ACCESS_TOKEN` during local development to bypass Cognito. The API must also enable `DEV_AUTH_BYPASS=true` for the flow to succeed.
-- The API token is automatically attached to client-side fetches; server components rely on the API's session cookie headers.
+- Client requests attach the `Authorization` header automatically; server-side utilities read the cookie to populate the same header before calling the API.
 
 ## Styling & UI Libraries
 - Tailwind CSS v4 for utility classes.
@@ -58,9 +57,13 @@ Storing raw responses outside of React Query or skipping schema parsing breaks o
 | `NEXT_PUBLIC_API_URL` | Points to the API when rendering on the server (defaults to `http://localhost:8787`). |
 | `NEXT_PUBLIC_COGNITO_AUTHORITY` | Issuer for the Cognito user pool (staging by default). |
 | `NEXT_PUBLIC_COGNITO_CLIENT_ID` | Public OIDC client ID supplied by Timeback. |
+| `NEXT_PUBLIC_COGNITO_SCOPE` | Requested OIDC scopes. Defaults to `openid email profile`. |
 | `NEXT_PUBLIC_COGNITO_REDIRECT_URI` | Where Cognito sends users after login. Must match the app URL. |
+| `NEXT_PUBLIC_COGNITO_LOGOUT_URI` | Location to send users after logout (usually the app URL). |
 | `NEXT_PUBLIC_AUTH_MOCK` | `true` to enable mock auth mode. |
 | `NEXT_PUBLIC_DEV_ACCESS_TOKEN` | Token injected when mock mode is on. Should match what the API expects. |
+| `NEXT_PUBLIC_DEV_USER_EMAIL` | Email used when mock auth is enabled. |
+| `NEXT_PUBLIC_DEV_USER_NAME` | Display name used when mock auth is enabled. |
 | `OPENAI_API_KEY` | Needed if we call Speech-to-Text or generation services from the browser (rare; most AI work stays server-side). |
 
 Copy `.env.example` and fill in the values that apply to your environment.

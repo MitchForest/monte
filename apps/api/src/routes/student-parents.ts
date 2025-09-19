@@ -189,7 +189,7 @@ const routerWithCreate = routerWithList.openapi(
       (trx) =>
         trx
           .selectFrom("students")
-          .select(["id"])
+          .select(["id", "oneroster_user_id"])
           .where("id", "=", params.studentId)
           .where("org_id", "=", session.session.orgId)
           .executeTakeFirst(),
@@ -201,6 +201,15 @@ const routerWithCreate = routerWithList.openapi(
         c,
         { error: "Student not found" },
         HTTP_STATUS.notFound,
+      );
+    }
+
+    if (student.oneroster_user_id) {
+      return respond(
+        createParentRoute,
+        c,
+        { error: "Guardians are managed by the roster sync" },
+        HTTP_STATUS.conflict,
       );
     }
 
@@ -302,15 +311,19 @@ const routerWithUpdate = routerWithCreate.openapi(
       const parent = await withDbContext(
         { userId: session.session.userId, orgId: session.session.orgId },
         async (trx) => {
-          const studentExists = await trx
+          const studentRecord = await trx
             .selectFrom("students")
-            .select(["id"])
+            .select(["id", "oneroster_user_id"])
             .where("id", "=", params.studentId)
             .where("org_id", "=", session.session.orgId)
             .executeTakeFirst();
 
-          if (!studentExists) {
+          if (!studentRecord) {
             return null;
+          }
+
+          if (studentRecord.oneroster_user_id) {
+            return "conflict" as const;
           }
 
           const update: Record<string, unknown> = {};
@@ -348,6 +361,15 @@ const routerWithUpdate = routerWithCreate.openapi(
           c,
           { error: "Student not found" },
           HTTP_STATUS.notFound,
+        );
+      }
+
+      if (parent === "conflict") {
+        return respond(
+          updateParentRoute,
+          c,
+          { error: "Guardians are managed by the roster sync" },
+          HTTP_STATUS.conflict,
         );
       }
 
@@ -421,17 +443,54 @@ const studentParentsRouter = routerWithUpdate.openapi(
 
     const params = c.req.valid("param");
 
-    const deleted = await withDbContext(
+    const deletionResult = await withDbContext(
       { userId: session.session.userId, orgId: session.session.orgId },
-      (trx) =>
-        trx
+      async (trx) => {
+        const studentRecord = await trx
+          .selectFrom("students")
+          .select(["id", "oneroster_user_id"])
+          .where("id", "=", params.studentId)
+          .where("org_id", "=", session.session.orgId)
+          .executeTakeFirst();
+
+        if (!studentRecord) {
+          return "student_not_found" as const;
+        }
+
+        if (studentRecord.oneroster_user_id) {
+          return "conflict" as const;
+        }
+
+        const deletedRow = await trx
           .deleteFrom("student_parents")
           .where("id", "=", params.parentId)
           .where("student_id", "=", params.studentId)
-          .executeTakeFirst(),
+          .returning(["id"])
+          .executeTakeFirst();
+
+        return deletedRow ? "deleted" : "parent_not_found";
+      },
     );
 
-    if (!deleted) {
+    if (deletionResult === "student_not_found") {
+      return respond(
+        deleteParentRoute,
+        c,
+        { error: "Student not found" },
+        HTTP_STATUS.notFound,
+      );
+    }
+
+    if (deletionResult === "conflict") {
+      return respond(
+        deleteParentRoute,
+        c,
+        { error: "Guardians are managed by the roster sync" },
+        HTTP_STATUS.conflict,
+      );
+    }
+
+    if (deletionResult === "parent_not_found") {
       return respond(
         deleteParentRoute,
         c,

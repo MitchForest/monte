@@ -1,11 +1,13 @@
 import type { Json } from "@monte/database";
 import { db } from "@monte/database";
+import { logger } from "@monte/shared";
 import { oneroster } from "@monte/timeback-clients";
 import { sql } from "kysely";
 import { z } from "zod";
 
 import { getOneRosterClient } from "../../lib/timeback/clients";
 import { isOrgAllowed } from "../../lib/timeback/orgs";
+import { enqueueQueueDlq, enqueueQueueEvent } from "./event-queue";
 
 const EVENT_CACHE_TTL_MS = 10 * 60 * 1000;
 
@@ -14,7 +16,7 @@ const CaliperGeneratedItemSchema = z.object({
   value: z.union([z.number(), z.string()]).optional(),
 });
 
-const CaliperEventSchema = z
+export const CaliperEventSchema = z
   .object({
     id: z.string(),
     eventTime: z.string(),
@@ -65,6 +67,13 @@ type CacheEntry = {
 const courseOrgCache = new Map<string, CacheEntry>();
 const userOrgCache = new Map<string, CacheEntry>();
 
+export class CaliperProcessingSkipped extends Error {
+  constructor(public readonly reason: string) {
+    super(reason);
+    this.name = "CaliperProcessingSkipped";
+  }
+}
+
 export async function ingestCaliperEvents(
   payloads: unknown[],
 ): Promise<CaliperIngestResult> {
@@ -81,6 +90,12 @@ export async function ingestCaliperEvents(
   for (const raw of payloads) {
     const parsed = CaliperEventSchema.safeParse(raw);
     if (!parsed.success) {
+      await enqueueQueueDlq(
+        null,
+        raw as Json,
+        "parse_error",
+        parsed.error.message,
+      );
       registerDrop(result, "parse_error", undefined, parsed.error.message);
       continue;
     }
@@ -88,27 +103,26 @@ export async function ingestCaliperEvents(
     const event = parsed.data;
     const eventId = normalizeEventId(event.id);
     if (!eventId) {
+      await enqueueQueueDlq(null, event as Json, "invalid_event_id");
       registerDrop(result, "invalid_event_id", event.id);
       continue;
     }
 
     const eventTime = new Date(event.eventTime);
     if (Number.isNaN(eventTime.getTime())) {
+      await enqueueQueueDlq(eventId, event as Json, "invalid_event_time");
       registerDrop(result, "invalid_event_time", eventId);
       continue;
     }
 
     const actorId = extractSourcedId(event.actor?.id);
     if (!actorId) {
+      await enqueueQueueDlq(eventId, event as Json, "missing_actor");
       registerDrop(result, "missing_actor", eventId);
       continue;
     }
 
     const courseId = extractSourcedId(event.object?.course?.id);
-    const classId = extractSourcedId(event.object?.id);
-
-    const xpEarned = extractXp(event.generated?.items ?? []);
-    const activeSeconds = extractActiveSeconds(event.generated?.items ?? []);
 
     let orgId: string | null = null;
 
@@ -121,64 +135,27 @@ export async function ingestCaliperEvents(
     }
 
     if (!orgId) {
+      await enqueueQueueDlq(eventId, event as Json, "org_unresolved");
       registerDrop(result, "org_unresolved", eventId);
       continue;
     }
 
     if (!isOrgAllowed(orgId)) {
+      await enqueueQueueDlq(eventId, event as Json, "org_not_allowed");
       registerDrop(result, "org_not_allowed", eventId);
       continue;
     }
 
     try {
-      await db.transaction().execute(async (trx) => {
-        await trx
-          .insertInto("timeback_events")
-          .values({
-            event_id: eventId,
-            event_time: eventTime.toISOString(),
-            event_type: event.type,
-            action: event.action ?? "unknown",
-            actor_user_id: actorId,
-            course_id: courseId ?? null,
-            class_id: classId ?? null,
-            org_id: orgId,
-            xp_earned: xpEarned,
-            timespent_active_seconds: activeSeconds,
-            payload: event as Json,
-          })
-          .onConflict((oc) => oc.column("event_id").doNothing())
-          .execute();
-
-        if (xpEarned !== 0) {
-          const dateBucket = eventTime.toISOString().slice(0, 10);
-          await trx
-            .insertInto("xp_facts_daily")
-            .values({
-              student_id: actorId,
-              org_id: orgId,
-              date_bucket: dateBucket,
-              xp_total: xpEarned,
-              last_event_at: eventTime.toISOString(),
-            })
-            .onConflict((oc) =>
-              oc
-                .columns(["student_id", "org_id", "date_bucket"])
-                .doUpdateSet(({ ref }) => ({
-                  xp_total: sql`${ref("xp_facts_daily.xp_total")} + excluded.xp_total`,
-                  last_event_at: sql`GREATEST(${ref("xp_facts_daily.last_event_at")}, excluded.last_event_at)`,
-                })),
-            )
-            .execute();
-        }
-      });
+      await enqueueQueueEvent(eventId, event as Json);
       result.stored += 1;
     } catch (error) {
       const message =
         error instanceof Error
           ? error.message
           : "Failed to store Caliper event";
-      registerDrop(result, "db_error", eventId, message, true);
+      await enqueueQueueDlq(eventId, event as Json, "queue_error", message);
+      registerDrop(result, "queue_error", eventId, message, true);
     }
   }
 
@@ -263,9 +240,7 @@ async function resolveCourseOrgId(courseId: string): Promise<string | null> {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Unknown OneRoster error";
-      process.stderr.write(
-        `Failed to resolve course org for ${courseId}: ${message}\n`,
-      );
+      logger.error("Failed to resolve course org", { courseId, message });
     }
   }
 
@@ -312,9 +287,7 @@ async function resolveUserOrgId(userId: string): Promise<string | null> {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Unknown OneRoster error";
-      process.stderr.write(
-        `Failed to resolve user org for ${userId}: ${message}\n`,
-      );
+      logger.error("Failed to resolve user org", { userId, message });
     }
   }
 
@@ -356,5 +329,105 @@ function registerDrop(
   result.dropped[reason] = (result.dropped[reason] ?? 0) + 1;
   if (isError || message) {
     result.errors.push({ eventId, reason, message });
+    logger.warn("Caliper ingest drop", {
+      reason,
+      eventId,
+      message,
+    });
   }
+}
+
+export async function enqueueCaliperDlq(
+  eventId: string | null,
+  payload: unknown,
+  reason: string,
+  message?: string,
+): Promise<void> {
+  await enqueueQueueDlq(eventId, payload as Json, reason, message);
+}
+
+export async function processCaliperEvent(
+  event: CaliperEvent,
+): Promise<"processed" | "skipped"> {
+  const eventId = normalizeEventId(event.id);
+  if (!eventId) {
+    throw new CaliperProcessingSkipped("invalid_event_id");
+  }
+
+  const eventTime = new Date(event.eventTime);
+  if (Number.isNaN(eventTime.getTime())) {
+    throw new CaliperProcessingSkipped("invalid_event_time");
+  }
+
+  const actorId = extractSourcedId(event.actor?.id);
+  if (!actorId) {
+    throw new CaliperProcessingSkipped("missing_actor");
+  }
+
+  const courseId = extractSourcedId(event.object?.course?.id);
+  const classId = extractSourcedId(event.object?.id);
+  const xpEarned = extractXp(event.generated?.items ?? []);
+  const activeSeconds = extractActiveSeconds(event.generated?.items ?? []);
+
+  let orgId: string | null = null;
+
+  if (courseId) {
+    orgId = await resolveCourseOrgId(courseId);
+  }
+
+  if (!orgId) {
+    orgId = await resolveUserOrgId(actorId);
+  }
+
+  if (!orgId) {
+    throw new CaliperProcessingSkipped("org_unresolved");
+  }
+
+  if (!isOrgAllowed(orgId)) {
+    throw new CaliperProcessingSkipped("org_not_allowed");
+  }
+
+  await db.transaction().execute(async (trx) => {
+    await trx
+      .insertInto("timeback_events")
+      .values({
+        event_id: eventId,
+        event_time: eventTime.toISOString(),
+        event_type: event.type,
+        action: event.action ?? "unknown",
+        actor_user_id: actorId,
+        course_id: courseId ?? null,
+        class_id: classId ?? null,
+        org_id: orgId,
+        xp_earned: xpEarned,
+        timespent_active_seconds: activeSeconds,
+        payload: event as Json,
+      })
+      .onConflict((oc) => oc.column("event_id").doNothing())
+      .execute();
+
+    if (xpEarned !== 0) {
+      const dateBucket = eventTime.toISOString().slice(0, 10);
+      await trx
+        .insertInto("xp_facts_daily")
+        .values({
+          student_id: actorId,
+          org_id: orgId,
+          date_bucket: dateBucket,
+          xp_total: xpEarned,
+          last_event_at: eventTime.toISOString(),
+        })
+        .onConflict((oc) =>
+          oc
+            .columns(["student_id", "org_id", "date_bucket"])
+            .doUpdateSet(({ ref }) => ({
+              xp_total: sql`${ref("xp_facts_daily.xp_total")} + excluded.xp_total`,
+              last_event_at: sql`GREATEST(${ref("xp_facts_daily.last_event_at")}, excluded.last_event_at)`,
+            })),
+        )
+        .execute();
+    }
+  });
+
+  return "processed";
 }

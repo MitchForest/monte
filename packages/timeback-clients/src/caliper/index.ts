@@ -10,6 +10,11 @@ export {
 } from "./client";
 
 export {
+  type ListCaliperEventsParams,
+  listCaliperEvents,
+} from "./events";
+
+export {
   type CaliperOperationAlias,
   type CaliperOperationSpecs,
   operationSpecs,

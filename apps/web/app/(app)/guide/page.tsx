@@ -1,16 +1,13 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
-import {
-  CalendarClock,
-  CircleDot,
-  Loader2,
-  PartyPopper,
-  Users,
-} from "lucide-react";
+import { format, isSameDay } from "date-fns";
+import { CalendarClock, Loader2, PartyPopper, Users } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-
+import {
+  type GuideScheduleItem,
+  ScheduleTimeline,
+} from "@/components/app/guide/schedule-timeline";
 import { AppPageHeader } from "@/components/app/page-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,13 +34,7 @@ import {
 
 const DAILY_XP_GOAL = 120;
 
-type ScheduleItem = {
-  id: string;
-  title: string;
-  type: "lesson" | "task";
-  studentId?: string | null;
-  dueTime: string | null;
-};
+type ScheduleItem = GuideScheduleItem;
 
 type AttendanceState = Record<string, boolean>;
 type AttendanceRecord = {
@@ -53,62 +44,46 @@ type AttendanceRecord = {
   endTime: string | null;
 };
 
-function ScheduleCard({
-  items,
-  isLoading,
-  resolveStudentName,
+function FocusCard({
+  totalStudents,
+  goalMet,
+  averageProgress,
 }: {
-  items: ScheduleItem[];
-  isLoading: boolean;
-  resolveStudentName: (id: string | null | undefined) => string | null;
+  totalStudents: number;
+  goalMet: number;
+  averageProgress: number;
 }) {
-  if (isLoading) {
-    return (
-      <div className="flex h-40 items-center justify-center">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
-
-  if (items.length === 0) {
-    return (
-      <div className="rounded-2xl border border-dashed border-border/60 bg-background/70 p-6 text-sm text-muted-foreground">
-        Nothing scheduled yet. Add a lesson or task to get started.
-      </div>
-    );
-  }
-
   return (
-    <ul className="space-y-3">
-      {items.map((item) => (
-        <li
-          className="flex items-center justify-between gap-4 rounded-2xl border border-border/60 bg-background/80 px-4 py-3"
-          key={item.id}
-        >
-          <div className="flex items-center gap-3">
-            <CircleDot className="size-4 text-primary" />
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-foreground">
-                {item.title}
-              </span>
-              {resolveStudentName(item.studentId) ? (
-                <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  {resolveStudentName(item.studentId)}
-                </span>
-              ) : null}
-            </div>
+    <Card className="h-full rounded-3xl border-border/60 bg-card/80 shadow-sm">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-lg font-semibold">
+          <PartyPopper className="size-5 text-primary" /> XP focus
+        </CardTitle>
+        <CardDescription>
+          Celebrate progress and spot who still needs momentum today.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="text-sm text-muted-foreground">Class average</p>
+            <p className="text-3xl font-semibold text-foreground">
+              {Math.round(averageProgress)}%
+            </p>
           </div>
-          <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground">
-            <span className="rounded-full border border-border/60 px-3 py-1 font-semibold uppercase tracking-[0.2em] text-foreground">
-              {item.type === "lesson" ? "Lesson" : "Task"}
-            </span>
-            <span>
-              {item.dueTime ? format(new Date(item.dueTime), "p") : "Anytime"}
-            </span>
+          <div className="text-right">
+            <p className="text-sm text-muted-foreground">Rings closed</p>
+            <p className="text-2xl font-semibold text-foreground">
+              {goalMet}/{totalStudents}
+            </p>
           </div>
-        </li>
-      ))}
-    </ul>
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-background/70 p-4 text-sm text-muted-foreground">
+          Keep observing moments of focus as students close their rings. Quick
+          actions live in the student table below.
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -253,6 +228,66 @@ export default function GuideHomePage() {
     [dashboard?.students],
   );
 
+  const xpStats = useMemo(() => {
+    if (studentEntries.length === 0) {
+      return {
+        totalStudents: 0,
+        goalMet: 0,
+        averageProgress: 0,
+      };
+    }
+
+    let goalMet = 0;
+    let totalProgress = 0;
+    let counted = 0;
+
+    for (const entry of studentEntries) {
+      const earned = entry.xpToday ?? 0;
+      const progress = Math.min(
+        100,
+        Math.round((earned / DAILY_XP_GOAL) * 100),
+      );
+      totalProgress += progress;
+      counted += 1;
+      if (earned >= DAILY_XP_GOAL) {
+        goalMet += 1;
+      }
+    }
+
+    return {
+      totalStudents: counted,
+      goalMet,
+      averageProgress: counted > 0 ? totalProgress / counted : 0,
+    };
+  }, [studentEntries]);
+
+  const insights = useMemo(() => {
+    const needsObservation = studentEntries.filter((entry) => {
+      if (!entry.lastObservationAt) {
+        return true;
+      }
+      return !isSameDay(new Date(entry.lastObservationAt), new Date());
+    }).length;
+
+    const needsSummary = studentEntries.filter((entry) => {
+      if (!entry.lastSummaryAt) {
+        return true;
+      }
+      return !isSameDay(new Date(entry.lastSummaryAt), new Date());
+    }).length;
+
+    const totalHabitsTracked = studentEntries.reduce(
+      (accumulator, entry) => accumulator + entry.habitsCount,
+      0,
+    );
+
+    return {
+      needsObservation,
+      needsSummary,
+      totalHabitsTracked,
+    };
+  }, [studentEntries]);
+
   const studentsById = useMemo(() => {
     const map = new Map<string, (typeof studentEntries)[number]["student"]>();
     for (const entry of studentEntries) {
@@ -357,37 +392,59 @@ export default function GuideHomePage() {
             </Button>
           </CardHeader>
           <CardContent>
-            <ScheduleCard
+            <ScheduleTimeline
               isLoading={isLoading}
               items={scheduleItems}
               resolveStudentName={resolveStudentName}
             />
           </CardContent>
         </Card>
+        <FocusCard
+          averageProgress={xpStats.averageProgress}
+          goalMet={xpStats.goalMet}
+          totalStudents={xpStats.totalStudents}
+        />
+      </section>
 
+      <section className="grid gap-4 sm:grid-cols-3">
         <Card className="rounded-3xl border-border/60 bg-card/80 shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-              <PartyPopper className="size-5 text-primary" /> Wins to celebrate
+            <CardTitle className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Observations pending
             </CardTitle>
             <CardDescription>
-              Quick highlights from observations and parent updates.
+              <span className="text-2xl font-semibold text-foreground">
+                {insights.needsObservation}
+              </span>{" "}
+              learners still need a note today.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm text-muted-foreground">
-            <p>
-              <strong>{dashboard?.observationCount ?? 0}</strong> observations
-              captured today.
-            </p>
-            <p>
-              <strong>{dashboard?.summaryCount ?? 0}</strong> parent updates
-              ready to send.
-            </p>
-            <p>
-              Check the student table below for who still needs a note home
-              today.
-            </p>
-          </CardContent>
+        </Card>
+        <Card className="rounded-3xl border-border/60 bg-card/80 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Parent updates to send
+            </CardTitle>
+            <CardDescription>
+              <span className="text-2xl font-semibold text-foreground">
+                {insights.needsSummary}
+              </span>{" "}
+              families ready for a summary.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+        <Card className="rounded-3xl border-border/60 bg-card/80 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Habits tracked
+            </CardTitle>
+            <CardDescription>
+              <span className="text-2xl font-semibold text-foreground">
+                {insights.totalHabitsTracked}
+              </span>{" "}
+              check-ins captured today.
+            </CardDescription>
+          </CardHeader>
         </Card>
       </section>
 

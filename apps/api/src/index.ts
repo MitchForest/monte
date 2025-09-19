@@ -1,6 +1,8 @@
+import { logger } from "@monte/shared";
 import { serve } from "bun";
 
-import { createAPIApp, getCorsOrigins } from "./lib/app";
+import { createAPIApp } from "./lib/app";
+import { getCorsOrigins, getPort } from "./lib/env";
 import { HTTP_STATUS } from "./lib/http/status";
 import { attendanceRouter } from "./routes/attendance";
 import { classroomsRouter } from "./routes/classrooms";
@@ -60,7 +62,9 @@ const typedApp = app
 typedApp.notFound((c) => c.json({ error: "Not found" }, HTTP_STATUS.notFound));
 
 typedApp.onError((err, c) => {
-  console.error("API error", err);
+  logger.error("API error", {
+    message: err instanceof Error ? err.message : String(err),
+  });
   return c.json(
     { error: "Internal server error" },
     HTTP_STATUS.internalServerError,
@@ -70,12 +74,12 @@ typedApp.onError((err, c) => {
 export type ApiApp = typeof typedApp;
 export { typedApp as app };
 
-const port = Number.parseInt(process.env.PORT ?? "8787", 10);
+const port = getPort();
 
 if (import.meta.main) {
   serve({
     port,
     fetch: typedApp.fetch,
   });
-  process.stdout.write(`API listening on http://localhost:${port}\n`);
+  logger.info("Monte API listening", { port });
 }

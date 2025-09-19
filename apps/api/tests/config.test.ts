@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "bun:test";
 
-import { getCorsOrigins } from "../src/lib/app";
+import { getCorsOrigins, resetApiEnv } from "../src/lib/env";
 
 const originalEnv = { ...process.env };
 
@@ -10,6 +10,7 @@ describe("getCorsOrigins", () => {
     process.env.APP_ORIGINS = "";
     process.env.NEXT_PUBLIC_APP_URL = "http://localhost:3000";
     process.env.APP_URL = "http://localhost:4000";
+    resetApiEnv();
   });
 
   afterEach(() => {
@@ -19,6 +20,7 @@ describe("getCorsOrigins", () => {
       }
     }
     Object.assign(process.env, originalEnv);
+    resetApiEnv();
   });
 
   it("falls back to default local origins when none are provided", () => {

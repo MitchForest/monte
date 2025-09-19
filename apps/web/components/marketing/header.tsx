@@ -16,10 +16,11 @@ import {
 import { MarketingLogo } from "./logo";
 
 const navigation = [
-  { href: "#features", label: "Features" },
+  { href: "#about", label: "About" },
+  { href: "#guides", label: "For Guides" },
+  { href: "#students", label: "For Students" },
   { href: "#pricing", label: "Pricing" },
   { href: "#faq", label: "FAQ" },
-  { href: "#testimonials", label: "Stories" },
 ];
 
 export function MarketingHeader() {
@@ -48,7 +49,7 @@ export function MarketingHeader() {
             Sign in
           </Link>
           <Button asChild size="lg">
-            <Link href="/signup">Start free trial</Link>
+            <Link href="/demo">Book Demo</Link>
           </Button>
         </div>
 
@@ -87,7 +88,7 @@ export function MarketingHeader() {
             <SheetFooter className="px-4 pt-4 pb-6">
               <div className="flex flex-col gap-3">
                 <Button asChild size="lg">
-                  <Link href="/signup">Start free trial</Link>
+                  <Link href="/demo">Book Demo</Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
                   <Link href="/login">Sign in</Link>

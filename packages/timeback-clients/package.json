@@ -6,7 +6,7 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "typecheck": "echo '@monte/timeback-clients typecheck skipped'",
+    "typecheck": "bun x tsc --noEmit",
     "lint": "bun x biome check",
     "fetch-specs": "bun run scripts/fetch-specs.ts",
     "generate": "bun run scripts/generate.ts",

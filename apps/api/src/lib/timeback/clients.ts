@@ -1,3 +1,4 @@
+import { logger } from "@monte/shared";
 import {
   caliper,
   maybeGetTimebackServiceConfig,
@@ -61,9 +62,7 @@ function createClientForService<Service extends TimebackService>(
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unknown Timeback error";
-    process.stderr.write(
-      `Failed to initialise Timeback ${service} client: ${message}\n`,
-    );
+    logger.error("Failed to initialise Timeback client", { service, message });
     clientCache[service] = null;
     return null as ServiceClientMap[Service];
   }

@@ -7,24 +7,34 @@ import {
 
 const faqs = [
   {
-    question: "How do guides adopt Monte without extra training time?",
     answer:
-      "We deliver Montessori-specific onboarding with your team, import existing lesson records, and tailor prompts to your materials list so guides feel at home from day one.",
+      "Yes. Homeschool guides gain access to the same curriculum, AI copilots, and reporting that our school partners use. Schedule a demo and we will tailor onboarding to your family or pod.",
+    question: "Is Monte available for homeschoolers?",
   },
   {
-    question: "Does Monte support multi-age and multi-campus organizations?",
     answer:
-      "Yes. Flexible cohorts, permissions, and cross-campus reporting make it simple to respect each environment while surfacing insights to leadership.",
+      "Absolutely. Schools with more than 100 students receive bespoke onboarding support and discounted per-student pricing; reach out to craft a plan for your campuses.",
+    question: "Do Montessori schools receive bulk pricing?",
   },
   {
-    question: "How does pricing work for part-time enrollments?",
     answer:
-      "Only active students are billed. You can archive and reactivate children as schedules shift without losing their history.",
+      "The day stays child-led. Most learners choose Monte on a computer or tablet for one to two hours, then return to hands-on materials, movement, and outdoor work for the remainder of the cycle.",
+    question: "How long do students spend on computers each day?",
   },
   {
-    question: "Can families access Monte on mobile?",
     answer:
-      "Families receive delightful mobile-ready updates, can reply with messages or photos, and choose the channels that work best for them.",
+      "We administer nationally normed assessments multiple times per year across our network. Students who engage with Monte's 2 Hour Learning model show academic growth roughly twice as fast as matched peers.",
+    question: "Where does the 2× as fast in two hours metric come from?",
+  },
+  {
+    answer:
+      "Implementation typically takes four to six weeks. We import your existing records, configure classrooms, and provide live coaching so guides feel confident before launch.",
+    question: "How quickly can we launch Monte?",
+  },
+  {
+    answer:
+      "Monte connects with SIS, LMS, and communication tools through secure integrations, keeping enrollment, attendance, and messaging in sync without duplicate entry.",
+    question: "Does Monte integrate with the systems we already use?",
   },
 ];
 
@@ -48,7 +58,7 @@ export function MarketingFaq() {
         </p>
       </div>
       <Accordion
-        className="mt-10 rounded-3xl border border-border/70 bg-background/90 shadow-md"
+        className="mt-10 rounded-3xl border border-border/70 bg-background/90 px-4 shadow-md sm:px-6"
         collapsible
         type="single"
       >

@@ -2,23 +2,16 @@ import type { ApiApp } from "@monte/api";
 import { hc } from "hono/client";
 
 import { getAccessToken } from "@/lib/auth/token-store";
+import { getServerApiBaseUrl, publicEnv } from "@/lib/env";
 import { getImpersonationSelection } from "@/lib/impersonation/store";
 
-const devBaseUrl = "http://localhost:8787";
 const isServer = typeof window === "undefined";
 
 function resolveBaseUrl(): string {
   if (isServer) {
-    if (process.env.NODE_ENV === "production") {
-      const apiUrl = process.env.RAILWAY_API_URL ?? process.env.API_URL;
-      if (apiUrl) {
-        return apiUrl;
-      }
-    }
-    const fallback = process.env.API_URL ?? devBaseUrl;
-    return fallback;
+    return getServerApiBaseUrl();
   }
-  return "/api";
+  return publicEnv.apiUrl ?? "/api";
 }
 
 function toHeaders(init?: HeadersInit): Headers {
