@@ -1,0 +1,27 @@
+{
+  "name": "@monte/frontend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tanstack/router-devtools": "^1.77.0",
+    "@tanstack/solid-form": "^0.25.0",
+    "@tanstack/solid-router": "^1.77.0",
+    "@tanstack/solid-table": "^8.20.0",
+    "solid-js": "^1.9.9"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.13",
+    "solid-devtools": "^0.34.3",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.4",
+    "vite-plugin-solid": "^2.11.8"
+  }
+}

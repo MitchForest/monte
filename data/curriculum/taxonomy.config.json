@@ -1,0 +1,210 @@
+{
+  "defaultUnit": {
+    "id": "numbers-place-value",
+    "name": "Numbers and Place Value"
+  },
+  "units": [
+    {
+      "id": "fractions-decimals",
+      "name": "Fractions and Decimals",
+      "priority": 120,
+      "keywords": [
+        "fraction",
+        "numerator",
+        "denominator",
+        "half",
+        "halves",
+        "third",
+        "fourth",
+        "fifth",
+        "sixth",
+        "eighth",
+        "unit fraction",
+        "mixed number",
+        "equivalent",
+        "decimal",
+        "tenths",
+        "hundredths",
+        "percent"
+      ]
+    },
+    {
+      "id": "addition",
+      "name": "Addition",
+      "priority": 110,
+      "keywords": [
+        "add",
+        "addition",
+        "sum",
+        "plus",
+        "make ten",
+        "compose to ten"
+      ]
+    },
+    {
+      "id": "subtraction",
+      "name": "Subtraction",
+      "priority": 105,
+      "keywords": [
+        "subtract",
+        "subtraction",
+        "difference",
+        "take away"
+      ]
+    },
+    {
+      "id": "multiplication",
+      "name": "Multiplication",
+      "priority": 100,
+      "keywords": [
+        "multiply",
+        "multiplication",
+        "product",
+        "times",
+        "array",
+        "equal group"
+      ]
+    },
+    {
+      "id": "division",
+      "name": "Division",
+      "priority": 95,
+      "keywords": [
+        "divide",
+        "division",
+        "quotient",
+        "remainder",
+        "share equally"
+      ]
+    },
+    {
+      "id": "expressions-equations",
+      "name": "Expressions and Equations",
+      "priority": 90,
+      "keywords": [
+        "equation",
+        "expression",
+        "parentheses",
+        "brackets",
+        "order of operations",
+        "unknown",
+        "variable",
+        "evaluate",
+        "simplify"
+      ]
+    },
+    {
+      "id": "geometry",
+      "name": "Geometry",
+      "priority": 85,
+      "keywords": [
+        "shape",
+        "polygon",
+        "triangle",
+        "quadrilateral",
+        "angle",
+        "line",
+        "ray",
+        "segment",
+        "symmetry",
+        "coordinate plane",
+        "volume",
+        "surface area"
+      ]
+    },
+    {
+      "id": "measurement-data",
+      "name": "Measurement and Data",
+      "priority": 80,
+      "keywords": [
+        "measure",
+        "measurement",
+        "length",
+        "weight",
+        "mass",
+        "volume",
+        "capacity",
+        "perimeter",
+        "area",
+        "time",
+        "clock",
+        "elapsed",
+        "money",
+        "coin",
+        "bill",
+        "temperature",
+        "graph",
+        "plot",
+        "chart",
+        "table",
+        "data"
+      ]
+    },
+    {
+      "id": "number-sense",
+      "name": "Number Sense and Patterns",
+      "priority": 75,
+      "keywords": [
+        "pattern",
+        "sequence",
+        "even",
+        "odd",
+        "prime",
+        "composite",
+        "factor",
+        "multiple",
+        "benchmark",
+        "estimat",
+        "round",
+        "skip-count"
+      ]
+    },
+    {
+      "id": "ratios-proportional",
+      "name": "Ratios and Proportional Reasoning",
+      "priority": 70,
+      "keywords": [
+        "ratio",
+        "rate",
+        "unit rate",
+        "proportion"
+      ]
+    },
+    {
+      "id": "integers",
+      "name": "Integers",
+      "priority": 65,
+      "keywords": [
+        "integer",
+        "negative",
+        "positive"
+      ]
+    },
+    {
+      "id": "numbers-place-value",
+      "name": "Numbers and Place Value",
+      "priority": 10,
+      "keywords": [
+        "place value",
+        "count",
+        "number line",
+        "number chart",
+        "number name",
+        "word name",
+        "digit",
+        "ones",
+        "tens",
+        "hundreds",
+        "thousands",
+        "regroup",
+        "compose",
+        "decompose",
+        "order number",
+        "compare number",
+        "hundred chart",
+        "before",
+        "after"
+      ]
+    }
+  ]
+}
