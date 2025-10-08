@@ -1,45 +1,61 @@
-import type { Component } from 'solid-js';
-import { For, Show } from 'solid-js';
-import { Link, Outlet } from '@tanstack/solid-router';
-import { RouterDevtools } from '@tanstack/router-devtools';
+import { Show, createMemo, type Component } from 'solid-js';
+import { Outlet, useNavigate, useRouterState } from '@tanstack/solid-router';
 
-const navItems = [
-  { href: '/', label: 'Overview' },
-  { href: '/forms', label: 'Forms' },
-  { href: '/table', label: 'Tables' },
-];
+import { ProgressProvider } from './curriculum/state/progress';
+import { PageSection, ProfileAvatar, Button } from './design-system';
 
 const App: Component = () => {
+  const navigate = useNavigate();
+  const routerState = useRouterState();
+
+  const backTarget = createMemo<{ show: boolean; path: string }>(() => {
+    const path = routerState().location.pathname;
+    if (path === '/') {
+      return { show: false, path: '/' };
+    }
+
+    const segments = path.split('/').filter(Boolean);
+    if (segments[0] !== 'units') {
+      return { show: true, path: '/' };
+    }
+
+    if (segments.length >= 4 && segments[2] === 'lessons') {
+      return { show: true, path: `/units/${segments[1]}` };
+    }
+
+    return { show: true, path: '/' };
+  });
+
   return (
-    <div class="flex min-h-screen flex-col">
-      <header class="border-b border-white/10 bg-neutral-950/80 backdrop-blur">
-        <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-          <p class="text-base font-semibold text-neutral-100">Monte</p>
-          <nav class="flex items-center gap-2 text-sm">
-            <For each={navItems}>
-              {(item) => (
-                <Link
-                  href={item.href}
-                  activeOptions={{ exact: item.href === '/' }}
-                  activeProps={{ class: 'rounded-full bg-neutral-100/10 px-3 py-1 text-white' }}
-                  inactiveProps={{ class: 'rounded-full px-3 py-1 text-neutral-400 hover:text-white' }}
-                >
-                  {item.label}
-                </Link>
-              )}
-            </For>
-          </nav>
-        </div>
-      </header>
-      <main class="flex-1">
-        <div class="mx-auto w-full max-w-5xl px-6 py-10">
+    <ProgressProvider>
+      <div class="min-h-screen bg-shell text-[color:var(--color-text)]">
+        <header class="sticky top-0 z-30 bg-[rgba(244,250,252,0.85)] backdrop-blur-md">
+          <PageSection bleed class="relative flex h-20 items-center justify-center">
+            <Show when={backTarget().show}>
+              <Button
+                variant="ghost"
+                size="compact"
+                iconPosition="left"
+                icon={<span aria-hidden>&lt;</span>}
+                class="absolute left-0"
+                onClick={() => void navigate({ to: backTarget().path })}
+              >
+                Back
+              </Button>
+            </Show>
+
+            <span class="text-5xl font-bold tracking-tight text-[color:var(--color-heading)]">Bemo</span>
+
+            <div class="absolute right-0 flex items-center gap-3">
+              <ProfileAvatar seed="Taylor" size={56} />
+            </div>
+          </PageSection>
+        </header>
+        <main class="flex-1 pb-12">
           <Outlet />
-        </div>
-      </main>
-      <Show when={import.meta.env.DEV}>
-        <RouterDevtools position="bottom-right" />
-      </Show>
-    </div>
+        </main>
+      </div>
+    </ProgressProvider>
   );
 };
 

@@ -4,8 +4,8 @@ import { Route, Router, RootRoute } from '@tanstack/solid-router';
 import App from './App';
 
 const HomeRoute = lazy(() => import('./routes/home'));
-const FormsRoute = lazy(() => import('./routes/forms'));
-const TableRoute = lazy(() => import('./routes/table'));
+const UnitRoute = lazy(() => import('./routes/unit'));
+const LessonRoute = lazy(() => import('./routes/lesson'));
 
 const rootRoute = new RootRoute({
   component: App,
@@ -14,22 +14,22 @@ const rootRoute = new RootRoute({
 const indexRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
-  component: HomeRoute,
+  component: () => <HomeRoute />,
 });
 
-const formsRoute = new Route({
+const unitRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/forms',
-  component: FormsRoute,
+  path: '/units/$unitSlug',
+  component: () => <UnitRoute />,
 });
 
-const tableRoute = new Route({
+const lessonRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/table',
-  component: TableRoute,
+  path: '/units/$unitSlug/lessons/$lessonSlug',
+  component: () => <LessonRoute />,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, formsRoute, tableRoute]);
+const routeTree = rootRoute.addChildren([indexRoute, unitRoute, lessonRoute]);
 
 export const router = new Router({
   routeTree,
