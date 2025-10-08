@@ -342,32 +342,39 @@
   .lesson-screen {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh; /* Fixed height - no overflow */
+    max-height: 100vh;
     background: var(--color-background);
     color: var(--color-text);
+    overflow: hidden;
   }
 
   .lesson-player-wrapper {
     flex: 1;
     display: flex;
     justify-content: center;
-    padding: 1.5rem 1rem 6rem;
+    align-items: center;
+    padding: 1rem;
+    overflow: hidden;
   }
 
   @media (min-width: 768px) {
     .lesson-player-wrapper {
-      padding: 2.5rem 1.75rem 7rem;
+      padding: 1.5rem;
     }
   }
 
   .lesson-player-frame {
     position: relative;
     width: 100%;
+    height: 100%;
     max-width: 1080px;
     border-radius: var(--radius-xl);
     overflow: hidden;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.92) 45%, rgba(255, 255, 255, 0.88) 100%);
     box-shadow: 0 18px 48px rgba(10, 42, 101, 0.18);
+    display: flex;
+    flex-direction: column;
   }
 
   .lesson-header-overlay {
@@ -424,9 +431,12 @@
   .lesson-player-surface {
     position: relative;
     z-index: 0;
-    padding: 9rem 2rem 2rem;
-    min-height: 420px;
+    flex: 1;
+    padding: 2rem;
     overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .lesson-player-surface--inactive {
@@ -731,6 +741,32 @@
     box-shadow: inset 0 -2px 0 rgba(15, 23, 42, 0.15);
   }
 
+  /* Montessori-style number cards with wood background and proportional sizing */
+  .number-card-montessori {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    padding: 0.6rem 0.8rem;
+    background: linear-gradient(135deg, #e8d5b7 0%, #d4c4a8 100%);
+    border-radius: var(--radius-md);
+    box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+    border: 2px solid #c9b896;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .number-card-digit-montessori {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
   .golden-bead-cube {
     position: relative;
     width: 48px;
@@ -840,9 +876,30 @@
   .presentation-card-stack__item {
     position: absolute;
     top: 0;
-    left: 0;
-    transform: translateY(calc(var(--offset, 0) * -0.6rem)) translateX(calc(var(--offset, 0) * 0.1rem));
+    right: 0; /* right-align so ones place aligns */
+    transform: translateY(calc(var(--offset, 0) * -0.6rem));
     filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.12));
+  }
+
+  /* Paper notes area beside the canvas */
+  .presentation-paper-notes {
+    position: absolute;
+    right: -220px;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 200px;
+  }
+
+  @media (max-width: 1024px) {
+    .presentation-paper-notes {
+      position: static;
+      right: auto;
+      top: auto;
+      max-width: none;
+      width: 100%;
+    }
   }
 
   .presentation-multiplier {
@@ -880,6 +937,47 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  /* Per-action timeline under the canvas */
+  .presentation-action-timeline {
+    position: relative;
+    width: 100%;
+    height: 36px;
+  }
+  .presentation-action-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 6px;
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.08);
+    border-radius: 999px;
+  }
+  .presentation-action-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(64, 157, 233, 0.5);
+    border-radius: 999px;
+  }
+  .presentation-action-dot {
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(15, 23, 42, 0.2);
+    background: #fff;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+  .presentation-action-dot.is-active {
+    transform: translate(-50%, -50%) scale(1.2);
+    border-color: rgba(64, 157, 233, 0.75);
+    background: #e6f1fb;
   }
 
   .presentation-stamp-column {
@@ -926,6 +1024,21 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .presentation-token.is-fresh {
+    animation: presentation-token-pop 0.35s ease;
+  }
+
+  @keyframes presentation-token-pop {
+    from {
+      transform: scale(0.6);
+      opacity: 0.2;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 
   .presentation-ribbon {
@@ -994,5 +1107,284 @@
 
   .presentation-panel--final .number-card {
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+  }
+
+  .lesson-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    color: var(--color-text);
+    overflow: hidden;
+  }
+
+  .lesson-stage[data-variant='presentation'] {
+    padding: 1rem;
+  }
+
+  .lesson-stage__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .lesson-stage__title {
+    font-size: clamp(1.75rem, 2.8vw, 2.5rem);
+    font-weight: 600;
+    color: var(--color-heading);
+  }
+
+  .lesson-stage__subtitle {
+    font-size: 0.95rem;
+    color: rgba(100, 116, 139, 0.9);
+  }
+
+  .lesson-stage__caption {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(100, 116, 139, 0.7);
+  }
+
+  .lesson-stage__canvas {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .lesson-stage__canvas-card {
+    width: min(100%, 960px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.35rem;
+  }
+
+  .lesson-stage__footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 3.5rem;
+  }
+
+  .lesson-stage__feedback {
+    font-size: 0.9rem;
+    color: rgba(15, 23, 42, 0.75);
+    text-align: center;
+    max-width: 40ch;
+  }
+
+  .lesson-stage__status {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(100, 116, 139, 0.75);
+  }
+
+  .lesson-stage__status--pass {
+    color: rgba(34, 197, 94, 0.9);
+  }
+
+  .lesson-stage__status--fail {
+    color: rgba(239, 68, 68, 0.9);
+  }
+
+  .guided-stage__canvas,
+  .practice-stage__canvas {
+    width: 100%;
+  }
+
+  .guided-stage__workspace {
+    width: min(100%, 960px);
+    margin: 0 auto;
+  }
+
+  .guided-stage__footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .guided-stage__controls {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .practice-stage__panel {
+    width: min(100%, 420px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .practice-stage__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    color: rgba(15, 23, 42, 0.85);
+  }
+
+  .practice-stage__input {
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(64, 157, 233, 0.35);
+    background: #fff;
+    padding: 0.65rem 0.85rem;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .practice-stage__footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .practice-stage__controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  /* K-3 Minimal UI: Large prominent caption */
+  .presentation-caption {
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 85%;
+    padding: 20px 32px;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-pop);
+    font-size: 24px;
+    font-weight: 600;
+    font-family: var(--font-heading);
+    color: var(--color-heading);
+    text-align: center;
+    z-index: 50;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 768px) {
+    .presentation-caption {
+      font-size: 28px;
+      padding: 24px 40px;
+    }
+  }
+
+  /* Simplified workspace layout */
+  .presentation-workspace-minimal {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    min-height: 200px;
+  }
+
+  .presentation-cards-minimal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .presentation-card-stack {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .presentation-card-stack__item {
+    display: flex;
+  }
+
+  .presentation-multiplier-minimal {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .presentation-multiplier-minimal::before {
+    content: '×';
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary-strong);
+  }
+
+  .presentation-answer {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  /* K-3 Guided Practice - Minimal UI */
+  .guided-prompt {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: var(--font-heading);
+    color: var(--color-heading);
+    text-align: center;
+    padding: 1.5rem 2rem;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 768px) {
+    .guided-prompt {
+      font-size: 28px;
+    }
+  }
+
+  .guided-workspace-minimal {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .guided-supply-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .guided-zone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .guided-footer-minimal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .guided-feedback {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-primary-strong);
+    text-align: center;
+    padding: 1rem;
+    background: rgba(140, 204, 212, 0.1);
+    border-radius: var(--radius-md);
   }
 }

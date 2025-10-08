@@ -207,9 +207,9 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
   };
 
   return (
-    <div class="flex flex-col gap-5 text-[color:var(--color-text)]">
-      <header class="space-y-3">
-        <div class="flex flex-wrap items-center gap-2">
+    <div class="lesson-stage" data-variant="practice">
+      <header class="lesson-stage__header">
+        <div class="flex flex-wrap items-center justify-center gap-2">
           <Chip tone="primary" size="sm">
             Question {index() + 1} of {questions().length}
           </Chip>
@@ -217,106 +217,55 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
             {currentQuestion()?.difficulty.toUpperCase()}
           </Chip>
         </div>
-        <h4 class="text-2xl font-semibold text-[color:var(--color-heading)]">{currentQuestion()?.prompt}</h4>
-        <p class="text-sm text-subtle">
-          Answer with the total after modeling the problem using the {props.segment.workspace === 'golden-beads' ? 'golden bead material' : 'stamp game'}.
+        <h4 class="lesson-stage__title">{currentQuestion()?.prompt}</h4>
+        <p class="lesson-stage__subtitle">
+          Model the problem with the {props.segment.workspace === 'golden-beads' ? 'golden beads' : 'stamp game'}, then enter the product.
+        </p>
+        <p class={`lesson-stage__status lesson-stage__status--${segmentStatus()}`}>
+          {segmentStatus() === 'pass'
+            ? 'Practice complete!'
+            : segmentStatus() === 'fail'
+            ? `${props.passCriteria.maxMisses} misses reached. Reset to try again.`
+            : `Correct ${correctCount()} • Incorrect ${incorrectCount()} • Attempts ${answeredCount()}`}
         </p>
       </header>
 
-      <Card variant="flat" class={`rounded-[var(--radius-lg)] p-4 sm:p-5 space-y-2 ${
-        segmentStatus() === 'pass'
-          ? 'surface-success'
-          : segmentStatus() === 'fail'
-          ? 'surface-attention'
-          : 'surface-neutral'
-      }`}>
-        <p class="text-sm font-semibold leading-snug">
-          {segmentStatus() === 'pass'
-            ? 'Practice complete! Mark the lesson segment done.'
-            : segmentStatus() === 'fail'
-            ? `${props.passCriteria.maxMisses} misses reached. Reset to try a new problem set.`
-            : 'Work the problem, then enter your final answer.'}
-        </p>
-        <p class="text-xs text-subtle opacity-80">
-          Correct: {correctCount()} • Incorrect: {incorrectCount()} • Attempts: {answeredCount()}
-        </p>
-      </Card>
+      <div class="lesson-stage__canvas practice-stage__canvas">
+        <div class="practice-stage__panel">
+          <label class="practice-stage__field">
+            <span>Answer</span>
+            <input
+              type="number"
+              value={answer()}
+              onInput={(event) => setAnswer(event.currentTarget.value)}
+              class="practice-stage__input"
+              disabled={segmentStatus() !== 'idle'}
+            />
+          </label>
+          <Show when={feedback()}>
+            {(message) => <p class="lesson-stage__feedback">{message()}</p>}
+          </Show>
+        </div>
+      </div>
 
-      <Card variant="soft" class="rounded-[var(--radius-lg)] p-4 sm:p-5 space-y-3">
-        <label class="flex flex-col gap-2 text-sm">
-          <span>Answer</span>
-          <input
-            type="number"
-            value={answer()}
-            onInput={(event) => setAnswer(event.currentTarget.value)}
-            class="rounded-[var(--radius-sm)] border border-[rgba(64,157,233,0.35)] bg-white px-3 py-2 text-base"
-            disabled={segmentStatus() !== 'idle'}
-          />
-        </label>
-        <div class="flex flex-wrap gap-2">
-          <Button size="compact" onClick={handleCheck} disabled={segmentStatus() !== 'idle'}>
-            Check answer
+      <footer class="lesson-stage__footer practice-stage__footer">
+        <div class="practice-stage__controls">
+          <Button onClick={handleCheck} disabled={segmentStatus() !== 'idle'}>
+            Check
           </Button>
-          <Button variant="secondary" size="compact" onClick={() => handleReset(false)}>
-            Reset current set
+          <Button variant="secondary" onClick={() => handleReset(false)}>
+            Reset set
           </Button>
-          <Button variant="ghost" size="compact" onClick={() => handleReset(true)}>
-            Regenerate problems
+          <Button variant="ghost" onClick={() => handleReset(true)}>
+            New problems
           </Button>
           <Show when={index() < questions().length - 1 && segmentStatus() === 'idle'}>
-            <Button variant="ghost" size="compact" onClick={handleNext}>
-              Skip to next
+            <Button variant="ghost" onClick={handleNext}>
+              Skip
             </Button>
           </Show>
         </div>
-        <Show when={feedback()}>
-          {(message) => <p class="text-sm text-subtle">{message()}</p>}
-        </Show>
-      </Card>
-
-      <Card variant="flat" class="surface-neutral rounded-[var(--radius-lg)] p-4 sm:p-5 space-y-3">
-        <p class="text-xs uppercase tracking-wide text-label-soft">Question tracker</p>
-        <div class="flex flex-col gap-2">
-          <For each={questions()}>
-            {(question, questionIndex) => {
-              const state = () => questionStates[question.id];
-              return (
-                <div class="rounded-[var(--radius-md)] border border-[rgba(64,157,233,0.2)] bg-white/85 px-4 py-3 text-sm">
-                  <div class="flex items-center justify-between gap-3">
-                    <div>
-                      <p class="text-xs font-semibold uppercase tracking-wide text-label-soft">
-                        Question {questionIndex() + 1}
-                      </p>
-                      <p class="mt-1 font-semibold leading-snug">
-                        {question.multiplicand} × {question.multiplier}
-                      </p>
-                    </div>
-                    <Chip
-                      tone={
-                        state()?.status === 'correct'
-                          ? 'green'
-                          : state()?.status === 'incorrect'
-                          ? 'red'
-                          : 'neutral'
-                      }
-                      size="sm"
-                    >
-                      {state()?.status === 'correct'
-                        ? 'Correct'
-                        : state()?.status === 'incorrect'
-                        ? 'Incorrect'
-                        : 'Pending'}
-                    </Chip>
-                  </div>
-                  <Show when={state()?.answer !== undefined}>
-                    <p class="mt-1 text-xs text-subtle">Your answer: {state()?.answer}</p>
-                  </Show>
-                </div>
-              );
-            }}
-          </For>
-        </div>
-      </Card>
+      </footer>
     </div>
   );
 };

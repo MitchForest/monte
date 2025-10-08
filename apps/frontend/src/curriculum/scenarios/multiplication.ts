@@ -193,30 +193,45 @@ export const buildGoldenBeadPresentationScript = (scenario: GoldenBeadScenario):
   const multiplierStr = multiplier.toString();
 
   const actions: PresentationAction[] = [
+    // Action 1: Write problem on paper (handwritten style font) to the side: 2344 x 3
+    { type: 'showCard', card: `${multiplicandStr} × ${multiplierStr}`, position: 'paper' },
     { type: 'narrate', text: `We will multiply ${multiplicandStr} by ${multiplierStr} using golden beads.` },
+
+    // Actions 2-5: Lay out 2000, then 300, then 40, then 4 stacked
     { type: 'showCard', card: `${digits.thousands * 1000}`, position: 'multiplicand-stack' },
     { type: 'showCard', card: `${digits.hundreds * 100}`, position: 'multiplicand-stack' },
     { type: 'showCard', card: `${digits.tens * 10}`, position: 'multiplicand-stack' },
     { type: 'showCard', card: `${digits.units}`, position: 'multiplicand-stack' },
-    { type: 'showCard', card: multiplierStr, position: 'multiplier' },
     { type: 'narrate', text: `Stack the thousand, hundred, ten, and unit cards to show ${multiplicandStr}.` },
 
-    { type: 'narrate', text: 'Collect beads to match each place value.' },
+    // Actions 6-7: Put multiplier (3) below the 4, put x to left of 3
+    { type: 'showCard', card: multiplierStr, position: 'multiplier' },
+    { type: 'showCard', card: '×', position: 'paper' },
+
+    // Actions 8-11: Place beads for each place value left to right
+    { type: 'narrate', text: 'Lay out the golden beads to match each place value.' },
     { type: 'placeBeads', place: 'thousand', quantity: digits.thousands, tray: 1 },
     { type: 'placeBeads', place: 'hundred', quantity: digits.hundreds, tray: 1 },
     { type: 'placeBeads', place: 'ten', quantity: digits.tens, tray: 1 },
     { type: 'placeBeads', place: 'unit', quantity: digits.units, tray: 1 },
 
+    // Actions 12-13: Repeat 2nd and 3rd time to match multiplier
+    { type: 'narrate', text: `Repeat the layout a second time.` },
+    { type: 'duplicateTray', count: 2 },
+    { type: 'narrate', text: `Repeat the layout a third time.` },
+    { type: 'duplicateTray', count: 3 },
+
+    // Action 14: Put yellow multiplication ribbon down
     { type: 'narrate', text: 'Lay a yellow ribbon beneath to signal multiplication.' },
     { type: 'highlight', target: 'multiplication-ribbon', text: 'Place ribbon' },
 
-    { type: 'narrate', text: `Repeat the layout ${multiplierStr} times for the multiplier.` },
-    { type: 'duplicateTray', count: multiplier },
-
-    { type: 'narrate', text: 'Gather all unit beads to add them together.' },
+    // Actions 15-16: Combine singles, exchange, and place the units result card
+    { type: 'narrate', text: 'Gather all single unit beads to add them together and exchange groups of ten.' },
     { type: 'exchange', from: 'unit', to: 'ten', quantity: 10, remainder: unitRemainder },
     { type: 'writeResult', value: `${unitRemainder} units remain and ${unitCarry} ten is carried.` },
+    { type: 'showCard', card: `${unitRemainder}`, position: 'paper' },
 
+    // Repeat for tens and hundreds
     { type: 'narrate', text: 'Gather the tens and exchange groups of ten tens for hundreds.' },
     { type: 'exchange', from: 'ten', to: 'hundred', quantity: 10, remainder: tensRemainder },
     { type: 'writeResult', value: `${tensRemainder} tens remain and ${tensCarry} hundred is carried.` },
@@ -225,6 +240,7 @@ export const buildGoldenBeadPresentationScript = (scenario: GoldenBeadScenario):
     { type: 'exchange', from: 'hundred', to: 'thousand', quantity: 10, remainder: hundredsRemainder },
     { type: 'writeResult', value: `${hundredsRemainder} hundreds remain and ${hundredsCarry} thousand is carried.` },
 
+    // Final stacking and product
     { type: 'narrate', text: 'Stack each place value to read the product.' },
     { type: 'stackPlaceValues', order: ['thousand', 'hundred', 'ten', 'unit'] },
     { type: 'writeResult', value: formatNumber(product) },

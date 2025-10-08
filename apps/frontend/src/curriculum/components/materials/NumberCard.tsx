@@ -1,81 +1,95 @@
 import { For } from 'solid-js';
 import type { Component } from 'solid-js';
 
-const placeConfig = [
-  { key: 'thousand', color: '#2f855a' },
-  { key: 'hundred', color: '#b91c1c' },
-  { key: 'ten', color: '#2563eb' },
-  { key: 'unit', color: '#2f855a' },
-] as const;
+// Montessori color coding for place values
+const digitColors = {
+  thousand: '#16a34a', // green
+  hundred: '#dc2626',  // red
+  ten: '#2563eb',      // blue
+  unit: '#16a34a',     // green
+};
 
-type PlaceKey = (typeof placeConfig)[number]['key'];
+type CardSize = 'xs' | 'sm' | 'md' | 'lg';
 
-type CardSize = 'xs' | 'sm' | 'md';
+// Base unit width for proportional sizing
+const baseUnitWidth: Record<CardSize, string> = {
+  lg: '4rem',
+  md: '3rem',
+  sm: '2rem',
+  xs: '1.5rem',
+};
 
-const sizeStyles: Record<CardSize, { fontSize: string; padding: string; gap: string }> = {
-  md: { fontSize: '1.8rem', padding: '0.6rem 0.8rem', gap: '0.45rem' },
-  sm: { fontSize: '1.2rem', padding: '0.4rem 0.6rem', gap: '0.35rem' },
-  xs: { fontSize: '1rem', padding: '0.3rem 0.5rem', gap: '0.25rem' },
+const fontSize: Record<CardSize, string> = {
+  lg: '2.5rem',
+  md: '1.8rem',
+  sm: '1.2rem',
+  xs: '1rem',
 };
 
 interface NumberCardProps {
   value: number;
   size?: CardSize;
-  emphasisZeroes?: boolean;
   label?: string;
 }
 
-const toDigits = (value: number) => {
+// Parse value into displayable digits with place values
+const parseValue = (value: number) => {
   const clamped = Math.max(0, Math.min(9999, Math.floor(value)));
-  const padded = clamped.toString().padStart(4, '0');
-  return padded.split('').map((digit) => Number(digit));
+  const str = clamped.toString();
+  
+  // Build array of {digit, place, color}
+  const result: Array<{ digit: number; place: string; color: string }> = [];
+  const len = str.length;
+  
+  for (let i = 0; i < len; i++) {
+    const digit = parseInt(str[i]);
+    const placeIndex = len - i - 1; // 0 = units, 1 = tens, 2 = hundreds, 3 = thousands
+    
+    let place = 'unit';
+    let color = digitColors.unit;
+    
+    if (placeIndex === 3) {
+      place = 'thousand';
+      color = digitColors.thousand;
+    } else if (placeIndex === 2) {
+      place = 'hundred';
+      color = digitColors.hundred;
+    } else if (placeIndex === 1) {
+      place = 'ten';
+      color = digitColors.ten;
+    }
+    
+    result.push({ digit, place, color });
+  }
+  
+  return result;
 };
 
-const digitOpacity = (digit: number) => (digit === 0 ? 0.35 : 1);
-
 export const NumberCard: Component<NumberCardProps> = (props) => {
-  const digits = toDigits(props.value);
   const size = props.size ?? 'md';
-  const style = sizeStyles[size];
-
-  const cardStyle = {
-    'font-size': style.fontSize,
-    padding: style.padding,
-    gap: style.gap,
-  } as const;
-
-  const hasThousands = digits[0] > 0;
-  const visibleConfig = placeConfig.filter((_, index) => {
-    if (index === 0) return hasThousands;
-    return true;
-  });
-
+  const digitData = parseValue(props.value);
+  const numDigits = digitData.length;
+  
   return (
     <div
-      class="number-card"
+      class="number-card-montessori"
       style={{
-        'font-size': cardStyle['font-size'],
-        padding: cardStyle.padding,
-        gap: cardStyle.gap,
+        width: `calc(${baseUnitWidth[size]} * ${numDigits})`,
+        'font-size': fontSize[size],
       }}
       aria-label={props.label ?? `${props.value}`}
     >
-      <For each={visibleConfig}>
-        {(config, index) => {
-          const digitIndex = index() + (hasThousands ? 0 : 1);
-          const digit = digits[digitIndex];
-          return (
-            <span
-              class="number-card-digit"
-              style={{
-                background: config.color,
-                opacity: digitOpacity(digit).toString(),
-              }}
-            >
-              {digit}
-            </span>
-          );
-        }}
+      <For each={digitData}>
+        {(data) => (
+          <span
+            class="number-card-digit-montessori"
+            style={{
+              color: data.color,
+            }}
+          >
+            {data.digit}
+          </span>
+        )}
       </For>
     </div>
   );

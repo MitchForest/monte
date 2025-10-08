@@ -150,6 +150,7 @@ const evaluateStep = (
 const GoldenBeadsWorkspace = (props: {
   onStateChange?: (snapshot: GoldenBeadsGuidedState) => void;
   scenario?: GoldenBeadScenario;
+  currentStepEvaluator?: GuidedEvaluatorId;
 }) => {
   const createDefaultLayout = () => ({
     base: {
@@ -554,130 +555,150 @@ const GoldenBeadsWorkspace = (props: {
     );
   };
 
-  return (
-    <Card variant="soft" class="flex flex-col gap-5 p-4 sm:p-5 text-xs text-[color:var(--color-text)]">
-      <div class="grid gap-3 md:grid-cols-3">
-        <div class="supply-group">
-          <span class="supply-title">Bead supply</span>
-          <div class="supply-grid">
-            <SupplyToken kind="thousand" label="Thousand cube">
-              <GoldenBeadThousand />
-            </SupplyToken>
-            <SupplyToken kind="hundred" label="Hundred square">
-              <GoldenBeadHundred />
-            </SupplyToken>
-            <SupplyToken kind="ten" label="Ten bar">
-              <GoldenBeadTen />
-            </SupplyToken>
-            <SupplyToken kind="unit" label="Unit bead">
-              <GoldenBeadUnit />
-            </SupplyToken>
-          </div>
-        </div>
-        <div class="supply-group">
-          <span class="supply-title">Multiplication ribbon</span>
-          <SupplyToken kind="copy" label="Yellow ribbon">
-            <YellowRibbon length="short" />
-          </SupplyToken>
-        </div>
-        <DigitSupply />
-      </div>
+  // Progressive disclosure: show zones based on current step
+  const showSupply = () => props.currentStepEvaluator === 'golden-beads-build-base';
+  const showBuildZones = () => props.currentStepEvaluator === 'golden-beads-build-base';
+  const showRibbonSupply = () => props.currentStepEvaluator === 'golden-beads-duplicate';
+  const showCopiesZone = () => props.currentStepEvaluator === 'golden-beads-duplicate';
+  const showExchangeUnits = () => props.currentStepEvaluator === 'golden-beads-exchange-units';
+  const showExchangeTens = () => props.currentStepEvaluator === 'golden-beads-exchange-tens';
+  const showExchangeHundreds = () => props.currentStepEvaluator === 'golden-beads-exchange-hundreds';
+  const showFinalDigits = () => props.currentStepEvaluator === 'golden-beads-stack-result';
+  const showDigitSupply = () => showFinalDigits();
 
-      <div class="space-y-3">
-        <p class="text-sm font-semibold text-[color:var(--color-heading)]">Build the multiplicand</p>
-        <Show when={multiplicandHint()}>
-          {(hint) => <p class="text-xs text-subtle">Target: {hint()}</p>}
-        </Show>
-        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Zone zoneId="layout-thousand" label="Thousands layout" hint={props.scenario?.digits.thousands?.toString()}>
+  return (
+    <div class="guided-workspace-minimal">
+      {/* Supply section - only show for relevant steps */}
+      <Show when={showSupply() || showRibbonSupply() || showDigitSupply()}>
+        <div class="guided-supply-row">
+          <Show when={showSupply()}>
+            <div class="supply-group">
+              <div class="supply-grid">
+                <SupplyToken kind="thousand" label="Thousand cube">
+                  <GoldenBeadThousand />
+                </SupplyToken>
+                <SupplyToken kind="hundred" label="Hundred square">
+                  <GoldenBeadHundred />
+                </SupplyToken>
+                <SupplyToken kind="ten" label="Ten bar">
+                  <GoldenBeadTen />
+                </SupplyToken>
+                <SupplyToken kind="unit" label="Unit bead">
+                  <GoldenBeadUnit />
+                </SupplyToken>
+              </div>
+            </div>
+          </Show>
+          <Show when={showRibbonSupply()}>
+            <div class="supply-group">
+              <SupplyToken kind="copy" label="Yellow ribbon">
+                <YellowRibbon length="short" />
+              </SupplyToken>
+            </div>
+          </Show>
+          <Show when={showDigitSupply()}>
+            <DigitSupply />
+          </Show>
+        </div>
+      </Show>
+
+      {/* Step 1: Build the multiplicand - ONLY show these 4 zones */}
+      <Show when={showBuildZones()}>
+        <div class="guided-zone-grid">
+          <Zone zoneId="layout-thousand" label="Thousands" hint={props.scenario?.digits.thousands?.toString()}>
             {() => renderBeadTokens(layout.base.thousands, 'thousand', 'layout-thousand')}
           </Zone>
-          <Zone zoneId="layout-hundred" label="Hundreds layout" hint={props.scenario?.digits.hundreds?.toString()}>
+          <Zone zoneId="layout-hundred" label="Hundreds" hint={props.scenario?.digits.hundreds?.toString()}>
             {() => renderBeadTokens(layout.base.hundreds, 'hundred', 'layout-hundred')}
           </Zone>
-          <Zone zoneId="layout-ten" label="Tens layout" hint={props.scenario?.digits.tens?.toString()}>
+          <Zone zoneId="layout-ten" label="Tens" hint={props.scenario?.digits.tens?.toString()}>
             {() => renderBeadTokens(layout.base.tens, 'ten', 'layout-ten')}
           </Zone>
-          <Zone zoneId="layout-unit" label="Units layout" hint={props.scenario?.digits.units?.toString()}>
+          <Zone zoneId="layout-unit" label="Units" hint={props.scenario?.digits.units?.toString()}>
             {() => renderBeadTokens(layout.base.units, 'unit', 'layout-unit')}
           </Zone>
         </div>
-      </div>
+      </Show>
 
-      <div class="space-y-3">
-        <p class="text-sm font-semibold text-[color:var(--color-heading)]">Multiplier copies</p>
-        <Zone zoneId="copies-zone" label="Ribbon placements" hint={props.scenario?.multiplier.toString()}>
-          {renderCopyTokens}
-        </Zone>
-      </div>
+      {/* Step 2: Multiplier copies */}
+      <Show when={showCopiesZone()}>
+        <div class="guided-zone-grid">
+          <Zone zoneId="copies-zone" label="Create copies" hint={props.scenario?.multiplier.toString()}>
+            {renderCopyTokens}
+          </Zone>
+        </div>
+      </Show>
 
-      <div class="space-y-3">
-        <p class="text-sm font-semibold text-[color:var(--color-heading)]">Exchange tracker</p>
-        <div class="grid gap-3 md:grid-cols-3">
-          <Zone zoneId="units-remaining" label="Units remaining" hint={props.scenario?.unitRemainder?.toString()}>
+      {/* Step 3: Exchange units */}
+      <Show when={showExchangeUnits()}>
+        <div class="guided-zone-grid">
+          <Zone zoneId="units-remaining" label="Units left" hint={props.scenario?.unitRemainder?.toString()}>
             {() => renderBeadTokens(layout.exchanges.unitRemainder, 'unit', 'units-remaining')}
           </Zone>
-          <Zone zoneId="tens-carry" label="Tens carried" hint={props.scenario?.unitCarry?.toString()}>
+          <Zone zoneId="tens-carry" label="Tens made" hint={props.scenario?.unitCarry?.toString()}>
             {() => renderBeadTokens(layout.exchanges.tensCarry, 'ten', 'tens-carry')}
           </Zone>
-          <Zone zoneId="tens-remaining" label="Tens remaining" hint={props.scenario?.tensRemainder?.toString()}>
+        </div>
+      </Show>
+
+      {/* Step 4: Exchange tens */}
+      <Show when={showExchangeTens()}>
+        <div class="guided-zone-grid">
+          <Zone zoneId="tens-remaining" label="Tens left" hint={props.scenario?.tensRemainder?.toString()}>
             {() => renderBeadTokens(layout.exchanges.tensRemainder, 'ten', 'tens-remaining')}
           </Zone>
-          <Zone zoneId="hundreds-carry" label="Hundreds carried" hint={props.scenario?.tensCarry?.toString()}>
+          <Zone zoneId="hundreds-carry" label="Hundreds made" hint={props.scenario?.tensCarry?.toString()}>
             {() => renderBeadTokens(layout.exchanges.hundredsCarry, 'hundred', 'hundreds-carry')}
           </Zone>
-          <Zone zoneId="hundreds-remaining" label="Hundreds remaining" hint={props.scenario?.hundredsRemainder?.toString()}>
+        </div>
+      </Show>
+
+      {/* Step 5: Exchange hundreds */}
+      <Show when={showExchangeHundreds()}>
+        <div class="guided-zone-grid">
+          <Zone zoneId="hundreds-remaining" label="Hundreds left" hint={props.scenario?.hundredsRemainder?.toString()}>
             {() => renderBeadTokens(layout.exchanges.hundredsRemainder, 'hundred', 'hundreds-remaining')}
           </Zone>
-          <Zone zoneId="thousands-carry" label="Thousands carried" hint={props.scenario?.hundredsCarry?.toString()}>
+          <Zone zoneId="thousands-carry" label="Thousands made" hint={props.scenario?.hundredsCarry?.toString()}>
             {() => renderBeadTokens(layout.exchanges.thousandsCarry, 'thousand', 'thousands-carry')}
           </Zone>
         </div>
-      </div>
+      </Show>
 
-      <div class="space-y-3">
-        <p class="text-sm font-semibold text-[color:var(--color-heading)]">Final product digits</p>
-        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Step 6: Final answer */}
+      <Show when={showFinalDigits()}>
+        <div class="guided-zone-grid">
           <Zone
             zoneId="final-digit-thousands"
-            label="Thousands place"
+            label="Thousands"
             hint={props.scenario ? `${Math.floor(props.scenario.product / 1000) % 10}` : undefined}
           >
             {() => renderDigitToken(layout.finalDigits.thousands, 'final-digit-thousands')}
           </Zone>
           <Zone
             zoneId="final-digit-hundreds"
-            label="Hundreds place"
+            label="Hundreds"
             hint={props.scenario ? `${Math.floor(props.scenario.product / 100) % 10}` : undefined}
           >
             {() => renderDigitToken(layout.finalDigits.hundreds, 'final-digit-hundreds')}
           </Zone>
           <Zone
             zoneId="final-digit-tens"
-            label="Tens place"
+            label="Tens"
             hint={props.scenario ? `${Math.floor(props.scenario.product / 10) % 10}` : undefined}
           >
             {() => renderDigitToken(layout.finalDigits.tens, 'final-digit-tens')}
           </Zone>
           <Zone
             zoneId="final-digit-units"
-            label="Units place"
+            label="Units"
             hint={props.scenario ? `${props.scenario.product % 10}` : undefined}
           >
             {() => renderDigitToken(layout.finalDigits.units, 'final-digit-units')}
           </Zone>
         </div>
-        <div class="mt-1 text-sm text-subtle">
-          Current reading:{' '}
-          <span class="font-semibold text-[color:var(--color-heading)]">
-            {deriveState().finalValue?.toLocaleString() ?? '—'}
-          </span>
-          <Show when={props.scenario}>
-            {(sc) => <span class="ml-2">Target: {sc().product.toLocaleString()}</span>}
-          </Show>
-        </div>
-      </div>
-    </Card>
+      </Show>
+    </div>
   );
 };
 
@@ -1188,19 +1209,15 @@ export const GuidedSegment = (props: GuidedSegmentProps) => {
     setFeedback(null);
   };
 
-  const handleSelect = (index: number) => {
-    if (index < 0 || index >= steps().length) return;
-    setCurrentIndex(index);
-    setFeedback(null);
-  };
-
   const renderWorkspace = () => {
+    const step = currentStep();
     switch (props.segment.workspace) {
       case 'golden-beads':
         return (
           <GoldenBeadsWorkspace
             scenario={props.scenario as GoldenBeadScenario | undefined}
             onStateChange={(snapshot) => setWorkspaceState(snapshot)}
+            currentStepEvaluator={step?.evaluatorId}
           />
         );
       case 'stamp-game':
@@ -1220,73 +1237,22 @@ export const GuidedSegment = (props: GuidedSegmentProps) => {
   };
 
   return (
-    <div class="flex flex-col gap-5 text-[color:var(--color-text)]">
-      <header class="space-y-3">
-        <div class="flex flex-wrap items-center gap-2">
-          <Chip tone="primary" size="sm">
-            Step {currentIndex() + 1} of {steps().length}
-          </Chip>
-          <Chip tone="blue" size="sm">
-            Guided practice
-          </Chip>
-        </div>
-        <h4 class="text-2xl font-semibold text-[color:var(--color-heading)]">{currentStep()?.prompt}</h4>
-        <p class="text-sm text-subtle">{currentStep()?.expectation}</p>
-      </header>
+    <div class="lesson-stage" data-variant="guided">
+      {/* K-3 Minimal: Just show the prompt, no chips or verbose text */}
+      <div class="guided-prompt">
+        {currentStep()?.prompt}
+      </div>
 
-      <Card variant="flat" class="surface-neutral rounded-[var(--radius-lg)] p-4 sm:p-5 space-y-2">
-        <p class="text-xs uppercase tracking-wide text-label-soft">Guided checklist</p>
-        <div class="flex flex-wrap gap-2">
-          <Button size="compact" onClick={handleBack} disabled={currentIndex() === 0}>
-            Previous step
-          </Button>
-          <Button size="compact" onClick={handleCheck}>
-            Check my work
-          </Button>
-        </div>
+      <div class="lesson-stage__canvas guided-stage__canvas">
+        <div class="guided-stage__workspace">{renderWorkspace()}</div>
+      </div>
+
+      <footer class="guided-footer-minimal">
+        <Button onClick={handleCheck} size="lg">Check</Button>
         <Show when={feedback()}>
-          {(message) => <p class="text-sm text-subtle">{message()}</p>}
+          {(message) => <div class="guided-feedback">{message()}</div>}
         </Show>
-      </Card>
-
-      {renderWorkspace()}
-
-      <Card variant="flat" class="surface-neutral rounded-[var(--radius-lg)] p-4 sm:p-5 space-y-2">
-        <p class="text-xs uppercase tracking-wide text-label-soft">Guided steps</p>
-        <div class="flex flex-col gap-2">
-          <For each={steps()}>
-            {(step, index) => {
-              const isActive = () => index() === currentIndex();
-              return (
-                <button
-                  type="button"
-                  onClick={() => handleSelect(index())}
-                  class={`rounded-[var(--radius-md)] px-4 py-3 text-left text-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgba(64,157,233,0.55)] ${
-                    isActive()
-                      ? 'surface-info text-[#0b4a8c] shadow-ambient'
-                      : 'surface-soft text-[color:var(--color-text)] hover:shadow-ambient'
-                  }`}
-                >
-                  <div class="flex items-center justify-between gap-3">
-                    <div>
-                      <p class="text-xs font-semibold uppercase tracking-wide text-label-soft">
-                        Step {index() + 1}
-                      </p>
-                      <p class="mt-1 text-sm font-semibold leading-snug">{step.prompt}</p>
-                    </div>
-                    <Show when={completed[step.id]}>
-                      <Chip tone="green" size="sm">
-                        Done
-                      </Chip>
-                    </Show>
-                  </div>
-                  <p class="mt-1 text-xs text-subtle">{step.successCheck}</p>
-                </button>
-              );
-            }}
-          </For>
-        </div>
-      </Card>
+      </footer>
     </div>
   );
 };

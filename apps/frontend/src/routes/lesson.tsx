@@ -254,37 +254,10 @@ const Lesson = () => {
     <div class="lesson-screen">
       <div class="lesson-player-wrapper">
         <div class="lesson-player-frame">
-          <div class="lesson-header-overlay">
-            <div class="lesson-header-grid">
-              <div class="lesson-header-text">
-                <span class="lesson-topic-label">{topic()?.title ?? 'Lesson'}</span>
-                <h1 class="lesson-title">{lesson()!.title}</h1>
-                <Show when={lesson()?.summary}>
-                  <p class="lesson-summary">{lesson()!.summary}</p>
-                </Show>
-                <Show when={!lesson()?.summary && topic()?.overview}>
-                  <p class="lesson-summary">{topic()!.overview}</p>
-                </Show>
-              </div>
-              <div class="lesson-header-meta">
-                <Chip tone="primary" size="sm">
-                  Step {activeIndex() + 1} of {segments().length}
-                </Chip>
-                <Chip tone="neutral" size="sm">
-                  {segmentTypeLabel[activeSegmentType()] ?? 'Segment'}
-                </Chip>
-              </div>
-            </div>
-          </div>
-
-          <Show when={showPlayOverlay()}>
-            <button type="button" class="lesson-play-overlay" onClick={handleTogglePlay}>
-              <span class="lesson-play-button">&gt;</span>
-              <p class="lesson-play-text">Play lesson</p>
-            </button>
-          </Show>
-
-          <div class={`lesson-player-surface ${showPlayOverlay() ? 'lesson-player-surface--inactive' : ''}`}>
+          {/* REMOVED: All header overlays, titles, and chips per cognitive load requirements */}
+          {/* K-3 learners need ZERO distractions - only the content matters */}
+          
+          <div class="lesson-player-surface">
             <Show when={lesson()} keyed>
               {(currentLesson) => (
                 <Show when={activeSegment()} keyed>

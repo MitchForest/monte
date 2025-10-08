@@ -1,4 +1,4 @@
-import { For, Show, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { For, Show, batch, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 
 import type { PlayerStatus } from '../../machines/lessonPlayer';
@@ -23,17 +23,27 @@ interface PresentationSegmentProps {
   script: PresentationScript;
 }
 
-interface BeadCounts {
-  thousand: number;
-  hundred: number;
-  ten: number;
-  unit: number;
+interface BeadToken {
+  id: number;
+  fresh: boolean;
 }
 
-interface StampColumn {
-  hundreds: number;
-  tens: number;
-  units: number;
+interface BeadTrayTokens {
+  thousand: BeadToken[];
+  hundred: BeadToken[];
+  ten: BeadToken[];
+  unit: BeadToken[];
+}
+
+interface StampToken {
+  id: number;
+  fresh: boolean;
+}
+
+interface StampColumnTokens {
+  hundreds: StampToken[];
+  tens: StampToken[];
+  units: StampToken[];
 }
 
 interface PresentationStageState {
@@ -41,8 +51,8 @@ interface PresentationStageState {
   multiplicandStack: number[];
   multiplierCard?: number;
   paperNotes: string[];
-  beadTrays: BeadCounts[];
-  stampColumns: StampColumn[];
+  beadTrays: BeadTrayTokens[];
+  stampColumns: StampColumnTokens[];
   highlight?: string;
   lastAction?: PresentationAction;
   ribbonVisible: boolean;
@@ -54,9 +64,21 @@ interface PresentationStageState {
   };
   finalStackOrder: ('thousand' | 'hundred' | 'ten' | 'unit')[];
   finalProduct?: string;
+  nextTokenId: number;
 }
 
-const initialBeadCounts = (): BeadCounts => ({ thousand: 0, hundred: 0, ten: 0, unit: 0 });
+const createEmptyBeadTray = (): BeadTrayTokens => ({
+  thousand: [],
+  hundred: [],
+  ten: [],
+  unit: [],
+});
+
+const createEmptyStampColumn = (): StampColumnTokens => ({
+  hundreds: [],
+  tens: [],
+  units: [],
+});
 
 const createInitialState = (): PresentationStageState => ({
   narration: '',
@@ -72,6 +94,7 @@ const createInitialState = (): PresentationStageState => ({
   exchangeBoards: {},
   finalStackOrder: [],
   finalProduct: undefined,
+  nextTokenId: 0,
 });
 
 const normalizeCardValue = (value: string) => {
@@ -79,35 +102,13 @@ const normalizeCardValue = (value: string) => {
   return Number.isNaN(numeric) ? 0 : numeric;
 };
 
-const sumBeadTrays = (trays: BeadCounts[]): BeadCounts =>
-  trays.reduce<BeadCounts>(
-    (totals, tray) => ({
-      thousand: totals.thousand + tray.thousand,
-      hundred: totals.hundred + tray.hundred,
-      ten: totals.ten + tray.ten,
-      unit: totals.unit + tray.unit,
-    }),
-    initialBeadCounts(),
-  );
+type BeadPlace = keyof BeadTrayTokens;
+type StampPlace = keyof StampColumnTokens;
 
-const cloneBeadCounts = (counts: BeadCounts): BeadCounts => ({
-  thousand: counts.thousand,
-  hundred: counts.hundred,
-  ten: counts.ten,
-  unit: counts.unit,
-});
+const settleTokens = <T extends { fresh: boolean }>(tokens: T[]): T[] =>
+  tokens.map((token) => ({ ...token, fresh: false }));
 
-const sumStampColumns = (columns: StampColumn[]) =>
-  columns.reduce(
-    (totals, column) => ({
-      hundreds: totals.hundreds + column.hundreds,
-      tens: totals.tens + column.tens,
-      units: totals.units + column.units,
-    }),
-    { hundreds: 0, tens: 0, units: 0 },
-  );
-
-const ACTION_INTERVAL_MS = 4200;
+const AUTO_STEP_DELAY_MS = 3200;
 
 export const PresentationSegment = (props: PresentationSegmentProps) => {
   const script = createMemo(() => props.script);
@@ -115,24 +116,57 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   const [stage, setStage] = createStore(createInitialState());
   const [activeIndex, setActiveIndex] = createSignal(0);
   const [appliedCount, setAppliedCount] = createSignal(0);
-  const [autoPlaying, setAutoPlaying] = createSignal(false);
+  const [processedScriptId, setProcessedScriptId] = createSignal<string | undefined>(undefined);
 
   let timer: number | undefined;
   let completionSignalled = false;
+
+  const createBeadTokens = (count: number): BeadToken[] => {
+    if (count <= 0) return [];
+    let created: BeadToken[] = [];
+    setStage('nextTokenId', (nextId: number) => {
+      created = Array.from({ length: count }, (_, index) => ({ id: nextId + index, fresh: true }));
+      return nextId + count;
+    });
+    return created;
+  };
+
+  const createStampTokens = (count: number): StampToken[] => {
+    if (count <= 0) return [];
+    let created: StampToken[] = [];
+    setStage('nextTokenId', (nextId: number) => {
+      created = Array.from({ length: count }, (_, index) => ({ id: nextId + index, fresh: true }));
+      return nextId + count;
+    });
+    return created;
+  };
+
+  const scheduleBeadSettlement = (trayIndex: number, place: BeadPlace) => {
+    window.setTimeout(() => {
+      setStage('beadTrays', trayIndex, place, (tokens: BeadToken[]) => settleTokens(tokens));
+    }, 220);
+  };
+
+  const scheduleStampSettlement = (columnIndex: number, place: StampPlace) => {
+    window.setTimeout(() => {
+      setStage('stampColumns', columnIndex, place, (tokens: StampToken[]) => settleTokens(tokens));
+    }, 220);
+  };
 
   const resetStage = () => {
     setStage(createInitialState());
     setActiveIndex(0);
     setAppliedCount(0);
     completionSignalled = false;
+    // Don't reset processedScriptId here - we track it separately
   };
 
   const ensureBeadTray = (index: number) => {
     setStage(
       'beadTrays',
-      produce((trays) => {
+      produce((trays: BeadTrayTokens[]) => {
         while (trays.length < index) {
-          trays.push(initialBeadCounts());
+          trays.push(createEmptyBeadTray());
         }
       }),
     );
@@ -141,25 +175,16 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   const ensureStampColumn = (index: number) => {
     setStage(
       'stampColumns',
-      produce((columns) => {
+      produce((columns: StampColumnTokens[]) => {
         while (columns.length < index) {
-          columns.push({ hundreds: 0, tens: 0, units: 0 });
+          columns.push(createEmptyStampColumn());
         }
       }),
     );
   };
 
-  const updateStampColumn = (index: number, partial: Partial<StampColumn>) => {
-    setStage('stampColumns', (columns) => {
-      const next = [...columns];
-      const current = next[index] ?? { hundreds: 0, tens: 0, units: 0 };
-      next[index] = { ...current, ...partial };
-      return next;
-    });
-  };
-
   const logPaperNote = (text: string) => {
-    setStage('paperNotes', (notes) => [...notes, text]);
+    setStage('paperNotes', (notes: string[]) => [...notes, text]);
   };
 
   const applyAction = (action: PresentationAction) => {
@@ -172,30 +197,54 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
       case 'showCard': {
         const cardValue = normalizeCardValue(action.card);
         if (action.position === 'multiplicand-stack') {
-          setStage('multiplicandStack', (cards) => [...cards, cardValue]);
+          setStage('multiplicandStack', (cards: number[]) => [...cards, cardValue]);
         } else if (action.position === 'multiplier') {
           setStage('multiplierCard', cardValue);
         } else if (action.position === 'paper') {
-          setStage('paperNotes', (notes) => [...notes, action.card]);
+          setStage('paperNotes', (notes: string[]) => [...notes, action.card]);
         }
         break;
       }
       case 'placeBeads': {
         setStage('activeMaterial', 'golden-beads');
         ensureBeadTray(action.tray);
-        setStage('beadTrays', action.tray - 1, action.place, action.quantity);
+        const tokens = createBeadTokens(action.quantity);
+        setStage('highlight', action.place);
+        setStage('beadTrays', action.tray - 1, action.place, () => tokens);
+        scheduleBeadSettlement(action.tray - 1, action.place);
         break;
       }
       case 'duplicateTray': {
         if (stage.beadTrays.length > 0) {
           const source = stage.beadTrays[0];
-          setStage('beadTrays', () => Array.from({ length: action.count }, () => ({ ...source })));
+          const duplicates = Array.from({ length: action.count }, () => ({
+            thousand: createBeadTokens(source.thousand.length),
+            hundred: createBeadTokens(source.hundred.length),
+            ten: createBeadTokens(source.ten.length),
+            unit: createBeadTokens(source.unit.length),
+          }));
+          setStage('beadTrays', () => duplicates);
+          duplicates.forEach((tray, trayIndex) => {
+            if (tray.thousand.length) scheduleBeadSettlement(trayIndex, 'thousand');
+            if (tray.hundred.length) scheduleBeadSettlement(trayIndex, 'hundred');
+            if (tray.ten.length) scheduleBeadSettlement(trayIndex, 'ten');
+            if (tray.unit.length) scheduleBeadSettlement(trayIndex, 'unit');
+          });
         } else if (stage.stampColumns.length > 0) {
           const source = stage.stampColumns[0];
-          setStage('stampColumns', () => Array.from({ length: action.count }, () => ({ ...source })));
+          const duplicates = Array.from({ length: action.count }, () => ({
+            hundreds: createStampTokens(source.hundreds.length),
+            tens: createStampTokens(source.tens.length),
+            units: createStampTokens(source.units.length),
+          }));
+          setStage('stampColumns', () => duplicates);
+          duplicates.forEach((column, columnIndex) => {
+            if (column.hundreds.length) scheduleStampSettlement(columnIndex, 'hundreds');
+            if (column.tens.length) scheduleStampSettlement(columnIndex, 'tens');
+            if (column.units.length) scheduleStampSettlement(columnIndex, 'units');
+          });
         } else {
-          // create empty trays to reflect count even if no data yet
-          setStage('beadTrays', () => Array.from({ length: action.count }, () => initialBeadCounts()));
+          setStage('beadTrays', () => Array.from({ length: action.count }, () => createEmptyBeadTray()));
         }
         break;
       }
@@ -210,47 +259,53 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
         break;
       case 'exchange': {
         if (stage.activeMaterial === 'stamp-game') {
-          const totals = sumStampColumns(stage.stampColumns);
           const fromKey = action.from === 'unit' ? 'units' : action.from === 'ten' ? 'tens' : 'hundreds';
-          const toKey = action.to === 'ten' ? 'tens' : action.to === 'hundred' ? 'hundreds' : 'thousand';
-          const sourceTotal = totals[fromKey as 'units' | 'tens' | 'hundreds'];
-          const traded = sourceTotal - action.remainder;
-          const carriedGroups = action.quantity > 0 ? Math.max(0, Math.floor(traded / action.quantity)) : 0;
-          const nextTotals = { ...totals, [fromKey]: action.remainder };
+          ensureStampColumn(1);
+          const column = stage.stampColumns[0] ?? createEmptyStampColumn();
+          const currentTokens = column[fromKey];
+          const kept = currentTokens.slice(0, Math.min(action.remainder, currentTokens.length)).map((token: StampToken) => ({
+            ...token,
+            fresh: false,
+          }));
+          const removedCount = currentTokens.length - kept.length;
+          const carriedGroups = action.quantity > 0 ? Math.max(0, Math.floor(removedCount / action.quantity)) : 0;
+
+          setStage('stampColumns', 0, fromKey, () => kept);
+          scheduleStampSettlement(0, fromKey);
 
           if (carriedGroups > 0) {
-            if (action.to === 'ten') nextTotals.tens += carriedGroups;
-            if (action.to === 'hundred') nextTotals.hundreds += carriedGroups;
             if (action.to === 'thousand') {
-              // thousands show as bead tray for final product; keep as note on paper
-              setStage('paperNotes', (notes) => [...notes, `${carriedGroups} thousand carried forward.`]);
+              setStage('paperNotes', (notes: string[]) => [...notes, `${carriedGroups} thousand carried forward.`]);
+            } else {
+              const toKey: StampPlace = action.to === 'ten' ? 'tens' : 'hundreds';
+              const carryTokens = createStampTokens(carriedGroups);
+              setStage('stampColumns', 0, toKey, (existing: StampToken[]) => [...existing, ...carryTokens]);
+              scheduleStampSettlement(0, toKey);
             }
           }
 
-          setStage('stampColumns', () => [nextTotals]);
           setStage('highlight', action.from);
           setStage('exchangeBoards', action.from, { remainder: action.remainder, carried: carriedGroups, to: action.to });
         } else {
-          const totals = sumBeadTrays(stage.beadTrays);
-          const sourceTotal = totals[action.from];
-          const traded = sourceTotal - action.remainder;
-          const carriedGroups = action.quantity > 0 ? Math.max(0, Math.floor(traded / action.quantity)) : 0;
-          const nextTotals = cloneBeadCounts(totals);
-          nextTotals[action.from] = action.remainder;
+          ensureBeadTray(1);
+          const tray = stage.beadTrays[0] ?? createEmptyBeadTray();
+          const currentTokens = tray[action.from];
+          const kept = currentTokens.slice(0, Math.min(action.remainder, currentTokens.length)).map((token: BeadToken) => ({
+            ...token,
+            fresh: false,
+          }));
+          const removedCount = currentTokens.length - kept.length;
+          const carriedGroups = action.quantity > 0 ? Math.max(0, Math.floor(removedCount / action.quantity)) : 0;
+
+          setStage('beadTrays', 0, action.from, () => kept);
+          scheduleBeadSettlement(0, action.from);
 
           if (carriedGroups > 0) {
-            if (action.to === 'ten') {
-              nextTotals.ten += carriedGroups;
-            }
-            if (action.to === 'hundred') {
-              nextTotals.hundred += carriedGroups;
-            }
-            if (action.to === 'thousand') {
-              nextTotals.thousand += carriedGroups;
-            }
+            const carryTokens = createBeadTokens(carriedGroups);
+            setStage('beadTrays', 0, action.to, (existing: BeadToken[]) => [...existing, ...carryTokens]);
+            scheduleBeadSettlement(0, action.to);
           }
 
-          setStage('beadTrays', () => [nextTotals]);
           setStage('highlight', action.from);
           setStage('exchangeBoards', action.from, { remainder: action.remainder, carried: carriedGroups, to: action.to });
         }
@@ -276,13 +331,19 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
         ensureStampColumn(action.columns);
         for (let index = 0; index < action.columns; index += 1) {
           if (action.stamp === '100') {
-            updateStampColumn(index, { hundreds: action.rows });
+            const tokens = createStampTokens(action.rows);
+            setStage('stampColumns', index, 'hundreds', () => tokens);
+            scheduleStampSettlement(index, 'hundreds');
           }
           if (action.stamp === '10') {
-            updateStampColumn(index, { tens: action.rows });
+            const tokens = createStampTokens(action.rows);
+            setStage('stampColumns', index, 'tens', () => tokens);
+            scheduleStampSettlement(index, 'tens');
           }
           if (action.stamp === '1') {
-            updateStampColumn(index, { units: action.rows });
+            const tokens = createStampTokens(action.rows);
+            setStage('stampColumns', index, 'units', () => tokens);
+            scheduleStampSettlement(index, 'units');
           }
         }
         break;
@@ -301,27 +362,45 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   };
 
   createEffect(() => {
+    // Capture all reactive values first to avoid multiple reads
     const scriptValue = script();
+    const currentIndex = activeIndex();
+    const currentApplied = appliedCount();
+    const currentScriptId = processedScriptId();
+    
     if (!scriptValue) {
       resetStage();
+      setProcessedScriptId(undefined);
       return;
     }
 
-    if (appliedCount() > activeIndex()) {
-      // Rewind requested; rebuild state from scratch
+    // Reset if script changed
+    if (scriptValue.id !== currentScriptId) {
       resetStage();
+      setProcessedScriptId(scriptValue.id);
+      return; // Exit early, let it re-run with clean state
     }
 
-    const target = activeIndex();
+    // Skip if we're going backwards
+    if (currentApplied > currentIndex) {
+      return;
+    }
+
+    // Apply actions from currentApplied to currentIndex
     const actions = scriptValue.actions;
-    let applied = appliedCount();
-    while (applied <= target && applied < actions.length) {
-      applyAction(actions[applied]);
-      applied += 1;
-    }
-    setAppliedCount(applied);
+    
+    // Batch all state updates to prevent mid-update re-renders
+    batch(() => {
+      let applied = currentApplied;
+      while (applied <= currentIndex && applied < actions.length) {
+        applyAction(actions[applied]);
+        applied += 1;
+      }
+      setAppliedCount(applied);
+    });
 
-    if (target >= actions.length - 1 && !completionSignalled) {
+    // Check for completion
+    if (currentIndex >= actions.length - 1 && !completionSignalled) {
       completionSignalled = true;
       props.onAutoAdvance();
     }
@@ -336,22 +415,18 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
 
   createEffect(() => {
     clearTimer();
-    const status = props.playerStatus;
     const scriptValue = script();
     if (!scriptValue) return;
-    if (status !== 'playing') {
-      setAutoPlaying(false);
+
+    const currentIndex = activeIndex();
+    if (currentIndex >= scriptValue.actions.length - 1) {
       return;
     }
 
-    setAutoPlaying(true);
-    if (activeIndex() >= scriptValue.actions.length - 1) {
-      return;
-    }
-
+    // Use the captured index value to avoid reactive loop
     timer = window.setTimeout(() => {
-      advanceTo(activeIndex() + 1);
-    }, ACTION_INTERVAL_MS);
+      setActiveIndex(currentIndex + 1);
+    }, AUTO_STEP_DELAY_MS);
   });
 
   onCleanup(() => {
@@ -378,14 +453,22 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
     }
   };
 
-  const BeadTokenStack = (props: { count: number; kind: 'thousand' | 'hundred' | 'ten' | 'unit'; highlighted?: boolean }) => {
-    const items = Array.from({ length: Math.max(props.count, 0) });
+  const BeadTokenStack = (props: {
+    tokens?: BeadToken[];
+    count?: number;
+    kind: BeadPlace;
+    highlighted?: boolean;
+  }) => {
+    const resolved = props.tokens ??
+      Array.from({ length: Math.max(props.count ?? 0, 0) }, (_, index) => ({ id: -index - 1, fresh: false }));
     return (
       <div class={`presentation-token-stack ${props.highlighted ? 'is-highlighted' : ''}`} data-kind={props.kind}>
-        <Show when={props.count > 0} fallback={<span class="presentation-token-placeholder">0</span>}>
-          <For each={items}>
-            {(_, index) => (
-              <div class="presentation-token" data-index={index()}>{beadVisualFor(props.kind)}</div>
+        <Show when={resolved.length > 0} fallback={<span class="presentation-token-placeholder">0</span>}>
+          <For each={resolved}>
+            {(token: BeadToken) => (
+              <div class={`presentation-token ${token.fresh ? 'is-fresh' : ''}`} data-id={token.id}>
+                {beadVisualFor(props.kind)}
+              </div>
             )}
           </For>
         </Show>
@@ -393,14 +476,20 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
     );
   };
 
-  const StampTokenStack = (props: { count: number; value: 1 | 10 | 100; highlighted?: boolean }) => {
-    const items = Array.from({ length: Math.max(props.count, 0) });
+  const StampTokenStack = (props: {
+    tokens?: StampToken[];
+    count?: number;
+    value: 1 | 10 | 100;
+    highlighted?: boolean;
+  }) => {
+    const resolved = props.tokens ??
+      Array.from({ length: Math.max(props.count ?? 0, 0) }, (_, index) => ({ id: -index - 1, fresh: false }));
     return (
       <div class={`presentation-token-stack ${props.highlighted ? 'is-highlighted' : ''}`} data-kind={`stamp-${props.value}`}>
-        <Show when={props.count > 0} fallback={<span class="presentation-token-placeholder">0</span>}>
-          <For each={items}>
-            {(_, index) => (
-              <div class="presentation-token" data-index={index()}>
+        <Show when={resolved.length > 0} fallback={<span class="presentation-token-placeholder">0</span>}>
+          <For each={resolved}>
+            {(token: StampToken) => (
+              <div class={`presentation-token ${token.fresh ? 'is-fresh' : ''}`} data-id={token.id}>
                 <StampTile value={props.value} />
               </div>
             )}
@@ -425,87 +514,79 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
     stage.finalProduct ? normalizeCardValue(stage.finalProduct) : null,
   );
 
-  const GoldenBeadWorkspaceVisual = () => {
-    if (stage.beadTrays.length === 0) {
-      return <p class="text-xs text-subtle">Golden beads will appear as the guide lays them out.</p>;
-    }
-
+  // Make this a reactive rendering - inline in JSX instead of function
+  const renderGoldenBeadWorkspace = () => {
     const trays = stage.beadTrays;
-    const ribbonLength = trays.length >= 3 ? 'long' : trays.length === 2 ? 'medium' : 'short';
-
+    
     return (
-      <div class="presentation-bead-workspace">
-        <div class="presentation-bead-tray-collection">
-          <For each={trays}>
-            {(tray, index) => (
-              <div class="presentation-bead-tray">
-                <span class="presentation-panel__label">Layout {index() + 1}</span>
-                <div class="presentation-bead-tray__grid">
-                  <For each={[
-                    { key: 'thousand' as const, value: tray.thousand },
-                    { key: 'hundred' as const, value: tray.hundred },
-                    { key: 'ten' as const, value: tray.ten },
-                    { key: 'unit' as const, value: tray.unit },
-                  ]}>
-                    {(entry) => (
-                      <div class={`presentation-bead-place ${stage.highlight === entry.key ? 'is-highlighted' : ''}`}>
-                        <span class="presentation-bead-place__label">{placeLabels[entry.key]}</span>
-                        <BeadTokenStack count={entry.value} kind={entry.key} highlighted={stage.highlight === entry.key} />
-                      </div>
-                    )}
-                  </For>
-                </div>
-              </div>
-            )}
-          </For>
-        </div>
-
-        <Show when={stage.ribbonVisible}>
-          <div class={`presentation-ribbon ${stage.highlight === 'multiplication-ribbon' ? 'is-highlighted' : ''}`}>
-            <YellowRibbon length={ribbonLength} />
-          </div>
-        </Show>
-
-        <Show when={exchangeEntries().length > 0}>
-          <div class="presentation-exchange-board">
-            <For each={exchangeEntries()}>
-              {(entry) => (
-                <div class={`presentation-exchange-board__cell ${stage.highlight === entry.from ? 'is-highlighted' : ''}`}>
-                  <span class="presentation-panel__label">Gather {placeLabels[entry.from]}</span>
-                  <div class="presentation-exchange-board__group">
-                    <span class="presentation-exchange-board__group-label">Remain</span>
-                    <BeadTokenStack count={entry.info.remainder} kind={entry.from} highlighted={stage.highlight === entry.from} />
+      <Show when={trays.length > 0}>
+        <div class="presentation-bead-workspace">
+          <div class="presentation-bead-tray-collection">
+            <For each={trays}>
+              {(tray: BeadTrayTokens) => (
+                <div class="presentation-bead-tray">
+                  <div class="presentation-bead-tray__grid">
+                    <For each={[
+                      { key: 'thousand' as const, tokens: tray.thousand },
+                      { key: 'hundred' as const, tokens: tray.hundred },
+                      { key: 'ten' as const, tokens: tray.ten },
+                      { key: 'unit' as const, tokens: tray.unit },
+                    ]}>
+                      {(entry: { key: BeadPlace; tokens: BeadToken[] }) => (
+                        <div class={`presentation-bead-place ${stage.highlight === entry.key ? 'is-highlighted' : ''}`}>
+                          <BeadTokenStack tokens={entry.tokens} kind={entry.key} highlighted={stage.highlight === entry.key} />
+                        </div>
+                      )}
+                    </For>
                   </div>
-                  <Show when={entry.info.carried > 0}>
-                    <div class="presentation-exchange-board__group">
-                      <span class="presentation-exchange-board__group-label">Carry to {placeLabels[entry.info.to]}</span>
-                      <BeadTokenStack count={entry.info.carried} kind={entry.info.to} />
-                    </div>
-                  </Show>
                 </div>
               )}
             </For>
           </div>
-        </Show>
-      </div>
+
+          <Show when={stage.ribbonVisible}>
+            <div class={`presentation-ribbon ${stage.highlight === 'multiplication-ribbon' ? 'is-highlighted' : ''}`}>
+              <YellowRibbon length={trays.length >= 3 ? 'long' : trays.length === 2 ? 'medium' : 'short'} />
+            </div>
+          </Show>
+
+          <Show when={exchangeEntries().length > 0}>
+            <div class="presentation-exchange-board">
+              <For each={exchangeEntries()}>
+                {(entry: { from: 'unit' | 'ten' | 'hundred'; info: { remainder: number; carried: number; to: 'ten' | 'hundred' | 'thousand' } }) => (
+                  <div class={`presentation-exchange-board__cell ${stage.highlight === entry.from ? 'is-highlighted' : ''}`}>
+                    <div class="presentation-exchange-board__group">
+                      <BeadTokenStack count={entry.info.remainder} kind={entry.from} highlighted={stage.highlight === entry.from} />
+                    </div>
+                    <Show when={entry.info.carried > 0}>
+                      <div class="presentation-exchange-board__group">
+                        <BeadTokenStack count={entry.info.carried} kind={entry.info.to} />
+                      </div>
+                    </Show>
+                  </div>
+                )}
+              </For>
+            </div>
+          </Show>
+        </div>
+      </Show>
     );
   };
 
   const StampGameWorkspaceVisual = () => {
     if (stage.stampColumns.length === 0) {
-      return <p class="text-xs text-subtle">Stamp tiles will appear as the guide lays them out.</p>;
+      return null; // Don't show placeholder text - keep it clean
     }
 
     return (
       <div class="presentation-stamp-workspace">
         <For each={stage.stampColumns}>
-          {(column, index) => (
+          {(column: StampColumnTokens) => (
             <div class="presentation-stamp-column">
-              <span class="presentation-panel__label">Column {index() + 1}</span>
               <div class="presentation-stamp-stack">
-                <StampTokenStack count={column.hundreds} value={100} highlighted={stage.highlight === 'hundred'} />
-                <StampTokenStack count={column.tens} value={10} highlighted={stage.highlight === 'ten'} />
-                <StampTokenStack count={column.units} value={1} highlighted={stage.highlight === 'unit'} />
+                <StampTokenStack tokens={column.hundreds} value={100} highlighted={stage.highlight === 'hundred'} />
+                <StampTokenStack tokens={column.tens} value={10} highlighted={stage.highlight === 'ten'} />
+                <StampTokenStack tokens={column.units} value={1} highlighted={stage.highlight === 'unit'} />
               </div>
             </div>
           )}
@@ -517,6 +598,30 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   const scriptSummary = () => script()?.summary ?? '';
   const actions = () => script()?.actions ?? [];
 
+  // Allow scrubbing backwards: when user selects an earlier index, reset and re-apply
+  const handleSelectAction = (index: number) => {
+    const scriptValue = script();
+    if (!scriptValue) return;
+    const safeIndex = Math.max(0, Math.min(index, scriptValue.actions.length - 1));
+    // If we go backwards, rebuild state to the selected action
+    if (appliedCount() > safeIndex) {
+      resetStage();
+      setProcessedScriptId(scriptValue.id);
+      batch(() => {
+        let applied = 0;
+        while (applied <= safeIndex && applied < scriptValue.actions.length) {
+          applyAction(scriptValue.actions[applied]);
+          applied += 1;
+        }
+        setAppliedCount(applied);
+        setActiveIndex(safeIndex);
+      });
+      return;
+    }
+    // Forward move uses normal mechanism
+    setActiveIndex(safeIndex);
+  };
+
   if (!script()) {
     return (
       <Card variant="soft" class="space-y-3 text-subtle">
@@ -526,147 +631,91 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   }
 
   return (
-    <div class="flex flex-col gap-5 text-[color:var(--color-text)]">
-      <div class="space-y-2">
-        <Chip tone="primary" size="sm">
-          Narrated presentation
-        </Chip>
-        <h4 class="text-2xl font-semibold text-[color:var(--color-heading)]">{script()?.title}</h4>
-        <Show when={scriptSummary()}>
-          {(summary) => <p class="text-sm text-subtle">{summary()}</p>}
-        </Show>
-      </div>
-
-      <Card variant="flat" class="surface-neutral rounded-[var(--radius-lg)] p-4 sm:p-5 space-y-3">
-        <p class="text-xs uppercase tracking-wide text-label-soft">Stage narration</p>
-        <p class="text-base leading-snug">{stage.narration || 'Press play to begin the scripted presentation.'}</p>
-        <div class="flex flex-wrap items-center gap-2">
-          <Button size="compact" onClick={() => advanceTo(Math.max(activeIndex() - 1, 0))}>
-            Previous step
-          </Button>
-          <Button size="compact" onClick={() => advanceTo(Math.min(activeIndex() + 1, actions().length - 1))}>
-            Next step
-          </Button>
-          <Button variant="secondary" size="compact" onClick={resetStage}>
-            Restart presentation
-          </Button>
-          <Show when={autoPlaying()}>
-            <Chip tone="green" size="sm">
-              Auto advance
-            </Chip>
-          </Show>
+    <div class="lesson-stage" data-variant="presentation" style={{ position: 'relative' }}>
+      {/* Prominent caption for K-3 learners */}
+      <Show when={stage.narration}>
+        <div class="presentation-caption">
+          {stage.narration}
         </div>
-      </Card>
+      </Show>
 
-      <Card variant="soft" class="rounded-[var(--radius-lg)] p-4 sm:p-5 space-y-4">
-        <header class="space-y-1">
-          <p class="text-xs uppercase tracking-wide text-label-soft">Montessori stage</p>
-          <p class="text-sm text-subtle">
-            Snapshot of materials after the current scripted action.
-          </p>
-        </header>
+      <div class="lesson-stage__canvas">
+        <div style={{ display: 'flex', 'flex-direction': 'column', 'align-items': 'center', gap: '2rem', width: '100%', 'max-width': '900px', position: 'relative' }}>
+          {/* Paper notes area (handwritten) */}
+          <Show when={stage.paperNotes.length > 0}>
+            <div class="presentation-paper-notes" aria-label="Notes">
+              <For each={stage.paperNotes}>
+                {(note: string) => (
+                  <PaperNote>{note}</PaperNote>
+                )}
+              </For>
+            </div>
+          </Show>
 
-        <div class="presentation-stage-grid">
-          <section class="presentation-panel">
-            <h5 class="text-sm font-semibold text-[color:var(--color-heading)]">Number cards</h5>
-            <div class="presentation-card-stack">
-              <Show
-                when={stage.multiplicandStack.length > 0}
-                fallback={<p class="text-xs text-subtle">Cards will appear as the guide introduces them.</p>}
-              >
-                <For each={stage.multiplicandStack}>
-                  {(card, index) => (
-                    <div class="presentation-card-stack__item" style={{ '--offset': `${index()}` }}>
-                      <NumberCard value={card} size="sm" />
-                    </div>
-                  )}
-                </For>
+          {/* Show number cards only when they exist */}
+          <Show when={stage.multiplicandStack.length > 0 || stage.multiplierCard !== undefined}>
+            <div class="presentation-cards-minimal">
+              <Show when={stage.multiplicandStack.length > 0}>
+                <div class="presentation-card-stack">
+                  <For each={stage.multiplicandStack}>
+                    {(card: number, index: () => number) => (
+                      <div class="presentation-card-stack__item" style={{ '--offset': `${index()}` }}>
+                        <NumberCard value={card} size="md" />
+                      </div>
+                    )}
+                  </For>
+                </div>
+              </Show>
+              <Show when={stage.multiplierCard !== undefined}>
+                <div class="presentation-multiplier-minimal">
+                  <NumberCard value={stage.multiplierCard ?? 0} size="md" />
+                </div>
               </Show>
             </div>
-            <div class="presentation-multiplier">
-              <span class="presentation-panel__label">Multiplier</span>
-              <Show
-                when={stage.multiplierCard !== undefined}
-                fallback={<span class="text-xs text-subtle">—</span>}
-              >
-                <NumberCard value={stage.multiplierCard ?? 0} size="sm" />
-              </Show>
-            </div>
-          </section>
+          </Show>
 
-          <section class={`presentation-panel presentation-panel--workspace ${stage.highlight === 'multiplication-ribbon' ? 'is-highlighted' : ''}`}>
-            <h5 class="text-sm font-semibold text-[color:var(--color-heading)]">
-              {stage.activeMaterial === 'stamp-game' ? 'Stamp game workspace' : 'Golden bead workspace'}
-            </h5>
+          {/* Minimal workspace - materials and workspace */}
+          <div class="presentation-workspace-minimal">
             <Show when={stage.activeMaterial === 'stamp-game'}>
               <StampGameWorkspaceVisual />
             </Show>
-            <Show when={stage.activeMaterial !== 'stamp-game'}>
-              <GoldenBeadWorkspaceVisual />
+            <Show when={stage.activeMaterial === 'golden-beads'}>
+              {renderGoldenBeadWorkspace()}
             </Show>
-          </section>
+          </div>
 
-          <section class="presentation-panel presentation-panel--paper">
-            <h5 class="text-sm font-semibold text-[color:var(--color-heading)]">Guide’s paper</h5>
-            <Show
-              when={stage.paperNotes.length > 0}
-              fallback={<p class="text-xs text-subtle">Notes will appear as the guide records them.</p>}
-            >
-              <div class="presentation-paper-notes">
-                <For each={stage.paperNotes}>{(note) => <PaperNote>{note}</PaperNote>}</For>
-              </div>
-            </Show>
-          </section>
-
+          {/* Show final answer when available */}
           <Show when={finalProductValue() !== null}>
-            <section class="presentation-panel presentation-panel--final">
-              <h5 class="text-sm font-semibold text-[color:var(--color-heading)]">Final product</h5>
-              <NumberCard value={finalProductValue() ?? 0} size="md" />
-              <Show when={stage.finalProduct}>
-                {(value) => <p class="text-sm text-subtle">{value()}</p>}
-              </Show>
-            </section>
+            <div class="presentation-answer">
+              <NumberCard value={finalProductValue() ?? 0} size="lg" />
+            </div>
+          </Show>
+
+          {/* Per-action timeline */}
+          <Show when={actions().length > 0}>
+            <div class="presentation-action-timeline" aria-label="Action timeline">
+              <div class="presentation-action-track">
+                <div class="presentation-action-progress" style={{ width: `${(activeIndex() / Math.max(actions().length - 1, 1)) * 100}%` }} />
+                <For each={actions()}>
+                  {(_: PresentationAction, idx: () => number) => {
+                    const position = actions().length <= 1 ? 0 : (idx() / (actions().length - 1)) * 100;
+                    const isCurrent = idx() === activeIndex();
+                    return (
+                      <button
+                        type="button"
+                        class={`presentation-action-dot ${isCurrent ? 'is-active' : ''}`}
+                        style={{ left: `${position}%` }}
+                        aria-label={`Action ${idx() + 1}`}
+                        onClick={() => handleSelectAction(idx())}
+                      />
+                    );
+                  }}
+                </For>
+              </div>
+            </div>
           </Show>
         </div>
-      </Card>
-
-      <Card variant="flat" class="surface-neutral rounded-[var(--radius-lg)] p-4 sm:p-5">
-        <p class="text-xs uppercase tracking-wide text-label-soft">Script actions</p>
-        <div class="mt-3 flex flex-col gap-2">
-          <For each={actions()}>
-            {(action, index) => {
-              const isActive = () => index() === activeIndex();
-              return (
-                <button
-                  type="button"
-                  onClick={() => advanceTo(index())}
-                  class={`rounded-[var(--radius-md)] px-4 py-3 text-left text-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgba(64,157,233,0.55)] ${
-                    isActive()
-                      ? 'surface-info text-[#0b4a8c] shadow-ambient'
-                      : 'surface-soft text-[color:var(--color-text)] hover:shadow-ambient'
-                  }`}
-                >
-                  <span class="block text-xs font-semibold uppercase tracking-wide text-label-soft">
-                    Step {index() + 1}
-                  </span>
-                  <span class="mt-1 block leading-snug">
-                    {action.type === 'narrate' && action.text}
-                    {action.type === 'showCard' && `Show card ${action.card} (${action.position})`}
-                    {action.type === 'placeBeads' && `Place ${action.quantity} ${action.place} beads on tray ${action.tray}`}
-                    {action.type === 'duplicateTray' && `Duplicate layout ${action.count} times`}
-                    {action.type === 'highlight' && `Highlight ${action.target}`}
-                    {action.type === 'exchange' && `Exchange ${action.quantity} ${action.from}s for ${action.to}s`}
-                    {action.type === 'stackPlaceValues' && `Stack ${action.order.join(', ')}`}
-                    {action.type === 'writeResult' && `Write ${action.value}`}
-                    {action.type === 'showStamp' && `Show ${action.rows} rows of ${action.stamp} stamp${action.rows > 1 ? 's' : ''}`}
-                    {action.type === 'countTotal' && `Count total ${action.value}`}
-                  </span>
-                </button>
-              );
-            }}
-          </For>
-        </div>
-      </Card>
+      </div>
     </div>
   );
 };
