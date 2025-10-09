@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { createContext, useContext } from 'solid-js';
+import { createContext, createEffect, useContext } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import type { LessonTask } from '../types';
@@ -34,13 +34,41 @@ interface ProgressContextValue {
 
 const ProgressContext = createContext<ProgressContextValue>();
 
+const STORAGE_KEY = 'monte:progress-state';
+
+const isBrowser = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+
+const readStoredState = (): ProgressState => {
+  if (!isBrowser) return { lessons: {} };
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return { lessons: {} };
+    const parsed = JSON.parse(raw) as ProgressState;
+    if (!parsed || typeof parsed !== 'object' || !parsed.lessons) return { lessons: {} };
+    return parsed;
+  } catch (error) {
+    console.warn('Failed to read stored progress state', error);
+    return { lessons: {} };
+  }
+};
+
 const getInitialTaskState = (index: number): LessonTaskState => ({
   status: index === 0 ? 'ready' : 'locked',
   attempts: 0,
 });
 
 export const ProgressProvider = (props: { children: JSX.Element }) => {
-  const [state, setState] = createStore<ProgressState>({ lessons: {} });
+  const [state, setState] = createStore<ProgressState>(readStoredState());
+
+  if (isBrowser) {
+    createEffect(() => {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        console.warn('Failed to persist progress state', error);
+      }
+    });
+  }
 
   const ensureTasks: ProgressActions['ensureTasks'] = (lessonId, tasks) => {
     if (tasks.length === 0) return;

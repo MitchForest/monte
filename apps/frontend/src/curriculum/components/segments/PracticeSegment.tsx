@@ -1,9 +1,9 @@
-import { For, Show, createEffect, createMemo, createSignal } from 'solid-js';
+import { Show, createEffect, createMemo, createSignal } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import type { DemoEventRecorder } from '../../analytics/events';
 import type { PracticePassCriteria, PracticeQuestion, PracticeSegment as PracticeSegmentType } from '../../types';
-import { Button, Card, Chip } from '../../../design-system';
+import { Button, Chip } from '../../../design-system';
 
 interface PracticeSegmentProps {
   lessonId: string;

@@ -4,7 +4,7 @@ import { createStore } from 'solid-js/store';
 
 import type { GuidedSegment as GuidedSegmentType, GuidedEvaluatorId, GuidedStep } from '../../types';
 import type { GoldenBeadScenario, StampGameScenario } from '../../scenarios/multiplication';
-import { Button, Card, Chip } from '../../../design-system';
+import { Button, Card } from '../../../design-system';
 import {
   NumberCard,
   GoldenBeadUnit,
@@ -178,9 +178,6 @@ const GoldenBeadsWorkspace = (props: {
 
   const [layout, setLayout] = createStore(createDefaultLayout());
   let dragContext: DragContext | null = null;
-
-  const multiplicandHint = () =>
-    props.scenario ? `${props.scenario.multiplicand.toLocaleString()} × ${props.scenario.multiplier}` : undefined;
 
   const scenarioSignature = createMemo(() => {
     const scenario = props.scenario;
@@ -744,12 +741,6 @@ const StampGameWorkspace = (props: {
     setLayout(createDefaultLayout());
   });
 
-  const beadLabels: Record<'hundred' | 'ten' | 'unit', string> = {
-    hundred: '100',
-    ten: '10',
-    unit: '1',
-  };
-
   const stampVisual = (kind: 'hundred' | 'ten' | 'unit') => {
     const value = kind === 'hundred' ? 100 : kind === 'ten' ? 10 : 1;
     return <StampTile value={value} />;
@@ -1169,15 +1160,13 @@ const StampGameWorkspace = (props: {
 export const GuidedSegment = (props: GuidedSegmentProps) => {
   const steps = () => props.steps;
   const [currentIndex, setCurrentIndex] = createSignal(0);
-  const [completed, setCompleted] = createStore<Record<string, boolean>>({});
   const [feedback, setFeedback] = createSignal<string | null>(null);
   const [workspaceState, setWorkspaceState] = createSignal<GuidedWorkspaceSnapshot>({ kind: 'none' });
   const [attempts, setAttempts] = createStore<Record<string, number>>({});
 
   const currentStep = createMemo(() => steps()[currentIndex()]);
 
-  const markCompleted = (stepId: string) => {
-    setCompleted(stepId, true);
+  const markCompleted = (_stepId: string) => {
     setFeedback('Great work! Move to the next step when you are ready.');
 
     if (currentIndex() >= steps().length - 1) {
@@ -1201,12 +1190,6 @@ export const GuidedSegment = (props: GuidedSegmentProps) => {
     }
 
     setFeedback(step.nudge);
-  };
-
-  const handleBack = () => {
-    if (currentIndex() === 0) return;
-    setCurrentIndex((index) => index - 1);
-    setFeedback(null);
   };
 
   const renderWorkspace = () => {
@@ -1248,7 +1231,7 @@ export const GuidedSegment = (props: GuidedSegmentProps) => {
       </div>
 
       <footer class="guided-footer-minimal">
-        <Button onClick={handleCheck} size="lg">Check</Button>
+        <Button onClick={handleCheck}>Check</Button>
         <Show when={feedback()}>
           {(message) => <div class="guided-feedback">{message()}</div>}
         </Show>

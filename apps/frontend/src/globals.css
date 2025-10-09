@@ -349,6 +349,521 @@
     overflow: hidden;
   }
 
+  /* K-3 Fullscreen Lesson Player - Minimal Distractions */
+  .lesson-screen-fullscreen {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+    background: rgba(233, 245, 251, 0.5);
+    overflow: hidden;
+  }
+
+  .lesson-nav-bar {
+    display: grid;
+    grid-template-columns: 280px 1fr auto;
+    align-items: center;
+    gap: 0;
+    background: transparent;
+    z-index: 40;
+    flex-shrink: 0;
+  }
+
+  .lesson-nav-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    color: var(--color-heading);
+    letter-spacing: -0.02em;
+    padding: 0.5rem 0 0.5rem 1.5rem;
+  }
+
+  .lesson-nav-breadcrumbs {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+  }
+
+  .lesson-nav-profile {
+    padding: 0.5rem 2rem 0.5rem 0;
+  }
+  
+  @media (max-width: 1024px) {
+    .lesson-nav-bar {
+      grid-template-columns: auto 1fr auto;
+    }
+    
+    .lesson-nav-logo {
+      padding: 0.5rem 0 0.5rem 1.5rem;
+    }
+    
+    .lesson-nav-breadcrumbs {
+      padding: 0.5rem 0 0.5rem 1rem;
+    }
+    
+    .lesson-nav-profile {
+      padding: 0.5rem 1.5rem 0.5rem 0;
+    }
+  }
+
+  /* Breadcrumb styles */
+  .breadcrumb {
+    display: flex;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumb-link {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 150ms ease;
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+  }
+
+  .breadcrumb-link--clickable:hover,
+  .breadcrumb-link[href]:hover {
+    color: var(--color-heading);
+    text-decoration: underline;
+  }
+
+  .breadcrumb-link--current {
+    color: var(--color-heading);
+    font-weight: 600;
+    cursor: default;
+  }
+
+  .breadcrumb-separator {
+    display: flex;
+    align-items: center;
+    color: var(--color-text-subtle);
+    font-size: 0.875rem;
+    user-select: none;
+  }
+
+  /* Start overlay - no auto-play for K-3 learners */
+  .lesson-start-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: linear-gradient(135deg, rgba(10, 42, 101, 0.15), rgba(64, 157, 233, 0.12));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .lesson-start-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .lesson-start-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 4px solid white;
+    cursor: pointer;
+    transition: all 300ms ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .lesson-start-button:hover {
+    transform: scale(1.1);
+    background: var(--color-primary-strong);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.4);
+  }
+
+  .lesson-start-button:active {
+    transform: scale(1.05);
+  }
+
+  .lesson-start-icon {
+    font-size: 3rem;
+    color: white;
+    margin-left: 0.5rem;
+  }
+
+  .lesson-start-text {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+    font-family: var(--font-heading);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .lesson-start-button {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .lesson-start-icon {
+      font-size: 2.5rem;
+    }
+    
+    .lesson-start-text {
+      font-size: 1.5rem;
+    }
+  }
+
+  .lesson-content-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr 32px;
+    gap: 0;
+    flex: 1;
+    overflow: hidden;
+    background: transparent;
+    min-height: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .lesson-content-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .lesson-sidebar-left {
+      display: none;
+    }
+    
+    .lesson-sidebar-right-spacer {
+      display: none;
+    }
+  }
+
+  .lesson-sidebar-left {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+  }
+  
+  .lesson-sidebar-right-spacer {
+    background: transparent;
+  }
+
+  /* Top section - equation display (1/3) */
+  .lesson-equation-section {
+    flex: 0 0 33%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: transparent;
+  }
+
+  .lesson-equation-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-heading);
+    background: white;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(10, 42, 101, 0.08);
+  }
+
+  .equation-mini-row {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .equation-mini-digit {
+    width: 1.125rem;
+    text-align: center;
+  }
+
+  .equation-mini-symbol {
+    margin-right: 0.35rem;
+    color: var(--color-primary-strong);
+  }
+
+  .equation-mini-divider {
+    width: 100%;
+    height: 1.5px;
+    background: var(--color-heading);
+    margin: 0.15rem 0;
+  }
+
+  /* Bottom section - carousel-style captions (2/3) */
+  .lesson-captions-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .lesson-captions-carousel {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    padding: 2rem 0;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 15%,
+      black 85%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 15%,
+      black 85%,
+      transparent 100%
+    );
+    /* Hide scrollbar */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+  
+  .lesson-captions-carousel::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Opera */
+  }
+
+  .lesson-captions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  /* Caption bubbles - carousel-style with centered active (Spotify lyrics style) */
+  .lesson-caption-bubble {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-heading);
+    font-family: var(--font-sans);
+    padding: 0.7rem 0.875rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-md);
+    box-shadow: 0 1px 4px rgba(10, 42, 101, 0.05);
+    transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    border: none;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    opacity: 0.2;
+    transform: scale(0.92);
+  }
+  
+  .lesson-caption-bubble:hover:not(.lesson-caption-current) {
+    opacity: 0.5 !important;
+    transform: scale(0.96) !important;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 8px rgba(10, 42, 101, 0.12);
+  }
+
+  .lesson-caption-current {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    background: linear-gradient(135deg, white, rgba(140, 204, 212, 0.15));
+    border-left: 4px solid var(--color-primary-strong);
+    font-weight: 600;
+    font-size: 1.15rem;
+    padding: 0.85rem 1rem;
+    box-shadow: 0 4px 16px rgba(10, 42, 101, 0.18);
+    cursor: default;
+  }
+
+  .lesson-caption-past {
+    opacity: 0.25;
+    transform: scale(0.94);
+  }
+  
+  .lesson-caption-future {
+    opacity: 0.15;
+    transform: scale(0.9);
+    font-style: italic;
+    color: var(--color-text-subtle);
+  }
+
+  .lesson-caption-muted {
+    opacity: 0.3;
+    font-style: italic;
+    cursor: default;
+  }
+
+  .lesson-player-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.92) 100%);
+    border-radius: var(--radius-xl);
+    margin: 8px 8px 8px 0;
+    box-shadow: 
+      0 4px 16px rgba(10, 42, 101, 0.08),
+      0 1px 3px rgba(10, 42, 101, 0.05);
+    min-height: 0;
+    height: calc(100% - 16px);
+  }
+  
+  @media (max-width: 1024px) {
+    .lesson-player-center {
+      margin: 8px;
+      height: calc(100% - 16px);
+      border-radius: var(--radius-lg);
+    }
+  }
+
+  .lesson-sidebar-right {
+    background: rgba(255, 251, 240, 0.8);
+    border-left: 1px solid rgba(10, 42, 101, 0.08);
+    overflow-y: auto;
+    padding: 1.5rem;
+  }
+
+  .lesson-paper-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .lesson-paper-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-heading);
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(10, 42, 101, 0.15);
+  }
+
+  .lesson-paper-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .lesson-work-equation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  /* Vertical equation format - traditional math notation */
+  .vertical-equation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-heading);
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 12px rgba(10, 42, 101, 0.1);
+    border: 2px solid rgba(140, 204, 212, 0.3);
+  }
+
+  .equation-carries {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: var(--color-accent-red);
+    min-height: 1.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .carry-digit {
+    width: 1.5rem;
+    text-align: center;
+  }
+
+  .equation-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .equation-symbol {
+    margin-right: 0.5rem;
+    color: var(--color-primary-strong);
+  }
+
+  .equation-digit {
+    width: 1.5rem;
+    text-align: center;
+  }
+
+  .equation-multiplicand {
+    /* Top number */
+  }
+
+  .equation-multiplier {
+    /* Bottom number with × */
+    padding-right: 0.5rem;
+  }
+
+  .equation-divider {
+    width: 100%;
+    height: 2px;
+    background: var(--color-heading);
+    margin: 0.25rem 0;
+  }
+
+  .equation-result {
+    /* Answer */
+    padding-right: 0.5rem;
+  }
+
+  @media (max-width: 1280px) {
+    .vertical-equation {
+      font-size: 1.25rem;
+      padding: 1.25rem 1.5rem;
+    }
+    
+    .equation-carries {
+      font-size: 0.875rem;
+    }
+  }
+
   .lesson-player-wrapper {
     flex: 1;
     display: flex;
@@ -479,27 +994,95 @@
   }
 
   .lesson-dock {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-top: 1px solid rgba(12, 42, 101, 0.08);
-    background: rgba(244, 250, 252, 0.9);
-    backdrop-filter: blur(12px);
-    z-index: 30;
+    background: transparent;
+    display: grid;
+    grid-template-columns: 280px 1fr 32px;
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .lesson-dock-spacer-left {
+    background: transparent;
+  }
+
+  .lesson-dock-spacer-right {
+    background: transparent;
   }
 
   .lesson-dock-inner {
-    margin: 0 auto;
-    max-width: 1080px;
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    padding: 0.75rem 1.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 0.5rem 1.5rem 0.5rem 0;
+  }
+  
+  @media (max-width: 1024px) {
+    .lesson-dock {
+      grid-template-columns: 1fr;
+    }
+    
+    .lesson-dock-spacer-left,
+    .lesson-dock-spacer-right {
+      display: none;
+    }
+    
+    .lesson-dock-inner {
+      padding: 0.5rem 1.5rem;
+    }
   }
 
   .lesson-dock-play {
-    min-width: 84px;
+    width: 48px;
+    height: 48px;
+    padding: 0 !important;
+    gap: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  
+  .lesson-dock-play > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  /* Action-level timeline for presentation segments */
+  .lesson-action-timeline {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .lesson-action-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(140, 204, 212, 0.6);
+    background: rgba(255, 255, 255, 0.9);
+    transform: translate(-50%, 0);
+    transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    cursor: pointer;
+  }
+
+  .lesson-action-dot:hover {
+    transform: translate(-50%, 0) scale(1.3);
+    background: rgba(140, 204, 212, 0.9);
+  }
+
+  .lesson-action-dot--active {
+    transform: translate(-50%, 0) scale(1.4);
+    background: var(--color-primary-strong);
+    border-color: var(--color-primary-strong);
+    box-shadow: 0 0 0 2px rgba(140, 204, 212, 0.3);
   }
 
   .lesson-timeline {
@@ -741,13 +1324,13 @@
     box-shadow: inset 0 -2px 0 rgba(15, 23, 42, 0.15);
   }
 
-  /* Montessori-style number cards with wood background and proportional sizing */
+  /* Montessori-style number cards with wood background and fixed-width digits for perfect stacking */
   .number-card-montessori {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.15rem;
-    padding: 0.6rem 0.8rem;
+    gap: 0;
+    padding: 0.4rem 0.5rem;
     background: linear-gradient(135deg, #e8d5b7 0%, #d4c4a8 100%);
     border-radius: var(--radius-md);
     box-shadow: 
@@ -756,7 +1339,7 @@
       inset 0 -2px 0 rgba(0, 0, 0, 0.1);
     border: 2px solid #c9b896;
     font-weight: 700;
-    letter-spacing: 0.05em;
+    letter-spacing: 0;
   }
 
   .number-card-digit-montessori {
@@ -765,6 +1348,8 @@
     justify-content: center;
     font-weight: 700;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex-shrink: 0;
   }
 
   .golden-bead-cube {
@@ -835,6 +1420,8 @@
   .presentation-stage-grid {
     display: grid;
     gap: 1.25rem;
+    overflow: visible;
+    min-height: 0;
   }
 
   @media (min-width: 768px) {
@@ -858,7 +1445,7 @@
   .presentation-token-stack.is-highlighted,
   .presentation-bead-place.is-highlighted,
   .presentation-exchange-board__cell.is-highlighted {
-    box-shadow: 0 0 0 3px rgba(64, 157, 233, 0.4);
+    /* Removed blue highlighting for K-3 minimal UI */
   }
 
   .presentation-panel__label {
@@ -870,15 +1457,22 @@
 
   .presentation-card-stack {
     position: relative;
-    min-height: 5rem;
+    min-height: 4rem;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .presentation-card-stack__item {
     position: absolute;
     top: 0;
-    right: 0; /* right-align so ones place aligns */
-    transform: translateY(calc(var(--offset, 0) * -0.6rem));
-    filter: drop-shadow(0 6px 10px rgba(15, 23, 42, 0.12));
+    right: 0;
+    transform: translateY(0);
+    filter: drop-shadow(0 4px 8px rgba(15, 23, 42, 0.12));
+  }
+  
+  /* Ensure all cards in stack have same width */
+  .presentation-card-stack .number-card-montessori {
+    min-width: min-content;
   }
 
   /* Paper notes area beside the canvas */
@@ -917,23 +1511,35 @@
   .presentation-stamp-workspace {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
+    overflow: visible;
+    min-height: 0;
+    flex-shrink: 1;
+    align-items: flex-start;
   }
 
-  .presentation-bead-tray-collection,
+  .presentation-bead-tray-collection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow: visible;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-shrink: 1;
+  }
+
   .presentation-stamp-workspace {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    overflow: hidden;
   }
 
   .presentation-bead-tray,
   .presentation-stamp-column {
-    flex: 1 1 220px;
-    border-radius: var(--radius-md);
-    border: 1px solid rgba(64, 157, 233, 0.18);
-    background: rgba(255, 255, 255, 0.92);
-    padding: 0.75rem;
+    flex: 0 0 auto;
+    background: transparent;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -985,18 +1591,18 @@
   }
 
   .presentation-bead-tray__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+    align-items: flex-start;
   }
 
   .presentation-bead-place {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
-    border-radius: var(--radius-sm);
-    background: rgba(248, 250, 252, 0.8);
-    padding: 0.4rem;
+    background: transparent;
+    padding: 0;
   }
 
   .presentation-bead-place__label {
@@ -1011,6 +1617,7 @@
     flex-wrap: wrap;
     gap: 0.3rem;
     align-items: center;
+    justify-content: flex-start;
   }
 
   .presentation-token-placeholder {
@@ -1043,19 +1650,81 @@
 
   .presentation-ribbon {
     display: flex;
-    justify-content: center;
-    padding: 0.35rem 0;
+    justify-content: stretch;
+    padding: 0.75rem 0;
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  .presentation-ribbon .yellow-ribbon {
+    width: 100%;
+    min-width: 100%;
   }
 
   .presentation-ribbon.is-highlighted {
-    border-radius: 999px;
-    background: rgba(253, 224, 71, 0.35);
+    /* Removed highlighting for K-3 minimal UI */
+  }
+
+  /* Exchange zone - top area where new beads appear during exchange */
+  .presentation-exchange-zone {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, rgba(140, 204, 212, 0.15), rgba(233, 245, 251, 0.9));
+    border-radius: var(--radius-md);
+    border: 2px dashed var(--color-primary-strong);
+    margin-bottom: 0.5rem;
+  }
+
+  /* Below the line - exchange working area */
+  .presentation-below-line-zone {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(233, 245, 251, 0.85));
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-primary-strong);
+    margin-top: 0.75rem;
+  }
+  
+  .presentation-below-line-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 6px rgba(10, 42, 101, 0.08);
+  }
+  
+  .presentation-result-card {
+    flex-shrink: 0;
   }
 
   .presentation-exchange-board {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 3px solid var(--color-primary-strong);
+    position: relative;
+  }
+  
+  .presentation-exchange-board::before {
+    content: 'Exchange Area';
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 0 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-primary-strong);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
   }
 
   @media (min-width: 640px) {
@@ -1066,13 +1735,14 @@
 
   .presentation-exchange-board__cell {
     flex: 1 1 0;
-    border: 1px dashed rgba(100, 116, 139, 0.3);
+    border: 2px solid rgba(140, 204, 212, 0.4);
     border-radius: var(--radius-md);
     padding: 0.75rem;
-    background: rgba(255, 255, 255, 0.7);
+    background: linear-gradient(135deg, rgba(233, 245, 251, 0.9), rgba(255, 255, 255, 0.95));
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(10, 42, 101, 0.08);
   }
 
   .presentation-exchange-board__group {
@@ -1086,6 +1756,14 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: rgba(100, 116, 139, 0.85);
+  }
+  
+  .presentation-exchange-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-heading);
+    margin-bottom: 0.25rem;
+    text-align: center;
   }
 
   .presentation-stamp-stack {
@@ -1112,16 +1790,17 @@
   .lesson-stage {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 100%;
     height: 100%;
-    padding: 1rem;
+    padding: 0;
     color: var(--color-text);
-    overflow: hidden;
+    overflow: visible;
+    min-height: 0;
   }
 
   .lesson-stage[data-variant='presentation'] {
-    padding: 1rem;
+    padding: 0;
   }
 
   .lesson-stage__header {
@@ -1155,7 +1834,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: visible;
+    min-height: 0;
   }
 
   .lesson-stage__canvas-card {
@@ -1165,6 +1845,8 @@
     flex-direction: column;
     justify-content: center;
     gap: 1.35rem;
+    min-height: 0;
+    overflow: visible;
   }
 
   .lesson-stage__footer {
@@ -1172,7 +1854,7 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    min-height: 3.5rem;
+    flex-shrink: 0;
   }
 
   .lesson-stage__feedback {
@@ -1200,11 +1882,15 @@
   .guided-stage__canvas,
   .practice-stage__canvas {
     width: 100%;
+    overflow: hidden;
+    min-height: 0;
   }
 
   .guided-stage__workspace {
     width: min(100%, 960px);
     margin: 0 auto;
+    overflow: hidden;
+    min-height: 0;
   }
 
   .guided-stage__footer {
@@ -1286,18 +1972,20 @@
   .presentation-workspace-minimal {
     width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    min-height: 200px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    overflow: visible;
+    flex-shrink: 1;
+    min-height: 0;
   }
 
   .presentation-cards-minimal {
     display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    flex-shrink: 0;
   }
 
   .presentation-card-stack {
@@ -1313,20 +2001,32 @@
   .presentation-multiplier-minimal {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+    align-self: flex-end;
   }
 
-  .presentation-multiplier-minimal::before {
-    content: '×';
-    font-size: 2.5rem;
+  .presentation-multiplier-symbol {
+    font-size: 2rem;
     font-weight: 700;
-    color: var(--color-primary-strong);
+    color: var(--color-heading);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  
+  .presentation-equation-divider {
+    align-self: stretch;
+    height: 2px;
+    background: var(--color-heading);
+    margin: 0.25rem 0;
   }
 
   .presentation-answer {
     display: flex;
-    justify-content: center;
-    padding: 1rem;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    flex-shrink: 0;
   }
 
   /* K-3 Guided Practice - Minimal UI */
@@ -1349,10 +2049,13 @@
   .guided-workspace-minimal {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding: 2rem;
+    gap: 1.5rem;
+    padding: 1rem;
     align-items: center;
     width: 100%;
+    overflow: hidden;
+    min-height: 0;
+    flex-shrink: 1;
   }
 
   .guided-supply-row {

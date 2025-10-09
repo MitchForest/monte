@@ -1,0 +1,416 @@
+{
+  "version": "1.0",
+  "lesson": {
+    "id": "lesson-multiplication-golden-beads",
+    "topicId": "topic-multiplication",
+    "title": "Golden Bead Multiplication",
+    "summary": "Model four-digit multiplication by a single digit using the golden bead material.",
+    "focusSkills": [
+      "skill.multiply-4-digit-by-1-digit"
+    ],
+    "estimatedDurationMinutes": 22,
+    "primaryMaterialId": "golden-beads",
+    "materials": [
+      {
+        "materialId": "golden-beads",
+        "purpose": "Concrete representation of place value products"
+      },
+      {
+        "materialId": "golden-bead-cards",
+        "purpose": "Record multiplicand and multiplier"
+      },
+      {
+        "materialId": "multiplication-ribbon",
+        "purpose": "Mark the repeated groups"
+      }
+    ],
+    "segments": [
+      {
+        "id": "presentation-golden-beads",
+        "title": "Golden Bead Demonstration",
+        "type": "presentation",
+        "representation": "concrete",
+        "primaryMaterialId": "golden-beads",
+        "materials": [
+          {
+            "materialId": "golden-beads",
+            "purpose": "Show place value quantities"
+          },
+          {
+            "materialId": "golden-bead-cards",
+            "purpose": "Display multiplicand and multiplier"
+          },
+          {
+            "materialId": "multiplication-ribbon",
+            "purpose": "Indicate multiplication layout"
+          }
+        ],
+        "skills": [
+          "skill.multiply-4-digit-by-1-digit"
+        ],
+        "scriptId": "presentation.multiplication.goldenBeads",
+        "script": {
+          "id": "presentation.multiplication.goldenBeads",
+          "title": "Golden Bead Staircase Multiplication",
+          "summary": "Demonstrate 2,466 × 3 using golden beads, exchanges, and final stacking.",
+          "actions": [
+            {
+              "id": "presentation.multiplication.goldenBeads-1",
+              "type": "showCard",
+              "card": "2,466 × 3",
+              "position": "paper"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-2",
+              "type": "narrate",
+              "text": "We will multiply 2,466 by 3 using golden beads."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-3",
+              "type": "showCard",
+              "card": "2000",
+              "position": "multiplicand-stack"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-4",
+              "type": "showCard",
+              "card": "400",
+              "position": "multiplicand-stack"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-5",
+              "type": "showCard",
+              "card": "60",
+              "position": "multiplicand-stack"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-6",
+              "type": "showCard",
+              "card": "6",
+              "position": "multiplicand-stack"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-7",
+              "type": "narrate",
+              "text": "Stack the thousand, hundred, ten, and unit cards to show 2,466."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-8",
+              "type": "showCard",
+              "card": "3",
+              "position": "multiplier"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-9",
+              "type": "showCard",
+              "card": "×",
+              "position": "paper"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-10",
+              "type": "narrate",
+              "text": "Lay out the golden beads to match each place value."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-11",
+              "type": "placeBeads",
+              "place": "thousand",
+              "quantity": 2,
+              "tray": 1
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-12",
+              "type": "placeBeads",
+              "place": "hundred",
+              "quantity": 4,
+              "tray": 1
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-13",
+              "type": "placeBeads",
+              "place": "ten",
+              "quantity": 6,
+              "tray": 1
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-14",
+              "type": "placeBeads",
+              "place": "unit",
+              "quantity": 6,
+              "tray": 1
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-15",
+              "type": "narrate",
+              "text": "Repeat the layout a second time."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-16",
+              "type": "duplicateTray",
+              "count": 2
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-17",
+              "type": "narrate",
+              "text": "Repeat the layout a third time."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-18",
+              "type": "duplicateTray",
+              "count": 3
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-19",
+              "type": "narrate",
+              "text": "Lay a yellow ribbon beneath to signal multiplication."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-20",
+              "type": "highlight",
+              "target": "multiplication-ribbon",
+              "text": "Place ribbon"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-21",
+              "type": "narrate",
+              "text": "Gather all single unit beads to add them together and exchange groups of ten."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-22",
+              "type": "exchange",
+              "from": "unit",
+              "to": "ten",
+              "quantity": 10,
+              "remainder": 8
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-23",
+              "type": "writeResult",
+              "value": "8 units remain and 1 ten is carried."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-24",
+              "type": "showCard",
+              "card": "8",
+              "position": "paper"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-25",
+              "type": "narrate",
+              "text": "Gather the tens and exchange groups of ten tens for hundreds."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-26",
+              "type": "exchange",
+              "from": "ten",
+              "to": "hundred",
+              "quantity": 10,
+              "remainder": 9
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-27",
+              "type": "writeResult",
+              "value": "9 tens remain and 1 hundred is carried."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-28",
+              "type": "narrate",
+              "text": "Gather the hundreds and exchange ten hundreds for thousands."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-29",
+              "type": "exchange",
+              "from": "hundred",
+              "to": "thousand",
+              "quantity": 10,
+              "remainder": 3
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-30",
+              "type": "writeResult",
+              "value": "3 hundreds remain and 1 thousand is carried."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-31",
+              "type": "narrate",
+              "text": "Stack each place value to read the product."
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-32",
+              "type": "stackPlaceValues",
+              "order": [
+                "thousand",
+                "hundred",
+                "ten",
+                "unit"
+              ]
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-33",
+              "type": "writeResult",
+              "value": "7,398"
+            },
+            {
+              "id": "presentation.multiplication.goldenBeads-34",
+              "type": "narrate",
+              "text": "2,466 multiplied by 3 equals 7,398."
+            }
+          ]
+        },
+        "scenario": {
+          "kind": "golden-beads",
+          "seed": 240317
+        }
+      },
+      {
+        "id": "guided-golden-beads",
+        "title": "Guided Golden Bead Build",
+        "type": "guided",
+        "representation": "concrete",
+        "materials": [
+          {
+            "materialId": "golden-beads",
+            "purpose": "Manipulate quantities while following prompts"
+          }
+        ],
+        "skills": [
+          "skill.multiply-4-digit-by-1-digit"
+        ],
+        "workspace": "golden-beads",
+        "steps": [
+          {
+            "id": "step-build-base",
+            "prompt": "Lay out 2,466 with bead cards and matching quantities.",
+            "expectation": "2 thousands, 4 hundreds, 6 tens, 6 units.",
+            "successCheck": "Cards and beads match the multiplicand.",
+            "nudge": "Check each place value: thousands, hundreds, tens, ones. Add missing bead bars.",
+            "evaluatorId": "golden-beads-build-base"
+          },
+          {
+            "id": "step-duplicate",
+            "prompt": "Create the 2,466 layout 3 times to match the multiplier.",
+            "expectation": "3 full copies separated by the ribbon.",
+            "successCheck": "Correct number of full sets present.",
+            "nudge": "Use the yellow ribbon to separate each copy and confirm counts.",
+            "evaluatorId": "golden-beads-duplicate"
+          },
+          {
+            "id": "step-exchange-units",
+            "prompt": "Combine the units and exchange every 10 for a ten bar.",
+            "expectation": "8 units remain with 1 ten carried.",
+            "successCheck": "Units reduced below ten with the carry recorded.",
+            "nudge": "Group ten unit beads, trade them for a ten bar, and place the ten on the tens column.",
+            "evaluatorId": "golden-beads-exchange-units"
+          },
+          {
+            "id": "step-exchange-tens",
+            "prompt": "Combine tens, exchanging groups of ten tens for a hundred.",
+            "expectation": "9 tens remain with 1 hundred carried.",
+            "successCheck": "Tens consolidated with the carry noted.",
+            "nudge": "Bundle ten tens, trade for a hundred square, and move it to hundreds.",
+            "evaluatorId": "golden-beads-exchange-tens"
+          },
+          {
+            "id": "step-exchange-hundreds",
+            "prompt": "Combine hundreds, exchanging ten hundreds for a thousand.",
+            "expectation": "3 hundreds remain with 1 thousand carried.",
+            "successCheck": "Hundreds consolidated with the carry noted.",
+            "nudge": "Gather ten hundreds, swap for a thousand cube, and add it to thousands.",
+            "evaluatorId": "golden-beads-exchange-hundreds"
+          },
+          {
+            "id": "step-stack-result",
+            "prompt": "Stack the final thousands, hundreds, tens, and units to read the product.",
+            "expectation": "Result cards show 7,398.",
+            "successCheck": "Final stack equals 7,398.",
+            "nudge": "Slide each place value pile to form the final number and read it aloud.",
+            "evaluatorId": "golden-beads-stack-result"
+          }
+        ],
+        "scenario": {
+          "kind": "golden-beads",
+          "seed": 240317
+        }
+      },
+      {
+        "id": "practice-golden-beads",
+        "title": "Golden Bead Practice",
+        "type": "practice",
+        "representation": "concrete",
+        "materials": [
+          {
+            "materialId": "golden-beads",
+            "purpose": "Model independent multiplication problems"
+          }
+        ],
+        "skills": [
+          "skill.multiply-4-digit-by-1-digit"
+        ],
+        "workspace": "golden-beads",
+        "questions": [
+          {
+            "id": "gb-scenario-240317",
+            "multiplicand": 2466,
+            "multiplier": 3,
+            "prompt": "Solve 2,466 × 3.",
+            "correctAnswer": 7398,
+            "difficulty": "easy"
+          },
+          {
+            "id": "gb-240317-1",
+            "multiplicand": 2344,
+            "multiplier": 4,
+            "prompt": "Solve 2,344 × 4.",
+            "correctAnswer": 9376,
+            "difficulty": "medium"
+          },
+          {
+            "id": "gb-240317-2",
+            "multiplicand": 1328,
+            "multiplier": 4,
+            "prompt": "Solve 1,328 × 4.",
+            "correctAnswer": 5312,
+            "difficulty": "medium"
+          },
+          {
+            "id": "gb-240317-3",
+            "multiplicand": 1126,
+            "multiplier": 4,
+            "prompt": "Solve 1,126 × 4.",
+            "correctAnswer": 4504,
+            "difficulty": "hard"
+          },
+          {
+            "id": "gb-240317-4",
+            "multiplicand": 2276,
+            "multiplier": 3,
+            "prompt": "Solve 2,276 × 3.",
+            "correctAnswer": 6828,
+            "difficulty": "hard"
+          }
+        ],
+        "passCriteria": {
+          "type": "threshold",
+          "firstCorrect": 2,
+          "totalCorrect": 3,
+          "maxMisses": 3
+        },
+        "scenario": {
+          "kind": "golden-beads",
+          "seed": 240317
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2025-10-08T19:43:18.721Z",
+    "updatedAt": "2025-10-08T19:43:18.721Z",
+    "scenario": {
+      "kind": "golden-beads",
+      "seed": 240317
+    },
+    "metadata": {
+      "source": "exportLessonDocuments.ts"
+    }
+  }
+}

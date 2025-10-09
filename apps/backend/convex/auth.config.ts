@@ -1,6 +1,4 @@
-import type { AuthConfig } from 'convex/server';
-
-const authConfig: AuthConfig = {
+const authConfig = {
   providers: [],
 };
 

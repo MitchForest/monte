@@ -1,18 +1,17 @@
-import { For, Show, createEffect, createMemo } from 'solid-js';
+import { For, Show, createEffect, createMemo, createResource } from 'solid-js';
 import { useNavigate, useParams } from '@tanstack/solid-router';
 
-import { curriculumUnits } from '../curriculum/units';
-import { curriculumLessons, curriculumTopics } from '../curriculum/lessons';
-import { buildLessonTasks } from '../curriculum/utils/lessonTasks';
-import { getLessonTaskStatus, useProgress } from '../curriculum/state/progress';
-import type { Lesson, LessonTask, UnitTopicRef } from '../curriculum/types';
-import { Button, Card, Chip, PageSection, ProgressDots, type ChipProps } from '../design-system';
+import {
+  fetchUnitBySlug,
+  listLessons,
+} from '../curriculum/api/curriculumClient';
 import { curriculumMaterials } from '../curriculum/materials';
+import { getLessonTaskStatus, useProgress } from '../curriculum/state/progress';
+import { buildLessonTasks } from '../curriculum/utils/lessonTasks';
+import type { Lesson } from '../curriculum/types';
+import { Button, Card, Chip, PageSection, ProgressDots, type ChipProps } from '../design-system';
 
 const materialNameMap = new Map(curriculumMaterials.map((material) => [material.id, material.name]));
-const lessonMap = new Map(curriculumLessons.map((lesson) => [lesson.id, lesson] as const));
-const topicMap = new Map(curriculumTopics.map((topic) => [topic.id, topic] as const));
-const lessonTaskMap = new Map<string, LessonTask[]>(curriculumLessons.map((lesson) => [lesson.id, buildLessonTasks(lesson)]));
 
 type ChipTone = NonNullable<ChipProps['tone']>;
 type LessonStatus = 'locked' | 'ready' | 'in-progress' | 'completed' | 'coming-soon';
@@ -35,6 +34,7 @@ const lessonStatusLabel: Record<LessonStatus, string> = {
 
 interface LessonNodeDisplay {
   id: string;
+  slug: string;
   lesson?: Lesson;
   title: string;
   summary?: string;
@@ -65,42 +65,45 @@ interface PathData {
   lessons: LessonNodeDisplay[];
 }
 
-const resolveLessonIds = (ref: UnitTopicRef): string[] => {
-  const topic = topicMap.get(ref.topicId);
-  if (ref.lessonIds && ref.lessonIds.length > 0) {
-    return ref.lessonIds;
-  }
-  return topic?.lessons.map((lesson) => lesson.id) ?? [];
-};
-
 const Unit = () => {
   const navigate = useNavigate();
   const params = useParams({ from: '/units/$unitSlug' });
-  const getUnitSlug = (id: string) => id.replace(/^unit-/, '');
-  const getLessonSlug = (id: string) => id.replace(/^lesson-/, '');
-
   const unitSlug = createMemo(() => params().unitSlug);
-  const unit = createMemo(() => curriculumUnits.find((item) => getUnitSlug(item.id) === unitSlug()));
   const { actions, state } = useProgress();
 
-  createEffect(() => {
-    const activeUnit = unit();
-    if (!activeUnit) return;
+  const [unitResource] = createResource(unitSlug, async (slug) => {
+    if (!slug) return undefined;
+    return await fetchUnitBySlug(slug);
+  });
 
-    activeUnit.topics.forEach((topicRef) => {
-      resolveLessonIds(topicRef).forEach((lessonId) => {
-        const lesson = lessonMap.get(lessonId);
-        if (!lesson) return;
-        const tasks = lessonTaskMap.get(lesson.id) ?? [];
-        if (tasks.length === 0) return;
+  const [lessonsResource] = createResource(async () => {
+    return await listLessons();
+  });
+
+  const unitData = createMemo(() => unitResource());
+  const lessonRecords = createMemo(() => lessonsResource() ?? []);
+
+  createEffect(() => {
+    const unit = unitData();
+    const records = lessonRecords();
+    if (!unit || records.length === 0) return;
+
+    unit.topics.forEach((topic) => {
+      topic.lessons.forEach((lessonMeta) => {
+        const record = records.find((entry) => entry._id === lessonMeta._id);
+        const document = record?.published ?? record?.draft;
+        if (!document) return;
+        const lesson = document.lesson;
+        const tasks = buildLessonTasks(lesson);
         actions.ensureTasks(lesson.id, tasks);
       });
     });
   });
 
   const pathData = createMemo<PathData>(() => {
-    const activeUnit = unit();
-    if (!activeUnit) {
+    const unit = unitData();
+    const records = lessonRecords();
+    if (!unit) {
       return { topics: [], lessons: [] };
     }
 
@@ -108,23 +111,35 @@ const Unit = () => {
     const lessons: LessonNodeDisplay[] = [];
     let previousComplete = true;
 
-    activeUnit.topics.forEach((topicRef, topicIndex) => {
-      const topic = topicMap.get(topicRef.topicId);
-      const topicId = topic?.id ?? topicRef.topicId;
-      const topicTitle = topic?.title ?? 'Topic in development';
-      const topicOverview = topic?.overview;
-      const lessonIds = resolveLessonIds(topicRef);
-      const entries = lessonIds.length
-        ? lessonIds.map((lessonId, lessonIndex) => ({ lessonId, lessonIndex, lesson: lessonMap.get(lessonId) }))
-        : [{ lessonId: `${topicId}-coming-soon`, lessonIndex: 0, lesson: undefined }];
-
+    unit.topics.forEach((topic, topicIndex) => {
+      const topicLessons: LessonNodeDisplay[] = [];
       let topicComplete = true;
-      const lessonDisplays: LessonNodeDisplay[] = [];
 
-      entries.forEach((entry) => {
-        const lesson = entry.lesson;
-        const lessonId = entry.lessonId;
-        const tasks = lesson ? lessonTaskMap.get(lesson.id) ?? [] : [];
+      const topicRecords = topic.lessons.length
+        ? topic.lessons.map((meta, lessonIndex) => {
+            const record = records.find((entry) => entry._id === meta._id);
+            return { meta, record, lessonIndex };
+          })
+        : [
+            {
+              meta: {
+                _id: `${topic._id}-coming-soon`,
+                slug: `${topic._id}-coming-soon`,
+                title: 'Coming soon',
+                summary: undefined,
+                status: 'draft',
+                updatedAt: Date.now(),
+              },
+              record: undefined,
+              lessonIndex: 0,
+            },
+          ];
+
+      topicRecords.forEach(({ meta, record, lessonIndex }) => {
+        const document = record?.published ?? record?.draft;
+        const lesson = document?.lesson;
+        const lessonId = lesson?.id ?? `${meta.slug}-draft`;
+        const tasks = lesson ? buildLessonTasks(lesson) : [];
         const progress = lesson ? state.lessons[lesson.id] : undefined;
         const orderedTaskIds = lesson
           ? progress?.orderedTaskIds ?? tasks.map((task) => task.id)
@@ -152,42 +167,41 @@ const Unit = () => {
           ? 'in-progress'
           : 'ready';
 
-        const display: LessonNodeDisplay = {
+        const node: LessonNodeDisplay = {
           id: lessonId,
+          slug: meta.slug,
           lesson,
-          title: lesson?.title ?? 'Coming soon',
-          summary: lesson?.summary,
+          title: meta.title ?? lesson?.title ?? 'Coming soon',
+          summary: meta.summary ?? lesson?.summary,
           material: lesson ? materialNameMap.get(lesson.primaryMaterialId) ?? lesson.primaryMaterialId : undefined,
           locked,
           status,
           completedTasks,
           totalTasks,
           estimatedDurationMinutes: lesson?.estimatedDurationMinutes,
-          topicId,
-          topicTitle,
+          topicId: topic._id,
+          topicTitle: topic.title,
           topicIndex,
-          lessonIndex: entry.lessonIndex,
+          lessonIndex,
         };
 
-        lessonDisplays.push(display);
+        topicLessons.push(node);
+        lessons.push(node);
         if (!isComplete) {
           topicComplete = false;
         }
         previousComplete = previousComplete && isComplete;
       });
 
-      const topicDisplay: TopicDisplay = {
-        id: topicId,
+      topics.push({
+        id: topic._id,
         index: topicIndex,
-        title: topicTitle,
-        overview: topicOverview,
-        locked: lessonDisplays[0]?.locked ?? !previousComplete,
+        title: topic.title,
+        overview: topic.overview,
+        locked: topicLessons[0]?.locked ?? true,
         complete: topicComplete,
-        lessons: lessonDisplays,
-      };
-
-      topics.push(topicDisplay);
-      lessons.push(...lessonDisplays);
+        lessons: topicLessons,
+      });
     });
 
     return { topics, lessons };
@@ -195,280 +209,138 @@ const Unit = () => {
 
   const playableLessons = createMemo(() => pathData().lessons.filter((lesson) => Boolean(lesson.lesson)));
   const allLessons = createMemo(() => pathData().lessons);
-
-  const groupedLessons = createMemo(() => {
-    const map = new Map<string, LessonNodeDisplay[]>();
-    allLessons().forEach((lesson) => {
-      const list = map.get(lesson.topicId) ?? [];
-      list.push(lesson);
-      map.set(lesson.topicId, list);
-    });
-    return map;
-  });
-
-  const overallProgress = createMemo(() => {
-    const lessons = playableLessons();
-    const completed = lessons.filter((lesson) => lesson.status === 'completed').length;
-    return { completed, total: lessons.length };
-  });
-
-  const nextLesson = createMemo(() => {
-    const lessons = playableLessons();
-    if (!lessons.length) return undefined;
-    const firstPending = lessons.find((lesson) => lesson.status !== 'completed');
-    if (firstPending) {
-      return firstPending;
-    }
-    return lessons[lessons.length - 1];
-  });
-
-  const canContinue = createMemo(() => {
-    const lesson = nextLesson();
-    if (!lesson || lesson.locked || lesson.status === 'coming-soon') return false;
-    return Boolean(lesson.lesson);
-  });
-
-  const heroButtonLabel = createMemo(() => {
-    if (overallProgress().total === 0) return 'Lessons coming soon';
-    if (!nextLesson() || !nextLesson()!.lesson) return 'Lessons coming soon';
-    if (overallProgress().completed === overallProgress().total) return 'Review lessons';
-    return nextLesson()!.status === 'in-progress' ? 'Resume lesson' : 'Continue lesson';
-  });
-
-  const focusTopicIndex = createMemo(() => {
-    const topics = pathData().topics;
-    for (const topic of topics) {
-      const lessonsInTopic = groupedLessons().get(topic.id) ?? [];
-      const firstIncomplete = lessonsInTopic.find((lesson) => lesson.status !== 'completed');
-      if (firstIncomplete) return topic.index;
-    }
-    return topics.length ? topics[topics.length - 1].index : -1;
-  });
-
-  const topicGroups = createMemo(() =>
-    pathData().topics.map((topic) => ({ topic, lessons: groupedLessons().get(topic.id) ?? [] })),
+  const completedLessonCount = createMemo(() =>
+    playableLessons().filter((lesson) => lesson.status === 'completed').length,
   );
 
-  const activeLessonId = createMemo(() => nextLesson()?.id);
-
-  const handleLessonNavigate = (lesson: LessonNodeDisplay) => {
-    if (lesson.locked || lesson.status === 'coming-soon' || !lesson.lesson) return;
+  const handleStartLesson = (lesson: LessonNodeDisplay) => {
+    if (!lesson.lesson) return;
+    const slug = unitSlug();
+    if (!slug) return;
     void navigate({
       to: '/units/$unitSlug/lessons/$lessonSlug',
-      params: { unitSlug: unitSlug(), lessonSlug: getLessonSlug(lesson.lesson.id) },
+      params: { unitSlug: slug, lessonSlug: lesson.slug },
     });
   };
 
-  const handleContinue = () => {
-    const target = nextLesson();
-    if (!target) return;
-    handleLessonNavigate(target);
-  };
-
-  if (!unit()) {
-    return (
-      <PageSection class="pt-12">
-        <Card class="space-y-4 text-center">
-          <p class="text-lg font-semibold">We could not find that unit.</p>
-          <Button
-            variant="secondary"
-            size="compact"
-            iconPosition="left"
-            icon={<span aria-hidden>←</span>}
-            onClick={() => void navigate({ to: '/' })}
-          >
-            Back to units
-          </Button>
-        </Card>
-      </PageSection>
-    );
-  }
-
-  const activeUnit = unit()!;
   return (
-    <div class="space-y-8 pb-12">
-      <PageSection class="pt-8">
-        <Card variant="floating" class="space-y-6">
-          <div class="flex flex-wrap items-end justify-between gap-6">
-            <div class="space-y-3">
-              <h1 class="text-4xl font-semibold leading-tight">{activeUnit.name}</h1>
-              <p class="max-w-2xl text-lg text-subtle">{activeUnit.summary}</p>
-              <div class="flex items-center gap-3 text-sm text-subtle">
-                <span>
-                  Lessons {overallProgress().completed}/{Math.max(overallProgress().total, 1)}
-                </span>
-                <ProgressDots total={Math.max(overallProgress().total, 1)} completed={overallProgress().completed} />
-              </div>
-            </div>
-            <Show when={nextLesson()?.lesson}>
-              <div class="rounded-[var(--radius-lg)] bg-[rgba(233,245,251,0.68)] px-4 py-3 text-sm text-[color:var(--color-heading)] shadow-ambient">
-                <p class="text-xs font-semibold uppercase tracking-wide text-label-soft">Next up</p>
-                <p class="text-base font-semibold">{nextLesson()!.lesson!.title}</p>
-              </div>
-            </Show>
-          </div>
-          <div class="flex flex-wrap items-center gap-3">
-            <Button onClick={handleContinue} disabled={!canContinue()} icon={<span aria-hidden>&gt;</span>}>
-              {heroButtonLabel()}
-            </Button>
-            <Show when={!canContinue()}>
-              <span class="text-sm text-subtle">
-                {overallProgress().total === 0
-                  ? 'Lessons for this unit are in development.'
-                  : 'Finish current lessons to unlock the next step.'}
-              </span>
-            </Show>
-          </div>
-        </Card>
-      </PageSection>
+    <div class="min-h-screen bg-shell px-4 pb-16 pt-16">
+      <PageSection class="mx-auto flex w-full max-w-5xl flex-col gap-6">
+        <Show when={unitData()} fallback={<Card class="p-6 text-center text-muted">Loading unit…</Card>}>
+          {(unit) => (
+            <>
+              <header class="space-y-3">
+                <Chip tone="primary" size="sm">
+                  Learning path
+                </Chip>
+                <h1 class="text-3xl font-semibold leading-tight">{unit().title}</h1>
+                <p class="text-muted text-base">{unit().summary ?? 'Expand this unit in the authoring tool to add a description.'}</p>
+              </header>
 
-      <PageSection class="pt-2 pb-6">
-        <div class="space-y-6">
-          <For each={topicGroups()}>
-            {(group) => (
-              <TopicJourneyCard
-                topic={group.topic}
-                lessons={group.lessons}
-                activeLessonId={activeLessonId()}
-                isActive={group.topic.index === focusTopicIndex()}
-                onSelectLesson={handleLessonNavigate}
-              />
-            )}
-          </For>
-        </div>
+              <section class="grid gap-4 md:grid-cols-2">
+                <Card variant="soft" class="space-y-3 p-4">
+                  <h2 class="text-sm font-semibold uppercase tracking-wide text-muted">Progress</h2>
+                  <div class="flex items-center gap-3">
+                    <ProgressDots
+                      total={allLessons().length}
+                      completed={completedLessonCount()}
+                    />
+                    <span class="text-sm text-muted">
+                      {completedLessonCount()}/{playableLessons().length} lessons completed
+                    </span>
+                  </div>
+                </Card>
+
+                <Card variant="soft" class="space-y-3 p-4">
+                  <h2 class="text-sm font-semibold uppercase tracking-wide text-muted">Lessons</h2>
+                  <div class="space-y-2">
+                    <For each={playableLessons()}>
+                      {(lesson) => (
+                        <div class="flex items-center justify-between rounded-md border border-[rgba(64,157,233,0.2)] bg-white px-3 py-2 text-sm shadow-sm">
+                          <div class="flex flex-col">
+                            <span class="font-medium">{lesson.title}</span>
+                            <span class="text-xs text-muted">
+                              {lesson.material ?? 'Material TBD'} · {lesson.estimatedDurationMinutes ?? 15} min
+                            </span>
+                          </div>
+                          <Chip tone={lessonStatusTone[lesson.status]} size="sm">
+                            {lessonStatusLabel[lesson.status]}
+                          </Chip>
+                        </div>
+                      )}
+                    </For>
+                    <Show when={playableLessons().length === 0}>
+                      <p class="text-xs text-muted">Add lessons in the editor to populate this unit.</p>
+                    </Show>
+                  </div>
+                </Card>
+              </section>
+
+              <section class="space-y-6">
+                <For each={pathData().topics}>
+                  {(topic) => (
+                    <Card variant="floating" class="space-y-4 p-5">
+                      <header class="space-y-2">
+                        <div class="flex items-center justify-between">
+                          <h2 class="text-2xl font-semibold">{topic.title}</h2>
+                          <Chip tone={topic.complete ? 'green' : 'primary'} size="sm">
+                            {topic.complete ? 'Complete' : topic.locked ? 'Locked' : 'In progress'}
+                          </Chip>
+                        </div>
+                        <p class="text-muted text-sm">{topic.overview ?? 'Describe this topic in the editor.'}</p>
+                      </header>
+
+                      <div class="space-y-3">
+                        <For each={topic.lessons}>
+                          {(lesson) => (
+                            <div class="flex flex-wrap items-center justify-between gap-3 rounded-md border border-[rgba(64,157,233,0.2)] bg-white px-3 py-3 text-sm shadow-sm">
+                              <div class="flex-1 min-w-[200px]">
+                                <p class="font-medium">{lesson.title}</p>
+                                <p class="text-xs text-muted">
+                                  {lesson.summary ?? 'Add a summary to this lesson in the editor.'}
+                                </p>
+                                <Show when={lesson.totalTasks > 0}>
+                                  <p class="text-xs text-muted mt-1">
+                                    {lesson.completedTasks}/{lesson.totalTasks} tasks completed
+                                  </p>
+                                </Show>
+                              </div>
+                              <div class="flex items-center gap-2">
+                                <Chip tone={lessonStatusTone[lesson.status]} size="sm">
+                                  {lessonStatusLabel[lesson.status]}
+                                </Chip>
+                                <Button
+                                  variant="primary"
+                                  size="compact"
+                                  disabled={lesson.locked || !lesson.lesson}
+                                  onClick={() => handleStartLesson(lesson)}
+                                >
+                                  {lesson.locked
+                                    ? 'Locked'
+                                    : lesson.status === 'in-progress'
+                                    ? 'Resume'
+                                    : lesson.status === 'completed'
+                                    ? 'Review'
+                                    : 'Start lesson'}
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+                        </For>
+                      </div>
+                    </Card>
+                  )}
+                </For>
+                <Show when={pathData().topics.length === 0}>
+                  <Card class="p-6 text-center text-muted">No topics yet. Add topics to this unit in the editor.</Card>
+                </Show>
+              </section>
+            </>
+          )}
+        </Show>
       </PageSection>
     </div>
   );
 };
 
 export default Unit;
-
-interface TopicJourneyCardProps {
-  topic: TopicDisplay;
-  lessons: LessonNodeDisplay[];
-  activeLessonId?: string;
-  isActive: boolean;
-  onSelectLesson: (lesson: LessonNodeDisplay) => void;
-}
-
-const TopicJourneyCard = (props: TopicJourneyCardProps) => {
-  const visibleLessons = createMemo(() => props.lessons.filter((lesson) => Boolean(lesson.lesson)));
-  const completedCount = () => visibleLessons().filter((lesson) => lesson.status === 'completed').length;
-  const lessonSummary = () => {
-    if (visibleLessons().length === 0) return 'Lessons coming soon';
-    if (completedCount() === visibleLessons().length) return 'All lessons complete!';
-    return `${completedCount()}/${visibleLessons().length} lessons finished`;
-  };
-
-  return (
-    <section class={`topic-journey-card ${props.isActive ? 'topic-journey-card--active' : ''}`}>
-      <div class="topic-journey-grid">
-        <aside class="topic-journey-info">
-          <Chip tone={props.topic.complete ? 'green' : props.topic.locked ? 'neutral' : 'primary'} size="sm">
-            Topic {props.topic.index + 1}
-          </Chip>
-          <h2 class="topic-journey-title">{props.topic.title}</h2>
-          <Show when={props.topic.overview}>
-            <p class="topic-journey-overview">{props.topic.overview}</p>
-          </Show>
-          <p class="topic-journey-count">{lessonSummary()}</p>
-        </aside>
-        <div class="topic-journey-lessons">
-          <Show
-            when={visibleLessons().length > 0}
-            fallback={<div class="topic-journey-placeholder">Lessons for this topic are in development.</div>}
-          >
-            <For each={visibleLessons()}>
-              {(lesson) => (
-                <LessonJourneyNode
-                  lesson={lesson}
-                  isActive={props.activeLessonId === lesson.id}
-                  onSelect={props.onSelectLesson}
-                />
-              )}
-            </For>
-          </Show>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-interface LessonJourneyNodeProps {
-  lesson: LessonNodeDisplay;
-  isActive: boolean;
-  onSelect: (lesson: LessonNodeDisplay) => void;
-}
-
-const LessonJourneyNode = (props: LessonJourneyNodeProps) => {
-  const { lesson } = props;
-  const disabled = lesson.locked || lesson.status === 'coming-soon' || !lesson.lesson;
-  const statusTone = lessonStatusTone[lesson.status];
-  const nodeClass = () => {
-    const classes = ['journey-card'];
-    if (lesson.status === 'completed') classes.push('journey-card--completed');
-    if (lesson.status === 'in-progress' || props.isActive) classes.push('journey-card--active');
-    if (disabled) classes.push('journey-card--disabled');
-    return classes.join(' ');
-  };
-
-  const handleSelect = () => {
-    if (disabled) return;
-    props.onSelect(lesson);
-  };
-
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (disabled) return;
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      props.onSelect(lesson);
-    }
-  };
-
-  return (
-    <div class="lesson-journey-item">
-      <div
-        class={nodeClass()}
-        role="button"
-        tabIndex={disabled ? -1 : 0}
-        aria-disabled={disabled ? 'true' : 'false'}
-        onClick={handleSelect}
-        onKeyDown={handleKeyDown}
-      >
-        <div class="journey-status">
-          <Chip tone={statusTone} size="sm">
-            {lessonStatusLabel[lesson.status]}
-          </Chip>
-          <span class="journey-topic-label">{lesson.topicTitle}</span>
-        </div>
-        <div class="journey-content">
-          <h3 class="journey-title">{lesson.title}</h3>
-          <Show when={lesson.summary}>
-            <p class="journey-summary">{lesson.summary}</p>
-          </Show>
-          <div class="journey-meta">
-            <Show when={lesson.material && lesson.status !== 'coming-soon'}>
-              <span class="journey-material-label">{lesson.material}</span>
-            </Show>
-            <span class="journey-progress">
-              {lesson.totalTasks ? `${lesson.completedTasks}/${lesson.totalTasks} steps` : 'Steps coming soon'}
-            </span>
-          </div>
-        </div>
-        <div class="journey-cta">
-          <Button
-            variant={lesson.status === 'completed' ? 'secondary' : 'primary'}
-            size="compact"
-            disabled={disabled}
-            onClick={(event) => {
-              event.stopPropagation();
-              handleSelect();
-            }}
-          >
-            {lesson.status === 'completed' ? 'Review' : lesson.status === 'in-progress' ? 'Resume' : 'Start'}
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};

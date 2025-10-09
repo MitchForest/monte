@@ -6,8 +6,8 @@ import mp3Duration from 'mp3-duration';
 import OpenAI from 'openai';
 import { config as loadEnv } from 'dotenv';
 
-import { curriculumLessons } from '../lessons';
-import type { LessonSegment, PresentationScript, PresentationAction } from '../types';
+import { loadLessonDocuments } from './utils/loadLessons';
+import type { LessonDocument, LessonSegment, PresentationScript, PresentationAction } from '../types';
 import {
   generateGoldenBeadScenario,
   generateStampGameScenario,
@@ -46,10 +46,12 @@ const defaultScenarioSeeds: Record<string, number> = {
   'presentation-stamp-game': 202502,
 };
 
-const collectPresentationSegments = (): PresentationSegmentInfo[] => {
+const collectPresentationSegments = (documents: LessonDocument[]): PresentationSegmentInfo[] => {
   const unique = new Map<string, PresentationSegmentInfo>();
 
-  for (const lesson of curriculumLessons) {
+  for (const document of documents) {
+    const lesson = document.lesson;
+
     for (const segment of lesson.segments) {
       if (segment.type !== 'presentation') continue;
       if (unique.has(segment.id)) continue;
@@ -217,7 +219,8 @@ const writeNarrationAssets = async (info: PresentationSegmentInfo) => {
 };
 
 const run = async () => {
-  const segments = collectPresentationSegments();
+  const documents = await loadLessonDocuments();
+  const segments = collectPresentationSegments(documents);
   if (segments.length === 0) {
     console.log('No presentation segments discovered. Nothing to do.');
     return;

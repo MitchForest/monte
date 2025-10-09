@@ -4,6 +4,7 @@ import type {
   PracticePassCriteria,
   PracticeQuestion,
   PresentationAction,
+  PresentationActionInput,
   PresentationScript,
 } from '../types';
 
@@ -187,12 +188,21 @@ export const generateStampGameScenario = (seed?: number): StampGameScenario => {
 
 const formatNumber = (value: number) => value.toLocaleString();
 
+const withActionIds = (
+  actions: readonly PresentationActionInput[],
+  prefix: string,
+): PresentationAction[] =>
+  actions.map((action, index) => ({
+    id: `${prefix}-${index + 1}`,
+    ...action,
+  }));
+
 export const buildGoldenBeadPresentationScript = (scenario: GoldenBeadScenario): PresentationScript => {
-  const { digits, multiplier, unitRemainder, unitCarry, tensRemainder, tensCarry, hundredsRemainder, hundredsCarry, product } = scenario;
+  const { digits, multiplier, unitTotal, unitRemainder, unitCarry, tensTotal, tensRemainder, tensCarry, hundredsTotal, hundredsRemainder, hundredsCarry, product } = scenario;
   const multiplicandStr = formatNumber(scenario.multiplicand);
   const multiplierStr = multiplier.toString();
 
-  const actions: PresentationAction[] = [
+  const actionInputs = [
     // Action 1: Write problem on paper (handwritten style font) to the side: 2344 x 3
     { type: 'showCard', card: `${multiplicandStr} × ${multiplierStr}`, position: 'paper' },
     { type: 'narrate', text: `We will multiply ${multiplicandStr} by ${multiplierStr} using golden beads.` },
@@ -225,27 +235,54 @@ export const buildGoldenBeadPresentationScript = (scenario: GoldenBeadScenario):
     { type: 'narrate', text: 'Lay a yellow ribbon beneath to signal multiplication.' },
     { type: 'highlight', target: 'multiplication-ribbon', text: 'Place ribbon' },
 
-    // Actions 15-16: Combine singles, exchange, and place the units result card
-    { type: 'narrate', text: 'Gather all single unit beads to add them together and exchange groups of ten.' },
-    { type: 'exchange', from: 'unit', to: 'ten', quantity: 10, remainder: unitRemainder },
-    { type: 'writeResult', value: `${unitRemainder} units remain and ${unitCarry} ten is carried.` },
+    // UNIT EXCHANGE - Step by step
+    { type: 'narrate', text: 'Move all unit beads below the yellow line.' },
+    { type: 'moveBeadsBelowLine', place: 'unit', totalCount: unitTotal },
+    
+    { type: 'narrate', text: 'Group the units into sets of ten.' },
+    { type: 'groupForExchange', place: 'unit', groupsOfTen: unitCarry, remainder: unitRemainder },
+    
+    { type: 'narrate', text: `Exchange ${unitCarry === 1 ? 'this group of 10 units' : `${unitCarry} groups of 10 units`} for ${unitCarry === 1 ? 'a ten bar' : `${unitCarry} ten bars`}.` },
+    { type: 'exchangeBeads', from: 'unit', to: 'ten', groupsOfTen: unitCarry },
+    
+    { type: 'narrate', text: `${unitRemainder} units remain.` },
+    { type: 'placeResultCard', place: 'unit', value: unitRemainder },
     { type: 'showCard', card: `${unitRemainder}`, position: 'paper' },
 
-    // Repeat for tens and hundreds
-    { type: 'narrate', text: 'Gather the tens and exchange groups of ten tens for hundreds.' },
-    { type: 'exchange', from: 'ten', to: 'hundred', quantity: 10, remainder: tensRemainder },
-    { type: 'writeResult', value: `${tensRemainder} tens remain and ${tensCarry} hundred is carried.` },
+    // TEN EXCHANGE - Step by step
+    { type: 'narrate', text: 'Move all ten bars below the yellow line.' },
+    { type: 'moveBeadsBelowLine', place: 'ten', totalCount: tensTotal },
+    
+    { type: 'narrate', text: 'Group the tens into sets of ten.' },
+    { type: 'groupForExchange', place: 'ten', groupsOfTen: tensCarry, remainder: tensRemainder },
+    
+    { type: 'narrate', text: `Exchange ${tensCarry === 1 ? 'this group of 10 tens' : `${tensCarry} groups of 10 tens`} for ${tensCarry === 1 ? 'a hundred square' : `${tensCarry} hundred squares`}.` },
+    { type: 'exchangeBeads', from: 'ten', to: 'hundred', groupsOfTen: tensCarry },
+    
+    { type: 'narrate', text: `${tensRemainder} tens remain.` },
+    { type: 'placeResultCard', place: 'ten', value: tensRemainder },
 
-    { type: 'narrate', text: 'Gather the hundreds and exchange ten hundreds for thousands.' },
-    { type: 'exchange', from: 'hundred', to: 'thousand', quantity: 10, remainder: hundredsRemainder },
-    { type: 'writeResult', value: `${hundredsRemainder} hundreds remain and ${hundredsCarry} thousand is carried.` },
+    // HUNDRED EXCHANGE - Step by step
+    { type: 'narrate', text: 'Move all hundred squares below the yellow line.' },
+    { type: 'moveBeadsBelowLine', place: 'hundred', totalCount: hundredsTotal },
+    
+    { type: 'narrate', text: 'Group the hundreds into sets of ten.' },
+    { type: 'groupForExchange', place: 'hundred', groupsOfTen: hundredsCarry, remainder: hundredsRemainder },
+    
+    { type: 'narrate', text: `Exchange ${hundredsCarry === 1 ? 'this group of 10 hundreds' : `${hundredsCarry} groups of 10 hundreds`} for ${hundredsCarry === 1 ? 'a thousand cube' : `${hundredsCarry} thousand cubes`}.` },
+    { type: 'exchangeBeads', from: 'hundred', to: 'thousand', groupsOfTen: hundredsCarry },
+    
+    { type: 'narrate', text: `${hundredsRemainder} hundreds remain.` },
+    { type: 'placeResultCard', place: 'hundred', value: hundredsRemainder },
 
     // Final stacking and product
     { type: 'narrate', text: 'Stack each place value to read the product.' },
     { type: 'stackPlaceValues', order: ['thousand', 'hundred', 'ten', 'unit'] },
     { type: 'writeResult', value: formatNumber(product) },
     { type: 'narrate', text: `${multiplicandStr} multiplied by ${multiplierStr} equals ${formatNumber(product)}.` },
-  ];
+  ] satisfies PresentationActionInput[];
+
+  const actions = withActionIds(actionInputs, 'presentation.multiplication.goldenBeads');
 
   return {
     id: 'presentation.multiplication.goldenBeads',
@@ -260,7 +297,7 @@ export const buildStampGamePresentationScript = (scenario: StampGameScenario): P
   const multiplicandStr = formatNumber(scenario.multiplicand);
   const multiplierStr = multiplier.toString();
 
-  const actions: PresentationAction[] = [
+  const actionInputs = [
     { type: 'narrate', text: `Let us multiply ${multiplicandStr} by ${multiplierStr} using the stamp game.` },
     { type: 'showCard', card: multiplicandStr, position: 'paper' },
     { type: 'showCard', card: multiplierStr, position: 'multiplier' },
@@ -272,10 +309,12 @@ export const buildStampGamePresentationScript = (scenario: StampGameScenario): P
     { type: 'duplicateTray', count: multiplier },
     { type: 'narrate', text: 'Gather the tiles and make exchanges: ten greens become a blue, ten blues become a red.' },
     { type: 'exchange', from: 'unit', to: 'ten', quantity: 10, remainder: unitsRemainder },
-      { type: 'exchange', from: 'ten', to: 'hundred', quantity: 10, remainder: tensRemainder },
-      { type: 'countTotal', value: formatNumber(product) },
+    { type: 'exchange', from: 'ten', to: 'hundred', quantity: 10, remainder: tensRemainder },
+    { type: 'countTotal', value: formatNumber(product) },
     { type: 'narrate', text: `${multiplicandStr} times ${multiplierStr} equals ${formatNumber(product)}.` },
-  ];
+  ] satisfies PresentationActionInput[];
+
+  const actions = withActionIds(actionInputs, 'presentation.multiplication.stampGame');
 
   return {
     id: 'presentation.multiplication.stampGame',

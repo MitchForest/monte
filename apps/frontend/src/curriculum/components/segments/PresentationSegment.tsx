@@ -1,9 +1,11 @@
-import { For, Show, batch, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
+import { For, Show, batch, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
+import { Motion } from 'solid-motionone';
 
 import type { PlayerStatus } from '../../machines/lessonPlayer';
+import type { DemoEventRecorder } from '../../analytics/events';
 import type { LessonSegment, PresentationAction, PresentationScript } from '../../types';
-import { Button, Card, Chip } from '../../../design-system';
+import { Card } from '../../../design-system';
 import {
   NumberCard,
   GoldenBeadUnit,
@@ -12,7 +14,6 @@ import {
   GoldenBeadThousand,
   StampTile,
   YellowRibbon,
-  PaperNote,
 } from '../materials';
 
 interface PresentationSegmentProps {
@@ -21,6 +22,14 @@ interface PresentationSegmentProps {
   playerStatus: PlayerStatus;
   onAutoAdvance: () => void;
   script: PresentationScript;
+  audioSrc?: string;
+  captionSrc?: string;
+  recordEvent?: DemoEventRecorder;
+  onNarrationChange?: (narration: string, actionIndex: number) => void;
+  onPaperNotesChange?: (notes: string[]) => void;
+  onActionChange?: (currentIndex: number, totalActions: number) => void;
+  onActionSelect?: (handler: (index: number) => void) => void;
+  actionJumpToIndex?: number;
 }
 
 interface BeadToken {
@@ -62,6 +71,23 @@ interface PresentationStageState {
     ten?: { remainder: number; carried: number; to: 'hundred' };
     hundred?: { remainder: number; carried: number; to: 'thousand' };
   };
+  exchangeZone: {
+    unit: BeadToken[];
+    ten: BeadToken[];
+    hundred: BeadToken[];
+    thousand: BeadToken[];
+  };
+  belowLineBeads: {
+    unit: BeadToken[];
+    ten: BeadToken[];
+    hundred: BeadToken[];
+  };
+  exchangeResultCards: {
+    unit?: number;
+    ten?: number;
+    hundred?: number;
+    thousand?: number;
+  };
   finalStackOrder: ('thousand' | 'hundred' | 'ten' | 'unit')[];
   finalProduct?: string;
   nextTokenId: number;
@@ -92,6 +118,18 @@ const createInitialState = (): PresentationStageState => ({
   ribbonVisible: false,
   activeMaterial: undefined,
   exchangeBoards: {},
+  exchangeZone: {
+    unit: [],
+    ten: [],
+    hundred: [],
+    thousand: [],
+  },
+  belowLineBeads: {
+    unit: [],
+    ten: [],
+    hundred: [],
+  },
+  exchangeResultCards: {},
   finalStackOrder: [],
   finalProduct: undefined,
   nextTokenId: 0,
@@ -113,10 +151,31 @@ const AUTO_STEP_DELAY_MS = 3200;
 export const PresentationSegment = (props: PresentationSegmentProps) => {
   const script = createMemo(() => props.script);
 
+  createEffect(() => {
+    void props.segment.id; // Track segment changes
+    setHasPlayedAudio(false);
+    if (audioElement) {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+    }
+  });
+
+  createEffect(() => {
+    if (!audioElement || !props.audioSrc) return;
+    if (props.playerStatus === 'playing') {
+      void audioElement.play().catch(() => undefined);
+    }
+    if (props.playerStatus === 'paused' || props.playerStatus === 'idle') {
+      audioElement.pause();
+    }
+  });
+
   const [stage, setStage] = createStore(createInitialState());
   const [activeIndex, setActiveIndex] = createSignal(0);
   const [appliedCount, setAppliedCount] = createSignal(0);
   const [processedScriptId, setProcessedScriptId] = createSignal<string | undefined>(undefined);
+  const [hasPlayedAudio, setHasPlayedAudio] = createSignal(false);
+  let audioElement: HTMLAudioElement | undefined;
 
   let timer: number | undefined;
   let completionSignalled = false;
@@ -184,7 +243,11 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   };
 
   const logPaperNote = (text: string) => {
-    setStage('paperNotes', (notes: string[]) => [...notes, text]);
+    setStage('paperNotes', (notes: string[]) => {
+      const updated = [...notes, text];
+      props.onPaperNotesChange?.(updated);
+      return updated;
+    });
   };
 
   const applyAction = (action: PresentationAction) => {
@@ -193,6 +256,7 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
     switch (action.type) {
       case 'narrate':
         setStage('narration', action.text);
+        props.onNarrationChange?.(action.text, activeIndex());
         break;
       case 'showCard': {
         const cardValue = normalizeCardValue(action.card);
@@ -200,8 +264,13 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
           setStage('multiplicandStack', (cards: number[]) => [...cards, cardValue]);
         } else if (action.position === 'multiplier') {
           setStage('multiplierCard', cardValue);
+          // Update paper notes when both multiplicand and multiplier are set
+          const multiplicandTotal = stage.multiplicandStack.reduce((sum: number, val: number) => sum + val, 0);
+          if (multiplicandTotal > 0) {
+            logPaperNote(`${multiplicandTotal.toLocaleString()} × ${cardValue}`);
+          }
         } else if (action.position === 'paper') {
-          setStage('paperNotes', (notes: string[]) => [...notes, action.card]);
+          logPaperNote(action.card);
         }
         break;
       }
@@ -351,15 +420,90 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
       case 'countTotal':
         logPaperNote(`Total: ${action.value}`);
         break;
+      
+      case 'moveBeadsBelowLine': {
+        // Collect all beads of this type from all trays
+        const allBeads: BeadToken[] = [];
+        stage.beadTrays.forEach((tray: BeadTrayTokens) => {
+          allBeads.push(...tray[action.place]);
+        });
+        
+        // Move them to below-line zone
+        setStage('belowLineBeads', action.place, allBeads);
+        
+        // Clear them from trays
+        stage.beadTrays.forEach((_: BeadTrayTokens, trayIndex: number) => {
+          setStage('beadTrays', trayIndex, action.place, []);
+        });
+        
+        setStage('highlight', action.place);
+        break;
+      }
+      
+      case 'groupForExchange': {
+        // Visual grouping happens in render - just update state
+        setStage('highlight', action.place);
+        break;
+      }
+      
+      case 'exchangeBeads': {
+        const beadsToExchange = stage.belowLineBeads[action.from];
+        const groupSize = 10;
+        const totalGroups = action.groupsOfTen;
+        
+        // Remove the beads being exchanged
+        const remainingBeads = beadsToExchange.slice(totalGroups * groupSize);
+        setStage('belowLineBeads', action.from, remainingBeads);
+        
+        // Create new beads in the exchange zone (they'll animate to the top)
+        if (totalGroups > 0) {
+          const newBeads = createBeadTokens(totalGroups);
+          setStage('exchangeZone', action.to, newBeads);
+          
+          // After animation, move them to the first tray
+          setTimeout(() => {
+            ensureBeadTray(1);
+            setStage('beadTrays', 0, action.to, (existing: BeadToken[]) => [...existing, ...newBeads]);
+            setStage('exchangeZone', action.to, []);
+            scheduleBeadSettlement(0, action.to);
+          }, 1000);
+        }
+        
+        setStage('highlight', action.from);
+        break;
+      }
+      
+      case 'placeResultCard': {
+        setStage('exchangeResultCards', action.place, action.value);
+        break;
+      }
     }
   };
 
-  const advanceTo = (index: number) => {
+  // Expose action selection to parent
+  createEffect(() => {
     const scriptValue = script();
-    if (!scriptValue) return;
-    const safeIndex = Math.max(0, Math.min(index, scriptValue.actions.length - 1));
-    setActiveIndex(safeIndex);
-  };
+    const currentIndex = activeIndex();
+    if (scriptValue && props.onActionChange) {
+      props.onActionChange(currentIndex, scriptValue.actions.length);
+    }
+  });
+
+  // Expose handleSelectAction to parent via onActionSelect prop
+  onMount(() => {
+    if (props.onActionSelect) {
+      // Pass our internal handleSelectAction function to the parent
+      props.onActionSelect(handleSelectAction);
+    }
+  });
+
+  // React to external action selection via prop - use untrack to prevent loop
+  createEffect(() => {
+    const jumpIndex = props.actionJumpToIndex;
+    if (jumpIndex !== undefined && jumpIndex >= 0 && jumpIndex !== activeIndex()) {
+      handleSelectAction(jumpIndex);
+    }
+  });
 
   createEffect(() => {
     // Capture all reactive values first to avoid multiple reads
@@ -423,6 +567,11 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
       return;
     }
 
+    // Only advance if playing
+    if (props.playerStatus !== 'playing') {
+      return;
+    }
+
     // Use the captured index value to avoid reactive loop
     timer = window.setTimeout(() => {
       setActiveIndex(currentIndex + 1);
@@ -431,14 +580,10 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
 
   onCleanup(() => {
     clearTimer();
+    if (audioElement) {
+      audioElement.pause();
+    }
   });
-
-  const placeLabels: Record<'thousand' | 'hundred' | 'ten' | 'unit', string> = {
-    thousand: 'Thousands',
-    hundred: 'Hundreds',
-    ten: 'Tens',
-    unit: 'Units',
-  };
 
   const beadVisualFor = (kind: 'thousand' | 'hundred' | 'ten' | 'unit') => {
     switch (kind) {
@@ -461,14 +606,75 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   }) => {
     const resolved = props.tokens ??
       Array.from({ length: Math.max(props.count ?? 0, 0) }, (_, index) => ({ id: -index - 1, fresh: false }));
+    
+    // Determine optimal layout based on quantity and type
+    const getLayout = () => {
+      const count = resolved.length;
+      if (count === 0) return { rows: 1, cols: 0 };
+      
+      // For thousands (cubes): arrange in compact rows
+      if (props.kind === 'thousand') {
+        if (count <= 3) return { rows: 1, cols: count };
+        if (count <= 6) return { rows: 2, cols: 3 };
+        return { rows: 3, cols: Math.ceil(count / 3) };
+      }
+      
+      // For hundreds (squares): arrange in compact rows
+      if (props.kind === 'hundred') {
+        if (count <= 3) return { rows: 1, cols: count };
+        if (count <= 6) return { rows: 2, cols: 3 };
+        if (count <= 9) return { rows: 3, cols: 3 };
+        return { rows: 3, cols: Math.ceil(count / 3) };
+      }
+      
+      // For tens (bars): use compact grid - MUCH better space usage
+      if (props.kind === 'ten') {
+        if (count <= 2) return { rows: 1, cols: count };
+        if (count <= 4) return { rows: 2, cols: 2 };
+        if (count <= 6) return { rows: 2, cols: 3 };
+        if (count <= 9) return { rows: 3, cols: 3 };
+        if (count <= 12) return { rows: 3, cols: 4 };
+        return { rows: 4, cols: Math.ceil(count / 4) };
+      }
+      
+      // For units (single beads): arrange in compact grid
+      if (props.kind === 'unit') {
+        if (count <= 3) return { rows: count, cols: 1 };
+        if (count <= 6) return { rows: 3, cols: 2 };
+        if (count <= 9) return { rows: 3, cols: 3 };
+        return { rows: 4, cols: Math.ceil(count / 4) };
+      }
+      
+      return { rows: 1, cols: count };
+    };
+    
+    const layout = getLayout();
+    
     return (
-      <div class={`presentation-token-stack ${props.highlighted ? 'is-highlighted' : ''}`} data-kind={props.kind}>
-        <Show when={resolved.length > 0} fallback={<span class="presentation-token-placeholder">0</span>}>
+      <div 
+        class={`presentation-token-stack ${props.highlighted ? 'is-highlighted' : ''}`} 
+        data-kind={props.kind}
+        style={{
+          'display': 'grid',
+          'grid-template-columns': `repeat(${layout.cols}, auto)`,
+          'grid-template-rows': `repeat(${layout.rows}, auto)`,
+          'gap': props.kind === 'unit' ? '0.15rem' : props.kind === 'ten' ? '0.25rem' : '0.35rem',
+          'justify-items': 'center',
+          'align-items': 'center',
+        }}
+      >
+        <Show when={resolved.length > 0}>
           <For each={resolved}>
             {(token: BeadToken) => (
-              <div class={`presentation-token ${token.fresh ? 'is-fresh' : ''}`} data-id={token.id}>
+              <Motion.div 
+                class={`presentation-token ${token.fresh ? 'is-fresh' : ''}`} 
+                data-id={token.id}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, easing: 'ease-out' }}
+              >
                 {beadVisualFor(props.kind)}
-              </div>
+              </Motion.div>
             )}
           </For>
         </Show>
@@ -486,7 +692,7 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
       Array.from({ length: Math.max(props.count ?? 0, 0) }, (_, index) => ({ id: -index - 1, fresh: false }));
     return (
       <div class={`presentation-token-stack ${props.highlighted ? 'is-highlighted' : ''}`} data-kind={`stamp-${props.value}`}>
-        <Show when={resolved.length > 0} fallback={<span class="presentation-token-placeholder">0</span>}>
+        <Show when={resolved.length > 0}>
           <For each={resolved}>
             {(token: StampToken) => (
               <div class={`presentation-token ${token.fresh ? 'is-fresh' : ''}`} data-id={token.id}>
@@ -517,10 +723,46 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   // Make this a reactive rendering - inline in JSX instead of function
   const renderGoldenBeadWorkspace = () => {
     const trays = stage.beadTrays;
+    const hasBeadsAboveLine = trays.some((tray: BeadTrayTokens) => 
+      tray.thousand.length > 0 || tray.hundred.length > 0 || tray.ten.length > 0 || tray.unit.length > 0
+    );
+    const hasBeadsBelowLine = 
+      stage.belowLineBeads.unit.length > 0 || 
+      stage.belowLineBeads.ten.length > 0 || 
+      stage.belowLineBeads.hundred.length > 0;
     
     return (
-      <Show when={trays.length > 0}>
+      <Show when={hasBeadsAboveLine || hasBeadsBelowLine}>
         <div class="presentation-bead-workspace">
+          {/* Exchange zone - appears at top when exchanging beads upward */}
+          <Show when={stage.exchangeZone.unit.length > 0 || stage.exchangeZone.ten.length > 0 || stage.exchangeZone.hundred.length > 0 || stage.exchangeZone.thousand.length > 0}>
+            <Motion.div 
+              class="presentation-exchange-zone"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, easing: 'ease-out' }}
+            >
+              <For each={[
+                { key: 'thousand' as const, tokens: stage.exchangeZone.thousand },
+                { key: 'hundred' as const, tokens: stage.exchangeZone.hundred },
+                { key: 'ten' as const, tokens: stage.exchangeZone.ten },
+                { key: 'unit' as const, tokens: stage.exchangeZone.unit },
+              ]}>
+                {(entry: { key: BeadPlace; tokens: BeadToken[] }) => (
+                  <Show when={entry.tokens.length > 0}>
+                    <Motion.div
+                      initial={{ opacity: 0, scale: 0.5, y: 100 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ duration: 0.8, easing: 'ease-out' }}
+                    >
+                      <BeadTokenStack tokens={entry.tokens} kind={entry.key} />
+                    </Motion.div>
+                  </Show>
+                )}
+              </For>
+            </Motion.div>
+          </Show>
+        
           <div class="presentation-bead-tray-collection">
             <For each={trays}>
               {(tray: BeadTrayTokens) => (
@@ -533,9 +775,11 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
                       { key: 'unit' as const, tokens: tray.unit },
                     ]}>
                       {(entry: { key: BeadPlace; tokens: BeadToken[] }) => (
-                        <div class={`presentation-bead-place ${stage.highlight === entry.key ? 'is-highlighted' : ''}`}>
-                          <BeadTokenStack tokens={entry.tokens} kind={entry.key} highlighted={stage.highlight === entry.key} />
-                        </div>
+                        <Show when={entry.tokens.length > 0}>
+                          <div class={`presentation-bead-place ${stage.highlight === entry.key ? 'is-highlighted' : ''}`}>
+                            <BeadTokenStack tokens={entry.tokens} kind={entry.key} highlighted={stage.highlight === entry.key} />
+                          </div>
+                        </Show>
                       )}
                     </For>
                   </div>
@@ -545,28 +789,90 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
           </div>
 
           <Show when={stage.ribbonVisible}>
-            <div class={`presentation-ribbon ${stage.highlight === 'multiplication-ribbon' ? 'is-highlighted' : ''}`}>
-              <YellowRibbon length={trays.length >= 3 ? 'long' : trays.length === 2 ? 'medium' : 'short'} />
-            </div>
+            <Motion.div 
+              class={`presentation-ribbon ${stage.highlight === 'multiplication-ribbon' ? 'is-highlighted' : ''}`}
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: 1, scaleX: 1 }}
+              transition={{ duration: 0.5, easing: 'ease-out' }}
+            >
+              <YellowRibbon length="full" />
+            </Motion.div>
+          </Show>
+
+          {/* Below line exchange area */}
+          <Show when={hasBeadsBelowLine}>
+            <Motion.div 
+              class="presentation-below-line-zone"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, easing: 'ease-out' }}
+            >
+              <For each={[
+                { key: 'unit' as const, tokens: stage.belowLineBeads.unit },
+                { key: 'ten' as const, tokens: stage.belowLineBeads.ten },
+                { key: 'hundred' as const, tokens: stage.belowLineBeads.hundred },
+              ]}>
+                {(entry: { key: 'unit' | 'ten' | 'hundred'; tokens: BeadToken[] }) => (
+                  <Show when={entry.tokens.length > 0}>
+                    <div class="presentation-below-line-group">
+                      <Motion.div
+                        initial={{ opacity: 0, y: -30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, easing: 'ease-out' }}
+                      >
+                        <BeadTokenStack tokens={entry.tokens} kind={entry.key} highlighted={stage.highlight === entry.key} />
+                      </Motion.div>
+                      <Show when={stage.exchangeResultCards[entry.key] !== undefined}>
+                        <Motion.div
+                          class="presentation-result-card"
+                          initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.4, delay: 0.3, easing: 'ease-out' }}
+                        >
+                          <NumberCard value={stage.exchangeResultCards[entry.key] ?? 0} size="sm" />
+                        </Motion.div>
+                      </Show>
+                    </div>
+                  </Show>
+                )}
+              </For>
+            </Motion.div>
           </Show>
 
           <Show when={exchangeEntries().length > 0}>
-            <div class="presentation-exchange-board">
+            <Motion.div 
+              class="presentation-exchange-board"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, easing: 'ease-out' }}
+            >
               <For each={exchangeEntries()}>
                 {(entry: { from: 'unit' | 'ten' | 'hundred'; info: { remainder: number; carried: number; to: 'ten' | 'hundred' | 'thousand' } }) => (
-                  <div class={`presentation-exchange-board__cell ${stage.highlight === entry.from ? 'is-highlighted' : ''}`}>
+                  <Motion.div 
+                    class={`presentation-exchange-board__cell ${stage.highlight === entry.from ? 'is-highlighted' : ''}`}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, delay: 0.2, easing: 'ease-out' }}
+                  >
                     <div class="presentation-exchange-board__group">
+                      <div class="presentation-exchange-label">Remaining:</div>
                       <BeadTokenStack count={entry.info.remainder} kind={entry.from} highlighted={stage.highlight === entry.from} />
                     </div>
                     <Show when={entry.info.carried > 0}>
-                      <div class="presentation-exchange-board__group">
+                      <Motion.div 
+                        class="presentation-exchange-board__group"
+                        initial={{ opacity: 0, x: -30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.5, easing: 'ease-out' }}
+                      >
+                        <div class="presentation-exchange-label">Exchanged:</div>
                         <BeadTokenStack count={entry.info.carried} kind={entry.info.to} />
-                      </div>
+                      </Motion.div>
                     </Show>
-                  </div>
+                  </Motion.div>
                 )}
               </For>
-            </div>
+            </Motion.div>
           </Show>
         </div>
       </Show>
@@ -594,9 +900,6 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
       </div>
     );
   };
-
-  const scriptSummary = () => script()?.summary ?? '';
-  const actions = () => script()?.actions ?? [];
 
   // Allow scrubbing backwards: when user selects an earlier index, reset and re-apply
   const handleSelectAction = (index: number) => {
@@ -631,89 +934,109 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   }
 
   return (
-    <div class="lesson-stage" data-variant="presentation" style={{ position: 'relative' }}>
-      {/* Prominent caption for K-3 learners */}
-      <Show when={stage.narration}>
-        <div class="presentation-caption">
-          {stage.narration}
-        </div>
+    <div class="lesson-stage" data-variant="presentation" style={{ position: 'relative', width: '100%', height: '100%' }}>
+      {/* Hidden audio element for playback control */}
+      <Show when={props.audioSrc}>
+        <audio
+          ref={(element) => {
+            audioElement = element ?? undefined;
+          }}
+          src={props.audioSrc}
+          preload="auto"
+          style={{ display: 'none' }}
+          onPlay={() => {
+            const replay = hasPlayedAudio();
+            if (!replay) {
+              setHasPlayedAudio(true);
+            }
+            props.recordEvent?.({
+              type: 'audio.play',
+              lessonId: props.lessonId,
+              segmentId: props.segment.id,
+              replay,
+            });
+          }}
+          onPause={() => {
+            props.recordEvent?.({
+              type: 'audio.pause',
+              lessonId: props.lessonId,
+              segmentId: props.segment.id,
+            });
+          }}
+          onEnded={() => {
+            props.recordEvent?.({
+              type: 'audio.end',
+              lessonId: props.lessonId,
+              segmentId: props.segment.id,
+            });
+          }}
+          onError={() => {
+            props.recordEvent?.({
+              type: 'audio.error',
+              lessonId: props.lessonId,
+              segmentId: props.segment.id,
+              message: 'Unable to load narration audio.',
+            });
+          }}
+        >
+          <Show when={props.captionSrc}>
+            <track kind="captions" src={props.captionSrc} default />
+          </Show>
+        </audio>
       </Show>
 
-      <div class="lesson-stage__canvas">
-        <div style={{ display: 'flex', 'flex-direction': 'column', 'align-items': 'center', gap: '2rem', width: '100%', 'max-width': '900px', position: 'relative' }}>
-          {/* Paper notes area (handwritten) */}
-          <Show when={stage.paperNotes.length > 0}>
-            <div class="presentation-paper-notes" aria-label="Notes">
-              <For each={stage.paperNotes}>
-                {(note: string) => (
-                  <PaperNote>{note}</PaperNote>
-                )}
-              </For>
-            </div>
-          </Show>
-
-          {/* Show number cards only when they exist */}
+      <div class="lesson-stage__canvas" style={{ padding: '1rem', overflow: 'visible', position: 'relative', height: '100%' }}>
+        <div style={{ display: 'grid', 'grid-template-columns': '1fr auto', 'grid-template-rows': 'auto 1fr', gap: '1rem', width: '100%', height: '100%', overflow: 'visible' }}>
+          
+          {/* Problem cards - TOP RIGHT */}
           <Show when={stage.multiplicandStack.length > 0 || stage.multiplierCard !== undefined}>
-            <div class="presentation-cards-minimal">
-              <Show when={stage.multiplicandStack.length > 0}>
-                <div class="presentation-card-stack">
-                  <For each={stage.multiplicandStack}>
-                    {(card: number, index: () => number) => (
-                      <div class="presentation-card-stack__item" style={{ '--offset': `${index()}` }}>
-                        <NumberCard value={card} size="md" />
-                      </div>
-                    )}
-                  </For>
-                </div>
-              </Show>
-              <Show when={stage.multiplierCard !== undefined}>
-                <div class="presentation-multiplier-minimal">
-                  <NumberCard value={stage.multiplierCard ?? 0} size="md" />
-                </div>
-              </Show>
-            </div>
-          </Show>
-
-          {/* Minimal workspace - materials and workspace */}
-          <div class="presentation-workspace-minimal">
-            <Show when={stage.activeMaterial === 'stamp-game'}>
-              <StampGameWorkspaceVisual />
-            </Show>
-            <Show when={stage.activeMaterial === 'golden-beads'}>
-              {renderGoldenBeadWorkspace()}
-            </Show>
-          </div>
-
-          {/* Show final answer when available */}
-          <Show when={finalProductValue() !== null}>
-            <div class="presentation-answer">
-              <NumberCard value={finalProductValue() ?? 0} size="lg" />
-            </div>
-          </Show>
-
-          {/* Per-action timeline */}
-          <Show when={actions().length > 0}>
-            <div class="presentation-action-timeline" aria-label="Action timeline">
-              <div class="presentation-action-track">
-                <div class="presentation-action-progress" style={{ width: `${(activeIndex() / Math.max(actions().length - 1, 1)) * 100}%` }} />
-                <For each={actions()}>
-                  {(_: PresentationAction, idx: () => number) => {
-                    const position = actions().length <= 1 ? 0 : (idx() / (actions().length - 1)) * 100;
-                    const isCurrent = idx() === activeIndex();
-                    return (
-                      <button
-                        type="button"
-                        class={`presentation-action-dot ${isCurrent ? 'is-active' : ''}`}
-                        style={{ left: `${position}%` }}
-                        aria-label={`Action ${idx() + 1}`}
-                        onClick={() => handleSelectAction(idx())}
-                      />
-                    );
-                  }}
-                </For>
+            <div style={{ 'grid-column': '2', 'grid-row': '1', 'justify-self': 'end', 'align-self': 'start' }}>
+              <div class="presentation-cards-minimal">
+                <Show when={stage.multiplicandStack.length > 0}>
+                  <div class="presentation-card-stack">
+                    <For each={stage.multiplicandStack}>
+                      {(card: number, index: () => number) => (
+                        <div class="presentation-card-stack__item" style={{ '--offset': `${index()}` }}>
+                          <NumberCard value={card} size="md" />
+                        </div>
+                      )}
+                    </For>
+                  </div>
+                </Show>
+                <Show when={stage.multiplierCard !== undefined}>
+                  <div style={{ display: 'flex', 'flex-direction': 'column', gap: '0.25rem', 'align-items': 'flex-end', width: '100%' }}>
+                    <div class="presentation-multiplier-minimal">
+                      <span class="presentation-multiplier-symbol">×</span>
+                      <NumberCard value={stage.multiplierCard ?? 0} size="md" />
+                    </div>
+                    <Show when={stage.multiplicandStack.length > 0}>
+                      <div class="presentation-equation-divider" />
+                    </Show>
+                  </div>
+                </Show>
               </div>
             </div>
           </Show>
+
+          {/* Golden beads workspace - LEFT SIDE, spanning both rows */}
+          <div style={{ 'grid-column': '1', 'grid-row': '1 / 3', display: 'flex', 'flex-direction': 'column', 'justify-content': 'flex-start', 'align-items': 'flex-start', gap: '1rem', 'padding-top': '0.5rem', overflow: 'visible' }}>
+            {/* Minimal workspace - materials and workspace */}
+            <div class="presentation-workspace-minimal" style={{ width: '100%', 'justify-content': 'flex-start' }}>
+              <Show when={stage.activeMaterial === 'stamp-game'}>
+                <StampGameWorkspaceVisual />
+              </Show>
+              <Show when={stage.activeMaterial === 'golden-beads'}>
+                {renderGoldenBeadWorkspace()}
+              </Show>
+            </div>
+
+            {/* Show final answer when available */}
+            <Show when={finalProductValue() !== null}>
+              <div class="presentation-answer" style={{ 'margin-top': 'auto' }}>
+                <NumberCard value={finalProductValue() ?? 0} size="lg" />
+              </div>
+            </Show>
+          </div>
         </div>
       </div>
     </div>

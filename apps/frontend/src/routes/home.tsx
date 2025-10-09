@@ -1,67 +1,62 @@
-import { createMemo } from 'solid-js';
+import { createEffect, createMemo, createResource } from 'solid-js';
 import { useNavigate } from '@tanstack/solid-router';
 
-import { curriculumTopics } from '../curriculum/lessons';
-import { curriculumUnits } from '../curriculum/units';
-import { useProgress } from '../curriculum/state/progress';
+import { fetchCurriculumTree, listLessons } from '../curriculum/api/curriculumClient';
+import { buildLessonTasks } from '../curriculum/utils/lessonTasks';
+import { getLessonTaskStatus, useProgress } from '../curriculum/state/progress';
+import type { Lesson, LessonDocument, LessonTask } from '../curriculum/types';
 import { Button, Card, Chip, PageSection } from '../design-system';
 
 const Home = () => {
   const navigate = useNavigate();
-  const { state } = useProgress();
+  const { state, actions } = useProgress();
 
-  const getUnitSlug = (unitId: string) => unitId.replace(/^unit-/, '');
+  const [treeResource] = createResource(fetchCurriculumTree);
+  const [lessonsResource] = createResource(async () => await listLessons());
 
-  const units = createMemo(() =>
-    curriculumUnits.map((unit) => {
-      const lessonIds = unit.topics.flatMap((topicRef) => {
-        const topic = curriculumTopics.find((item) => item.id === topicRef.topicId);
-        if (!topic) return [] as string[];
-        if (topicRef.lessonIds && topicRef.lessonIds.length > 0) {
-          return topicRef.lessonIds;
-        }
-        return topic.lessons.map((lesson) => lesson.id);
-      });
+  createEffect(() => {
+    const records = lessonsResource();
+    if (!records) return;
+    records.forEach((record) => {
+      const document = (record.published ?? record.draft) as LessonDocument;
+      const lesson = document.lesson;
+      const tasks = buildLessonTasks(lesson);
+      actions.ensureTasks(lesson.id, tasks);
+    });
+  });
 
-      const lessonCount = lessonIds.length;
-      const completedLessons = lessonIds.filter((lessonId) => {
-        const lessonProgress = state.lessons[lessonId];
-        if (!lessonProgress) return false;
-        if (lessonProgress.orderedTaskIds.length === 0) return false;
-        return lessonProgress.orderedTaskIds.every(
-          (taskId) => lessonProgress.tasks[taskId]?.status === 'completed',
-        );
-      }).length;
-
+  const lessonSummaries = createMemo(() => {
+    const records = lessonsResource();
+    if (!records) return [] as LessonSummary[];
+    return records.map((record) => {
+      const document = (record.published ?? record.draft) as LessonDocument;
+      const lesson = document.lesson;
+      const tasks = buildLessonTasks(lesson);
+      const progress = state.lessons[lesson.id];
+      const orderedTaskIds = progress?.orderedTaskIds ?? tasks.map((task) => task.id);
+      const completed = orderedTaskIds.filter(
+        (taskId) => getLessonTaskStatus(state, lesson.id, taskId) === 'completed',
+      ).length;
+      const isComplete = orderedTaskIds.length > 0 && completed === orderedTaskIds.length;
       return {
-        ...unit,
-        lessonIds,
-        lessonCount,
-        completedLessons,
-        slug: getUnitSlug(unit.id),
-      };
-    }),
-  );
+        id: lesson.id,
+        slug: record.slug,
+        lesson,
+        tasks,
+        completed,
+        total: orderedTaskIds.length,
+        isComplete,
+      } satisfies LessonSummary;
+    });
+  });
 
   const summary = createMemo(() => {
-    const lessonProgress = state.lessons;
-    let completedTasks = 0;
-
-    Object.values(lessonProgress).forEach((lessonState) => {
-      if (!lessonState) return;
-      lessonState.orderedTaskIds.forEach((taskId) => {
-        if (lessonState.tasks[taskId]?.status === 'completed') {
-          completedTasks += 1;
-        }
-      });
-    });
-
-    const totalLessons = units().reduce((acc, unit) => acc + unit.lessonCount, 0);
-    const completedLessons = units().reduce((acc, unit) => acc + unit.completedLessons, 0);
-
+    const lessons = lessonSummaries();
+    const totalLessons = lessons.length;
+    const completedLessons = lessons.filter((lesson) => lesson.isComplete).length;
+    const completedTasks = lessons.reduce((acc, lesson) => acc + lesson.completed, 0);
     const xp = completedTasks * 10;
     const streak = Math.min(completedLessons, 7);
-
     return {
       totalLessons,
       completedLessons,
@@ -70,7 +65,11 @@ const Home = () => {
     };
   });
 
-  const nextUnit = createMemo(() => units().find((unit) => unit.completedLessons < unit.lessonCount) ?? units()[0]);
+  const nextUnit = createMemo(() => {
+    const tree = treeResource();
+    if (!tree || tree.length === 0) return undefined;
+    return tree[0];
+  });
 
   const handleContinue = () => {
     const unit = nextUnit();
@@ -86,7 +85,7 @@ const Home = () => {
           class="flex flex-col items-center gap-8 px-6 pb-10 pt-10 text-center sm:px-10"
         >
           <Chip tone="primary" size="sm">
-            Hi Taylor!
+            Welcome back!
           </Chip>
           <div class="space-y-3">
             <h1 class="text-4xl font-semibold leading-tight sm:text-5xl">
@@ -106,10 +105,23 @@ const Home = () => {
           <Button onClick={handleContinue} icon={<span aria-hidden>&gt;</span>}>
             Continue learning
           </Button>
+          <Button variant="secondary" onClick={() => void navigate({ to: '/editor' })}>
+            Open lesson editor
+          </Button>
         </Card>
       </PageSection>
     </div>
   );
 };
+
+interface LessonSummary {
+  id: string;
+  slug: string;
+  lesson: Lesson;
+  tasks: LessonTask[];
+  completed: number;
+  total: number;
+  isComplete: boolean;
+}
 
 export default Home;

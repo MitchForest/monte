@@ -6,6 +6,7 @@ import App from './App';
 const HomeRoute = lazy(() => import('./routes/home'));
 const UnitRoute = lazy(() => import('./routes/unit'));
 const LessonRoute = lazy(() => import('./routes/lesson'));
+const EditorRoute = lazy(() => import('./routes/editor'));
 
 const rootRoute = new RootRoute({
   component: App,
@@ -29,7 +30,13 @@ const lessonRoute = new Route({
   component: () => <LessonRoute />,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, unitRoute, lessonRoute]);
+const editorRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/editor',
+  component: () => <EditorRoute />,
+});
+
+const routeTree = rootRoute.addChildren([indexRoute, unitRoute, lessonRoute, editorRoute]);
 
 export const router = new Router({
   routeTree,
