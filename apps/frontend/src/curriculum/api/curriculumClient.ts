@@ -16,7 +16,46 @@ const client = new ConvexHttpClient(convexUrl);
 
 type SaveLessonDraftArgs = typeof api.curriculum.saveLessonDraft._args;
 
-export const fetchCurriculumTree = async () => {
+export interface CurriculumTreeLesson {
+  _id: Id<'lessons'>;
+  slug: string;
+  order: number;
+  status: 'draft' | 'published';
+  title: string;
+  summary: string;
+  updatedAt: number;
+}
+
+export interface CurriculumTreeTopic {
+  _id: Id<'topics'>;
+  unitId: Id<'units'>;
+  slug: string;
+  title: string;
+  overview?: string;
+  focusSkills: string[];
+  estimatedDurationMinutes?: number;
+  order: number;
+  status: 'active' | 'archived';
+  lessons: CurriculumTreeLesson[];
+}
+
+export interface CurriculumTreeUnit {
+  _id: Id<'units'>;
+  slug: string;
+  title: string;
+  summary?: string;
+  coverImage?: string;
+  order: number;
+  status: 'active' | 'archived';
+  metadata?: Record<string, unknown>;
+  createdAt: number;
+  updatedAt: number;
+  topics: CurriculumTreeTopic[];
+}
+
+export type CurriculumTree = CurriculumTreeUnit[];
+
+export const fetchCurriculumTree = async (): Promise<CurriculumTree> => {
   return await client.query(api.curriculum.listCurriculumTree, {});
 };
 
