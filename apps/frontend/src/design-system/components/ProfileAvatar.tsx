@@ -1,7 +1,14 @@
+import { cva } from 'class-variance-authority';
 import type { Component, JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
-import { cx } from '../utils/cx';
+import { cn } from '../../lib/cn';
+
+const avatarContainer = cva(
+  'relative inline-flex shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.6)] p-1 shadow-ambient',
+);
+
+const statusDot = cva('absolute -bottom-0.5 right-1 h-3.5 w-3.5 rounded-full border-2 border-white');
 
 const buildDicebearUrl = (seed: string, background: string) =>
   `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(seed)}&backgroundColor=${background.replace('#', '')}&radius=50`;
@@ -21,7 +28,7 @@ export const ProfileAvatar: Component<ProfileAvatarProps> = (props) => {
 
   return (
     <span
-      class={cx('relative inline-flex shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.6)] p-1 shadow-ambient', local.class)}
+      class={cn(avatarContainer(), local.class)}
       style={{ width: `${size}px`, height: `${size}px` }}
     >
       <img
@@ -30,10 +37,7 @@ export const ProfileAvatar: Component<ProfileAvatarProps> = (props) => {
         class="h-full w-full rounded-full object-cover"
         {...rest}
       />
-      <span
-        class="absolute -bottom-0.5 right-1 h-3.5 w-3.5 rounded-full border-2 border-white"
-        style={{ background: statusColor }}
-      />
+      <span class={statusDot()} style={{ background: statusColor }} />
     </span>
   );
 };

@@ -1,22 +1,18 @@
 import { For, Show } from 'solid-js';
 
-import type { EditorViewModel } from '../hooks/useEditorViewModel';
-import { curriculumMaterials } from '../../../curriculum/materials';
+import {
+  useEditorActions,
+  useEditorComputed,
+  useEditorForms,
+  useEditorMetaTab,
+} from '../hooks/useEditorViewModel';
+import { curriculumMaterials } from '../../../domains/curriculum/materials';
 import { Button, Card, Chip } from '../../../design-system';
 
-interface MetadataPanelProps {
-  vm: EditorViewModel;
-}
-
-export const MetadataPanel = ({ vm }: MetadataPanelProps) => {
-  const {
-    computed: { units, currentUnit, topics, currentTopic, lessonDocument, currentLessonMeta },
-    forms,
-    metaTab,
-    actions,
-    options: { scenarioKindOptions },
-  } = vm;
-
+export const MetadataPanel = () => {
+  const { units, currentUnit, currentTopic, lessonDocument, currentLessonMeta } = useEditorComputed();
+  const forms = useEditorForms();
+  const metaTab = useEditorMetaTab();
   const {
     handleUnitFormSubmit,
     handleTopicFormSubmit,
@@ -25,7 +21,7 @@ export const MetadataPanel = ({ vm }: MetadataPanelProps) => {
     handleLessonPrimaryMaterialChange,
     handleLessonSkillChange,
     handleLessonMetaChange,
-  } = actions;
+  } = useEditorActions();
 
   const unitForm = forms.unit;
   const topicForm = forms.topic;

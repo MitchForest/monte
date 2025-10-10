@@ -3,7 +3,7 @@ import type {
   LessonDocument,
   PracticeQuestion,
   PresentationAction,
-} from '../../curriculum/types';
+} from '@monte/types';
 import {
   beadPlaceOptions,
   type ActionTypeValue,
@@ -262,6 +262,7 @@ export const createSegment = (
         actions: [createPresentationAction('narrate')],
       },
       scenario: { kind: 'golden-beads', seed: Date.now() },
+      materialBankId: undefined,
     } satisfies PresentationSegmentType;
   }
   if (type === 'guided') {
@@ -276,6 +277,7 @@ export const createSegment = (
       workspace: 'golden-beads',
       steps: [defaultGuidedStep('golden-beads')],
       scenario: { kind: 'golden-beads', seed: Date.now() },
+      materialBankId: undefined,
     };
   }
   return {
@@ -290,6 +292,7 @@ export const createSegment = (
     questions: [defaultPracticeQuestion()],
     passCriteria: { ...defaultPassCriteria },
     scenario: { kind: 'golden-beads', seed: Date.now() },
+    materialBankId: undefined,
   };
 };
 

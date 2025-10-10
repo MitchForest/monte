@@ -1,55 +1,62 @@
 import { For, Show } from 'solid-js';
 
-import type { EditorViewModel } from '../hooks/useEditorViewModel';
+import {
+  useEditorActions,
+  useEditorComputed,
+  useEditorOptions,
+  useEditorSelection,
+} from '../hooks/useEditorViewModel';
 import {
   PresentationActionEditor,
   GuidedStepEditor,
   PracticeSegmentEditor,
 } from './lessonEditors';
 import { Button, Card } from '../../../design-system';
-import { curriculumMaterials } from '../../../curriculum/materials';
+import { curriculumMaterials } from '../../../domains/curriculum/materials';
+import type { LessonSegment, PresentationSegmentType } from '../types';
+import { InventoryPanel } from './InventoryPanel';
+import { LessonInventoryProvider } from '../../../domains/curriculum/inventory/context';
+import { SegmentPreview } from './SegmentPreview';
 
-interface LessonWorkspaceProps {
-  vm: EditorViewModel;
-}
-
-export const LessonWorkspace = ({ vm }: LessonWorkspaceProps) => {
+export const LessonWorkspace = () => {
+  const { lessonDocument, materialInventory, selectedSegment } = useEditorComputed();
+  const { scenarioKindOptions, representationOptions } = useEditorOptions();
   const {
-    computed: { lessonDocument },
-    options: { scenarioKindOptions, representationOptions },
-    actions: {
-      handleLessonMaterialChange,
-      handleAddLessonMaterial,
-      handleRemoveLessonMaterial,
-      handleDocumentScenarioUpdate,
-      handleAddSegment,
-      handleRemoveSegment,
-      handleMoveSegment,
-      handleSegmentTitleChange,
-      handleSegmentRepresentationChange,
-      handleSegmentSkillsChange,
-      handleSegmentScenarioUpdate,
-      handleSegmentMaterialChange,
-      handleAddSegmentMaterial,
-      handleRemoveSegmentMaterial,
-      handleActionTypeChange,
-      handleMoveAction,
-      handleRemoveAction,
-      handleAddAction,
-      handleUpdateAction,
-      handleGuidedStepChange,
-      handleRemoveGuidedStep,
-      handleAddGuidedStep,
-      handleMoveGuidedStep,
-      handlePracticeQuestionChange,
-      handleRemovePracticeQuestion,
-      handleAddPracticeQuestion,
-      handleMovePracticeQuestion,
-      handlePassCriteriaChange,
-      handleGuidedWorkspaceChange,
-      handlePracticeWorkspaceChange,
-    },
-  } = vm;
+    handleLessonMaterialChange,
+    handleAddLessonMaterial,
+    handleRemoveLessonMaterial,
+    handleDocumentScenarioUpdate,
+    handleAddSegment,
+    handleRemoveSegment,
+    handleMoveSegment,
+    handleSegmentTitleChange,
+    handleSegmentRepresentationChange,
+    handleSegmentSkillsChange,
+    handleSegmentScenarioUpdate,
+    handleSegmentMaterialChange,
+    handleAddSegmentMaterial,
+    handleRemoveSegmentMaterial,
+    handleActionTypeChange,
+    handleMoveAction,
+    handleRemoveAction,
+    handleAddAction,
+    handleUpdateAction,
+    handleGuidedStepChange,
+    handleRemoveGuidedStep,
+    handleAddGuidedStep,
+    handleMoveGuidedStep,
+    handlePracticeQuestionChange,
+    handleRemovePracticeQuestion,
+    handleAddPracticeQuestion,
+    handleMovePracticeQuestion,
+    handlePassCriteriaChange,
+    handleGuidedWorkspaceChange,
+    handlePracticeWorkspaceChange,
+    handleSegmentMaterialBankChange,
+    registerInventorySnapshot,
+    selectSegment,
+  } = useEditorActions();
+  const { selectedSegmentId } = useEditorSelection();
 
   return (
     <section class="space-y-4">
@@ -161,8 +168,23 @@ export const LessonWorkspace = ({ vm }: LessonWorkspaceProps) => {
           <div class="space-y-4">
             <For each={lessonDocument()?.lesson.segments ?? []}>
               {(segment, index) => (
-                <Card variant="outlined" class="space-y-3 p-4">
-                  <div class="flex items-center justify-between gap-2">
+                <Card
+                  variant="floating"
+                  class={`space-y-3 p-4 transition-colors ${selectedSegmentId() === segment.id ? 'border-[rgba(64,157,233,0.6)] bg-[rgba(64,157,233,0.08)] shadow-[0_8px_24px_rgba(64,157,233,0.12)]' : ''}`}
+                >
+                  <div
+                    class="flex items-center justify-between gap-2"
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={selectedSegmentId() === segment.id}
+                    onClick={() => selectSegment(segment.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        selectSegment(segment.id);
+                      }
+                    }}
+                  >
                     <div class="flex items-center gap-2">
                       <input
                         class="w-64 rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -325,6 +347,44 @@ export const LessonWorkspace = ({ vm }: LessonWorkspaceProps) => {
                     </label>
                   </div>
 
+                  <div class="grid gap-2 md:grid-cols-2">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                      <span>Material bank</span>
+                      <select
+                        class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
+                        value={segment.materialBankId ?? ''}
+                        onChange={(event) =>
+                          handleSegmentMaterialBankChange(
+                            segment.id,
+                            event.currentTarget.value || undefined,
+                          )
+                        }
+                      >
+                        <option value="">None (manual)</option>
+                        <For
+                          each={materialInventory().banks.filter(
+                            (bank) =>
+                              bank.scope === 'lesson' ||
+                              (bank.scope === 'segment' && bank.segmentId === segment.id),
+                          )}
+                        >
+                          {(bank) => (
+                            <option value={bank.id}>
+                              {bank.label} {bank.scope === 'segment' ? `(segment)` : ''}
+                            </option>
+                          )}
+                        </For>
+                      </select>
+                    </label>
+                    <Show
+                      when={segment.materialBankId && !materialInventory().banks.some((bank) => bank.id === segment.materialBankId)}
+                    >
+                      <p class="rounded-md border border-[rgba(239,68,68,0.3)] bg-[rgba(239,68,68,0.05)] px-3 py-2 text-xs text-[rgba(239,68,68,0.9)]">
+                        Linked bank missing from inventory.
+                      </p>
+                    </Show>
+                  </div>
+
                   <Show when={segment.type === 'presentation'}>
                     <PresentationActionEditor
                       segment={segment as PresentationSegmentType}
@@ -342,7 +402,7 @@ export const LessonWorkspace = ({ vm }: LessonWorkspaceProps) => {
                       onWorkspaceChange={(workspace) => handleGuidedWorkspaceChange(segment.id, workspace)}
                       onStepChange={handleGuidedStepChange}
                       onRemoveStep={handleRemoveGuidedStep}
-                      onAddStep={handleAddGuidedStep}
+                      onAddStep={(workspace) => handleAddGuidedStep(segment.id, workspace)}
                       onMoveStep={handleMoveGuidedStep}
                     />
                   </Show>
@@ -364,6 +424,23 @@ export const LessonWorkspace = ({ vm }: LessonWorkspaceProps) => {
           </div>
         </Show>
       </Card>
+
+      <Show when={lessonDocument() && selectedSegment()}>
+        {(activeSegment) => (
+          <LessonInventoryProvider
+            inventory={lessonDocument()?.lesson.materialInventory}
+          >
+            <SegmentPreview
+              lesson={lessonDocument()!.lesson}
+              segment={activeSegment()}
+              scenario={lessonDocument()?.meta?.scenario}
+              onInventorySnapshot={registerInventorySnapshot}
+            />
+          </LessonInventoryProvider>
+        )}
+      </Show>
+
+      <InventoryPanel />
 
       <Card variant="soft" class="space-y-3 p-5">
         <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Document JSON (read-only)</h3>

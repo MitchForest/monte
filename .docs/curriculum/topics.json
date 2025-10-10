@@ -1,0 +1,1232 @@
+[
+  {
+    "id": "counting-within-5",
+    "unitId": "foundations-of-counting",
+    "name": "Counting within 5",
+    "description": "Establish stable counting order and one-to-one correspondence for quantities up to five using concrete objects.",
+    "ritRange": { "min": 130, "max": 144 },
+    "ccssFocus": ["K.CC.A.1", "K.CC.B.4"],
+    "priority": 1,
+    "prerequisiteTopicIds": []
+  },
+  {
+    "id": "counting-within-10",
+    "unitId": "foundations-of-counting",
+    "name": "Counting within 10",
+    "description": "Extend counting to ten across scattered, structured, and sequential contexts with number word—numeral connections.",
+    "ritRange": { "min": 135, "max": 149 },
+    "ccssFocus": ["K.CC.A.1", "K.CC.A.3"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["counting-within-5"]
+  },
+  {
+    "id": "compare-quantities-matching",
+    "unitId": "foundations-of-counting",
+    "name": "Compare Quantities by Matching",
+    "description": "Use matching and counting strategies to identify more, less, or equal groups up to ten.",
+    "ritRange": { "min": 135, "max": 149 },
+    "ccssFocus": ["K.CC.C.6", "K.CC.C.7"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["counting-within-5"]
+  },
+  {
+    "id": "one-more-one-less",
+    "unitId": "foundations-of-counting",
+    "name": "One More and One Less",
+    "description": "Determine the next or previous number within ten by adding or removing a single unit.",
+    "ritRange": { "min": 138, "max": 150 },
+    "ccssFocus": ["K.CC.B.4.c", "K.OA.A.5"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["counting-within-10"]
+  },
+  {
+    "id": "count-story-problems-5",
+    "unitId": "foundations-of-counting",
+    "name": "Count Story Problems within 5",
+    "description": "Represent join and separate situations within five using objects, drawings, and verbal equations.",
+    "ritRange": { "min": 138, "max": 150 },
+    "ccssFocus": ["K.OA.A.1", "K.OA.A.2"],
+    "priority": 5,
+    "prerequisiteTopicIds": ["counting-within-5", "compare-quantities-matching"]
+  },
+  {
+    "id": "compose-decompose-teen-numbers",
+    "unitId": "teen-numbers-and-20s",
+    "name": "Compose and Decompose Teen Numbers",
+    "description": "Represent teen numbers as ten ones and some more ones with beads, frames, and numerals.",
+    "ritRange": { "min": 145, "max": 160 },
+    "ccssFocus": ["K.NBT.A.1"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["counting-within-10"]
+  },
+  {
+    "id": "represent-numbers-to-20",
+    "unitId": "teen-numbers-and-20s",
+    "name": "Represent Numbers to 20",
+    "description": "Read, write, and model numbers to twenty across words, numerals, and manipulatives.",
+    "ritRange": { "min": 147, "max": 162 },
+    "ccssFocus": ["K.CC.A.3", "1.NBT.A.1"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["compose-decompose-teen-numbers"]
+  },
+  {
+    "id": "compare-numbers-to-20",
+    "unitId": "teen-numbers-and-20s",
+    "name": "Compare Numbers to 20",
+    "description": "Compare and order numbers to twenty using models, number lines, and comparison symbols.",
+    "ritRange": { "min": 150, "max": 165 },
+    "ccssFocus": ["1.NBT.B.2", "1.NBT.B.3"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["represent-numbers-to-20"]
+  },
+  {
+    "id": "make-ten-combinations",
+    "unitId": "teen-numbers-and-20s",
+    "name": "Make-Ten Combinations",
+    "description": "Decompose numbers within twenty to create ten and understand complements of ten.",
+    "ritRange": { "min": 150, "max": 168 },
+    "ccssFocus": ["1.OA.C.6"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["compose-decompose-teen-numbers"]
+  },
+  {
+    "id": "subtraction-within-10",
+    "unitId": "teen-numbers-and-20s",
+    "name": "Subtraction within 10",
+    "description": "Solve subtraction situations within ten using manipulatives, drawings, and equations.",
+    "ritRange": { "min": 150, "max": 168 },
+    "ccssFocus": ["1.OA.A.1", "1.OA.B.4"],
+    "priority": 5,
+    "prerequisiteTopicIds": ["make-ten-combinations"]
+  },
+  {
+    "id": "tens-ones-composition",
+    "unitId": "place-value-to-120",
+    "name": "Tens and Ones Composition",
+    "description": "Compose and decompose two-digit numbers using tens and ones models and equations.",
+    "ritRange": { "min": 159, "max": 172 },
+    "ccssFocus": ["1.NBT.B.2", "1.NBT.B.4"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["compose-decompose-teen-numbers"]
+  },
+  {
+    "id": "ten-more-ten-less",
+    "unitId": "place-value-to-120",
+    "name": "Ten More and Ten Less",
+    "description": "Find numbers that are ten more or less within 120 using models and hundred charts.",
+    "ritRange": { "min": 160, "max": 175 },
+    "ccssFocus": ["1.NBT.C.5"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["tens-ones-composition"]
+  },
+  {
+    "id": "expanded-form-to-120",
+    "unitId": "place-value-to-120",
+    "name": "Expanded Form to 120",
+    "description": "Express two- and three-digit numbers in expanded form and standard form with manipulatives.",
+    "ritRange": { "min": 162, "max": 176 },
+    "ccssFocus": ["2.NBT.A.3"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["tens-ones-composition"]
+  },
+  {
+    "id": "hundred-chart-navigation",
+    "unitId": "place-value-to-120",
+    "name": "Hundred Chart Navigation",
+    "description": "Use hundred charts to locate numbers, skip count, and recognize place-value patterns.",
+    "ritRange": { "min": 162, "max": 176 },
+    "ccssFocus": ["1.NBT.A.1", "2.NBT.A.2"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["ten-more-ten-less"]
+  },
+  {
+    "id": "skip-count-by-2-5-10",
+    "unitId": "place-value-to-120",
+    "name": "Skip Count by 2s, 5s, and 10s",
+    "description": "Skip count using number lines, hundred charts, and arrays to prepare for multiplication.",
+    "ritRange": { "min": 162, "max": 178 },
+    "ccssFocus": ["2.NBT.A.2", "2.OA.C.4"],
+    "priority": 5,
+    "prerequisiteTopicIds": ["hundred-chart-navigation"]
+  },
+  {
+    "id": "read-write-3-digit-numbers",
+    "unitId": "place-value-to-1000",
+    "name": "Read and Write 3-Digit Numbers",
+    "description": "Interpret and record numbers to 1000 in standard, word, and expanded forms.",
+    "ritRange": { "min": 170, "max": 190 },
+    "ccssFocus": ["2.NBT.A.3", "3.NBT.A.2"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["expanded-form-to-120"]
+  },
+  {
+    "id": "compare-order-to-1000",
+    "unitId": "place-value-to-1000",
+    "name": "Compare and Order Numbers to 1000",
+    "description": "Compare multi-digit numbers using place-value reasoning, symbols, and word descriptions.",
+    "ritRange": { "min": 172, "max": 192 },
+    "ccssFocus": ["2.NBT.A.4", "3.NBT.A.1"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["read-write-3-digit-numbers"]
+  },
+  {
+    "id": "rounding-to-nearest-10-100",
+    "unitId": "place-value-to-1000",
+    "name": "Rounding to the Nearest 10 and 100",
+    "description": "Round numbers using number lines, base-ten models, and place-value understanding.",
+    "ritRange": { "min": 175, "max": 195 },
+    "ccssFocus": ["3.NBT.A.1", "4.NBT.A.3"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["compare-order-to-1000"]
+  },
+  {
+    "id": "compose-decompose-hundreds",
+    "unitId": "place-value-to-1000",
+    "name": "Compose and Decompose Hundreds",
+    "description": "Regroup hundreds, tens, and ones using concrete hierarchical materials.",
+    "ritRange": { "min": 175, "max": 195 },
+    "ccssFocus": ["2.NBT.B.6", "3.NBT.A.2"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["read-write-3-digit-numbers"]
+  },
+  {
+    "id": "place-value-word-problems",
+    "unitId": "place-value-to-1000",
+    "name": "Place Value Word Problems",
+    "description": "Apply place-value reasoning to multi-step contextual problems within 1000.",
+    "ritRange": { "min": 178, "max": 198 },
+    "ccssFocus": ["3.NBT.A.2", "4.NBT.A.2"],
+    "priority": 5,
+    "prerequisiteTopicIds": ["compose-decompose-hundreds", "rounding-to-nearest-10-100"]
+  },
+  {
+    "id": "tenths-hundredths-models",
+    "unitId": "decimals-base-ten-structure",
+    "name": "Tenths and Hundredths Models",
+    "description": "Use decimal materials and area models to represent tenths and hundredths.",
+    "ritRange": { "min": 190, "max": 205 },
+    "ccssFocus": ["4.NF.C.5", "4.NF.C.6"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["compose-decompose-hundreds"]
+  },
+  {
+    "id": "read-write-decimals",
+    "unitId": "decimals-base-ten-structure",
+    "name": "Read and Write Decimals",
+    "description": "Express decimals through hundredths in word, standard, and expanded forms.",
+    "ritRange": { "min": 190, "max": 205 },
+    "ccssFocus": ["4.NF.C.6", "5.NBT.A.3"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["tenths-hundredths-models"]
+  },
+  {
+    "id": "compare-order-decimals",
+    "unitId": "decimals-base-ten-structure",
+    "name": "Compare and Order Decimals",
+    "description": "Compare decimals using place-value charts, number lines, and benchmarks.",
+    "ritRange": { "min": 192, "max": 207 },
+    "ccssFocus": ["4.NF.C.7", "5.NBT.A.3"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["read-write-decimals"]
+  },
+  {
+    "id": "relate-fractions-decimals",
+    "unitId": "decimals-base-ten-structure",
+    "name": "Relate Fractions and Decimals",
+    "description": "Connect fraction and decimal representations through equivalence and conversion tasks.",
+    "ritRange": { "min": 195, "max": 210 },
+    "ccssFocus": ["4.NF.C.5", "5.NBT.A.3"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["tenths-hundredths-models", "compare-order-decimals"]
+  },
+  {
+    "id": "metric-measurement-scaling",
+    "unitId": "decimals-base-ten-structure",
+    "name": "Metric Measurement Scaling",
+    "description": "Apply decimal understanding to metric units, conversions, and scaling problems.",
+    "ritRange": { "min": 198, "max": 210 },
+    "ccssFocus": ["4.MD.A.1", "5.MD.A.1"],
+    "priority": 5,
+    "prerequisiteTopicIds": ["relate-fractions-decimals"]
+  },
+  {
+    "id": "doubles-near-doubles",
+    "unitId": "addition-foundations",
+    "name": "Doubles and Near Doubles",
+    "description": "Use doubles facts and adjustments to solve addition within twenty.",
+    "ritRange": { "min": 159, "max": 175 },
+    "ccssFocus": ["1.OA.C.6"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["make-ten-combinations"]
+  },
+  {
+    "id": "make-ten-bridge",
+    "unitId": "addition-foundations",
+    "name": "Make-Ten Bridge",
+    "description": "Apply make-ten reasoning to addition and subtraction with teen numbers.",
+    "ritRange": { "min": 160, "max": 178 },
+    "ccssFocus": ["1.OA.C.6", "2.OA.B.2"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["make-ten-combinations"]
+  },
+  {
+    "id": "fact-families-within-20",
+    "unitId": "addition-foundations",
+    "name": "Fact Families within 20",
+    "description": "Relate addition and subtraction facts using part-part-whole and inverse reasoning.",
+    "ritRange": { "min": 162, "max": 180 },
+    "ccssFocus": ["1.OA.B.4", "2.OA.B.2"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["doubles-near-doubles"]
+  },
+  {
+    "id": "dynamic-addition-within-100",
+    "unitId": "addition-foundations",
+    "name": "Dynamic Addition within 100",
+    "description": "Perform two-digit addition with regrouping using place-value models, number lines, and algorithms.",
+    "ritRange": { "min": 165, "max": 182 },
+    "ccssFocus": ["2.NBT.B.5", "3.NBT.A.2"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["fact-families-within-20", "tens-ones-composition"]
+  },
+  {
+    "id": "equal-groups-arrays",
+    "unitId": "multiplication-foundations",
+    "name": "Equal Groups and Arrays",
+    "description": "Build foundational multiplication concepts through repeated addition, equal groups, and array structures.",
+    "ritRange": { "min": 176, "max": 188 },
+    "ccssFocus": ["2.OA.C.4", "3.OA.A.1"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["skip-count-by-2-5-10"]
+  },
+  {
+    "id": "static-multiplication",
+    "unitId": "multiplication-foundations",
+    "name": "Static Multiplication",
+    "description": "Multiply without regrouping using golden beads, stamp game, and array diagrams.",
+    "ritRange": { "min": 178, "max": 190 },
+    "ccssFocus": ["3.OA.A.1", "3.NBT.A.3"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["equal-groups-arrays"]
+  },
+  {
+    "id": "division-as-sharing",
+    "unitId": "multiplication-foundations",
+    "name": "Division as Sharing",
+    "description": "Model division as equal sharing and relate it to multiplication facts.",
+    "ritRange": { "min": 178, "max": 190 },
+    "ccssFocus": ["3.OA.A.2"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["equal-groups-arrays"]
+  },
+  {
+    "id": "skip-counting-multiplication-facts",
+    "unitId": "multiplication-foundations",
+    "name": "Skip Counting for Multiplication Facts",
+    "description": "Reinforce multiplication facts through rhythmic skip counting and bead chains.",
+    "ritRange": { "min": 180, "max": 192 },
+    "ccssFocus": ["3.OA.B.5", "3.OA.B.6"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["static-multiplication"]
+  },
+  {
+    "id": "dynamic-multiplication",
+    "unitId": "multiplication-division-mastery",
+    "name": "Dynamic Multiplication",
+    "description": "Multiply multi-digit numbers with regrouping using dot game, bead frames, and checkerboard.",
+    "ritRange": { "min": 188, "max": 205 },
+    "ccssFocus": ["4.NBT.B.5"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["static-multiplication", "compose-decompose-hundreds"]
+  },
+  {
+    "id": "long-division",
+    "unitId": "multiplication-division-mastery",
+    "name": "Long Division",
+    "description": "Divide dividends up to four digits using racks & tubes, bead frames, and standard algorithm representations.",
+    "ritRange": { "min": 190, "max": 205 },
+    "ccssFocus": ["4.NBT.B.6"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["division-as-sharing", "dynamic-multiplication"]
+  },
+  {
+    "id": "distributive-associative-strategies",
+    "unitId": "multiplication-division-mastery",
+    "name": "Distributive and Associative Strategies",
+    "description": "Apply properties of operations to simplify multiplication and division problems.",
+    "ritRange": { "min": 192, "max": 207 },
+    "ccssFocus": ["3.OA.B.5", "4.OA.B.4"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["dynamic-multiplication"]
+  },
+  {
+    "id": "multi-step-word-problems",
+    "unitId": "multiplication-division-mastery",
+    "name": "Multi-Step Word Problems",
+    "description": "Solve multi-step problems involving multiplication and division with reasoning about remainders.",
+    "ritRange": { "min": 194, "max": 208 },
+    "ccssFocus": ["4.OA.A.3"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["dynamic-multiplication", "long-division"]
+  },
+  {
+    "id": "factors-and-multiples",
+    "unitId": "expressions-early-algebra",
+    "name": "Factors and Multiples",
+    "description": "Analyze factor pairs and multiples to support number theory and algebraic reasoning.",
+    "ritRange": { "min": 195, "max": 210 },
+    "ccssFocus": ["4.OA.B.4"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["skip-counting-multiplication-facts"]
+  },
+  {
+    "id": "patterns-and-rules",
+    "unitId": "expressions-early-algebra",
+    "name": "Patterns and Rules",
+    "description": "Describe and generalize patterns using tables, expressions, and verbal rules.",
+    "ritRange": { "min": 195, "max": 210 },
+    "ccssFocus": ["4.OA.C.5", "5.OA.B.3"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["factors-and-multiples"]
+  },
+  {
+    "id": "numerical-expressions",
+    "unitId": "expressions-early-algebra",
+    "name": "Numerical Expressions",
+    "description": "Write and evaluate numerical expressions with parentheses and multi-step operations.",
+    "ritRange": { "min": 198, "max": 210 },
+    "ccssFocus": ["5.OA.A.1", "5.OA.A.2"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["patterns-and-rules", "distributive-associative-strategies"]
+  },
+  {
+    "id": "intro-equations-inequalities",
+    "unitId": "expressions-early-algebra",
+    "name": "Intro Equations and Inequalities",
+    "description": "Represent relationships with simple equations and inequalities using variables.",
+    "ritRange": { "min": 200, "max": 215 },
+    "ccssFocus": ["5.OA.B.3", "6.EE.A.1"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["numerical-expressions"]
+  },
+  {
+    "id": "partition-shapes-equal-parts",
+    "unitId": "fraction-foundations",
+    "name": "Partition Shapes into Equal Parts",
+    "description": "Partition shapes into halves, thirds, and fourths and describe each part as a fraction.",
+    "ritRange": { "min": 175, "max": 190 },
+    "ccssFocus": ["3.G.A.2", "3.NF.A.1"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["partition-shapes-equal-parts-geometry"]
+  },
+  {
+    "id": "unit-fractions-number-lines",
+    "unitId": "fraction-foundations",
+    "name": "Unit Fractions on Number Lines",
+    "description": "Locate and label unit fractions on number lines and strips.",
+    "ritRange": { "min": 178, "max": 193 },
+    "ccssFocus": ["3.NF.A.2"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["partition-shapes-equal-parts"]
+  },
+  {
+    "id": "fractions-of-sets",
+    "unitId": "fraction-foundations",
+    "name": "Fractions of Sets",
+    "description": "Determine fractional parts of sets and connect to repeated subtraction and division.",
+    "ritRange": { "min": 180, "max": 195 },
+    "ccssFocus": ["3.NF.A.1"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["unit-fractions-number-lines"]
+  },
+  {
+    "id": "compare-unit-fractions",
+    "unitId": "fraction-foundations",
+    "name": "Compare Unit Fractions",
+    "description": "Compare unit fractions using size of denominators and visual models.",
+    "ritRange": { "min": 180, "max": 195 },
+    "ccssFocus": ["3.NF.A.3"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["unit-fractions-number-lines"]
+  },
+  {
+    "id": "generate-equivalent-fractions",
+    "unitId": "fraction-equivalence-ordering",
+    "name": "Generate Equivalent Fractions",
+    "description": "Use models and numerical reasoning to create equivalent fractions.",
+    "ritRange": { "min": 190, "max": 205 },
+    "ccssFocus": ["3.NF.A.3", "4.NF.A.1"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["compare-unit-fractions"]
+  },
+  {
+    "id": "compare-unlike-fractions",
+    "unitId": "fraction-equivalence-ordering",
+    "name": "Compare Unlike Fractions",
+    "description": "Compare fractions with different denominators using common denominators or numerators.",
+    "ritRange": { "min": 192, "max": 207 },
+    "ccssFocus": ["4.NF.A.2"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["generate-equivalent-fractions"]
+  },
+  {
+    "id": "benchmark-fractions",
+    "unitId": "fraction-equivalence-ordering",
+    "name": "Benchmark Fractions",
+    "description": "Use benchmarks such as 1/2 and 1 to estimate and compare fractions.",
+    "ritRange": { "min": 192, "max": 207 },
+    "ccssFocus": ["4.NF.A.2"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["generate-equivalent-fractions"]
+  },
+  {
+    "id": "mixed-numbers-number-lines",
+    "unitId": "fraction-equivalence-ordering",
+    "name": "Mixed Numbers on Number Lines",
+    "description": "Represent mixed numbers and improper fractions on number lines.",
+    "ritRange": { "min": 194, "max": 209 },
+    "ccssFocus": ["4.NF.B.3"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["compare-unlike-fractions"]
+  },
+  {
+    "id": "add-subtract-like-denominator",
+    "unitId": "fraction-decimal-operations",
+    "name": "Add and Subtract Fractions with Like Denominators",
+    "description": "Add and subtract fractions and mixed numbers with like denominators using models and equations.",
+    "ritRange": { "min": 200, "max": 210 },
+    "ccssFocus": ["4.NF.B.3"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["mixed-numbers-number-lines"]
+  },
+  {
+    "id": "multiply-fractions-by-whole-numbers",
+    "unitId": "fraction-decimal-operations",
+    "name": "Multiply Fractions by Whole Numbers",
+    "description": "Interpret fraction multiplication as repeated addition and scaling.",
+    "ritRange": { "min": 202, "max": 212 },
+    "ccssFocus": ["4.NF.B.4"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["add-subtract-like-denominator"]
+  },
+  {
+    "id": "fraction-decimal-conversion",
+    "unitId": "fraction-decimal-operations",
+    "name": "Fraction-Decimal Conversion",
+    "description": "Convert between fractions and decimals using division and place value.",
+    "ritRange": { "min": 202, "max": 212 },
+    "ccssFocus": ["4.NF.C.5", "5.NF.B.7"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["relate-fractions-decimals"]
+  },
+  {
+    "id": "add-subtract-decimals",
+    "unitId": "fraction-decimal-operations",
+    "name": "Add and Subtract Decimals",
+    "description": "Perform decimal addition and subtraction to hundredths with alignment and reasoning.",
+    "ritRange": { "min": 204, "max": 215 },
+    "ccssFocus": ["5.NBT.B.7"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["read-write-decimals", "fraction-decimal-conversion"]
+  },
+  {
+    "id": "compare-length-weight-capacity",
+    "unitId": "measurement-foundations",
+    "name": "Compare Length, Weight, and Capacity",
+    "description": "Directly compare attributes using informal language and non-standard units.",
+    "ritRange": { "min": 150, "max": 170 },
+    "ccssFocus": ["K.MD.A.1", "K.MD.A.2"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["counting-within-10"]
+  },
+  {
+    "id": "choose-measurement-tools",
+    "unitId": "measurement-foundations",
+    "name": "Choose Measurement Tools",
+    "description": "Select appropriate tools and units for measuring objects and quantities.",
+    "ritRange": { "min": 155, "max": 175 },
+    "ccssFocus": ["1.MD.A.1"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["compare-length-weight-capacity"]
+  },
+  {
+    "id": "order-objects-by-attribute",
+    "unitId": "measurement-foundations",
+    "name": "Order Objects by Attribute",
+    "description": "Order objects by length, weight, or capacity using comparison results.",
+    "ritRange": { "min": 155, "max": 175 },
+    "ccssFocus": ["1.MD.A.1", "1.MD.A.2"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["compare-length-weight-capacity"]
+  },
+  {
+    "id": "tell-time-hour-half-quarter",
+    "unitId": "time-and-money",
+    "name": "Tell Time to Hour, Half-Hour, and Quarter-Hour",
+    "description": "Read analog and digital clocks to the hour, half-hour, and quarter-hour.",
+    "ritRange": { "min": 160, "max": 182 },
+    "ccssFocus": ["1.MD.B.3"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["counting-within-10"]
+  },
+  {
+    "id": "count-coins-pennies-to-quarters",
+    "unitId": "time-and-money",
+    "name": "Count Coins: Pennies to Quarters",
+    "description": "Identify and count collections of coins up to one dollar using skip counting.",
+    "ritRange": { "min": 165, "max": 185 },
+    "ccssFocus": ["2.MD.C.8"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["skip-count-by-2-5-10"]
+  },
+  {
+    "id": "make-given-amounts",
+    "unitId": "time-and-money",
+    "name": "Make Given Amounts",
+    "description": "Use coins to create specified values and exchange sets for equivalent amounts.",
+    "ritRange": { "min": 168, "max": 188 },
+    "ccssFocus": ["2.MD.C.8"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["count-coins-pennies-to-quarters"]
+  },
+  {
+    "id": "time-money-word-problems",
+    "unitId": "time-and-money",
+    "name": "Time and Money Word Problems",
+    "description": "Solve contextual problems involving elapsed time and money totals or differences.",
+    "ritRange": { "min": 170, "max": 190 },
+    "ccssFocus": ["2.MD.C.7", "2.MD.C.8"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["tell-time-hour-half-quarter", "make-given-amounts"]
+  },
+  {
+    "id": "tally-charts-and-tables",
+    "unitId": "data-displays",
+    "name": "Tally Charts and Tables",
+    "description": "Collect data and represent it using tally charts and simple tables.",
+    "ritRange": { "min": 165, "max": 185 },
+    "ccssFocus": ["1.MD.C.4"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["compare-length-weight-capacity"]
+  },
+  {
+    "id": "picture-graphs",
+    "unitId": "data-displays",
+    "name": "Picture Graphs",
+    "description": "Create and interpret picture graphs representing data with single-value symbols.",
+    "ritRange": { "min": 168, "max": 188 },
+    "ccssFocus": ["2.MD.D.10"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["tally-charts-and-tables"]
+  },
+  {
+    "id": "scaled-bar-graphs",
+    "unitId": "data-displays",
+    "name": "Scaled Bar Graphs",
+    "description": "Represent data using scaled bar graphs and solve one- and two-step problems.",
+    "ritRange": { "min": 172, "max": 195 },
+    "ccssFocus": ["3.MD.B.3"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["picture-graphs"]
+  },
+  {
+    "id": "line-plots-whole-numbers",
+    "unitId": "data-displays",
+    "name": "Line Plots with Whole Numbers",
+    "description": "Create and analyze line plots using whole-number measurements.",
+    "ritRange": { "min": 175, "max": 198 },
+    "ccssFocus": ["3.MD.B.4"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["scaled-bar-graphs"]
+  },
+  {
+    "id": "interpret-data-word-problems",
+    "unitId": "data-displays",
+    "name": "Interpret Data Word Problems",
+    "description": "Solve contextual problems using information from tables and graphs.",
+    "ritRange": { "min": 178, "max": 200 },
+    "ccssFocus": ["3.MD.B.3", "4.MD.B.4"],
+    "priority": 5,
+    "prerequisiteTopicIds": ["line-plots-whole-numbers"]
+  },
+  {
+    "id": "area-and-perimeter-rectangles",
+    "unitId": "measurement-data-extensions",
+    "name": "Area and Perimeter of Rectangles",
+    "description": "Find area and perimeter using tiling, arrays, and formulas for rectangles.",
+    "ritRange": { "min": 190, "max": 205 },
+    "ccssFocus": ["3.MD.C.5", "4.MD.A.3"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["scaled-bar-graphs"]
+  },
+  {
+    "id": "volume-rectangular-prisms",
+    "unitId": "measurement-data-extensions",
+    "name": "Volume of Rectangular Prisms",
+    "description": "Calculate volume using unit cubes and formula reasoning for rectangular prisms.",
+    "ritRange": { "min": 195, "max": 210 },
+    "ccssFocus": ["5.MD.C.3", "5.MD.C.5"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["area-and-perimeter-rectangles"]
+  },
+  {
+    "id": "line-plots-fractions",
+    "unitId": "measurement-data-extensions",
+    "name": "Line Plots with Fractions",
+    "description": "Create and interpret line plots featuring fractional measurements.",
+    "ritRange": { "min": 195, "max": 210 },
+    "ccssFocus": ["4.MD.B.4", "5.MD.B.2"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["line-plots-whole-numbers", "generate-equivalent-fractions"]
+  },
+  {
+    "id": "coordinate-plane-graphing",
+    "unitId": "measurement-data-extensions",
+    "name": "Coordinate Plane Graphing",
+    "description": "Graph and interpret points in the first quadrant to model measurement contexts.",
+    "ritRange": { "min": 198, "max": 210 },
+    "ccssFocus": ["5.G.A.1", "5.G.A.2"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["line-plots-fractions"]
+  },
+  {
+    "id": "data-variability-and-measures",
+    "unitId": "measurement-data-extensions",
+    "name": "Data Variability and Measures",
+    "description": "Describe distributions using mean, median, mode, range, and variability measures.",
+    "ritRange": { "min": 200, "max": 215 },
+    "ccssFocus": ["6.SP.A.1", "6.SP.B.5"],
+    "priority": 5,
+    "prerequisiteTopicIds": ["line-plots-fractions"]
+  },
+  {
+    "id": "identify-2d-3d-shapes",
+    "unitId": "shape-foundations",
+    "name": "Identify 2D and 3D Shapes",
+    "description": "Name and recognize common two- and three-dimensional shapes in various orientations.",
+    "ritRange": { "min": 150, "max": 165 },
+    "ccssFocus": ["K.G.A.2", "K.G.A.3"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["counting-within-5"]
+  },
+  {
+    "id": "describe-positions",
+    "unitId": "shape-foundations",
+    "name": "Describe Positions",
+    "description": "Use positional words to describe locations of objects relative to others.",
+    "ritRange": { "min": 150, "max": 165 },
+    "ccssFocus": ["K.G.A.1"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["identify-2d-3d-shapes"]
+  },
+  {
+    "id": "compose-decompose-shapes",
+    "unitId": "shape-foundations",
+    "name": "Compose and Decompose Shapes",
+    "description": "Combine and break apart shapes to form new figures and understand part-whole relationships.",
+    "ritRange": { "min": 155, "max": 170 },
+    "ccssFocus": ["K.G.B.6", "1.G.A.2"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["identify-2d-3d-shapes"]
+  },
+  {
+    "id": "classify-shapes-by-attributes",
+    "unitId": "shape-foundations",
+    "name": "Classify Shapes by Attributes",
+    "description": "Group shapes based on attributes such as number of sides, angles, or faces.",
+    "ritRange": { "min": 160, "max": 175 },
+    "ccssFocus": ["1.G.A.1"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["compose-decompose-shapes"]
+  },
+  {
+    "id": "partition-shapes-equal-parts-geometry",
+    "unitId": "plane-geometry",
+    "name": "Partition Shapes into Equal Parts (Geometry)",
+    "description": "Partition shapes into equal shares and describe the parts using fractional language.",
+    "ritRange": { "min": 170, "max": 185 },
+    "ccssFocus": ["2.G.A.3"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["classify-shapes-by-attributes"]
+  },
+  {
+    "id": "lines-angles",
+    "unitId": "plane-geometry",
+    "name": "Lines and Angles",
+    "description": "Identify and classify lines (parallel, perpendicular) and angles (acute, right, obtuse).",
+    "ritRange": { "min": 175, "max": 195 },
+    "ccssFocus": ["4.G.A.1"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["partition-shapes-equal-parts-geometry"]
+  },
+  {
+    "id": "triangles-quadrilaterals",
+    "unitId": "plane-geometry",
+    "name": "Triangles and Quadrilaterals",
+    "description": "Classify triangles and quadrilaterals by sides and angles using attribute reasoning.",
+    "ritRange": { "min": 180, "max": 195 },
+    "ccssFocus": ["3.G.A.1", "4.G.A.2"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["lines-angles"]
+  },
+  {
+    "id": "symmetry-and-reflection",
+    "unitId": "plane-geometry",
+    "name": "Symmetry and Reflection",
+    "description": "Identify lines of symmetry and analyze reflections of shapes.",
+    "ritRange": { "min": 182, "max": 198 },
+    "ccssFocus": ["4.G.A.3"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["triangles-quadrilaterals"]
+  },
+  {
+    "id": "area-of-rectangles-triangles",
+    "unitId": "measurement-geometry",
+    "name": "Area of Rectangles and Triangles",
+    "description": "Calculate area using arrays, base-height formulas, and decomposition strategies.",
+    "ritRange": { "min": 188, "max": 205 },
+    "ccssFocus": ["3.MD.C.7", "4.MD.A.3"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["area-and-perimeter-rectangles"]
+  },
+  {
+    "id": "surface-area-with-nets",
+    "unitId": "measurement-geometry",
+    "name": "Surface Area with Nets",
+    "description": "Represent three-dimensional figures with nets to determine surface area.",
+    "ritRange": { "min": 195, "max": 210 },
+    "ccssFocus": ["6.G.A.4"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["area-of-rectangles-triangles"]
+  },
+  {
+    "id": "volume-concepts",
+    "unitId": "measurement-geometry",
+    "name": "Volume Concepts",
+    "description": "Understand volume as space filled by unit cubes and relate to multiplication and addition.",
+    "ritRange": { "min": 195, "max": 210 },
+    "ccssFocus": ["5.MD.C.3", "5.MD.C.5"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["area-of-rectangles-triangles"]
+  },
+  {
+    "id": "coordinate-plane-polygons",
+    "unitId": "measurement-geometry",
+    "name": "Coordinate Plane Polygons",
+    "description": "Plot vertices and analyze polygons on the coordinate plane, connecting to area and perimeter.",
+    "ritRange": { "min": 198, "max": 210 },
+    "ccssFocus": ["5.G.A.1", "5.G.A.2"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["coordinate-plane-graphing", "triangles-quadrilaterals"]
+  },
+  {
+    "id": "graph-points-coordinate-plane",
+    "unitId": "spatial-reasoning-extensions",
+    "name": "Graph Points in the Coordinate Plane",
+    "description": "Graph ordered pairs and interpret coordinate relationships in context.",
+    "ritRange": { "min": 200, "max": 212 },
+    "ccssFocus": ["5.G.A.1", "5.G.A.2"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["coordinate-plane-graphing"]
+  },
+  {
+    "id": "classify-2d-figures-hierarchies",
+    "unitId": "spatial-reasoning-extensions",
+    "name": "Classify 2D Figures in Hierarchies",
+    "description": "Use hierarchies to classify polygons based on properties of sides and angles.",
+    "ritRange": { "min": 200, "max": 212 },
+    "ccssFocus": ["5.G.B.3"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["triangles-quadrilaterals"]
+  },
+  {
+    "id": "analyze-transformations",
+    "unitId": "spatial-reasoning-extensions",
+    "name": "Analyze Transformations",
+    "description": "Investigate translations, rotations, and reflections on grids.",
+    "ritRange": { "min": 205, "max": 215 },
+    "ccssFocus": ["5.G.B.4"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["graph-points-coordinate-plane"]
+  },
+  {
+    "id": "repeating-growing-patterns",
+    "unitId": "early-patterns",
+    "name": "Repeating and Growing Patterns",
+    "description": "Identify, extend, and create repeating and growing patterns with concrete materials.",
+    "ritRange": { "min": 150, "max": 170 },
+    "ccssFocus": ["K.OA.A.2", "1.OA.B.3"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["counting-within-10"]
+  },
+  {
+    "id": "unknown-addend-problems",
+    "unitId": "early-patterns",
+    "name": "Unknown Addend Problems",
+    "description": "Solve for unknown addends using part-part-whole and balance contexts.",
+    "ritRange": { "min": 155, "max": 175 },
+    "ccssFocus": ["1.OA.A.1", "1.OA.B.4"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["repeating-growing-patterns"]
+  },
+  {
+    "id": "balance-contexts",
+    "unitId": "early-patterns",
+    "name": "Balance Contexts",
+    "description": "Represent equality as balance using manipulatives and simple equations.",
+    "ritRange": { "min": 158, "max": 175 },
+    "ccssFocus": ["1.OA.D.7"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["unknown-addend-problems"]
+  },
+  {
+    "id": "multi-step-problem-solving",
+    "unitId": "multi-step-thinking",
+    "name": "Multi-Step Problem Solving",
+    "description": "Solve multi-step operational problems with reasoning and representation.",
+    "ritRange": { "min": 180, "max": 198 },
+    "ccssFocus": ["3.OA.D.8", "4.OA.A.3"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["balance-contexts", "additive-word-problems"]
+  },
+  {
+    "id": "input-output-tables",
+    "unitId": "multi-step-thinking",
+    "name": "Input-Output Tables",
+    "description": "Analyze and generalize rules generating values in tables.",
+    "ritRange": { "min": 185, "max": 200 },
+    "ccssFocus": ["4.OA.C.5"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["multi-step-problem-solving"]
+  },
+  {
+    "id": "pattern-rules-arithmetic-structure",
+    "unitId": "multi-step-thinking",
+    "name": "Pattern Rules and Arithmetic Structure",
+    "description": "Describe arithmetic patterns using properties and structure.",
+    "ritRange": { "min": 188, "max": 202 },
+    "ccssFocus": ["4.OA.C.5"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["input-output-tables"]
+  },
+  {
+    "id": "evaluate-numerical-expressions",
+    "unitId": "pre-algebra-foundations",
+    "name": "Evaluate Numerical Expressions",
+    "description": "Evaluate expressions with parentheses, brackets, and braces following order of operations.",
+    "ritRange": { "min": 200, "max": 212 },
+    "ccssFocus": ["5.OA.A.1", "5.OA.A.2"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["numerical-expressions"]
+  },
+  {
+    "id": "equations-with-variables",
+    "unitId": "pre-algebra-foundations",
+    "name": "Equations with Variables",
+    "description": "Write and solve simple equations using variables to represent unknowns.",
+    "ritRange": { "min": 200, "max": 212 },
+    "ccssFocus": ["6.EE.A.1", "6.EE.B.5"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["intro-equations-inequalities", "multi-step-problem-solving"]
+  },
+  {
+    "id": "coordinate-relationships",
+    "unitId": "pre-algebra-foundations",
+    "name": "Coordinate Relationships",
+    "description": "Model relationships between two variables on the coordinate plane.",
+    "ritRange": { "min": 202, "max": 215 },
+    "ccssFocus": ["5.G.A.1", "6.EE.C.9"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["coordinate-plane-graphing", "input-output-tables"]
+  },
+  {
+    "id": "intro-inequalities",
+    "unitId": "pre-algebra-foundations",
+    "name": "Intro Inequalities",
+    "description": "Represent and solve simple inequalities, interpreting solution sets on number lines.",
+    "ritRange": { "min": 204, "max": 215 },
+    "ccssFocus": ["6.EE.B.8"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["equations-with-variables"]
+  },
+  {
+    "id": "compose-decompose-thousands",
+    "unitId": "introduce-decimal-system",
+    "name": "Compose and Decompose Thousands",
+    "description": "Use thousand cubes, hundred squares, ten bars, and unit beads to build and break apart four-digit numbers.",
+    "ritRange": { "min": 168, "max": 182 },
+    "ccssFocus": ["2.NBT.A.1", "3.NBT.A.2"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["compose-decompose-hundreds"]
+  },
+  {
+    "id": "read-write-4-digit-numbers",
+    "unitId": "introduce-decimal-system",
+    "name": "Read and Write 4-Digit Numbers",
+    "description": "Record four-digit numbers in standard and expanded forms using place-value cards and numerals.",
+    "ritRange": { "min": 170, "max": 185 },
+    "ccssFocus": ["2.NBT.A.3", "3.NBT.A.2"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["compose-decompose-thousands"]
+  },
+  {
+    "id": "thousand-chart-navigation",
+    "unitId": "introduce-decimal-system",
+    "name": "Thousand Chart Navigation",
+    "description": "Locate and sequence numbers on a thousand chart to visualize base-ten structure and place-value patterns.",
+    "ritRange": { "min": 170, "max": 188 },
+    "ccssFocus": ["2.NBT.A.2", "3.NBT.A.1"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["read-write-4-digit-numbers"]
+  },
+  {
+    "id": "estimate-number-lines",
+    "unitId": "introduce-decimal-system",
+    "name": "Estimate on Number Lines",
+    "description": "Place four-digit numbers on open and labeled number lines, estimating midpoints and benchmarks.",
+    "ritRange": { "min": 172, "max": 190 },
+    "ccssFocus": ["2.MD.B.6", "3.NBT.A.1"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["thousand-chart-navigation"]
+  },
+  {
+    "id": "locate-numbers-number-line",
+    "unitId": "number-lines-and-estimation",
+    "name": "Locate Numbers on Number Lines",
+    "description": "Place whole numbers within 1,000 on number lines with varying scales and intervals.",
+    "ritRange": { "min": 170, "max": 188 },
+    "ccssFocus": ["2.MD.B.6"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["estimate-number-lines"]
+  },
+  {
+    "id": "estimate-sums-differences",
+    "unitId": "number-lines-and-estimation",
+    "name": "Estimate Sums and Differences",
+    "description": "Use friendly numbers and number lines to estimate results of addition and subtraction problems.",
+    "ritRange": { "min": 170, "max": 190 },
+    "ccssFocus": ["3.NBT.A.1"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["locate-numbers-number-line", "make-ten-bridge"]
+  },
+  {
+    "id": "rounding-number-lines",
+    "unitId": "number-lines-and-estimation",
+    "name": "Rounding on Number Lines",
+    "description": "Round numbers to the nearest ten or hundred by identifying benchmark points on number lines.",
+    "ritRange": { "min": 172, "max": 192 },
+    "ccssFocus": ["3.NBT.A.1", "4.NBT.A.3"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["locate-numbers-number-line"]
+  },
+  {
+    "id": "skip-count-number-lines",
+    "unitId": "number-lines-and-estimation",
+    "name": "Skip Count on Number Lines",
+    "description": "Skip count by 2s, 5s, 10s, and 100s on open number lines to reinforce multiplication patterns.",
+    "ritRange": { "min": 172, "max": 195 },
+    "ccssFocus": ["2.NBT.A.2", "3.OA.A.1"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["locate-numbers-number-line", "skip-count-by-2-5-10"]
+  },
+  {
+    "id": "counting-on-addition",
+    "unitId": "addition-foundations",
+    "name": "Counting-On Addition",
+    "description": "Use counting-on strategies with objects, number lines, and mental models to add within 20.",
+    "ritRange": { "min": 150, "max": 170 },
+    "ccssFocus": ["K.OA.A.2", "1.OA.C.5"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["counting-within-10"]
+  },
+  {
+    "id": "take-away-models",
+    "unitId": "subtraction-foundations",
+    "name": "Take-Away Models",
+    "description": "Model subtraction with objects and drawings, showing removal of quantities within 20.",
+    "ritRange": { "min": 150, "max": 170 },
+    "ccssFocus": ["K.OA.A.1", "1.OA.A.1"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["counting-within-10"]
+  },
+  {
+    "id": "count-back-count-up",
+    "unitId": "subtraction-foundations",
+    "name": "Count Back and Count Up",
+    "description": "Use counting-back and counting-up strategies to solve subtraction within 20.",
+    "ritRange": { "min": 152, "max": 175 },
+    "ccssFocus": ["1.OA.C.6"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["take-away-models", "counting-on-addition"]
+  },
+  {
+    "id": "fact-families-subtraction",
+    "unitId": "subtraction-foundations",
+    "name": "Subtraction Fact Families",
+    "description": "Relate subtraction to addition using fact families and part-part-whole diagrams.",
+    "ritRange": { "min": 154, "max": 178 },
+    "ccssFocus": ["1.OA.B.4"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["count-back-count-up", "fact-families-within-20"]
+  },
+  {
+    "id": "dynamic-subtraction-within-100",
+    "unitId": "subtraction-foundations",
+    "name": "Dynamic Subtraction within 100",
+    "description": "Perform two-digit subtraction with regrouping using concrete models, number lines, and algorithms.",
+    "ritRange": { "min": 165, "max": 182 },
+    "ccssFocus": ["2.NBT.B.5", "2.NBT.B.7"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["fact-families-subtraction", "tens-ones-composition"]
+  },
+  {
+    "id": "addition-fact-drills",
+    "unitId": "addition-subtraction-memorization",
+    "name": "Addition Fact Drills",
+    "description": "Practice addition facts within 10 and 20 using timed drills and strategy prompts.",
+    "ritRange": { "min": 160, "max": 180 },
+    "ccssFocus": ["1.OA.C.6"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["doubles-near-doubles", "make-ten-bridge"]
+  },
+  {
+    "id": "subtraction-fact-drills",
+    "unitId": "addition-subtraction-memorization",
+    "name": "Subtraction Fact Drills",
+    "description": "Build subtraction fluency within 20 through structured drills and inverse relationships.",
+    "ritRange": { "min": 160, "max": 182 },
+    "ccssFocus": ["1.OA.C.6"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["fact-families-subtraction"]
+  },
+  {
+    "id": "make-ten-fluency",
+    "unitId": "addition-subtraction-memorization",
+    "name": "Make-Ten Fluency",
+    "description": "Reinforce make-ten combinations and decompositions to accelerate mental calculation.",
+    "ritRange": { "min": 160, "max": 182 },
+    "ccssFocus": ["1.OA.C.6"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["make-ten-bridge"]
+  },
+  {
+    "id": "facts-within-20-application",
+    "unitId": "addition-subtraction-memorization",
+    "name": "Facts within 20 Applications",
+    "description": "Apply fluent addition and subtraction facts within 20 to stories and mixed practice.",
+    "ritRange": { "min": 162, "max": 185 },
+    "ccssFocus": ["1.OA.C.6", "2.OA.B.2"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["addition-fact-drills", "subtraction-fact-drills"]
+  },
+  {
+    "id": "multiplication-fact-strategies",
+    "unitId": "multiplication-division-memorization",
+    "name": "Multiplication Fact Strategies",
+    "description": "Use patterns, doubles, and area models to internalize multiplication facts up to 10×10.",
+    "ritRange": { "min": 180, "max": 198 },
+    "ccssFocus": ["3.OA.B.5"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["skip-counting-multiplication-facts", "static-multiplication"]
+  },
+  {
+    "id": "division-fact-strategies",
+    "unitId": "multiplication-division-memorization",
+    "name": "Division Fact Strategies",
+    "description": "Connect division facts to known multiplication facts and quotient patterns.",
+    "ritRange": { "min": 182, "max": 198 },
+    "ccssFocus": ["3.OA.C.7"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["multiplication-fact-strategies", "division-as-sharing"]
+  },
+  {
+    "id": "fact-families-multiplication-division",
+    "unitId": "multiplication-division-memorization",
+    "name": "Multiplication & Division Fact Families",
+    "description": "Organize related multiplication and division facts to reinforce inverse relationships.",
+    "ritRange": { "min": 182, "max": 200 },
+    "ccssFocus": ["3.OA.B.6"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["multiplication-fact-strategies", "division-fact-strategies"]
+  },
+  {
+    "id": "mixed-fact-drills",
+    "unitId": "multiplication-division-memorization",
+    "name": "Mixed Fact Drills",
+    "description": "Blend multiplication and division facts in timed practice to build automaticity.",
+    "ritRange": { "min": 184, "max": 202 },
+    "ccssFocus": ["3.OA.C.7"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["fact-families-multiplication-division"]
+  },
+  {
+    "id": "division-as-grouping",
+    "unitId": "division-foundations",
+    "name": "Division as Grouping",
+    "description": "Interpret division as forming equal groups and determine how many groups can be made.",
+    "ritRange": { "min": 176, "max": 190 },
+    "ccssFocus": ["3.OA.A.2"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["division-as-sharing"]
+  },
+  {
+    "id": "relate-division-multiplication",
+    "unitId": "division-foundations",
+    "name": "Relate Division and Multiplication",
+    "description": "Use arrays and fact families to connect division problems to multiplication facts.",
+    "ritRange": { "min": 178, "max": 192 },
+    "ccssFocus": ["3.OA.B.6"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["division-as-grouping", "multiplication-fact-strategies"]
+  },
+  {
+    "id": "division-word-problems",
+    "unitId": "division-foundations",
+    "name": "Division Word Problems",
+    "description": "Solve division story problems involving sharing and grouping with concrete and visual models.",
+    "ritRange": { "min": 180, "max": 195 },
+    "ccssFocus": ["3.OA.A.3"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["relate-division-multiplication", "division-as-grouping"]
+  },
+  {
+    "id": "additive-word-problems",
+    "unitId": "operations-word-problems",
+    "name": "Additive Word Problems",
+    "description": "Solve join, separate, and compare problems using addition and subtraction strategies.",
+    "ritRange": { "min": 155, "max": 185 },
+    "ccssFocus": ["1.OA.A.1", "2.OA.A.1"],
+    "priority": 1,
+    "prerequisiteTopicIds": ["dynamic-addition-within-100", "dynamic-subtraction-within-100"]
+  },
+  {
+    "id": "comparison-word-problems",
+    "unitId": "operations-word-problems",
+    "name": "Comparison Word Problems",
+    "description": "Interpret and solve compare problems with unknown differences using equations and diagrams.",
+    "ritRange": { "min": 160, "max": 190 },
+    "ccssFocus": ["2.OA.A.1"],
+    "priority": 2,
+    "prerequisiteTopicIds": ["additive-word-problems", "count-back-count-up"]
+  },
+  {
+    "id": "equal-groups-word-problems",
+    "unitId": "operations-word-problems",
+    "name": "Equal Groups Word Problems",
+    "description": "Model equal groups situations that require multiplication or division solutions.",
+    "ritRange": { "min": 175, "max": 198 },
+    "ccssFocus": ["3.OA.A.3"],
+    "priority": 3,
+    "prerequisiteTopicIds": ["equal-groups-arrays", "division-as-sharing"]
+  },
+  {
+    "id": "two-step-word-problems",
+    "unitId": "operations-word-problems",
+    "name": "Two-Step Word Problems",
+    "description": "Solve two-step problems mixing operations and explain the reasoning behind each step.",
+    "ritRange": { "min": 180, "max": 200 },
+    "ccssFocus": ["3.OA.D.8"],
+    "priority": 4,
+    "prerequisiteTopicIds": ["comparison-word-problems", "equal-groups-word-problems"]
+  }
+]

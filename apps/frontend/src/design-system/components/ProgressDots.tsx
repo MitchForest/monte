@@ -1,5 +1,22 @@
-import type { Component } from 'solid-js';
+import { cva } from 'class-variance-authority';
 import { For } from 'solid-js';
+import type { Component } from 'solid-js';
+
+import { cn } from '../../lib/cn';
+
+const dotsContainer = cva('flex items-center gap-2');
+const dotVariants = cva('flex h-4 w-4 items-center justify-center rounded-full transition-all duration-200 md:h-5 md:w-5', {
+  variants: {
+    state: {
+      default: 'bg-[rgba(12,42,101,0.08)]',
+      current: 'bg-[color:var(--color-primary)] shadow-ambient',
+      complete: 'bg-[color:var(--color-accent-green)]',
+    },
+  },
+  defaultVariants: {
+    state: 'default',
+  },
+});
 
 export interface ProgressDotsProps {
   total: number;
@@ -11,7 +28,7 @@ export const ProgressDots: Component<ProgressDotsProps> = (props) => {
   const safeTotal = Math.max(props.total, 1);
 
   return (
-    <div class="flex items-center gap-2">
+    <div class={dotsContainer()}>
       <For each={Array.from({ length: safeTotal })}>
         {(_, index) => {
           const isCompleted = index() < props.completed;
@@ -19,13 +36,11 @@ export const ProgressDots: Component<ProgressDotsProps> = (props) => {
 
           return (
             <span
-              class={`flex h-4 w-4 items-center justify-center rounded-full transition-all duration-200 md:h-5 md:w-5 ${
-                isCompleted
-                  ? 'bg-[color:var(--color-accent-green)]'
-                  : isCurrent
-                  ? 'bg-[color:var(--color-primary)] shadow-ambient'
-                  : 'bg-[rgba(12,42,101,0.08)]'
-              }`}
+              class={cn(
+                dotVariants({
+                  state: isCompleted ? 'complete' : isCurrent ? 'current' : 'default',
+                }),
+              )}
             />
           );
         }}

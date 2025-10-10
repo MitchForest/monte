@@ -1,44 +1,40 @@
 import { For, Show } from 'solid-js';
 
-import type { EditorViewModel } from '../hooks/useEditorViewModel';
+import {
+  useEditorActions,
+  useEditorComputed,
+  useEditorConfirm,
+  useEditorForms,
+  useEditorSelection,
+  useLessonEditor,
+} from '../hooks/useEditorViewModel';
 import { Button, Card } from '../../../design-system';
 
-interface CurriculumSidebarProps {
-  vm: EditorViewModel;
-}
-
-export const CurriculumSidebar = ({ vm }: CurriculumSidebarProps) => {
+export const CurriculumSidebar = () => {
+  const { units, topics, lessons } = useEditorComputed();
+  const { selectedUnitId, setSelectedUnitId, selectedTopicId, setSelectedTopicId, selectedLessonId, setSelectedLessonId } =
+    useEditorSelection();
+  const forms = useEditorForms();
   const {
-    computed: { units, topics, lessons },
-    selection: {
-      selectedUnitId,
-      setSelectedUnitId,
-      selectedTopicId,
-      setSelectedTopicId,
-      selectedLessonId,
-      setSelectedLessonId,
-    },
-    forms,
-    actions: {
-      startCreateUnit,
-      cancelCreateUnit,
-      submitCreateUnit,
-      handleMoveUnit,
-      handleDeleteUnit,
-      startCreateTopic,
-      cancelCreateTopic,
-      submitCreateTopic,
-      handleMoveTopic,
-      handleDeleteTopic,
-      startCreateLesson,
-      cancelCreateLesson,
-      submitCreateLesson,
-      handleDeleteLesson,
-      handleMoveLessonOrder,
-      handleSelectLesson,
-    },
-    editor,
-  } = vm;
+    startCreateUnit,
+    cancelCreateUnit,
+    submitCreateUnit,
+    handleMoveUnit,
+    handleDeleteUnit,
+    startCreateTopic,
+    cancelCreateTopic,
+    submitCreateTopic,
+    handleMoveTopic,
+    handleDeleteTopic,
+    startCreateLesson,
+    cancelCreateLesson,
+    submitCreateLesson,
+    handleDeleteLesson,
+    handleMoveLessonOrder,
+    handleSelectLesson,
+  } = useEditorActions();
+  const confirm = useEditorConfirm();
+  const editor = useLessonEditor();
 
   const createUnit = forms.createUnit;
   const createTopic = forms.createTopic;
@@ -71,13 +67,17 @@ export const CurriculumSidebar = ({ vm }: CurriculumSidebarProps) => {
                       : 'border-[rgba(64,157,233,0.2)] bg-white hover:border-[rgba(64,157,233,0.4)]'
                   }`}
                   onClick={() => {
-                    if (editor.state.dirty && unit._id !== selectedUnitId()) {
-                      const confirmNavigation = window.confirm(
-                        'You have unsaved changes. Navigating away will discard them. Continue?',
-                      );
-                      if (!confirmNavigation) return;
-                    }
-                    setSelectedUnitId(unit._id);
+                    void (async () => {
+                      if (editor.state.dirty && unit._id !== selectedUnitId()) {
+                        const confirmNavigation = await confirm.request({
+                          message: 'You have unsaved changes. Navigating away will discard them. Continue?',
+                          confirmLabel: 'Discard changes',
+                          cancelLabel: 'Stay here',
+                        });
+                        if (!confirmNavigation) return;
+                      }
+                      setSelectedUnitId(unit._id);
+                    })();
                   }}
                 >
                   <div class="flex items-start justify-between gap-3">
@@ -208,14 +208,18 @@ export const CurriculumSidebar = ({ vm }: CurriculumSidebarProps) => {
                       : 'border-[rgba(140,204,212,0.2)] bg-white hover:border-[rgba(140,204,212,0.5)]'
                   }`}
                   onClick={() => {
-                    if (editor.state.dirty && topic._id !== selectedTopicId()) {
-                      const confirmNavigation = window.confirm(
-                        'You have unsaved changes. Navigating away will discard them. Continue?',
-                      );
-                      if (!confirmNavigation) return;
-                    }
-                    setSelectedTopicId(topic._id);
-                    setSelectedLessonId(topic.lessons[0]?._id);
+                    void (async () => {
+                      if (editor.state.dirty && topic._id !== selectedTopicId()) {
+                        const confirmNavigation = await confirm.request({
+                          message: 'You have unsaved changes. Navigating away will discard them. Continue?',
+                          confirmLabel: 'Discard changes',
+                          cancelLabel: 'Stay here',
+                        });
+                        if (!confirmNavigation) return;
+                      }
+                      setSelectedTopicId(topic._id);
+                      setSelectedLessonId(topic.lessons[0]?._id);
+                    })();
                   }}
                 >
                   <div class="flex items-start justify-between gap-3">
@@ -356,7 +360,7 @@ export const CurriculumSidebar = ({ vm }: CurriculumSidebarProps) => {
                       ? 'border-[rgba(64,157,233,0.8)] bg-[rgba(233,245,251,0.75)]'
                       : 'border-[rgba(64,157,233,0.2)] bg-white hover:border-[rgba(64,157,233,0.4)]'
                   }`}
-                  onClick={() => handleSelectLesson(lesson._id)}
+                  onClick={() => void handleSelectLesson(lesson._id)}
                 >
                   <div class="flex items-start justify-between gap-3">
                     <div class="flex flex-col">

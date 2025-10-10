@@ -13,9 +13,9 @@ import {
 import { useNavigate, useParams } from '@tanstack/solid-router';
 import { createActor, type ActorRefFrom } from 'xstate';
 
-import { buildLessonTasks } from '../curriculum/utils/lessonTasks';
-import { useProgress } from '../curriculum/state/progress';
-import { createLessonPlayerMachine, type PlayerEvent, type PlayerStatus } from '../curriculum/machines/lessonPlayer';
+import { buildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
+import { useProgress } from '../domains/curriculum/state/progress';
+import { createLessonPlayerMachine, type PlayerEvent, type PlayerStatus } from '../domains/curriculum/machines/lessonPlayer';
 import type {
   GuidedEvaluatorId,
   GuidedStep,
@@ -25,28 +25,27 @@ import type {
   LessonSegment,
   PracticeQuestion,
   PresentationScript,
-} from '../curriculum/types';
-import { LessonTimeline } from '../curriculum/components/LessonTimeline';
-import { PresentationSegment } from '../curriculum/components/segments/PresentationSegment';
-import { GuidedSegment } from '../curriculum/components/segments/GuidedSegment';
-import { PracticeSegment } from '../curriculum/components/segments/PracticeSegment';
-import { createLocalEventRecorder } from '../curriculum/analytics/recorder';
-import type { DemoEventRecorder } from '../curriculum/analytics/events';
+} from '@monte/types';
+import { LessonTimeline } from '../domains/curriculum/components/LessonTimeline';
+import { PresentationSegment } from '../domains/curriculum/components/segments/PresentationSegment';
+import { GuidedSegment } from '../domains/curriculum/components/segments/GuidedSegment';
+import { PracticeSegment } from '../domains/curriculum/components/segments/PracticeSegment';
+import { createLocalEventRecorder } from '../domains/curriculum/analytics/recorder';
+import type { DemoEventRecorder } from '../domains/curriculum/analytics/events';
 import {
   generateGoldenBeadScenario,
   generateStampGameScenario,
-  buildGoldenBeadPresentationScript,
-  buildStampGamePresentationScript,
-  buildGoldenBeadGuidedSteps,
-  buildStampGameGuidedSteps,
-  buildGoldenBeadPractice,
-  buildStampGamePractice,
-  goldenBeadPassCriteria,
-  stampGamePassCriteria,
   type GoldenBeadScenario,
   type StampGameScenario,
-} from '../curriculum/scenarios/multiplication';
-import { fetchLessonBySlug, fetchUnitBySlug } from '../curriculum/api/curriculumClient';
+} from '../domains/curriculum/scenarios/multiplication';
+import {
+  fetchLessonBySlug,
+  fetchUnitBySlug,
+  isCurriculumAuthReady,
+  isCurriculumApiAvailable,
+  type LessonDraftRecord,
+  type CurriculumTreeUnit,
+} from '../domains/curriculum/api/curriculumClient';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -58,6 +57,8 @@ import {
   PageSection,
   ProfileAvatar,
 } from '../design-system';
+import { LessonInventoryProvider, useLessonInventory } from '../domains/curriculum/inventory/context';
+import { useAuth } from '../providers/AuthProvider';
 
 // Mini equation component for left sidebar (compact version)
 const MiniEquation = (props: { notes: string[] }) => {
@@ -262,10 +263,10 @@ const normalizeScenarioBinding = (value: unknown): LessonScenarioBinding | undef
 
 const extractScenarioBinding = (document: LessonDocument | undefined): LessonScenarioBinding | undefined => {
   if (!document) return undefined;
+  if (document.meta?.scenario) return document.meta.scenario;
   for (const segment of document.lesson.segments) {
     if (segment.scenario) return segment.scenario;
   }
-  if (document.meta?.scenario) return document.meta.scenario;
   return normalizeScenarioBinding(document.meta?.metadata?.scenario);
 };
 
@@ -287,40 +288,61 @@ const Lesson = () => {
   const lessonSlug = createMemo(() => params().lessonSlug);
   const unitSlug = createMemo(() => params().unitSlug);
   const navigate = useNavigate();
+  const auth = useAuth();
+  const apiReady = createMemo(() => isCurriculumApiAvailable && isCurriculumAuthReady() && !auth.loading());
 
-  const [lessonRecordResource, { refetch: refetchLessonRecord }] = createResource(
-    lessonSlug,
+  const [lessonRecordResource, { refetch: refetchLessonRecord }] = createResource<
+    LessonDraftRecord | undefined,
+    string | undefined
+  >(
+    () => {
+      const slug = lessonSlug();
+      return apiReady() && slug ? slug : undefined;
+    },
     async (slug) => {
       if (!slug) return undefined;
-      return await fetchLessonBySlug(slug);
+      return fetchLessonBySlug(slug);
     },
   );
 
-  const [unitResource] = createResource(unitSlug, async (slug) => {
-    if (!slug) return undefined;
-    return await fetchUnitBySlug(slug);
-  });
+  const [unitResource] = createResource<CurriculumTreeUnit | undefined, string | undefined>(
+    () => {
+      const slug = unitSlug();
+      return apiReady() && slug ? slug : undefined;
+    },
+    async (slug) => {
+      if (!slug) return undefined;
+      return fetchUnitBySlug(slug);
+    },
+  );
 
   const lessonDocument = createMemo<LessonDocument | undefined>(() => {
     const record = lessonRecordResource();
     if (!record) return undefined;
-    return (record.published ?? record.draft) as LessonDocument;
+    return record.published ?? record.draft;
   });
 
   const lesson = createMemo<Lesson | undefined>(() => lessonDocument()?.lesson);
   const segments = createMemo(() => lesson()?.segments ?? []);
   const tasks = createMemo(() => {
     if (!lesson()) return [];
-    return buildLessonTasks(lesson()!);
+    try {
+      return buildLessonTasks(lesson()!);
+    } catch (error) {
+      console.warn('Unable to build lesson tasks for playback', { lessonId: lesson()!.id, error });
+      return [];
+    }
   });
 
   const { actions: progressActions } = useProgress();
   const recordEvent = createLocalEventRecorder();
 
   createEffect(() => {
-    if (lesson()) {
-      progressActions.ensureTasks(lesson()!.id, tasks());
-    }
+    const currentLesson = lesson();
+    if (!currentLesson) return;
+    const lessonTasks = tasks();
+    if (lessonTasks.length === 0) return;
+    progressActions.ensureTasks(currentLesson.id, lessonTasks);
   });
 
   const tasksBySegment = createMemo(() => {
@@ -460,10 +482,14 @@ const Lesson = () => {
     </div>
   );
 
+  const getLessonId = () => lesson()?.id;
+
   const markSegmentTasksCompleted = (segmentId: string) => {
+    const lessonId = getLessonId();
+    if (!lessonId) return;
     const relatedTasks = tasksBySegment().get(segmentId);
     if (!relatedTasks) return;
-    relatedTasks.forEach((task) => progressActions.markTaskStatus(lesson()!.id, task.id, 'completed'));
+    relatedTasks.forEach((task) => progressActions.markTaskStatus(lessonId, task.id, 'completed'));
   };
 
   const handlePresentationComplete = () => {
@@ -479,21 +505,31 @@ const Lesson = () => {
   };
 
   const handlePracticeTaskResult = (taskId: string, status: 'completed' | 'incorrect') => {
-    progressActions.markTaskStatus(lesson()!.id, taskId, status);
+    const lessonId = getLessonId();
+    if (!lessonId) return;
+    progressActions.markTaskStatus(lessonId, taskId, status);
   };
 
   const handlePracticeResult = (segmentId: string, result: 'pass' | 'fail') => {
+    const lessonId = getLessonId();
+    if (!lessonId) return;
     const segmentTasks = tasksBySegment().get(segmentId) ?? [];
 
     if (result === 'pass') {
-      segmentTasks.forEach((task) => progressActions.markTaskStatus(lesson()!.id, task.id, 'completed'));
+      segmentTasks.forEach((task) => progressActions.markTaskStatus(lessonId, task.id, 'completed'));
       send({ type: 'COMPLETE' });
       return;
     }
 
-    segmentTasks.forEach((task) => progressActions.markTaskStatus(lesson()!.id, task.id, 'incorrect'));
-    progressActions.resetLesson(lesson()!.id);
+    segmentTasks.forEach((task) => progressActions.markTaskStatus(lessonId, task.id, 'incorrect'));
+    progressActions.resetLesson(lessonId);
     send({ type: 'SET_INDEX', index: 0 });
+  };
+
+  const handlePracticeReset = (_options?: { regenerate: boolean }) => {
+    const currentLesson = lesson();
+    if (!currentLesson) return;
+    progressActions.resetLesson(currentLesson.id);
   };
 
   const handleTogglePlay = () => {
@@ -669,25 +705,28 @@ const Lesson = () => {
         <div class="lesson-player-center">
           <Show when={lesson()} keyed>
             {(currentLesson) => (
-              <Show when={activeSegment()} keyed>
-                {(segment) => (
-                  <SegmentContent
-                    lesson={currentLesson}
-                    segment={segment}
-                    playerStatus={status()}
-                    onPresentationComplete={handlePresentationComplete}
-                    onGuidedComplete={handleGuidedComplete}
-                    onPracticeResult={handlePracticeResult}
-                    onPracticeTaskResult={handlePracticeTaskResult}
-                    scenario={currentScenario()}
-                    recordEvent={recordEvent}
-                    onNarrationChange={handleNarrationUpdate}
-                    onPaperNotesChange={setPaperNotes}
-                    onActionChange={handleActionChange}
-                    actionJumpToIndex={actionJumpToIndex()}
-                  />
-                )}
-              </Show>
+              <LessonInventoryProvider inventory={currentLesson.materialInventory}>
+                <Show when={activeSegment()} keyed>
+                  {(segment) => (
+                    <SegmentContent
+                      lesson={currentLesson}
+                      segment={segment}
+                      playerStatus={status()}
+                      onPresentationComplete={handlePresentationComplete}
+                      onGuidedComplete={handleGuidedComplete}
+                      onPracticeResult={handlePracticeResult}
+                      onPracticeTaskResult={handlePracticeTaskResult}
+                      onPracticeReset={handlePracticeReset}
+                      scenario={currentScenario()}
+                      recordEvent={recordEvent}
+                      onNarrationChange={handleNarrationUpdate}
+                      onPaperNotesChange={setPaperNotes}
+                      onActionChange={handleActionChange}
+                      actionJumpToIndex={actionJumpToIndex()}
+                    />
+                  )}
+                </Show>
+              </LessonInventoryProvider>
             )}
           </Show>
         </div>
@@ -817,6 +856,7 @@ const SegmentContent = (props: {
   onGuidedComplete: (segmentId: string) => void;
   onPracticeResult: (segmentId: string, result: 'pass' | 'fail') => void;
   onPracticeTaskResult: (taskId: string, status: 'completed' | 'incorrect') => void;
+  onPracticeReset?: (options: { regenerate: boolean }) => void;
   scenario?: LessonScenario;
   recordEvent?: DemoEventRecorder;
   onNarrationChange?: (narration: string, actionIndex: number) => void;
@@ -824,6 +864,7 @@ const SegmentContent = (props: {
   onActionChange?: (currentIndex: number, totalActions: number) => void;
   actionJumpToIndex?: number;
 }) => {
+  const inventoryContext = useLessonInventory();
   const scenario = () => props.scenario;
 
   onMount(() => {
@@ -836,70 +877,17 @@ const SegmentContent = (props: {
 
   const presentationScript = createMemo<PresentationScript | undefined>(() => {
     if (props.segment.type !== 'presentation') return undefined;
-    if (props.segment.script) return props.segment.script;
-    if (props.lesson.id === 'lesson-multiplication-golden-beads' && scenario()?.kind === 'golden-beads') {
-      return buildGoldenBeadPresentationScript(scenario() as GoldenBeadScenario);
-    }
-    if (props.lesson.id === 'lesson-multiplication-stamp-game' && scenario()?.kind === 'stamp-game') {
-      return buildStampGamePresentationScript(scenario() as StampGameScenario);
-    }
-    return undefined;
+    return props.segment.script;
   });
 
   const guidedSteps = createMemo<(GuidedStep & { evaluatorId: GuidedEvaluatorId })[]>(() => {
     if (props.segment.type !== 'guided') return [];
-    if (props.segment.steps.length > 0) {
-      return props.segment.steps;
-    }
-    if (props.lesson.id === 'lesson-multiplication-golden-beads' && scenario()?.kind === 'golden-beads') {
-      return buildGoldenBeadGuidedSteps(scenario() as GoldenBeadScenario);
-    }
-    if (props.lesson.id === 'lesson-multiplication-stamp-game' && scenario()?.kind === 'stamp-game') {
-      return buildStampGameGuidedSteps(scenario() as StampGameScenario);
-    }
     return props.segment.steps;
   });
 
-  const practiceConfig = createMemo(() => {
-    if (props.segment.type !== 'practice') {
-      return {
-        questions: [] as PracticeQuestion[],
-        passCriteria: undefined,
-        refreshKey: 0,
-      } as const;
-    }
-
-    if (props.segment.questions.length > 0) {
-      return {
-        questions: props.segment.questions,
-        passCriteria: props.segment.passCriteria,
-        refreshKey: props.segment.questions.length,
-      } as const;
-    }
-
-    if (props.lesson.id === 'lesson-multiplication-golden-beads' && scenario()?.kind === 'golden-beads') {
-      const concreteScenario = scenario() as GoldenBeadScenario;
-      return {
-        questions: buildGoldenBeadPractice(concreteScenario),
-        passCriteria: goldenBeadPassCriteria,
-        refreshKey: concreteScenario.product,
-      } as const;
-    }
-
-    if (props.lesson.id === 'lesson-multiplication-stamp-game' && scenario()?.kind === 'stamp-game') {
-      const concreteScenario = scenario() as StampGameScenario;
-      return {
-        questions: buildStampGamePractice(concreteScenario),
-        passCriteria: stampGamePassCriteria,
-        refreshKey: concreteScenario.product,
-      } as const;
-    }
-
-    return {
-      questions: props.segment.questions,
-      passCriteria: props.segment.passCriteria,
-      refreshKey: 0,
-    } as const;
+  const practiceQuestions = createMemo<PracticeQuestion[]>(() => {
+    if (props.segment.type !== 'practice') return [];
+    return props.segment.questions;
   });
 
   const recordSegmentEnd = (reason: 'manual-complete' | 'narration-complete' | 'skipped') => {
@@ -913,10 +901,10 @@ const SegmentContent = (props: {
 
   if (props.segment.type === 'presentation') {
     const script = presentationScript();
-    if (!script) {
+    if (!script || script.actions.length === 0) {
       return (
         <Card variant="soft" class="space-y-3 text-subtle">
-          <p>Presentation script unavailable.</p>
+          <p>Presentation segment "{props.segment.title}" is missing authored script actions. Update the lesson draft to continue.</p>
         </Card>
       );
     }
@@ -945,6 +933,14 @@ const SegmentContent = (props: {
   }
 
   if (props.segment.type === 'guided') {
+    const steps = guidedSteps();
+    if (steps.length === 0) {
+      return (
+        <Card variant="soft" class="space-y-3 text-subtle">
+          <p>Guided segment "{props.segment.title}" requires at least one step before it can run.</p>
+        </Card>
+      );
+    }
     const handleComplete = () => {
       recordSegmentEnd('manual-complete');
       props.onGuidedComplete(props.segment.id);
@@ -953,15 +949,23 @@ const SegmentContent = (props: {
       <GuidedSegment
         lessonId={props.lesson.id}
         segment={props.segment}
-        steps={guidedSteps().length ? guidedSteps() : props.segment.steps}
+        steps={steps}
         scenario={scenario()}
         onSegmentComplete={handleComplete}
+        recordEvent={props.recordEvent}
       />
     );
   }
 
   if (props.segment.type === 'practice') {
-    const config = practiceConfig();
+    const questions = practiceQuestions();
+    if (questions.length === 0 || !props.segment.passCriteria) {
+      return (
+        <Card variant="soft" class="space-y-3 text-subtle">
+          <p>Practice segment "{props.segment.title}" needs authored questions and pass criteria.</p>
+        </Card>
+      );
+    }
     const handleResult = (result: 'pass' | 'fail') => {
       recordSegmentEnd('manual-complete');
       props.onPracticeResult(props.segment.id, result);
@@ -971,12 +975,17 @@ const SegmentContent = (props: {
       <PracticeSegment
         lessonId={props.lesson.id}
         segment={props.segment}
-        questions={config.questions.length ? config.questions : props.segment.questions}
-        passCriteria={config.passCriteria ?? props.segment.passCriteria}
-        refreshKey={config.refreshKey}
+        questions={questions}
+        passCriteria={props.segment.passCriteria}
+        refreshKey={props.segment.questions.length}
         onSegmentResult={handleResult}
         onTaskResult={props.onPracticeTaskResult}
         recordEvent={props.recordEvent}
+        scenarioSeed={scenario()?.seed}
+        onReset={(options) => {
+          inventoryContext.resetAll();
+          props.onPracticeReset?.(options);
+        }}
       />
     );
   }

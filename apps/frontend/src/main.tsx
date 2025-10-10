@@ -1,11 +1,15 @@
 /* @refresh reload */
 import { render } from 'solid-js/web';
-import 'solid-devtools';
-
 import { RouterProvider } from '@tanstack/solid-router';
 
 import { router } from './router';
 import './globals.css';
+import { AuthProvider } from './providers/AuthProvider';
+import { Toaster } from 'solid-sonner';
+
+if (import.meta.env.DEV) {
+  await import('solid-devtools');
+}
 
 const root = document.getElementById('root');
 
@@ -15,4 +19,12 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
-render(() => <RouterProvider router={router} />, root!);
+render(
+  () => (
+    <AuthProvider>
+      <RouterProvider router={router} />
+      <Toaster position="top-right" closeButton richColors />
+    </AuthProvider>
+  ),
+  root!,
+);

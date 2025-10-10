@@ -1,4 +1,4 @@
-import type { GuidedEvaluatorId } from '../../curriculum/types';
+import type { GuidedEvaluatorId } from '@monte/types';
 
 export const actionTypeOptions = [
   { value: 'narrate', label: 'Narration' },

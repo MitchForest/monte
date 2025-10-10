@@ -1,0 +1,74 @@
+[
+  {
+    "id": "number-sense-place-value",
+    "name": "Number Sense & Place Value",
+    "description": "Develop counting, number relationships, and base-ten structure from concrete quantities through decimal understanding.",
+    "canonicalOrder": 1,
+    "ccssClusters": ["K.CC", "K.NBT", "1.NBT", "2.NBT", "3.NBT", "4.NBT"],
+    "ritBands": [
+      { "min": 130, "max": 159 },
+      { "min": 160, "max": 189 },
+      { "min": 190, "max": 209 }
+    ]
+  },
+  {
+    "id": "operations-algebraic-thinking",
+    "name": "Operations & Algebraic Thinking",
+    "description": "Build addition, subtraction, multiplication, and division fluency with an emphasis on strategies, structure, and early algebraic reasoning.",
+    "canonicalOrder": 2,
+    "ccssClusters": ["K.OA", "1.OA", "2.OA", "3.OA", "4.OA", "5.OA"],
+    "ritBands": [
+      { "min": 150, "max": 179 },
+      { "min": 180, "max": 199 },
+      { "min": 200, "max": 215 }
+    ]
+  },
+  {
+    "id": "fractions-rational-numbers",
+    "name": "Fractions & Rational Numbers",
+    "description": "Introduce unit fractions, equivalence, ordering, and operations connecting fractions to decimals and measurement contexts.",
+    "canonicalOrder": 3,
+    "ccssClusters": ["3.NF", "4.NF", "5.NF"],
+    "ritBands": [
+      { "min": 175, "max": 194 },
+      { "min": 195, "max": 209 },
+      { "min": 210, "max": 220 }
+    ]
+  },
+  {
+    "id": "measurement-data",
+    "name": "Measurement & Data",
+    "description": "Measure attributes, tell time, work with money, and analyze data representations to solve real-world problems.",
+    "canonicalOrder": 4,
+    "ccssClusters": ["K.MD", "1.MD", "2.MD", "3.MD", "4.MD", "5.MD"],
+    "ritBands": [
+      { "min": 150, "max": 179 },
+      { "min": 180, "max": 199 },
+      { "min": 200, "max": 215 }
+    ]
+  },
+  {
+    "id": "geometry-spatial-reasoning",
+    "name": "Geometry & Spatial Reasoning",
+    "description": "Explore shapes, attributes, spatial relationships, and geometric measurement with progressive abstraction.",
+    "canonicalOrder": 5,
+    "ccssClusters": ["K.G", "1.G", "2.G", "3.G", "4.G", "5.G"],
+    "ritBands": [
+      { "min": 150, "max": 179 },
+      { "min": 180, "max": 204 },
+      { "min": 205, "max": 215 }
+    ]
+  },
+  {
+    "id": "patterns-algebraic-thinking",
+    "name": "Patterns & Algebraic Thinking",
+    "description": "Recognize, generalize, and represent patterns, relationships, and early functional thinking.",
+    "canonicalOrder": 6,
+    "ccssClusters": ["1.OA", "2.OA", "3.OA", "4.OA", "5.OA", "6.EE"],
+    "ritBands": [
+      { "min": 160, "max": 189 },
+      { "min": 190, "max": 205 },
+      { "min": 206, "max": 220 }
+    ]
+  }
+]

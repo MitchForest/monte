@@ -10,6 +10,12 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths": {
+      "@monte/backend/*": ["apps/backend/*"],
+      "@monte/api/*": ["packages/api/*"],
+      "@monte/types/*": ["packages/types/*"]
+    }
   }
 }

@@ -5,3 +5,4 @@ export * from './components/Chip';
 export * from './components/PageSection';
 export * from './components/ProfileAvatar';
 export * from './components/ProgressDots';
+export * from './components/Modal';

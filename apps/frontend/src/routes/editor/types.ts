@@ -5,7 +5,7 @@ import type {
   PracticeQuestion,
   PresentationAction,
   WorkspaceKind,
-} from '../../curriculum/types';
+} from '@monte/types';
 
 export interface UnitFormState {
   title: string;

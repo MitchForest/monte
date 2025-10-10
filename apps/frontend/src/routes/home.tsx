@@ -1,27 +1,60 @@
 import { createEffect, createMemo, createResource } from 'solid-js';
 import { useNavigate } from '@tanstack/solid-router';
 
-import { fetchCurriculumTree, listLessons } from '../curriculum/api/curriculumClient';
-import { buildLessonTasks } from '../curriculum/utils/lessonTasks';
-import { getLessonTaskStatus, useProgress } from '../curriculum/state/progress';
-import type { Lesson, LessonDocument, LessonTask } from '../curriculum/types';
+import {
+  fetchCurriculumTree,
+  isCurriculumApiAvailable,
+  isCurriculumAuthReady,
+  listLessons,
+} from '../domains/curriculum/api/curriculumClient';
+import { buildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
+import { getLessonTaskStatus, useProgress } from '../domains/curriculum/state/progress';
+import type { CurriculumTree, Lesson, LessonTask } from '@monte/types';
+import type { LessonDraftRecord } from '../domains/curriculum/api/curriculumClient';
 import { Button, Card, Chip, PageSection } from '../design-system';
+import { useAuth } from '../providers/AuthProvider';
 
 const Home = () => {
   const navigate = useNavigate();
   const { state, actions } = useProgress();
+  const auth = useAuth();
 
-  const [treeResource] = createResource(fetchCurriculumTree);
-  const [lessonsResource] = createResource(async () => await listLessons());
+  const fetchCurriculumTreeSafe = async (): Promise<CurriculumTree> => {
+    if (!isCurriculumApiAvailable || !isCurriculumAuthReady() || auth.loading()) {
+      return [];
+    }
+    return fetchCurriculumTree();
+  };
+
+  const fetchLessonListSafe = async (): Promise<LessonDraftRecord[]> => {
+    if (!isCurriculumApiAvailable || !isCurriculumAuthReady() || auth.loading()) {
+      return [];
+    }
+    return listLessons();
+  };
+
+  const [treeResource, { refetch: refetchTree }] = createResource(fetchCurriculumTreeSafe);
+  const [lessonsResource, { refetch: refetchLessons }] = createResource(fetchLessonListSafe);
+
+  createEffect(() => {
+    if (isCurriculumApiAvailable && isCurriculumAuthReady() && !auth.loading()) {
+      void refetchTree();
+      void refetchLessons();
+    }
+  });
 
   createEffect(() => {
     const records = lessonsResource();
     if (!records) return;
     records.forEach((record) => {
-      const document = (record.published ?? record.draft) as LessonDocument;
+      const document = record.published ?? record.draft;
       const lesson = document.lesson;
-      const tasks = buildLessonTasks(lesson);
-      actions.ensureTasks(lesson.id, tasks);
+      try {
+        const tasks = buildLessonTasks(lesson);
+        actions.ensureTasks(lesson.id, tasks);
+      } catch (error) {
+        console.warn('Unable to register lesson tasks', { lessonId: lesson.id, error });
+      }
     });
   });
 
@@ -29,9 +62,14 @@ const Home = () => {
     const records = lessonsResource();
     if (!records) return [] as LessonSummary[];
     return records.map((record) => {
-      const document = (record.published ?? record.draft) as LessonDocument;
+      const document = record.published ?? record.draft;
       const lesson = document.lesson;
-      const tasks = buildLessonTasks(lesson);
+      let tasks: LessonTask[] = [];
+      try {
+        tasks = buildLessonTasks(lesson);
+      } catch (error) {
+        console.warn('Skipping tasks while summarizing lesson', { lessonId: lesson.id, error });
+      }
       const progress = state.lessons[lesson.id];
       const orderedTaskIds = progress?.orderedTaskIds ?? tasks.map((task) => task.id);
       const completed = orderedTaskIds.filter(

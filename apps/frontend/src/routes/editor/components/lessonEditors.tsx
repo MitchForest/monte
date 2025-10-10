@@ -10,7 +10,7 @@ import {
   positionOptions,
   workspaceOptions,
 } from '../constants';
-import { clone, defaultPassCriteria, moveItem } from '../utils';
+import { clone, defaultPassCriteria } from '../utils';
 import type {
   GuidedStepWithEvaluator,
   LessonSegment,
@@ -18,10 +18,9 @@ import type {
 } from '../types';
 import type {
   GuidedEvaluatorId,
-  GuidedStep,
   PracticeQuestion,
   PresentationAction,
-} from '../../../curriculum/types';
+} from '@monte/types';
 import { Button } from '../../../design-system';
 
 export interface PresentationActionEditorProps {
@@ -727,3 +726,49 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
                       difficulty: event.currentTarget.value as (typeof difficultyOptions)[number],
                     }))
                   }
+                >
+                  <For each={difficultyOptions}>
+                    {(option) => (
+                      <option value={option}>
+                        {option}
+                      </option>
+                    )}
+                  </For>
+                </select>
+              </label>
+            </div>
+
+            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <span>Prompt</span>
+              <input
+                class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
+                value={question.prompt}
+                onInput={(event) =>
+                  updateQuestion(question, (draft) => ({
+                    ...draft,
+                    prompt: event.currentTarget.value,
+                  }))
+                }
+              />
+            </label>
+
+            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <span>Correct answer</span>
+              <input
+                type="number"
+                class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
+                value={question.correctAnswer}
+                onInput={(event) =>
+                  updateQuestion(question, (draft) => ({
+                    ...draft,
+                    correctAnswer: Number(event.currentTarget.value) || 0,
+                  }))
+                }
+              />
+            </label>
+          </div>
+        )}
+      </For>
+    </div>
+  );
+};

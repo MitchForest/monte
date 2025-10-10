@@ -1,43 +1,41 @@
+import { cva, type VariantProps } from 'class-variance-authority';
 import type { Component, JSX } from 'solid-js';
 import { splitProps } from 'solid-js';
 
-import { cx } from '../utils/cx';
+import { cn } from '../../lib/cn';
 
-type CardVariant = 'soft' | 'floating' | 'flat';
+const cardVariants = cva(
+  'rounded-[var(--radius-lg)] border border-[rgba(12,42,101,0.08)] text-[color:var(--color-text)] shadow-ambient transition-shadow duration-200',
+  {
+    variants: {
+      variant: {
+        soft: 'surface-card',
+        floating: 'surface-floating',
+        flat: 'bg-transparent',
+      },
+      padding: {
+        none: 'p-0',
+        sm: 'p-4',
+        md: 'p-6',
+        lg: 'p-8',
+      },
+    },
+    defaultVariants: {
+      variant: 'soft',
+      padding: 'md',
+    },
+  },
+);
 
-export interface CardProps extends JSX.HTMLAttributes<HTMLDivElement> {
-  variant?: CardVariant;
-  padding?: 'none' | 'sm' | 'md' | 'lg';
-}
-
-const variantClass: Record<CardVariant, string> = {
-  soft: 'surface-card',
-  floating: 'surface-floating',
-  flat: 'bg-transparent',
-};
-
-const paddingClass: Record<NonNullable<CardProps['padding']>, string> = {
-  none: 'p-0',
-  sm: 'p-4',
-  md: 'p-6',
-  lg: 'p-8',
-};
+export interface CardProps
+  extends JSX.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof cardVariants> {}
 
 export const Card: Component<CardProps> = (props) => {
   const [local, rest] = splitProps(props, ['class', 'children', 'variant', 'padding']);
-  const variant = local.variant ?? 'soft';
-  const padding = local.padding ?? 'md';
 
   return (
-    <div
-      class={cx(
-        'rounded-[var(--radius-lg)] border border-[rgba(12,42,101,0.08)] text-[color:var(--color-text)] shadow-ambient transition-shadow duration-200',
-        variantClass[variant],
-        paddingClass[padding],
-        local.class,
-      )}
-      {...rest}
-    >
+    <div class={cn(cardVariants({ variant: local.variant, padding: local.padding }), local.class)} {...rest}>
       {local.children}
     </div>
   );

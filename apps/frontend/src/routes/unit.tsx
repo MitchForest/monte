@@ -3,13 +3,18 @@ import { useNavigate, useParams } from '@tanstack/solid-router';
 
 import {
   fetchUnitBySlug,
+  isCurriculumAuthReady,
+  isCurriculumApiAvailable,
   listLessons,
-} from '../curriculum/api/curriculumClient';
-import { curriculumMaterials } from '../curriculum/materials';
-import { getLessonTaskStatus, useProgress } from '../curriculum/state/progress';
-import { buildLessonTasks } from '../curriculum/utils/lessonTasks';
-import type { Lesson } from '../curriculum/types';
+  type CurriculumTreeUnit,
+  type LessonDraftRecord,
+} from '../domains/curriculum/api/curriculumClient';
+import { curriculumMaterials } from '../domains/curriculum/materials';
+import { getLessonTaskStatus, useProgress } from '../domains/curriculum/state/progress';
+import { buildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
+import type { Lesson, LessonTask } from '@monte/types';
 import { Button, Card, Chip, PageSection, ProgressDots, type ChipProps } from '../design-system';
+import { useAuth } from '../providers/AuthProvider';
 
 const materialNameMap = new Map(curriculumMaterials.map((material) => [material.id, material.name]));
 
@@ -70,14 +75,35 @@ const Unit = () => {
   const params = useParams({ from: '/units/$unitSlug' });
   const unitSlug = createMemo(() => params().unitSlug);
   const { actions, state } = useProgress();
+  const auth = useAuth();
 
-  const [unitResource] = createResource(unitSlug, async (slug) => {
-    if (!slug) return undefined;
-    return await fetchUnitBySlug(slug);
-  });
+  const [unitResource, { refetch: refetchUnit }] = createResource<CurriculumTreeUnit | undefined, string | undefined>(
+    unitSlug,
+    async (slug) => {
+      if (!slug || !isCurriculumApiAvailable || !isCurriculumAuthReady() || auth.loading()) {
+        return undefined;
+      }
+      return fetchUnitBySlug(slug);
+    },
+  );
 
-  const [lessonsResource] = createResource(async () => {
-    return await listLessons();
+  const fetchLessonListSafe = async (): Promise<LessonDraftRecord[]> => {
+    if (!isCurriculumApiAvailable || !isCurriculumAuthReady() || auth.loading()) {
+      return [];
+    }
+    return listLessons();
+  };
+
+  const [lessonsResource, { refetch: refetchLessons }] = createResource(fetchLessonListSafe);
+
+  createEffect(() => {
+    if (isCurriculumApiAvailable && isCurriculumAuthReady() && !auth.loading()) {
+      void refetchLessons();
+      const slug = unitSlug();
+      if (slug) {
+        void refetchUnit();
+      }
+    }
   });
 
   const unitData = createMemo(() => unitResource());
@@ -94,8 +120,12 @@ const Unit = () => {
         const document = record?.published ?? record?.draft;
         if (!document) return;
         const lesson = document.lesson;
-        const tasks = buildLessonTasks(lesson);
-        actions.ensureTasks(lesson.id, tasks);
+        try {
+          const tasks = buildLessonTasks(lesson);
+          actions.ensureTasks(lesson.id, tasks);
+        } catch (error) {
+          console.warn('Unable to register lesson tasks for unit view', { lessonId: lesson.id, error });
+        }
       });
     });
   });
@@ -139,7 +169,14 @@ const Unit = () => {
         const document = record?.published ?? record?.draft;
         const lesson = document?.lesson;
         const lessonId = lesson?.id ?? `${meta.slug}-draft`;
-        const tasks = lesson ? buildLessonTasks(lesson) : [];
+        let tasks: LessonTask[] = [];
+        if (lesson) {
+          try {
+            tasks = buildLessonTasks(lesson);
+          } catch (error) {
+            console.warn('Skipping tasks in unit path rendering', { lessonId: lesson.id, error });
+          }
+        }
         const progress = lesson ? state.lessons[lesson.id] : undefined;
         const orderedTaskIds = lesson
           ? progress?.orderedTaskIds ?? tasks.map((task) => task.id)

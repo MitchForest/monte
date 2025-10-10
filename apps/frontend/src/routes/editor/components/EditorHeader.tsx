@@ -1,16 +1,10 @@
-import type { EditorViewModel } from '../hooks/useEditorViewModel';
+import { useEditorActions, useEditorSelection, useLessonEditor } from '../hooks/useEditorViewModel';
 import { Button } from '../../../design-system';
 
-interface EditorHeaderProps {
-  vm: EditorViewModel;
-}
-
-export const EditorHeader = ({ vm }: EditorHeaderProps) => {
-  const {
-    editor,
-    actions: { handlePublish, handleSave, handleReset },
-    selection: { selectedLessonId },
-  } = vm;
+export const EditorHeader = () => {
+  const editor = useLessonEditor();
+  const { handlePublish, handleSave, handleReset } = useEditorActions();
+  const { selectedLessonId } = useEditorSelection();
 
   return (
     <header class="flex flex-wrap items-center justify-between gap-3">
@@ -21,7 +15,7 @@ export const EditorHeader = ({ vm }: EditorHeaderProps) => {
         </p>
       </div>
       <div class="flex items-center gap-2">
-        <Button variant="secondary" size="compact" onClick={handleReset}>
+        <Button variant="secondary" size="compact" onClick={() => void handleReset()}>
           Reset draft
         </Button>
         <Button variant="secondary" size="compact" disabled={!editor.canUndo()} onClick={() => editor.undo()}>
