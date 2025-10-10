@@ -1,0 +1,1786 @@
+[
+  {
+    "id": "lesson.g1.represent-20.place-value-cards",
+    "topicId": "represent-numbers-to-20",
+    "name": "Place-Value Cards to 20",
+    "materialId": "place-value-cards",
+    "skills": [
+      "skill.represent-numbers-to-20.read-write-numerals-20",
+      "skill.represent-numbers-to-20.match-words-models-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.teen-numbers.golden-bead-teens"
+    ],
+    "notes": "Use Montessori place-value cards with bead bars to read and record numbers to twenty."
+  },
+  {
+    "id": "lesson.g1.represent-20.double-ten-frame",
+    "topicId": "represent-numbers-to-20",
+    "name": "Double Ten Frame Representations",
+    "materialId": "double-ten-frame",
+    "skills": [
+      "skill.represent-numbers-to-20.ten-frame-models-20",
+      "skill.represent-numbers-to-20.match-words-models-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.represent-20.place-value-cards"
+    ],
+    "notes": "Fill paired ten frames, then choose matching numeral and word labels."
+  },
+  {
+    "id": "lesson.g1.compare-20.place-value-models",
+    "topicId": "compare-numbers-to-20",
+    "name": "Compare Numbers with Place-Value Models",
+    "materialId": "place-value-cards",
+    "skills": [
+      "skill.compare-numbers-to-20.compare-models-20",
+      "skill.compare-numbers-to-20.compare-numerals-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.represent-20.double-ten-frame"
+    ],
+    "notes": "Build two amounts with bead bars and cards, then choose <, >, or =."
+  },
+  {
+    "id": "lesson.g1.compare-20.order",
+    "topicId": "compare-numbers-to-20",
+    "name": "Order Three Numbers to 20",
+    "materialId": "number-card-line",
+    "skills": [
+      "skill.compare-numbers-to-20.order-three-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.compare-20.place-value-models"
+    ],
+    "notes": "Arrange numeral cards on a digital strip and justify the order."
+  },
+  {
+    "id": "lesson.g1.make-ten.bead-partners",
+    "topicId": "make-ten-combinations",
+    "name": "Bead Stair Ten Partners",
+    "materialId": "bead-stair",
+    "skills": [
+      "skill.make-ten-combinations.ten-partners-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.teen-numbers.golden-bead-teens"
+    ],
+    "notes": "Match complementary bead bars to build ten on the staircase."
+  },
+  {
+    "id": "lesson.g1.make-ten.equation-cards",
+    "topicId": "make-ten-combinations",
+    "name": "Ten Partners Equation Cards",
+    "materialId": "equation-tablet",
+    "skills": [
+      "skill.make-ten-combinations.compose-teens",
+      "skill.make-ten-combinations.decompose-20-equations"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.make-ten.bead-partners"
+    ],
+    "notes": "Use movable digits to record teen compositions and make-ten decompositions."
+  },
+  {
+    "id": "lesson.g1.subtraction10.strip-board",
+    "topicId": "subtraction-within-10",
+    "name": "Subtraction Strip Board Stories",
+    "materialId": "subtraction-strip-board",
+    "skills": [
+      "skill.subtraction-within-10.take-away-objects-10",
+      "skill.subtraction-within-10.compare-sets-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.make-ten.equation-cards"
+    ],
+    "notes": "Remove strips to model take-away and comparison situations within ten."
+  },
+  {
+    "id": "lesson.g1.subtraction10.equation-tablet",
+    "topicId": "subtraction-within-10",
+    "name": "Record Subtraction within Ten",
+    "materialId": "equation-tablet",
+    "skills": [
+      "skill.subtraction-within-10.solve-equations-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.subtraction10.strip-board"
+    ],
+    "notes": "Translate modeled subtraction into equations and check with bead bars."
+  },
+  {
+    "id": "lesson.g1.tens-ones.bead-exchange",
+    "topicId": "tens-ones-composition",
+    "name": "Golden Bead Tens and Ones",
+    "materialId": "golden-beads-lite",
+    "skills": [
+      "skill.tens-ones-composition.build-models-120",
+      "skill.tens-ones-composition.regroup-tens-ones"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.teen-numbers.golden-bead-teens"
+    ],
+    "notes": "Exchange ten unit beads for a ten bar and represent numbers through 120."
+  },
+  {
+    "id": "lesson.g1.tens-ones.stamp-equations",
+    "topicId": "tens-ones-composition",
+    "name": "Stamp Game Tens and Ones",
+    "materialId": "stamp-game-lite",
+    "skills": [
+      "skill.tens-ones-composition.write-equations-120"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.tens-ones.bead-exchange"
+    ],
+    "notes": "Lay stamp tiles to match written numbers and record expanded equations."
+  },
+  {
+    "id": "lesson.g1.ten-more.hundred-board",
+    "topicId": "ten-more-ten-less",
+    "name": "Ten More and Ten Less on the Hundred Board",
+    "materialId": "hundred-board",
+    "skills": [
+      "skill.ten-more-ten-less.find-ten-more-120",
+      "skill.ten-more-ten-less.find-ten-less-120"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.tens-ones.stamp-equations"
+    ],
+    "notes": "Use the hundred board to hop vertically and justify the change of ten."
+  },
+  {
+    "id": "lesson.g1.ten-more.story-problems",
+    "topicId": "ten-more-ten-less",
+    "name": "Ten More/Less Story Problems",
+    "materialId": "story-mat",
+    "skills": [
+      "skill.ten-more-ten-less.solve-word-problems-120"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.ten-more.hundred-board"
+    ],
+    "notes": "Act out scenarios gaining or losing ten and record the result."
+  },
+  {
+    "id": "lesson.g1.hundred-chart.neighbor-walk",
+    "topicId": "hundred-chart-navigation",
+    "name": "Hundred Chart Neighbor Walk",
+    "materialId": "hundred-board",
+    "skills": [
+      "skill.hundred-chart-navigation.find-neighbors",
+      "skill.hundred-chart-navigation.count-within-120"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.ten-more.story-problems"
+    ],
+    "notes": "Explore forward and backward sequences on the hundred chart."
+  },
+  {
+    "id": "lesson.g1.hundred-chart.write-120",
+    "topicId": "hundred-chart-navigation",
+    "name": "Write Numbers to 120",
+    "materialId": "hundred-board",
+    "skills": [
+      "skill.hundred-chart-navigation.read-write-120"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "hundred-chart"
+      },
+      {
+        "type": "guided",
+        "representation": "hundred-chart"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.hundred-chart.neighbor-walk"
+    ],
+    "notes": "Fill missing numbers on the hundred board and record numerals beyond 100."
+  },
+  {
+    "id": "lesson.g1.hundred-chart.compare-120",
+    "topicId": "hundred-chart-navigation",
+    "name": "Compare Numbers on the Hundred Board",
+    "materialId": "hundred-board",
+    "skills": [
+      "skill.hundred-chart-navigation.compare-to-120"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "hundred-chart"
+      },
+      {
+        "type": "guided",
+        "representation": "hundred-chart"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.hundred-chart.write-120"
+    ],
+    "notes": "Use place value and board positions to compare and order numbers up to 120."
+  },
+  {
+    "id": "lesson.g1.hundred-chart.skip-patterns",
+    "topicId": "hundred-chart-navigation",
+    "name": "Hundred Chart Skip Patterns",
+    "materialId": "hundred-board",
+    "skills": [
+      "skill.hundred-chart-navigation.jump-patterns",
+      "skill.hundred-chart-navigation.patterns"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.hundred-chart.neighbor-walk"
+    ],
+    "notes": "Highlight diagonal and row patterns produced by equal jumps."
+  },
+  {
+    "id": "lesson.g1.doubles.bead-pairs",
+    "topicId": "doubles-near-doubles",
+    "name": "Bead Stair Doubles",
+    "materialId": "bead-stair",
+    "skills": [
+      "skill.doubles-near-doubles.doubles-facts"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.make-ten.equation-cards"
+    ],
+    "notes": "Stack matching bead bars and say the doubles facts aloud."
+  },
+  {
+    "id": "lesson.g1.doubles.near-doubles",
+    "topicId": "doubles-near-doubles",
+    "name": "Near Doubles Strategies",
+    "materialId": "number-line",
+    "skills": [
+      "skill.doubles-near-doubles.near-doubles-adjust",
+      "skill.doubles-near-doubles.near-doubles-equations"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.doubles.bead-pairs"
+    ],
+    "notes": "Use number line hops and equations to show +1 and -1 adjustments."
+  },
+  {
+    "id": "lesson.g1.make-ten-bridge.ten-frame",
+    "topicId": "make-ten-bridge",
+    "name": "Bridge to Ten with Ten Frames",
+    "materialId": "ten-frame",
+    "skills": [
+      "skill.make-ten-bridge.compose-ten-objects"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.make-ten.equation-cards"
+    ],
+    "notes": "Break addends and slide counters to make a full ten frame first."
+  },
+  {
+    "id": "lesson.g1.make-ten-bridge.number-line",
+    "topicId": "make-ten-bridge",
+    "name": "Number Line Bridge to Ten",
+    "materialId": "number-line",
+    "skills": [
+      "skill.make-ten-bridge.make-ten-number-line",
+      "skill.make-ten-bridge.decompose-addends-make-ten"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.make-ten-bridge.ten-frame"
+    ],
+    "notes": "Hop to ten then the remainder, recording decomposed equations."
+  },
+  {
+    "id": "lesson.g1.fact-family.commutative-turn-around",
+    "topicId": "fact-families-within-20",
+    "name": "Turn-Around Facts with Number Bonds",
+    "materialId": "number-bond-board",
+    "skills": [
+      "skill.addition-properties.commutative-addition-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "manipulatives"
+      },
+      {
+        "type": "guided",
+        "representation": "manipulatives"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.doubles.near-doubles"
+    ],
+    "notes": "Build number bonds to show that switching addends gives the same total."
+  },
+  {
+    "id": "lesson.g1.fact-family.associative-add-three",
+    "topicId": "fact-families-within-20",
+    "name": "Group Three Addends",
+    "materialId": "addition-strip-board",
+    "skills": [
+      "skill.addition-properties.associative-add-3-20",
+      "skill.add-3-numbers.within-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.fact-family.commutative-turn-around"
+    ],
+    "notes": "Regroup three addends to make ten or doubles before finding the total."
+  },
+  {
+    "id": "lesson.g1.fact-family.triangle-board",
+    "topicId": "fact-families-within-20",
+    "name": "Fact Family Triangle Board",
+    "materialId": "fact-family-board",
+    "skills": [
+      "skill.fact-families-within-20.build-fact-family",
+      "skill.fact-families-within-20.complete-fact-family"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.fact-family.associative-add-three"
+    ],
+    "notes": "Place addends and totals on the fact triangle, then write all related facts."
+  },
+  {
+    "id": "lesson.g1.fact-family.story-problems",
+    "topicId": "fact-families-within-20",
+    "name": "Fact Family Story Problems",
+    "materialId": "story-mat",
+    "skills": [
+      "skill.fact-families-within-20.fact-family-word-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.fact-family.triangle-board"
+    ],
+    "notes": "Connect stories to all four equations in the family."
+  },
+  {
+    "id": "lesson.g1.fact-family.unknown-number",
+    "topicId": "fact-families-within-20",
+    "name": "Solve Unknowns in Fact Families",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.unknown-number-eq.find-unknown-add-sub-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "bar-model"
+      },
+      {
+        "type": "guided",
+        "representation": "bar-model"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.fact-family.story-problems"
+    ],
+    "notes": "Use bar models to determine which number completes each addition or subtraction equation."
+  },
+  {
+    "id": "lesson.g1.measure.choose-tools",
+    "topicId": "choose-measurement-tools",
+    "name": "Choose the Right Measurement Tool",
+    "materialId": "measurement-tool-shelf",
+    "skills": [
+      "skill.choose-measurement-tools.match-tool-to-attribute"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-measure.pouring-pitchers"
+    ],
+    "notes": "Drag classroom objects to the ruler, balance, or measuring cup."
+  },
+  {
+    "id": "lesson.g1.measure.choose-units",
+    "topicId": "choose-measurement-tools",
+    "name": "Choose Appropriate Units",
+    "materialId": "measurement-tool-shelf",
+    "skills": [
+      "skill.choose-measurement-tools.choose-units"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.measure.choose-tools"
+    ],
+    "notes": "Select standard or non-standard units to fit each measuring task."
+  },
+  {
+    "id": "lesson.g1.measure.order-length",
+    "topicId": "order-objects-by-attribute",
+    "name": "Order Objects by Length",
+    "materialId": "grading-tray",
+    "skills": [
+      "skill.order-objects-by-attribute.order-three-objects"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-measure.pouring-pitchers"
+    ],
+    "notes": "Drag virtual rods to arrange from shortest to longest."
+  },
+  {
+    "id": "lesson.g1.measure.record-order",
+    "topicId": "order-objects-by-attribute",
+    "name": "Measure and Record Attributes",
+    "materialId": "measurement-log",
+    "skills": [
+      "skill.order-objects-by-attribute.measure-and-record"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.measure.order-length"
+    ],
+    "notes": "Measure each object with the chosen unit and enter the data."
+  },
+  {
+    "id": "lesson.g1.time.hour-half",
+    "topicId": "tell-time-hour-half-quarter",
+    "name": "Read Hour and Half-Hour",
+    "materialId": "analog-clock",
+    "skills": [
+      "skill.tell-time-hour-half-quarter.read-analog-clock"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-10.ten-frame"
+    ],
+    "notes": "Move the hour and minute hands to show o'clock and half-past times."
+  },
+  {
+    "id": "lesson.g1.time.quarter-hour",
+    "topicId": "tell-time-hour-half-quarter",
+    "name": "Quarter-Hour Clock Stories",
+    "materialId": "analog-clock",
+    "skills": [
+      "skill.tell-time-hour-half-quarter.read-quarter-hour"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.time.hour-half"
+    ],
+    "notes": "Rotate the clock to one quarter past and one quarter to given times."
+  },
+  {
+    "id": "lesson.g1.tally.collect",
+    "topicId": "tally-charts-and-tables",
+    "name": "Create and Read Tally Charts",
+    "materialId": "tally-chart-board",
+    "skills": [
+      "skill.tally-charts-and-tables.create-tally-chart",
+      "skill.tally-charts-and-tables.read-tally-marks"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-measure.pouring-pitchers"
+    ],
+    "notes": "Collect class data, mark tallies, and state totals."
+  },
+  {
+    "id": "lesson.g1.tally.interpret",
+    "topicId": "tally-charts-and-tables",
+    "name": "Interpret Tally Tables",
+    "materialId": "tally-chart-board",
+    "skills": [
+      "skill.tally-charts-and-tables.interpret-table"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.tally.collect"
+    ],
+    "notes": "Answer comparison questions using completed tally tables."
+  },
+  {
+    "id": "lesson.g1.compose-shapes.rectangles",
+    "topicId": "compose-decompose-shapes",
+    "name": "Compose Shapes with Triangles",
+    "materialId": "constructive-triangles",
+    "skills": [
+      "skill.compose-decompose-shapes.compose-using-shapes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.shapes.geometric-solids"
+    ],
+    "notes": "Build rectangles and other figures from constructive triangles."
+  },
+  {
+    "id": "lesson.g1.compose-shapes.decompose",
+    "topicId": "compose-decompose-shapes",
+    "name": "Decompose Shapes with Pattern Blocks",
+    "materialId": "pattern-blocks",
+    "skills": [
+      "skill.compose-decompose-shapes.decompose-into-shapes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.compose-shapes.rectangles"
+    ],
+    "notes": "Cover outlines and describe the component shapes used."
+  },
+  {
+    "id": "lesson.g1.partition-shapes.halves-fourths",
+    "topicId": "partition-shapes-equal-parts-geometry",
+    "name": "Partition Halves and Fourths",
+    "materialId": "area-partition-board",
+    "skills": [
+      "skill.partition-shapes-equal-parts-geometry.partition-halves-fourths"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "area-model"
+      },
+      {
+        "type": "guided",
+        "representation": "area-model"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.compose-shapes.decompose"
+    ],
+    "notes": "Partition circles and rectangles into halves and fourths and name each share."
+  },
+  {
+    "id": "lesson.g1.classify-shapes.sort",
+    "topicId": "classify-shapes-by-attributes",
+    "name": "Sort Shapes by Attributes",
+    "materialId": "shape-sorting-mat",
+    "skills": [
+      "skill.classify-shapes-by-attributes.sort-by-attributes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.compose-shapes.decompose"
+    ],
+    "notes": "Drag shapes into labeled regions based on sides, vertices, or whether they are curved."
+  },
+  {
+    "id": "lesson.g1.classify-shapes.compare",
+    "topicId": "classify-shapes-by-attributes",
+    "name": "Compare 2D and 3D Shapes",
+    "materialId": "geometry-solids",
+    "skills": [
+      "skill.classify-shapes-by-attributes.compare-2d-3d"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.classify-shapes.sort"
+    ],
+    "notes": "Match solids to their faces and explain similarities to plane shapes."
+  },
+  {
+    "id": "lesson.g1.patterns.repeating-cards",
+    "topicId": "repeating-growing-patterns",
+    "name": "Extend Repeating Patterns",
+    "materialId": "color-tablets",
+    "skills": [
+      "skill.repeating-growing-patterns.identify-repeating-patterns"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-10.ten-frame"
+    ],
+    "notes": "Name the core of repeating sequences and continue them."
+  },
+  {
+    "id": "lesson.g1.patterns.growing-tchart",
+    "topicId": "repeating-growing-patterns",
+    "name": "Growing Patterns T-Chart",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.repeating-growing-patterns.extend-growing-patterns",
+      "skill.repeating-growing-patterns.create-patterns"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.patterns.repeating-cards"
+    ],
+    "notes": "Record pattern stages in a T-chart and describe the rule."
+  },
+  {
+    "id": "lesson.g1.unknown-addend.strip-board",
+    "topicId": "unknown-addend-problems",
+    "name": "Unknown Addends with Strip Board",
+    "materialId": "addition-strip-board",
+    "skills": [
+      "skill.unknown-addend-problems.represent-unknown-addend"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.patterns.growing-tchart"
+    ],
+    "notes": "Cover part of the strip to discover the missing addend."
+  },
+  {
+    "id": "lesson.g1.unknown-addend.number-line",
+    "topicId": "unknown-addend-problems",
+    "name": "Find Unknown Addends on Number Lines",
+    "materialId": "number-line",
+    "skills": [
+      "skill.unknown-addend-problems.solve-number-line"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.unknown-addend.strip-board"
+    ],
+    "notes": "Hop forward from the known addend to reach the total and record the missing number."
+  },
+  {
+    "id": "lesson.g1.balance.true-false",
+    "topicId": "balance-contexts",
+    "name": "True or False Equations",
+    "materialId": "balance-scale",
+    "skills": [
+      "skill.equality.true-false-equations-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "balance-scale"
+      },
+      {
+        "type": "guided",
+        "representation": "balance-scale"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.unknown-addend.number-line"
+    ],
+    "notes": "Decide whether each equation stays balanced by comparing both sides with counters and symbols."
+  },
+  {
+    "id": "lesson.g1.balance.equivalence",
+    "topicId": "balance-contexts",
+    "name": "Explain Balanced Equations",
+    "materialId": "balance-scale",
+    "skills": [
+      "skill.balance-contexts.explain-equivalence"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.balance.true-false"
+    ],
+    "notes": "Show both sides of the scale have the same total and narrate why the equation is true."
+  },
+  {
+    "id": "lesson.g1.balance.missing-value",
+    "topicId": "balance-contexts",
+    "name": "Find Missing Values to Balance",
+    "materialId": "balance-scale",
+    "skills": [
+      "skill.balance-contexts.find-missing-to-balance"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.balance.equivalence"
+    ],
+    "notes": "Add or remove tiles until the scale balances, then write the equation."
+  },
+  {
+    "id": "lesson.g1.counting-on.strip-board-20",
+    "topicId": "counting-on-addition",
+    "name": "Counting-On to 20 with Strip Board",
+    "materialId": "addition-strip-board",
+    "skills": [
+      "skill.counting-on-addition.count-on-objects-10",
+      "skill.counting-on-addition.count-on-equations-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-on.number-line-hop"
+    ],
+    "notes": "Begin at the larger addend and slide additional strips while stating the running total."
+  },
+  {
+    "id": "lesson.g1.counting-on.number-line-20",
+    "topicId": "counting-on-addition",
+    "name": "Number Line Counting-On to 20",
+    "materialId": "number-line",
+    "skills": [
+      "skill.counting-on-addition.count-on-number-line-20",
+      "skill.counting-on-addition.count-on-equations-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.counting-on.strip-board-20"
+    ],
+    "notes": "Hop along the number line and then record the resulting addition sentence."
+  },
+  {
+    "id": "lesson.g1.take-away.stamp-story",
+    "topicId": "take-away-models",
+    "name": "Stamp Game Take-Away Stories",
+    "materialId": "stamp-game-lite",
+    "skills": [
+      "skill.take-away-models.subtract-with-objects-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "story-context"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.take-away.number-line"
+    ],
+    "notes": "Model subtraction stories within ten using colored stamp tiles."
+  },
+  {
+    "id": "lesson.g1.take-away.number-line-20",
+    "topicId": "take-away-models",
+    "name": "Number Line Take-Away to 20",
+    "materialId": "number-line",
+    "skills": [
+      "skill.take-away-models.subtract-number-line-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.take-away.stamp-story"
+    ],
+    "notes": "Hop backward to show subtraction within twenty."
+  },
+  {
+    "id": "lesson.g1.take-away.record-equations",
+    "topicId": "take-away-models",
+    "name": "Record Subtraction Equations to 20",
+    "materialId": "equation-tablet",
+    "skills": [
+      "skill.take-away-models.subtract-equations-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.take-away.number-line-20"
+    ],
+    "notes": "Translate modeled subtraction into written equations."
+  },
+  {
+    "id": "lesson.g1.count-back.number-line",
+    "topicId": "count-back-count-up",
+    "name": "Counting Back on the Number Line",
+    "materialId": "number-line",
+    "skills": [
+      "skill.count-back-count-up.count-back-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.take-away.number-line-20"
+    ],
+    "notes": "Practice counting backward from any start within twenty."
+  },
+  {
+    "id": "lesson.g1.count-back.strategy-choice",
+    "topicId": "count-back-count-up",
+    "name": "Count Up to Find Differences",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.count-back-count-up.count-up-find-difference",
+      "skill.count-back-count-up.choose-counting-strategy",
+      "skill.subtraction-as-unknown-addend.rewrite"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.count-back.number-line",
+      "lesson.g1.counting-on.number-line-20"
+    ],
+    "notes": "Decide whether to count back or count up and justify the strategy."
+  },
+  {
+    "id": "lesson.g1.subtraction-family.models",
+    "topicId": "fact-families-subtraction",
+    "name": "Subtraction Fact Family Models",
+    "materialId": "fact-family-board",
+    "skills": [
+      "skill.fact-families-subtraction.relate-addition-subtraction-models"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.count-back.strategy-choice",
+      "lesson.g1.fact-family.story-problems"
+    ],
+    "notes": "Use the fact family board to show how addition and subtraction mirror each other."
+  },
+  {
+    "id": "lesson.g1.subtraction-family.complete",
+    "topicId": "fact-families-subtraction",
+    "name": "Complete Subtraction Fact Families",
+    "materialId": "equation-tablet",
+    "skills": [
+      "skill.fact-families-subtraction.complete-subtraction-family",
+      "skill.fact-families-subtraction.fact-family-reasoning"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.subtraction-family.models"
+    ],
+    "notes": "Fill in missing subtraction facts and explain the relationships."
+  },
+  {
+    "id": "lesson.g1.fact-drill.addition-10",
+    "topicId": "addition-fact-drills",
+    "name": "Addition Fact Fluency to 10",
+    "materialId": "fact-drill-board",
+    "skills": [
+      "skill.addition-fact-drills.fluent-addition-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.doubles.near-doubles",
+      "lesson.g1.make-ten-bridge.number-line"
+    ],
+    "notes": "Timed digital flash cards with Montessori encouragement track accuracy."
+  },
+  {
+    "id": "lesson.g1.fact-drill.addition-20",
+    "topicId": "addition-fact-drills",
+    "name": "Addition Fact Fluency to 20",
+    "materialId": "fact-drill-board",
+    "skills": [
+      "skill.addition-fact-drills.fluent-addition-20",
+      "skill.addition-fact-drills.addition-strategy-checks"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.fact-drill.addition-10"
+    ],
+    "notes": "Blend doubles, make-ten, and near-doubles strategies during fluency sprints."
+  },
+  {
+    "id": "lesson.g1.fact-drill.subtraction-10",
+    "topicId": "subtraction-fact-drills",
+    "name": "Subtraction Fact Fluency to 10",
+    "materialId": "fact-drill-board",
+    "skills": [
+      "skill.subtraction-fact-drills.fluent-subtraction-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.subtraction-family.complete"
+    ],
+    "notes": "Rapid subtraction cards reinforce takeaway within ten."
+  },
+  {
+    "id": "lesson.g1.fact-drill.subtraction-20",
+    "topicId": "subtraction-fact-drills",
+    "name": "Subtraction Strategy Checkups",
+    "materialId": "fact-drill-board",
+    "skills": [
+      "skill.subtraction-fact-drills.fluent-subtraction-20",
+      "skill.subtraction-fact-drills.subtraction-strategy-checks"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.fact-drill.subtraction-10"
+    ],
+    "notes": "Learners explain whether they counted back or used fact families to solve quickly."
+  },
+  {
+    "id": "lesson.g1.make-ten-fluency.quick-draw",
+    "topicId": "make-ten-fluency",
+    "name": "Quick Draw Make-Ten",
+    "materialId": "flash-ten-frame",
+    "skills": [
+      "skill.make-ten-fluency.fast-make-ten"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.make-ten-bridge.number-line"
+    ],
+    "notes": "Flashed ten frames encourage instant recognition of complements to ten."
+  },
+  {
+    "id": "lesson.g1.make-ten-fluency.strategy",
+    "topicId": "make-ten-fluency",
+    "name": "Make-Ten Strategy Practice",
+    "materialId": "equation-tablet",
+    "skills": [
+      "skill.make-ten-fluency.apply-make-ten-addition",
+      "skill.make-ten-fluency.use-make-ten-subtraction"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.make-ten-fluency.quick-draw"
+    ],
+    "notes": "Convert problems into make-ten plus leftovers and the related subtraction."
+  },
+  {
+    "id": "lesson.g1.facts20.choose-strategy",
+    "topicId": "facts-within-20-application",
+    "name": "Choose Strategies within 20",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.facts-within-20-application.choose-strategy-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.fact-drill.addition-20",
+      "lesson.g1.fact-drill.subtraction-20"
+    ],
+    "notes": "Select doubles, make-ten, or count-on strategies for mixed facts."
+  },
+  {
+    "id": "lesson.g1.facts20.word-problems",
+    "topicId": "facts-within-20-application",
+    "name": "Facts within 20 Word Problems",
+    "materialId": "story-mat",
+    "skills": [
+      "skill.facts-within-20-application.solve-add-sub-within-20",
+      "skill.facts-within-20-application.fluid-word-problems-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.facts20.choose-strategy"
+    ],
+    "notes": "Model and solve joining, separating, and comparison situations within twenty."
+  },
+  {
+    "id": "lesson.g1.additive-word.bar-models",
+    "topicId": "additive-word-problems",
+    "name": "Bar Models for Additive Stories",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.additive-word-problems.join-separate-problems",
+      "skill.additive-word-problems.compare-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.fact-family.unknown-number"
+    ],
+    "notes": "Build bar models to represent join, separate, and comparison word problems."
+  },
+  {
+    "id": "lesson.g1.additive-word.strategy",
+    "topicId": "additive-word-problems",
+    "name": "Choose Addition or Subtraction Strategies",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.additive-word-problems.choose-additive-strategy"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.additive-word.bar-models"
+    ],
+    "notes": "Explain which operation solves a story problem and justify the choice."
+  },
+  {
+    "id": "lesson.g1.classify-shapes.draw-attributes",
+    "topicId": "classify-shapes-by-attributes",
+    "name": "Draw Shapes with Attributes",
+    "materialId": "shape-sketch-board",
+    "skills": [
+      "skill.classify-shapes-by-attributes.draw-attributes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "drawing"
+      },
+      {
+        "type": "guided",
+        "representation": "drawing"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.classify-shapes.sort"
+    ],
+    "notes": "Use attribute checklists to draw shapes with specified sides and angles."
+  }
+]

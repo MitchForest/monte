@@ -27,29 +27,29 @@ The scaffold below draws from Montessori sequences (`.docs/reference/montessori.
 
 ### Domain: Number Sense & Place Value
 - **Unit: Foundations of Counting** (RIT <145; CCSS K.CC.A-B, K.OA.A)  
-  - Topics: Counting within 5, Counting within 10 (scattered/structured), Compare quantities by matching, One more/one less, Count stories within 5.
+  - Topics: Counting within 5, Counting within 10 (scattered/structured), Compare quantities by matching, One more/one less, Count stories within 5, Count to 20 and by tens to 100.
 - **Unit: Teen Numbers & 20s** (RIT 146–158; CCSS K.NBT.A, K.OA.A)  
   - Topics: Compose/decompose teen numbers, Represent numbers to 20 (words, numerals, models), Compare numbers to 20, Make-ten combinations, Subtraction within 10.
 - **Unit: Place Value to 120** (RIT 159–175; CCSS 1.NBT.A-C, 2.NBT.A)  
-  - Topics: Tens/ones composition, Ten more/less, Expanded form to 120, Hundred chart navigation, Skip-count by 2/5/10.
+  - Topics: Tens/ones composition, Ten more/less, Expanded form to 120, Hundred chart navigation, Skip-count by 2/5/10, Add multiple two-digit numbers.
 - **Unit: Introduction to the Decimal System** (RIT 168–185; CCSS 2.NBT.A, 3.NBT.A)  
   - Topics: Compose/decompose thousands, Read/write 4-digit numbers, Thousand-chart navigation, Estimate on number lines.
-- **Unit: Place Value to 1000** (RIT 176–195; CCSS 2.NBT.B, 3.NBT.A)  
-  - Topics: Read/write 3-digit numbers, Compare and order to 1000, Rounding to nearest 10/100, Compose/decompose hundreds, Place value word problems.
-- **Unit: Number Lines & Estimation** (RIT 170–195; CCSS 2.MD.B, 3.NBT.A)  
+- **Unit: Place Value to 1000** (RIT 176–200; CCSS 2.NBT.B, 3.NBT.A)  
+  - Topics: Read/write 3-digit numbers, Compare and order to 1000, Rounding to nearest 10/100, Compose/decompose hundreds, Place value word problems, Dynamic addition within 1000, Dynamic subtraction within 1000.
+- **Unit: Number Lines & Estimation** (RIT 170–200; CCSS 2.MD.B, 3.NBT.A)  
   - Topics: Locate numbers on number lines, Estimate sums/differences, Round on number lines, Skip count on number lines.
 - **Unit: Decimals & Structure of Base-10** (RIT 196–205; CCSS 4.NBT.A, 4.NF.C)  
   - Topics: Tenths and hundredths models, Read/write decimals, Compare decimals, Relate fractions and decimals, Scale base-ten understanding to metric measurement.
 
 ### Domain: Operations & Algebraic Thinking
-- **Unit: Addition Foundations** (RIT 150–175; CCSS K.OA.A, 1.OA.C, 2.OA.B)  
-  - Topics: Counting-on addition, Make-ten bridge, Doubles/near doubles, Fact families within 20.
+- **Unit: Addition Foundations** (RIT 150–182; CCSS K.OA.A, 1.OA.C, 2.OA.B)  
+  - Topics: Counting-on addition, Make-ten bridge, Doubles/near doubles, Fact families within 20, Dynamic addition within 100.
 - **Unit: Subtraction Foundations** (RIT 150–178; CCSS K.OA.A, 1.OA.B, 2.OA.B)  
   - Topics: Take-away models, Count back/count up, Subtraction fact families, Dynamic subtraction.
 - **Unit: Addition & Subtraction Memorization** (RIT 160–182; CCSS 1.OA.C.6, 2.OA.B.2)  
-  - Topics: Addition fact drills, Subtraction fact drills, Make-ten fluency, Facts within 20 applications.
-- **Unit: Multiplication Foundations** (RIT 176–190; CCSS 2.OA.C, 3.OA.A-B)  
-  - Topics: Equal groups and arrays, Static multiplication, Division as sharing, Skip counting for multiplication facts.
+  - Topics: Addition fact drills, Subtraction fact drills, Even and odd numbers, Make-ten fluency, Facts within 20 applications.
+- **Unit: Multiplication Foundations** (RIT 176–200; CCSS 2.OA.C, 3.OA.A-B, 3.NBT.A.3)  
+  - Topics: Equal groups and arrays, Static multiplication, Division as sharing, Skip counting for multiplication facts, Multiply by multiples of 10.
 - **Unit: Division Foundations** (RIT 176–190; CCSS 3.OA.A-B)  
   - Topics: Division as sharing, Division as grouping, Relate division and multiplication, Division word problems.
 - **Unit: Multiplication & Division Memorization** (RIT 180–198; CCSS 3.OA.B-C)  
@@ -72,8 +72,12 @@ The scaffold below draws from Montessori sequences (`.docs/reference/montessori.
 ### Domain: Measurement & Data
 - **Unit: Measurement Foundations** (RIT 150–175; CCSS K.MD, 1.MD.A-B)  
   - Topics: Compare length/weight/capacity with non-standard units, Choose appropriate tools, Order objects by attribute.
-- **Unit: Time & Money** (RIT 160–182; CCSS 1.MD.B, 2.MD.C)  
-  - Topics: Tell time to hour/half-hour/quarter-hour, Count coins (pennies → quarters), Make given amounts, Word problems in time/money contexts.
+- **Unit: Length in Standard Units** (RIT 170–188; CCSS 2.MD.A-B, 2.MD.D)  
+  - Topics: Measure lengths with rulers, Add and subtract lengths, Generate measurement data and line plots.
+- **Unit: Time & Money** (RIT 160–195; CCSS 1.MD.B, 2.MD.C, 3.MD.A)  
+  - Topics: Tell time to hour/half-hour/quarter-hour, Count coins (pennies → quarters), Make given amounts, Tell time to the nearest five minutes, Elapsed time to the minute, Time and money word problems.
+- **Unit: Mass & Liquid Volume** (RIT 188–200; CCSS 3.MD.A)  
+  - Topics: Measure and estimate mass in grams/kilograms, Measure and estimate liquid volume in liters, Solve one-step problems with mass and volume.
 - **Unit: Data Displays** (RIT 165–200; CCSS 1.MD.C, 2.MD.D, 3.MD.B)  
   - Topics: Tally charts and tables, Picture graphs, Scaled bar graphs, Line plots with whole numbers, Interpret data to solve problems.
 - **Unit: Measurement & Data Extensions** (RIT 200–210; CCSS 4.MD.A-C, 5.MD.A-C)  
@@ -82,8 +86,8 @@ The scaffold below draws from Montessori sequences (`.docs/reference/montessori.
 ### Domain: Geometry & Spatial Reasoning
 - **Unit: Shape Foundations** (RIT 150–170; CCSS K.G.A-B, 1.G.A)  
   - Topics: Identify 2D/3D shapes, Describe positions, Compose/decompose shapes, Classify shapes by attributes.
-- **Unit: Plane Geometry** (RIT 170–195; CCSS 2.G.A, 3.G.A, 4.G.A)  
-  - Topics: Partition shapes into equal parts, Lines and angles, Types of triangles and quadrilaterals, Symmetry.
+- **Unit: Plane Geometry** (RIT 170–200; CCSS 2.G.A, 3.G.A, 4.G.A)  
+  - Topics: Partition shapes into equal parts, Tile rectangles with rows and columns, Lines and angles, Types of triangles and quadrilaterals, Symmetry.
 - **Unit: Measurement Geometry** (RIT 185–205; CCSS 3.MD.C, 4.MD.C, 5.MD.C)  
   - Topics: Area of rectangles/triangles, Surface area with nets, Volume concepts, Coordinate plane polygons.
 - **Unit: Spatial Reasoning Extensions** (RIT 205–215; CCSS 5.G.A-B)  
@@ -104,26 +108,38 @@ The following table samples key skills per topic using naming aligned with IXL-s
 | --- | --- | --- | --- |
 | Counting within 5 | Count dots ≤5, Match numbers to sets, Say the next number (≤5) | K.CC.A.1-3, K.CC.B.4 | <145 |
 | Counting within 10 | Count scattered objects, Fill ten frames, Identify numerals to 10 | K.CC.A.1-3 | <145 |
+| Count to 20 and by tens | Count forward from any number to 20, Skip-count by tens to 100, Use hundred charts | K.CC.A.1-2 | 138–152 |
 | Compare quantities by matching | Match sets, Identify more/less/same (≤10), Relate to numerals | K.CC.C.6-7 | <145 |
 | Compose teen numbers | Build 10+ones with manipulatives, Represent teen numbers in words, Match models to equations | K.NBT.A.1 | 146–158 |
 | Make-ten combinations | Complete tens on frames, Decompose numbers to make 10, Apply make-ten in addition within 20 | 1.OA.C.6 | 150–170 |
 | Counting-on addition | Add within 20 using counting-on strategies with counters, number lines, and mental steps | 1.OA.C.5 | 150–170 |
 | Take-away models | Remove objects, draw subtraction stories, and record equations within 20 | 1.OA.A.1 | 150–170 |
 | Ten more/less | Find 10 more/less without counting, Use hundred chart jumps, Explain place-value change | 1.NBT.C.5 | 159–175 |
+| Add multiple two-digit numbers | Add three or four two-digit numbers using place-value and regrouping | 2.NBT.B.6 | 170–188 |
 | Dynamic addition within 100 | Add two-digit numbers with regrouping using place-value models and number lines | 2.NBT.B.5 | 165–182 |
 | Dynamic subtraction within 100 | Subtract two-digit numbers with regrouping using models and open number lines | 2.NBT.B.7 | 165–182 |
+| Dynamic addition within 1000 | Add three-digit numbers with regrouping across hundreds and tens | 3.NBT.A.2 | 185–200 |
+| Dynamic subtraction within 1000 | Subtract three-digit numbers with regrouping across hundreds and tens | 3.NBT.A.2 | 185–200 |
 | Addition fact drills | Build fluency with optimized sequences, timed sets, and make-ten reinforcements | 1.OA.C.6 | 160–182 |
+| Even and odd numbers | Determine evenness via pairing, arrays, and skip-count patterns | 2.OA.C.3 | 168–182 |
 | Static multiplication | Build equal groups concretely, Map groups to repeated addition, Translate to array diagrams | 3.OA.A.1 | 176–190 |
 | Division as sharing | Partition objects equally, Interpret remainders concretely, Represent with division statements | 3.OA.A.2 | 176–190 |
 | Multiplication fact strategies | Use doubles, fives, and pattern reasoning to internalize multiplication facts | 3.OA.B.5 | 180–198 |
+| Multiply by multiples of 10 | Multiply a one-digit factor by 10–90 using place-value reasoning | 3.NBT.A.3 | 190–200 |
 | Dynamic multiplication | Exchange tens/hundreds during multiplication, Use bead frames/algorithms, Solve multi-digit products | 4.NBT.B.5 | 191–205 |
 | Long division | Model division with racks & tubes, Transition to abstract algorithm, Interpret quotients and remainders | 4.NBT.B.6 | 195–210 |
 | Partition shapes | Split shapes into halves/thirds/fourths, Label unit fractions, Match partitions to area models | 3.G.A.2, 3.NF.A.1 | 175–190 |
 | Equivalent fractions | Generate equivalents with fraction strips, Place equivalents on number lines, Compare using common denominators | 3.NF.A.3, 4.NF.A.1 | 190–205 |
+| Measure lengths with rulers | Measure and estimate in inches/centimeters to nearest whole unit | 2.MD.A.1-3 | 170–185 |
+| Add and subtract lengths | Solve length word problems using drawings, number lines, and equations | 2.MD.B.5-6 | 172–188 |
+| Tell time to five minutes | Read analog clocks to five minutes and identify a.m./p.m. contexts | 2.MD.C.7 | 172–188 |
+| Elapsed time to the minute | Use open number lines to find start, end, or elapsed time to the minute | 3.MD.A.1 | 185–200 |
+| Mass and liquid volume | Measure/estimate grams, kilograms, and liters; solve one-step problems | 3.MD.A.2 | 188–200 |
 | Picture/bar graphs | Create picture graphs, Interpret scaled bar graphs, Solve word problems from data | 2.MD.D.10, 3.MD.B.3 | 170–195 |
 | Line plots (fractions) | Create line plots with unit fractions, Interpret data, Solve measurement problems | 4.MD.B.4, 5.MD.B.2 | 200–210 |
 | Area & perimeter | Find area/perimeter of rectangles, Apply to composite figures, Use multiplication connection | 3.MD.C.7, 4.MD.A.3 | 185–205 |
 | Coordinate plane | Plot ordered pairs, Describe patterns, Interpret graph relationships | 5.G.A.1-2 | 205–215 |
+| Tile rectangles with rows and columns | Partition rectangles into equal rows/columns and link to repeated addition | 2.G.A.2 | 172–185 |
 | Patterns & rules | Extend growing patterns, Identify rule from table, Express rule with expressions | 4.OA.C.5, 5.OA.B.3 | 185–205 |
 | Additive word problems | Solve join/separate/comparison contexts with equations and models | 1.OA.A.1, 2.OA.A.1 | 155–185 |
 

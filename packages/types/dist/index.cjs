@@ -29,6 +29,7 @@ __export(index_exports, {
   CurriculumTreeTopicSchema: () => CurriculumTreeTopicSchema,
   CurriculumTreeUnitSchema: () => CurriculumTreeUnitSchema,
   DifficultySchema: () => DifficultySchema,
+  EntityMetadataSchema: () => EntityMetadataSchema,
   ExchangeRuleSchema: () => ExchangeRuleSchema,
   GuidedEvaluatorIdSchema: () => GuidedEvaluatorIdSchema,
   GuidedSegmentSchema: () => GuidedSegmentSchema,
@@ -102,6 +103,12 @@ var LessonScenarioBindingSchema = import_zod.z.object({
   snapshot: import_zod.z.record(import_zod.z.unknown()).optional(),
   notes: import_zod.z.string().optional()
 }).strict();
+var EntityMetadataSchema = import_zod.z.object({
+  source: import_zod.z.string().optional(),
+  tags: import_zod.z.array(import_zod.z.string()).optional(),
+  notes: import_zod.z.string().optional(),
+  scenario: LessonScenarioBindingSchema.optional()
+}).catchall(import_zod.z.unknown());
 var MaterialSchema = import_zod.z.object({
   id: import_zod.z.string(),
   name: import_zod.z.string(),
@@ -427,7 +434,7 @@ var LessonDocumentMetaSchema = import_zod.z.object({
   updatedAt: import_zod.z.union([import_zod.z.string(), import_zod.z.number()]).optional(),
   author: import_zod.z.string().optional(),
   notes: import_zod.z.string().optional(),
-  metadata: import_zod.z.record(import_zod.z.unknown()).optional(),
+  metadata: EntityMetadataSchema.optional(),
   scenario: LessonScenarioBindingSchema.optional()
 }).strict();
 var LessonDocumentSchema = import_zod.z.object({
@@ -507,7 +514,7 @@ var CurriculumTreeUnitSchema = import_zod.z.object({
   coverImage: import_zod.z.string().optional(),
   order: import_zod.z.number(),
   status: UnitStatusSchema,
-  metadata: import_zod.z.record(import_zod.z.unknown()).optional(),
+  metadata: EntityMetadataSchema.optional(),
   createdAt: import_zod.z.number(),
   updatedAt: import_zod.z.number(),
   topics: import_zod.z.array(CurriculumTreeTopicSchema)
@@ -525,7 +532,7 @@ var LessonDraftRecordSchema = import_zod.z.object({
   status: LessonStatusSchema,
   createdAt: import_zod.z.number(),
   updatedAt: import_zod.z.number(),
-  metadata: import_zod.z.record(import_zod.z.unknown()).optional()
+  metadata: EntityMetadataSchema.optional()
 }).strict();
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
@@ -538,6 +545,7 @@ var LessonDraftRecordSchema = import_zod.z.object({
   CurriculumTreeTopicSchema,
   CurriculumTreeUnitSchema,
   DifficultySchema,
+  EntityMetadataSchema,
   ExchangeRuleSchema,
   GuidedEvaluatorIdSchema,
   GuidedSegmentSchema,

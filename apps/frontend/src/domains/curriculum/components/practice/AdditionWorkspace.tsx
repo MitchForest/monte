@@ -2,7 +2,7 @@ import { createEffect, createMemo, createSignal } from 'solid-js';
 import { NumberRod } from '../../components/materials/NumberRod';
 import { ColoredBeadStair } from '../../components/materials/ColoredBeadStair';
 import type { PracticeQuestion } from '@monte/types';
-import { Card, Chip } from '../../../../design-system';
+import { Card, Chip } from '../../../../components/ui';
 
 export interface AdditionWorkspaceState {
   kind: 'addition';
@@ -61,7 +61,7 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
 
   const renderBeadBar = (value: number) => {
     if (value === 0) {
-      return <span class="text-xs font-medium text-subtle">0</span>;
+      return <span class="text-xs font-medium text-[color:var(--color-text-subtle)]">0</span>;
     }
 
     const color = beadColors[(value - 1) % beadColors.length] ?? '#ffffff';
@@ -75,7 +75,7 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
             />
           ))}
         </div>
-        <span class="text-[10px] text-subtle">{value}</span>
+        <span class="text-[10px] text-[color:var(--color-text-subtle)]">{value}</span>
       </div>
     );
   };
@@ -95,12 +95,12 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
       case 'addition-strip-board':
         return (
           <div class="flex flex-col gap-2">
-            <p class="text-xs text-subtle">Imagine placing a red strip of {first()} and a blue strip of {second()}.</p>
+            <p class="text-xs text-[color:var(--color-text-subtle)]">Imagine placing a red strip of {first()} and a blue strip of {second()}.</p>
             <NumberRod length={sum()} />
           </div>
         );
       default:
-        return <p class="text-xs text-subtle">Use this space to model the addition with your chosen material.</p>;
+        return <p class="text-xs text-[color:var(--color-text-subtle)]">Use this space to model the addition with your chosen material.</p>;
     }
   };
 
@@ -117,10 +117,10 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
 
       {props.materialId === 'colored-bead-stair' ? (
         <div class="flex flex-col gap-3 text-xs">
-          <p class="text-subtle">Tap a bead bar for each addend.</p>
+          <p class="text-[color:var(--color-text-subtle)]">Tap a bead bar for each addend.</p>
           <div class="flex flex-col gap-3">
             <div class="space-y-2">
-              <p class="text-[10px] uppercase tracking-wide text-label-soft">First addend</p>
+              <p class="text-[10px] uppercase tracking-wide text-[color:color-mix(in srgb, var(--color-heading) 72%, #ffffff 28%)]">First addend</p>
               <div class="flex flex-wrap gap-1.5">
                 {beadValues.map((value) => {
                   const selected = first() === value;
@@ -129,8 +129,8 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
                       type="button"
                       class={`flex items-center gap-1 rounded-[var(--radius-sm)] px-3 py-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgba(24,191,151,0.55)] ${
                         selected
-                          ? 'surface-success text-[#0f6a53]'
-                          : 'surface-neutral text-subtle hover:shadow-ambient'
+                          ? 'bg-[rgba(24,191,151,0.12)] border border-[rgba(24,191,151,0.3)] text-[#0f6a53]'
+                          : 'bg-[rgba(233,245,251,0.78)] border border-[rgba(64,157,233,0.18)] text-[color:var(--color-text-subtle)] hover:shadow-[0_12px_28px_rgba(12,42,101,0.12)]'
                       }`}
                       onClick={() => handleSelect('first', value)}
                       aria-pressed={selected}
@@ -143,7 +143,7 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
               </div>
             </div>
             <div class="space-y-2">
-              <p class="text-[10px] uppercase tracking-wide text-label-soft">Second addend</p>
+              <p class="text-[10px] uppercase tracking-wide text-[color:color-mix(in srgb, var(--color-heading) 72%, #ffffff 28%)]">Second addend</p>
               <div class="flex flex-wrap gap-1.5">
                 {beadValues.map((value) => {
                   const selected = second() === value;
@@ -152,8 +152,8 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
                       type="button"
                       class={`flex items-center gap-1 rounded-[var(--radius-sm)] px-3 py-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgba(24,191,151,0.55)] ${
                         selected
-                          ? 'surface-success text-[#0f6a53]'
-                          : 'surface-neutral text-subtle hover:shadow-ambient'
+                          ? 'bg-[rgba(24,191,151,0.12)] border border-[rgba(24,191,151,0.3)] text-[#0f6a53]'
+                          : 'bg-[rgba(233,245,251,0.78)] border border-[rgba(64,157,233,0.18)] text-[color:var(--color-text-subtle)] hover:shadow-[0_12px_28px_rgba(12,42,101,0.12)]'
                       }`}
                       onClick={() => handleSelect('second', value)}
                       aria-pressed={selected}
@@ -169,14 +169,14 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
         </div>
       ) : (
         <div class="flex flex-wrap items-center gap-4 text-xs">
-          <label class="flex items-center gap-2 text-subtle">
+          <label class="flex items-center gap-2 text-[color:var(--color-text-subtle)]">
             First addend
             <input
               type="number"
               min="0"
               max="10"
               value={first()}
-              class="w-20 rounded-full border border-[rgba(64,157,233,0.3)] bg-white px-3 py-1.5 text-sm font-semibold text-[color:var(--color-text)] shadow-ambient focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgba(64,157,233,0.55)]"
+              class="w-20 rounded-full border border-[rgba(64,157,233,0.3)] bg-white px-3 py-1.5 text-sm font-semibold text-[color:var(--color-text)] shadow-[0_12px_28px_rgba(12,42,101,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgba(64,157,233,0.55)]"
               onInput={(event) => {
                 const value = clampAddend(Number(event.currentTarget.value));
                 setFirst(value);
@@ -184,14 +184,14 @@ export const AdditionWorkspace = (props: AdditionWorkspaceProps) => {
               }}
             />
           </label>
-          <label class="flex items-center gap-2 text-subtle">
+          <label class="flex items-center gap-2 text-[color:var(--color-text-subtle)]">
             Second addend
             <input
               type="number"
               min="0"
               max="10"
               value={second()}
-              class="w-20 rounded-full border border-[rgba(64,157,233,0.3)] bg-white px-3 py-1.5 text-sm font-semibold text-[color:var(--color-text)] shadow-ambient focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgba(64,157,233,0.55)]"
+              class="w-20 rounded-full border border-[rgba(64,157,233,0.3)] bg-white px-3 py-1.5 text-sm font-semibold text-[color:var(--color-text)] shadow-[0_12px_28px_rgba(12,42,101,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:rgba(64,157,233,0.55)]"
               onInput={(event) => {
                 const value = clampAddend(Number(event.currentTarget.value));
                 setSecond(value);

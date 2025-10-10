@@ -3,7 +3,7 @@ import { For, Show, createMemo } from 'solid-js';
 import { useEditorActions, useEditorComputed } from '../hooks/useEditorViewModel';
 import { beadPlaceOptions, workspaceOptions } from '../constants';
 import { curriculumMaterials } from '../../../domains/curriculum/materials';
-import { Button, Card } from '../../../design-system';
+import { Button, Card } from '../../../components/ui';
 import type { TokenTypeDefinition } from '@monte/types';
 import { resolveBankQuantity } from '../../../domains/curriculum/utils/inventory';
 
@@ -156,7 +156,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
   return (
     <Card variant="soft" class="space-y-4 p-5">
       <div class="flex items-center justify-between">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Inventory</h3>
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Inventory</h3>
         <div class="flex items-center gap-2">
           <Button size="compact" variant="secondary" onClick={() => actions.handleAddTokenType()}>
             Add token type
@@ -182,21 +182,21 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
 
       <section class="space-y-3">
         <header>
-          <h4 class="text-xs font-semibold uppercase tracking-wide text-muted">Token types</h4>
+          <h4 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Token types</h4>
         </header>
-        <Show when={inventory().tokenTypes.length} fallback={<p class="text-xs text-muted">No token types defined yet.</p>}>
+        <Show when={inventory().tokenTypes.length} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">No token types defined yet.</p>}>
           <div class="space-y-3">
             <For each={inventory().tokenTypes}>
               {(token) => (
                 <div class="space-y-2 rounded-md border border-[rgba(64,157,233,0.2)] bg-white/80 p-3 shadow-sm">
                   <div class="flex items-center justify-between gap-2">
-                    <div class="text-xs text-muted">{token.id}</div>
+                    <div class="text-xs text-[color:var(--color-text-muted)]">{token.id}</div>
                     <Button size="compact" variant="ghost" onClick={() => handleDeleteTokenType(token.id)}>
                       Remove
                     </Button>
                   </div>
                   <div class="grid gap-2 sm:grid-cols-2">
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Label</span>
                       <input
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -204,7 +204,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                         onInput={(event) => handleLabelChange(token, event.currentTarget.value)}
                       />
                     </label>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Material</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -218,7 +218,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                     </label>
                   </div>
                   <div class="grid gap-2 sm:grid-cols-3">
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Workspace</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -230,7 +230,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                         </For>
                       </select>
                     </label>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Visual kind</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -247,7 +247,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                         </For>
                       </select>
                     </label>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Quantity / token</span>
                       <input
                         type="number"
@@ -262,7 +262,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                   </div>
 
                   <Show when={token.visual.kind === 'bead'}>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Bead place</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -283,7 +283,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
 
                   <Show when={token.visual.kind === 'card'}>
                     <div class="grid gap-2 sm:grid-cols-2">
-                      <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                      <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                         <span>Card value</span>
                         <input
                           type="number"
@@ -301,7 +301,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                           }
                         />
                       </label>
-                      <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                      <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                         <span>Card size</span>
                         <select
                           class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -326,7 +326,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                   </Show>
 
                   <Show when={token.visual.kind === 'stamp'}>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Stamp value</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -356,9 +356,9 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
 
       <section class="space-y-3">
         <header>
-          <h4 class="text-xs font-semibold uppercase tracking-wide text-muted">Banks</h4>
+          <h4 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Banks</h4>
         </header>
-        <Show when={inventory().banks.length} fallback={<p class="text-xs text-muted">No banks configured.</p>}>
+        <Show when={inventory().banks.length} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">No banks configured.</p>}>
           <div class="space-y-3">
             <For each={inventory().banks}>
               {(bank) => {
@@ -381,13 +381,13 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                 return (
                   <div class="space-y-2 rounded-md border border-[rgba(64,157,233,0.2)] bg-white/80 p-3 shadow-sm">
                     <div class="flex items-center justify-between gap-2">
-                      <div class="text-xs text-muted">{bank.id}</div>
+                      <div class="text-xs text-[color:var(--color-text-muted)]">{bank.id}</div>
                       <Button size="compact" variant="ghost" onClick={() => handleRemoveBank(bank.id)}>
                         Remove
                       </Button>
                   </div>
                   <div class="grid gap-2 sm:grid-cols-3">
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Label</span>
                       <input
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -395,7 +395,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                         onInput={(event) => handleBankLabelChange(bank.id, event.currentTarget.value)}
                       />
                     </label>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Scope</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -411,7 +411,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                       </select>
                     </label>
                     <Show when={bank.scope === 'segment'}>
-                      <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                      <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                         <span>Segment</span>
                         <select
                           class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -430,7 +430,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                     </Show>
                   </div>
                   <div class="grid gap-2 sm:grid-cols-2">
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Material</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] px-3 py-2 text-sm shadow-sm"
@@ -442,7 +442,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                         </For>
                       </select>
                     </label>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Accepts token types</span>
                       <select
                         multiple
@@ -462,7 +462,7 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                     </label>
                   </div>
                     <div class="space-y-2">
-                      <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                      <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                         <span>Uniform quantity</span>
                         <input
                           type="number"
@@ -472,14 +472,14 @@ const handleBankTokenQuantityChange = (bankId: string, tokenId: string, value: n
                           onInput={(event) => handleBankQuantityChange(bank.id, Number(event.currentTarget.value) || 0)}
                         />
                         <Show when={typeof bank.initialQuantity !== 'number'}>
-                          <span class="text-[0.65rem] text-muted">
+                          <span class="text-[0.65rem] text-[color:var(--color-text-muted)]">
                             Editing per-token quantities overrides the uniform value.
                           </span>
                         </Show>
                       </label>
                       <Show when={tokenSummaries.length > 0}>
                         <div class="rounded-md border border-[rgba(64,157,233,0.2)] bg-[rgba(15,23,42,0.02)] p-3">
-                          <div class="mb-2 text-[0.7rem] font-semibold uppercase tracking-wide text-muted">
+                          <div class="mb-2 text-[0.7rem] font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">
                             Token counts
                           </div>
                           <div class="space-y-2">

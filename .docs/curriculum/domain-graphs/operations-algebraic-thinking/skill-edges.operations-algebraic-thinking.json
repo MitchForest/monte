@@ -1,0 +1,898 @@
+[
+  {
+    "id": "edge.add-sub-bridge.transition-1",
+    "sourceSkillId": "skill.dynamic-addition-within-100.add-word-problems-100",
+    "targetSkillId": "skill.take-away-models.subtract-with-objects-10",
+    "type": "prereq_strategy",
+    "rationale": "Contextual addition experiences set up contrasting take-away subtraction models."
+  },
+  {
+    "id": "edge.add-sub-bridge.transition-2",
+    "sourceSkillId": "skill.dynamic-addition-within-100.use-strategies-two-digit",
+    "targetSkillId": "skill.dynamic-subtraction-within-100.model-two-digit-subtraction",
+    "type": "prereq_core",
+    "rationale": "Place-value addition strategies lay groundwork for decomposing in subtraction."
+  },
+  {
+    "id": "edge.addition-fact-drills.sequence-1",
+    "sourceSkillId": "skill.addition-fact-drills.fluent-addition-10",
+    "targetSkillId": "skill.addition-fact-drills.fluent-addition-20",
+    "type": "prereq_core",
+    "rationale": "Fluency to ten supports extending fluency to larger sums."
+  },
+  {
+    "id": "edge.addition-fact-drills.sequence-2",
+    "sourceSkillId": "skill.addition-fact-drills.fluent-addition-20",
+    "targetSkillId": "skill.addition-fact-drills.addition-strategy-checks",
+    "type": "prereq_strategy",
+    "rationale": "Fluency practice is followed by monitoring and refining addition strategies."
+  },
+  {
+    "id": "edge.addition-foundations.transition-1",
+    "sourceSkillId": "skill.counting-on-addition.count-on-equations-20",
+    "targetSkillId": "skill.make-ten-bridge.compose-ten-objects",
+    "type": "prereq_core",
+    "rationale": "Counting-on fluency establishes readiness to regroup addends and make ten."
+  },
+  {
+    "id": "edge.addition-foundations.transition-2",
+    "sourceSkillId": "skill.make-ten-bridge.decompose-addends-make-ten",
+    "targetSkillId": "skill.doubles-near-doubles.doubles-facts",
+    "type": "prereq_strategy",
+    "rationale": "Understanding complements of ten supports recognizing doubles patterns."
+  },
+  {
+    "id": "edge.addition-foundations.transition-3",
+    "sourceSkillId": "skill.doubles-near-doubles.near-doubles-equations",
+    "targetSkillId": "skill.fact-families-within-20.build-fact-family",
+    "type": "prereq_core",
+    "rationale": "Using doubles and near doubles primes learners to organize related fact families."
+  },
+  {
+    "id": "edge.addition-foundations.transition-4",
+    "sourceSkillId": "skill.fact-families-within-20.fact-family-word-problems",
+    "targetSkillId": "skill.dynamic-addition-within-100.model-two-digit-addition",
+    "type": "prereq_core",
+    "rationale": "Fact family reasoning extends naturally to modeling two-digit addition situations."
+  },
+  {
+    "id": "edge.additive-word-problems.sequence-1",
+    "sourceSkillId": "skill.additive-word-problems.join-separate-problems",
+    "targetSkillId": "skill.additive-word-problems.compare-problems",
+    "type": "prereq_core",
+    "rationale": "Solving join/separate stories precedes comparison contexts."
+  },
+  {
+    "id": "edge.additive-word-problems.sequence-2",
+    "sourceSkillId": "skill.additive-word-problems.compare-problems",
+    "targetSkillId": "skill.additive-word-problems.choose-additive-strategy",
+    "type": "prereq_core",
+    "rationale": "Working across problem types enables strategic selection."
+  },
+  {
+    "id": "edge.comparison-word-problems.sequence-1",
+    "sourceSkillId": "skill.comparison-word-problems.compare-unknowns",
+    "targetSkillId": "skill.comparison-word-problems.compare-languages",
+    "type": "prereq_core",
+    "rationale": "Representing unknowns comes before analyzing comparison language."
+  },
+  {
+    "id": "edge.comparison-word-problems.sequence-2",
+    "sourceSkillId": "skill.comparison-word-problems.compare-languages",
+    "targetSkillId": "skill.comparison-word-problems.draw-models-comparison",
+    "type": "prereq_core",
+    "rationale": "Understanding language supports choosing diagrams for comparison."
+  },
+  {
+    "id": "edge.count-back-count-up.sequence-1",
+    "sourceSkillId": "skill.count-back-count-up.count-back-10",
+    "targetSkillId": "skill.count-back-count-up.count-up-find-difference",
+    "type": "prereq_core",
+    "rationale": "Counting back lays the groundwork for counting up to find differences."
+  },
+  {
+    "id": "edge.count-back-count-up.sequence-2",
+    "sourceSkillId": "skill.count-back-count-up.count-up-find-difference",
+    "targetSkillId": "skill.count-back-count-up.choose-counting-strategy",
+    "type": "prereq_core",
+    "rationale": "Experience with both directions supports choosing efficient subtraction strategies."
+  },
+  {
+    "id": "edge.counting-on-addition.sequence-1",
+    "sourceSkillId": "skill.counting-on-addition.count-on-objects-10",
+    "targetSkillId": "skill.counting-on-addition.count-on-number-line-20",
+    "type": "prereq_core",
+    "rationale": "Counting on with objects comes before applying the strategy on number lines."
+  },
+  {
+    "id": "edge.counting-on-addition.sequence-2",
+    "sourceSkillId": "skill.counting-on-addition.count-on-number-line-20",
+    "targetSkillId": "skill.counting-on-addition.count-on-equations-20",
+    "type": "prereq_core",
+    "rationale": "Learners link number-line counting-on to symbolic equations after visual practice."
+  },
+  {
+    "id": "edge.distributive-associative-strategies.sequence-1",
+    "sourceSkillId": "skill.distributive-associative-strategies.distributive-over-addition",
+    "targetSkillId": "skill.distributive-associative-strategies.associative-property",
+    "type": "prereq_core",
+    "rationale": "Understanding distribution precedes regrouping factors with the associative property."
+  },
+  {
+    "id": "edge.distributive-associative-strategies.sequence-2",
+    "sourceSkillId": "skill.distributive-associative-strategies.associative-property",
+    "targetSkillId": "skill.distributive-associative-strategies.factorization-strategies",
+    "type": "prereq_core",
+    "rationale": "Applying properties leads to systematic factorization strategies."
+  },
+  {
+    "id": "edge.distributive.to-partial-products",
+    "sourceSkillId": "skill.distributive-associative-strategies.distributive-over-addition",
+    "targetSkillId": "skill.dynamic-multiplication.partial-products-algorithm",
+    "type": "prereq_core",
+    "rationale": "Applying the distributive property underpins the partial products algorithm."
+  },
+  {
+    "id": "edge.distributive.to-partial-quotients",
+    "sourceSkillId": "skill.distributive-associative-strategies.distributive-over-addition",
+    "targetSkillId": "skill.long-division.partial-quotients",
+    "type": "prereq_core",
+    "rationale": "Understanding distribution supports using partial quotients in division."
+  },
+  {
+    "id": "edge.division-as-grouping.sequence-1",
+    "sourceSkillId": "skill.division-as-grouping.create-equal-groups",
+    "targetSkillId": "skill.division-as-grouping.number-line-division",
+    "type": "prereq_core",
+    "rationale": "Creating equal groups precedes mapping division on number lines."
+  },
+  {
+    "id": "edge.division-as-grouping.sequence-2",
+    "sourceSkillId": "skill.division-as-grouping.number-line-division",
+    "targetSkillId": "skill.division-as-grouping.write-grouping-equations",
+    "type": "prereq_core",
+    "rationale": "Repeated subtraction models support writing grouping equations."
+  },
+  {
+    "id": "edge.division-as-sharing.sequence-1",
+    "sourceSkillId": "skill.division-as-sharing.share-equally",
+    "targetSkillId": "skill.division-as-sharing.write-division-equations",
+    "type": "prereq_core",
+    "rationale": "Sharing objects equally comes before recording division equations."
+  },
+  {
+    "id": "edge.division-as-sharing.sequence-2",
+    "sourceSkillId": "skill.division-as-sharing.write-division-equations",
+    "targetSkillId": "skill.division-as-sharing.relate-sharing-multiplication",
+    "type": "prereq_core",
+    "rationale": "Writing equations prepares learners to relate division to multiplication facts."
+  },
+  {
+    "id": "edge.division-fact-strategies.sequence-1",
+    "sourceSkillId": "skill.division-fact-strategies.use-related-multiplication",
+    "targetSkillId": "skill.division-fact-strategies.divide-using-repeated-subtraction",
+    "type": "prereq_core",
+    "rationale": "Using related facts precedes interpreting division as repeated subtraction."
+  },
+  {
+    "id": "edge.division-fact-strategies.sequence-2",
+    "sourceSkillId": "skill.division-fact-strategies.divide-using-repeated-subtraction",
+    "targetSkillId": "skill.division-fact-strategies.divide-using-area-models",
+    "type": "prereq_core",
+    "rationale": "Repeated subtraction experience feeds into partitioning arrays for division."
+  },
+  {
+    "id": "edge.division-foundations.transition-1",
+    "sourceSkillId": "skill.multi-step-word-problems.evaluate-reasonableness",
+    "targetSkillId": "skill.division-as-grouping.create-equal-groups",
+    "type": "prereq_core",
+    "rationale": "Evaluating multi-step solutions readies learners for interpreting division groupings."
+  },
+  {
+    "id": "edge.division-foundations.transition-2",
+    "sourceSkillId": "skill.division-as-grouping.write-grouping-equations",
+    "targetSkillId": "skill.relate-division-multiplication.area-model-relate",
+    "type": "prereq_core",
+    "rationale": "Writing division equations feeds into relating them to multiplication structures."
+  },
+  {
+    "id": "edge.division-foundations.transition-3",
+    "sourceSkillId": "skill.relate-division-multiplication.choose-related-strategy",
+    "targetSkillId": "skill.division-word-problems.interpret-division-situations",
+    "type": "prereq_core",
+    "rationale": "Choosing related strategies sets up interpreting division contexts."
+  },
+  {
+    "id": "edge.division-word-problems.sequence-1",
+    "sourceSkillId": "skill.division-word-problems.interpret-division-situations",
+    "targetSkillId": "skill.division-word-problems.solve-division-word-problems",
+    "type": "prereq_core",
+    "rationale": "Interpreting scenarios precedes solving division word problems."
+  },
+  {
+    "id": "edge.division-word-problems.sequence-2",
+    "sourceSkillId": "skill.division-word-problems.solve-division-word-problems",
+    "targetSkillId": "skill.division-word-problems.explain-division-solutions",
+    "type": "prereq_core",
+    "rationale": "Solving problems comes before communicating division reasoning."
+  },
+  {
+    "id": "edge.doubles-near-doubles.sequence-1",
+    "sourceSkillId": "skill.doubles-near-doubles.doubles-facts",
+    "targetSkillId": "skill.doubles-near-doubles.near-doubles-adjust",
+    "type": "prereq_core",
+    "rationale": "Fluent doubles facts are required before adjusting to near doubles."
+  },
+  {
+    "id": "edge.doubles-near-doubles.sequence-2",
+    "sourceSkillId": "skill.doubles-near-doubles.near-doubles-adjust",
+    "targetSkillId": "skill.doubles-near-doubles.near-doubles-equations",
+    "type": "prereq_core",
+    "rationale": "Strategy practice leads to representing near doubles with equations."
+  },
+  {
+    "id": "edge.dynamic-addition-within-100.sequence-1",
+    "sourceSkillId": "skill.dynamic-addition-within-100.model-two-digit-addition",
+    "targetSkillId": "skill.dynamic-addition-within-100.use-strategies-two-digit",
+    "type": "prereq_core",
+    "rationale": "Modeling multi-digit addition underpins strategy-based computation."
+  },
+  {
+    "id": "edge.dynamic-addition-within-100.sequence-2",
+    "sourceSkillId": "skill.dynamic-addition-within-100.use-strategies-two-digit",
+    "targetSkillId": "skill.dynamic-addition-within-100.add-word-problems-100",
+    "type": "prereq_core",
+    "rationale": "Fluent strategies enable solving contextual two-digit addition problems."
+  },
+  {
+    "id": "edge.dynamic-multiplication.sequence-1",
+    "sourceSkillId": "skill.dynamic-multiplication.model-multi-digit-multiplication",
+    "targetSkillId": "skill.dynamic-multiplication.partial-products-algorithm",
+    "type": "prereq_core",
+    "rationale": "Modeling multi-digit multiplication precedes recording partial products."
+  },
+  {
+    "id": "edge.dynamic-multiplication.sequence-2",
+    "sourceSkillId": "skill.dynamic-multiplication.partial-products-algorithm",
+    "targetSkillId": "skill.dynamic-multiplication.standard-algorithm-multiplication",
+    "type": "prereq_core",
+    "rationale": "Working with partial products sets up the standard algorithm."
+  },
+  {
+    "id": "edge.dynamic-subtraction-within-100.sequence-1",
+    "sourceSkillId": "skill.dynamic-subtraction-within-100.model-two-digit-subtraction",
+    "targetSkillId": "skill.dynamic-subtraction-within-100.use-place-value-strategies",
+    "type": "prereq_core",
+    "rationale": "Modeling with base-ten blocks comes before abstract place-value strategies."
+  },
+  {
+    "id": "edge.dynamic-subtraction-within-100.sequence-2",
+    "sourceSkillId": "skill.dynamic-subtraction-within-100.use-place-value-strategies",
+    "targetSkillId": "skill.dynamic-subtraction-within-100.subtraction-word-problems-100",
+    "type": "prereq_core",
+    "rationale": "Strategy fluency empowers solving contextual two-digit subtraction problems."
+  },
+  {
+    "id": "edge.equal-groups-arrays.sequence-1",
+    "sourceSkillId": "skill.equal-groups-arrays.make-equal-groups",
+    "targetSkillId": "skill.equal-groups-arrays.array-multiplication",
+    "type": "prereq_core",
+    "rationale": "Forming equal groups precedes organizing them into arrays."
+  },
+  {
+    "id": "edge.equal-groups-arrays.sequence-2",
+    "sourceSkillId": "skill.equal-groups-arrays.array-multiplication",
+    "targetSkillId": "skill.equal-groups-arrays.relate-repeated-addition",
+    "type": "prereq_core",
+    "rationale": "Array representations lead to writing repeated addition and multiplication expressions."
+  },
+  {
+    "id": "edge.equal-groups-word-problems.sequence-1",
+    "sourceSkillId": "skill.equal-groups-word-problems.interpret-equal-groups-context",
+    "targetSkillId": "skill.equal-groups-word-problems.solve-equal-groups-multiplication",
+    "type": "prereq_core",
+    "rationale": "Interpreting equal groups precedes solving them via multiplication."
+  },
+  {
+    "id": "edge.equal-groups-word-problems.sequence-2",
+    "sourceSkillId": "skill.equal-groups-word-problems.solve-equal-groups-multiplication",
+    "targetSkillId": "skill.equal-groups-word-problems.solve-equal-groups-division",
+    "type": "prereq_core",
+    "rationale": "Multiplication solutions inform division approaches to equal groups."
+  },
+  {
+    "id": "edge.even-odd-parity.sequence-1",
+    "sourceSkillId": "skill.even-odd-parity.identify-even-odd-models",
+    "targetSkillId": "skill.even-odd-parity.use-even-odd-rules",
+    "type": "prereq_core",
+    "rationale": "Hands-on parity exploration precedes applying even/odd rules."
+  },
+  {
+    "id": "edge.even-odd-parity.sequence-2",
+    "sourceSkillId": "skill.even-odd-parity.use-even-odd-rules",
+    "targetSkillId": "skill.even-odd-parity.explain-even-odd-patterns",
+    "type": "prereq_core",
+    "rationale": "Rule application enables explaining broader parity patterns."
+  },
+  {
+    "id": "edge.expressions-early-algebra.transition-1",
+    "sourceSkillId": "skill.two-step-word-problems.check-two-step-solutions",
+    "targetSkillId": "skill.factors-and-multiples.find-factors",
+    "type": "prereq_core",
+    "rationale": "Checking multi-step work deepens readiness for factor and multiple analysis."
+  },
+  {
+    "id": "edge.expressions-early-algebra.transition-2",
+    "sourceSkillId": "skill.factors-and-multiples.determine-prime-composite",
+    "targetSkillId": "skill.patterns-and-rules.generate-pattern",
+    "type": "prereq_core",
+    "rationale": "Reasoning about factors primes students for analyzing numerical patterns."
+  },
+  {
+    "id": "edge.expressions-early-algebra.transition-3",
+    "sourceSkillId": "skill.patterns-and-rules.graph-patterns",
+    "targetSkillId": "skill.numerical-expressions.evaluate-parentheses",
+    "type": "prereq_core",
+    "rationale": "Graphing patterned growth leads into manipulating complex expressions."
+  },
+  {
+    "id": "edge.expressions-early-algebra.transition-4",
+    "sourceSkillId": "skill.numerical-expressions.compare-expressions",
+    "targetSkillId": "skill.intro-equations-inequalities.write-equations-with-letters",
+    "type": "prereq_core",
+    "rationale": "Comparing expression structures supports representing relationships with equations."
+  },
+  {
+    "id": "edge.fact-families-multiplication-division.sequence-1",
+    "sourceSkillId": "skill.fact-families-multiplication-division.complete-family",
+    "targetSkillId": "skill.fact-families-multiplication-division.generate-family",
+    "type": "prereq_core",
+    "rationale": "Completing fact families enables generating them from visual models."
+  },
+  {
+    "id": "edge.fact-families-multiplication-division.sequence-2",
+    "sourceSkillId": "skill.fact-families-multiplication-division.generate-family",
+    "targetSkillId": "skill.fact-families-multiplication-division.apply-family-context",
+    "type": "prereq_core",
+    "rationale": "Generating families supports applying them in story situations."
+  },
+  {
+    "id": "edge.fact-families-subtraction.sequence-1",
+    "sourceSkillId": "skill.fact-families-subtraction.relate-addition-subtraction-models",
+    "targetSkillId": "skill.fact-families-subtraction.complete-subtraction-family",
+    "type": "prereq_core",
+    "rationale": "Linking inverse operations precedes completing subtraction fact families."
+  },
+  {
+    "id": "edge.fact-families-subtraction.sequence-2",
+    "sourceSkillId": "skill.fact-families-subtraction.complete-subtraction-family",
+    "targetSkillId": "skill.fact-families-subtraction.fact-family-reasoning",
+    "type": "prereq_core",
+    "rationale": "Completing families enables explaining subtraction strategies using related facts."
+  },
+  {
+    "id": "edge.fact-families-within-20.sequence-1",
+    "sourceSkillId": "skill.fact-families-within-20.build-fact-family",
+    "targetSkillId": "skill.fact-families-within-20.complete-fact-family",
+    "type": "prereq_core",
+    "rationale": "Building fact families with models comes before completing them symbolically."
+  },
+  {
+    "id": "edge.fact-families-within-20.sequence-2",
+    "sourceSkillId": "skill.fact-families-within-20.complete-fact-family",
+    "targetSkillId": "skill.fact-families-within-20.fact-family-word-problems",
+    "type": "prereq_core",
+    "rationale": "Completing fact families prepares learners to apply them in stories."
+  },
+  {
+    "id": "edge.fact-families.commutative",
+    "sourceSkillId": "skill.counting-on-addition.count-on-objects-10",
+    "targetSkillId": "skill.addition-properties.commutative-addition-20",
+    "type": "prereq_core",
+    "rationale": "Counting on with manipulatives builds the understanding needed to recognize turn-around facts."
+  },
+  {
+    "id": "edge.fact-family.to-unknown-number",
+    "sourceSkillId": "skill.fact-families-within-20.complete-fact-family",
+    "targetSkillId": "skill.unknown-number-eq.find-unknown-add-sub-20",
+    "type": "prereq_core",
+    "rationale": "Completing fact families prepares learners to solve equations with an unknown in any position."
+  },
+  {
+    "id": "edge.factors-and-multiples.sequence-1",
+    "sourceSkillId": "skill.factors-and-multiples.find-factors",
+    "targetSkillId": "skill.factors-and-multiples.identify-multiples",
+    "type": "prereq_core",
+    "rationale": "Listing factors sets up analyzing multiples."
+  },
+  {
+    "id": "edge.factors-and-multiples.sequence-2",
+    "sourceSkillId": "skill.factors-and-multiples.identify-multiples",
+    "targetSkillId": "skill.factors-and-multiples.determine-prime-composite",
+    "type": "prereq_core",
+    "rationale": "Understanding multiples supports distinguishing prime versus composite."
+  },
+  {
+    "id": "edge.facts-within-20-application.sequence-1",
+    "sourceSkillId": "skill.facts-within-20-application.solve-add-sub-within-20",
+    "targetSkillId": "skill.facts-within-20-application.choose-strategy-20",
+    "type": "prereq_core",
+    "rationale": "Applying mixed facts precedes choosing among strategies intentionally."
+  },
+  {
+    "id": "edge.facts-within-20-application.sequence-2",
+    "sourceSkillId": "skill.facts-within-20-application.choose-strategy-20",
+    "targetSkillId": "skill.facts-within-20-application.fluid-word-problems-20",
+    "type": "prereq_core",
+    "rationale": "Strategic decision-making supports solving fact-based word problems."
+  },
+  {
+    "id": "edge.intro-equations-inequalities.sequence-1",
+    "sourceSkillId": "skill.intro-equations-inequalities.write-equations-with-letters",
+    "targetSkillId": "skill.intro-equations-inequalities.solve-simple-equations",
+    "type": "prereq_core",
+    "rationale": "Writing equations with unknowns precedes solving them."
+  },
+  {
+    "id": "edge.intro-equations-inequalities.sequence-2",
+    "sourceSkillId": "skill.intro-equations-inequalities.solve-simple-equations",
+    "targetSkillId": "skill.intro-equations-inequalities.graph-inequalities",
+    "type": "prereq_core",
+    "rationale": "Solving equations sets up graphing and interpreting inequalities."
+  },
+  {
+    "id": "edge.k-decompose.make-ten",
+    "sourceSkillId": "skill.k-decompose.decompose-to-10-multiple-ways",
+    "targetSkillId": "skill.make-ten-bridge.compose-ten-objects",
+    "type": "prereq_core",
+    "rationale": "Decomposing numbers to ten supports later make-ten strategies."
+  },
+  {
+    "id": "edge.k-fluency.counting-on",
+    "sourceSkillId": "skill.k-fluency.add-sub-within-5",
+    "targetSkillId": "skill.counting-on-addition.count-on-objects-10",
+    "type": "prereq_core",
+    "rationale": "Fluency within five supplies the automatic facts needed for counting-on strategies."
+  },
+  {
+    "id": "edge.long-division.sequence-1",
+    "sourceSkillId": "skill.long-division.model-long-division",
+    "targetSkillId": "skill.long-division.partial-quotients",
+    "type": "prereq_core",
+    "rationale": "Modeling long division supports understanding partial quotients."
+  },
+  {
+    "id": "edge.long-division.sequence-2",
+    "sourceSkillId": "skill.long-division.partial-quotients",
+    "targetSkillId": "skill.long-division.standard-algorithm",
+    "type": "prereq_core",
+    "rationale": "Partial quotient reasoning transitions to the standard algorithm."
+  },
+  {
+    "id": "edge.make-ten-bridge.sequence-1",
+    "sourceSkillId": "skill.make-ten-bridge.compose-ten-objects",
+    "targetSkillId": "skill.make-ten-bridge.make-ten-number-line",
+    "type": "prereq_core",
+    "rationale": "Composing ten concretely precedes using number lines to bridge to ten."
+  },
+  {
+    "id": "edge.make-ten-bridge.sequence-2",
+    "sourceSkillId": "skill.make-ten-bridge.make-ten-number-line",
+    "targetSkillId": "skill.make-ten-bridge.decompose-addends-make-ten",
+    "type": "prereq_core",
+    "rationale": "Number-line bridging supports writing make-ten decomposition equations."
+  },
+  {
+    "id": "edge.make-ten-fluency.sequence-1",
+    "sourceSkillId": "skill.make-ten-fluency.fast-make-ten",
+    "targetSkillId": "skill.make-ten-fluency.apply-make-ten-addition",
+    "type": "prereq_core",
+    "rationale": "Automatic make-ten pairs precede applying the strategy in addition."
+  },
+  {
+    "id": "edge.make-ten-fluency.sequence-2",
+    "sourceSkillId": "skill.make-ten-fluency.apply-make-ten-addition",
+    "targetSkillId": "skill.make-ten-fluency.use-make-ten-subtraction",
+    "type": "prereq_strategy",
+    "rationale": "Applying make-ten to addition supports using complements for subtraction."
+  },
+  {
+    "id": "edge.make-ten.add-three",
+    "sourceSkillId": "skill.make-ten-bridge.compose-ten-objects",
+    "targetSkillId": "skill.add-3-numbers.within-20",
+    "type": "prereq_core",
+    "rationale": "Composing ten supports adding three numbers efficiently."
+  },
+  {
+    "id": "edge.make-ten.associative",
+    "sourceSkillId": "skill.make-ten-bridge.compose-ten-objects",
+    "targetSkillId": "skill.addition-properties.associative-add-3-20",
+    "type": "prereq_core",
+    "rationale": "Making ten provides the strategy foundation for regrouping addends using the associative property."
+  },
+  {
+    "id": "edge.memorization.transition-1",
+    "sourceSkillId": "skill.dynamic-subtraction-within-100.subtraction-word-problems-100",
+    "targetSkillId": "skill.addition-fact-drills.fluent-addition-10",
+    "type": "prereq_strategy",
+    "rationale": "Solving complex problems highlights the need for automatic basic facts."
+  },
+  {
+    "id": "edge.memorization.transition-2",
+    "sourceSkillId": "skill.addition-fact-drills.addition-strategy-checks",
+    "targetSkillId": "skill.subtraction-fact-drills.fluent-subtraction-10",
+    "type": "prereq_core",
+    "rationale": "Monitoring addition fluency informs parallel work on subtraction facts."
+  },
+  {
+    "id": "edge.memorization.transition-3",
+    "sourceSkillId": "skill.subtraction-fact-drills.subtraction-strategy-checks",
+    "targetSkillId": "skill.even-odd-parity.identify-even-odd-models",
+    "type": "prereq_core",
+    "rationale": "Reflecting on subtraction strategies segues into analyzing number parity."
+  },
+  {
+    "id": "edge.memorization.transition-4",
+    "sourceSkillId": "skill.even-odd-parity.explain-even-odd-patterns",
+    "targetSkillId": "skill.make-ten-fluency.fast-make-ten",
+    "type": "prereq_strategy",
+    "rationale": "Recognizing parity patterns supports rapid recall of make-ten complements."
+  },
+  {
+    "id": "edge.memorization.transition-5",
+    "sourceSkillId": "skill.make-ten-fluency.use-make-ten-subtraction",
+    "targetSkillId": "skill.facts-within-20-application.solve-add-sub-within-20",
+    "type": "prereq_core",
+    "rationale": "Mastery of make-ten in both operations feeds mixed fact applications."
+  },
+  {
+    "id": "edge.mixed-fact-drills.sequence-1",
+    "sourceSkillId": "skill.mixed-fact-drills.mixed-fact-fluency",
+    "targetSkillId": "skill.mixed-fact-drills.mixed-fact-strategy-monitor",
+    "type": "prereq_strategy",
+    "rationale": "Fluency practice is followed by monitoring mixed-operation strategies."
+  },
+  {
+    "id": "edge.mixed-fact-drills.sequence-2",
+    "sourceSkillId": "skill.mixed-fact-drills.mixed-fact-strategy-monitor",
+    "targetSkillId": "skill.mixed-fact-drills.apply-mixed-facts-context",
+    "type": "prereq_core",
+    "rationale": "Strategy reflection supports applying mixed facts to contexts."
+  },
+  {
+    "id": "edge.multi-step-word-problems.sequence-1",
+    "sourceSkillId": "skill.multi-step-word-problems.analyze-two-step-problems",
+    "targetSkillId": "skill.multi-step-word-problems.write-equations-with-letter",
+    "type": "prereq_core",
+    "rationale": "Analyzing problem structure precedes representing it with equations."
+  },
+  {
+    "id": "edge.multi-step-word-problems.sequence-2",
+    "sourceSkillId": "skill.multi-step-word-problems.write-equations-with-letter",
+    "targetSkillId": "skill.multi-step-word-problems.evaluate-reasonableness",
+    "type": "prereq_core",
+    "rationale": "Equation writing enables evaluating solution reasonableness."
+  },
+  {
+    "id": "edge.multiplication-fact-strategies.sequence-1",
+    "sourceSkillId": "skill.multiplication-fact-strategies.use-commutative-property",
+    "targetSkillId": "skill.multiplication-fact-strategies.use-double-and-half",
+    "type": "prereq_core",
+    "rationale": "Using commutativity paves the way for doubling and halving strategies."
+  },
+  {
+    "id": "edge.multiplication-fact-strategies.sequence-2",
+    "sourceSkillId": "skill.multiplication-fact-strategies.use-double-and-half",
+    "targetSkillId": "skill.multiplication-fact-strategies.use-area-models-facts",
+    "type": "prereq_strategy",
+    "rationale": "Combining strategy work culminates in area-model explanations."
+  },
+  {
+    "id": "edge.multiplication-foundations.transition-1",
+    "sourceSkillId": "skill.facts-within-20-application.fluid-word-problems-20",
+    "targetSkillId": "skill.equal-groups-arrays.make-equal-groups",
+    "type": "prereq_core",
+    "rationale": "Comfort with additive stories primes learners for equal groups reasoning."
+  },
+  {
+    "id": "edge.multiplication-foundations.transition-2",
+    "sourceSkillId": "skill.equal-groups-arrays.relate-repeated-addition",
+    "targetSkillId": "skill.static-multiplication.multiplication-sentences",
+    "type": "prereq_core",
+    "rationale": "Relating repeated addition to multiplication precedes writing equations."
+  },
+  {
+    "id": "edge.multiplication-foundations.transition-3",
+    "sourceSkillId": "skill.static-multiplication.explain-multiplication-models",
+    "targetSkillId": "skill.division-as-sharing.share-equally",
+    "type": "prereq_core",
+    "rationale": "Deep understanding of multiplication models anchors sharing-based division."
+  },
+  {
+    "id": "edge.multiplication-foundations.transition-4",
+    "sourceSkillId": "skill.division-as-sharing.relate-sharing-multiplication",
+    "targetSkillId": "skill.skip-counting-multiplication-facts.skip-count-by-factor",
+    "type": "prereq_core",
+    "rationale": "Connecting division to multiplication motivates skip-counting practice."
+  },
+  {
+    "id": "edge.multiplication-foundations.transition-5",
+    "sourceSkillId": "skill.skip-counting-multiplication-facts.skip-count-word-problems",
+    "targetSkillId": "skill.multiply-by-multiples-of-10.decompose-multiple-of-10",
+    "type": "prereq_core",
+    "rationale": "Skip-count experience feeds into decomposing larger multiples of ten."
+  },
+  {
+    "id": "edge.multiplication-mastery.transition-1",
+    "sourceSkillId": "skill.mixed-fact-drills.apply-mixed-facts-context",
+    "targetSkillId": "skill.dynamic-multiplication.model-multi-digit-multiplication",
+    "type": "prereq_core",
+    "rationale": "Confidence with mixed facts feeds into modeling multi-digit multiplication."
+  },
+  {
+    "id": "edge.multiplication-mastery.transition-3",
+    "sourceSkillId": "skill.distributive-associative-strategies.factorization-strategies",
+    "targetSkillId": "skill.multi-step-word-problems.analyze-two-step-problems",
+    "type": "prereq_core",
+    "rationale": "Advanced property use supports planning multi-step problem strategies."
+  },
+  {
+    "id": "edge.multiplication-memorization.transition-1",
+    "sourceSkillId": "skill.multiply-by-multiples-of-10.use-distributive-10s",
+    "targetSkillId": "skill.multiplication-fact-strategies.use-commutative-property",
+    "type": "prereq_core",
+    "rationale": "Distributive reasoning connects directly to flexible fact strategies."
+  },
+  {
+    "id": "edge.multiplication-memorization.transition-2",
+    "sourceSkillId": "skill.multiplication-fact-strategies.use-area-models-facts",
+    "targetSkillId": "skill.division-fact-strategies.use-related-multiplication",
+    "type": "prereq_core",
+    "rationale": "Area models highlighting inverse relationships prepare for division fact strategies."
+  },
+  {
+    "id": "edge.multiplication-memorization.transition-3",
+    "sourceSkillId": "skill.division-fact-strategies.divide-using-area-models",
+    "targetSkillId": "skill.fact-families-multiplication-division.complete-family",
+    "type": "prereq_core",
+    "rationale": "Array-based division leads directly into connected fact families."
+  },
+  {
+    "id": "edge.multiplication-memorization.transition-4",
+    "sourceSkillId": "skill.fact-families-multiplication-division.apply-family-context",
+    "targetSkillId": "skill.mixed-fact-drills.mixed-fact-fluency",
+    "type": "prereq_core",
+    "rationale": "Working with fact families transitions into mixed fact fluency drills."
+  },
+  {
+    "id": "edge.multiplication-properties.identity-zero",
+    "sourceSkillId": "skill.multiplication-fact-strategies.use-commutative-property",
+    "targetSkillId": "skill.multiplication-properties.identity-zero",
+    "type": "prereq_core",
+    "rationale": "Understanding commutativity supports reasoning about identity and zero facts."
+  },
+  {
+    "id": "edge.multiply-by-multiples-of-10.sequence-1",
+    "sourceSkillId": "skill.multiply-by-multiples-of-10.decompose-multiple-of-10",
+    "targetSkillId": "skill.multiply-by-multiples-of-10.multiply-single-digit-by-10s",
+    "type": "prereq_core",
+    "rationale": "Decomposing tens precedes using place-value patterns in multiplication."
+  },
+  {
+    "id": "edge.multiply-by-multiples-of-10.sequence-2",
+    "sourceSkillId": "skill.multiply-by-multiples-of-10.multiply-single-digit-by-10s",
+    "targetSkillId": "skill.multiply-by-multiples-of-10.use-distributive-10s",
+    "type": "prereq_core",
+    "rationale": "Multiplying by tens sets the stage for distributive reasoning."
+  },
+  {
+    "id": "edge.numerical-expressions.sequence-1",
+    "sourceSkillId": "skill.numerical-expressions.evaluate-parentheses",
+    "targetSkillId": "skill.numerical-expressions.write-numerical-expression",
+    "type": "prereq_core",
+    "rationale": "Evaluating structured expressions precedes composing them from words."
+  },
+  {
+    "id": "edge.numerical-expressions.sequence-2",
+    "sourceSkillId": "skill.numerical-expressions.write-numerical-expression",
+    "targetSkillId": "skill.numerical-expressions.compare-expressions",
+    "type": "prereq_core",
+    "rationale": "Writing expressions supports comparing them without evaluation."
+  },
+  {
+    "id": "edge.operations-word-problems.transition-1",
+    "sourceSkillId": "skill.division-word-problems.explain-division-solutions",
+    "targetSkillId": "skill.additive-word-problems.join-separate-problems",
+    "type": "prereq_strategy",
+    "rationale": "Explaining division strategies reconnects learners to additive problem structures."
+  },
+  {
+    "id": "edge.operations-word-problems.transition-2",
+    "sourceSkillId": "skill.additive-word-problems.choose-additive-strategy",
+    "targetSkillId": "skill.comparison-word-problems.compare-unknowns",
+    "type": "prereq_core",
+    "rationale": "Strategic additive reasoning flows into comparison problems with unknowns."
+  },
+  {
+    "id": "edge.operations-word-problems.transition-3",
+    "sourceSkillId": "skill.comparison-word-problems.draw-models-comparison",
+    "targetSkillId": "skill.equal-groups-word-problems.interpret-equal-groups-context",
+    "type": "prereq_core",
+    "rationale": "Modeling comparisons supports interpreting multiplicative comparison contexts."
+  },
+  {
+    "id": "edge.operations-word-problems.transition-4",
+    "sourceSkillId": "skill.equal-groups-word-problems.solve-equal-groups-division",
+    "targetSkillId": "skill.two-step-word-problems.plan-two-step",
+    "type": "prereq_core",
+    "rationale": "Mastery with equal groups feeds into planning multi-step problem solutions."
+  },
+  {
+    "id": "edge.patterns-and-rules.sequence-1",
+    "sourceSkillId": "skill.patterns-and-rules.generate-pattern",
+    "targetSkillId": "skill.patterns-and-rules.describe-pattern-feature",
+    "type": "prereq_core",
+    "rationale": "Generating patterns precedes articulating their features."
+  },
+  {
+    "id": "edge.patterns-and-rules.sequence-2",
+    "sourceSkillId": "skill.patterns-and-rules.describe-pattern-feature",
+    "targetSkillId": "skill.patterns-and-rules.graph-patterns",
+    "type": "prereq_core",
+    "rationale": "Describing structure supports graphing patterns on coordinate grids."
+  },
+  {
+    "id": "edge.patterns.even-odd-support",
+    "sourceSkillId": "skill.even-odd-parity.explain-even-odd-patterns",
+    "targetSkillId": "skill.arithmetic-patterns.tables-oa",
+    "type": "prereq_strategy",
+    "rationale": "Reasoning about even and odd supports explaining arithmetic patterns in tables."
+  },
+  {
+    "id": "edge.patterns.tables",
+    "sourceSkillId": "skill.skip-counting-multiplication-facts.skip-count-missing-multiples",
+    "targetSkillId": "skill.arithmetic-patterns.tables-oa",
+    "type": "prereq_core",
+    "rationale": "Skip-counting experiences prepare learners to analyze patterns in tables."
+  },
+  {
+    "id": "edge.relate-division-multiplication.sequence-1",
+    "sourceSkillId": "skill.relate-division-multiplication.area-model-relate",
+    "targetSkillId": "skill.relate-division-multiplication.fact-family-reason",
+    "type": "prereq_core",
+    "rationale": "Area-model reasoning precedes verbalizing fact relationships."
+  },
+  {
+    "id": "edge.relate-division-multiplication.sequence-2",
+    "sourceSkillId": "skill.relate-division-multiplication.fact-family-reason",
+    "targetSkillId": "skill.relate-division-multiplication.choose-related-strategy",
+    "type": "prereq_core",
+    "rationale": "Explaining related facts prepares learners to choose efficient strategies."
+  },
+  {
+    "id": "edge.skip-counting-multiplication-facts.sequence-1",
+    "sourceSkillId": "skill.skip-counting-multiplication-facts.skip-count-by-factor",
+    "targetSkillId": "skill.skip-counting-multiplication-facts.skip-count-missing-multiples",
+    "type": "prereq_core",
+    "rationale": "Basic skip counting supports filling in missing multiples."
+  },
+  {
+    "id": "edge.skip-counting-multiplication-facts.sequence-2",
+    "sourceSkillId": "skill.skip-counting-multiplication-facts.skip-count-missing-multiples",
+    "targetSkillId": "skill.skip-counting-multiplication-facts.skip-count-word-problems",
+    "type": "prereq_core",
+    "rationale": "Pattern work prepares learners to apply skip counting in contexts."
+  },
+  {
+    "id": "edge.static-multiplication.sequence-1",
+    "sourceSkillId": "skill.static-multiplication.multiplication-sentences",
+    "targetSkillId": "skill.static-multiplication.multiplication-within-100",
+    "type": "prereq_core",
+    "rationale": "Writing multiplication sentences precedes fluent computation."
+  },
+  {
+    "id": "edge.static-multiplication.sequence-2",
+    "sourceSkillId": "skill.static-multiplication.multiplication-within-100",
+    "targetSkillId": "skill.static-multiplication.explain-multiplication-models",
+    "type": "prereq_strategy",
+    "rationale": "Computational fluency supports explaining multiple multiplication models."
+  },
+  {
+    "id": "edge.subtraction-fact-drills.sequence-1",
+    "sourceSkillId": "skill.subtraction-fact-drills.fluent-subtraction-10",
+    "targetSkillId": "skill.subtraction-fact-drills.fluent-subtraction-20",
+    "type": "prereq_core",
+    "rationale": "Basic subtraction fluency supports extending to larger minuends."
+  },
+  {
+    "id": "edge.subtraction-fact-drills.sequence-2",
+    "sourceSkillId": "skill.subtraction-fact-drills.fluent-subtraction-20",
+    "targetSkillId": "skill.subtraction-fact-drills.subtraction-strategy-checks",
+    "type": "prereq_strategy",
+    "rationale": "Fluency up to twenty enables reflective strategy monitoring."
+  },
+  {
+    "id": "edge.subtraction-foundations.transition-1",
+    "sourceSkillId": "skill.take-away-models.subtract-equations-20",
+    "targetSkillId": "skill.count-back-count-up.count-back-10",
+    "type": "prereq_core",
+    "rationale": "Equation work with take-away supports extending to count-back strategies."
+  },
+  {
+    "id": "edge.subtraction-foundations.transition-2",
+    "sourceSkillId": "skill.count-back-count-up.choose-counting-strategy",
+    "targetSkillId": "skill.fact-families-subtraction.relate-addition-subtraction-models",
+    "type": "prereq_core",
+    "rationale": "Selecting counting strategies primes learners to reason about inverse operations."
+  },
+  {
+    "id": "edge.subtraction-foundations.transition-3",
+    "sourceSkillId": "skill.fact-families-subtraction.fact-family-reasoning",
+    "targetSkillId": "skill.dynamic-subtraction-within-100.model-two-digit-subtraction",
+    "type": "prereq_core",
+    "rationale": "Reasoning with fact families prepares learners for multi-digit subtraction models."
+  },
+  {
+    "id": "edge.subtraction.count-up",
+    "sourceSkillId": "skill.count-back-count-up.count-up-find-difference",
+    "targetSkillId": "skill.subtraction-as-unknown-addend.rewrite",
+    "type": "prereq_core",
+    "rationale": "Counting up to find differences leads directly to rewriting subtraction as an unknown-addend problem."
+  },
+  {
+    "id": "edge.subtraction.unknown-to-equation",
+    "sourceSkillId": "skill.subtraction-as-unknown-addend.rewrite",
+    "targetSkillId": "skill.unknown-number-eq.find-unknown-add-sub-20",
+    "type": "prereq_core",
+    "rationale": "Rewriting subtraction as an unknown-addend builds proficiency for solving equations with unknowns."
+  },
+  {
+    "id": "edge.take-away-models.sequence-1",
+    "sourceSkillId": "skill.take-away-models.subtract-with-objects-10",
+    "targetSkillId": "skill.take-away-models.subtract-number-line-20",
+    "type": "prereq_core",
+    "rationale": "Concrete take-away prepares learners for subtracting on number lines."
+  },
+  {
+    "id": "edge.take-away-models.sequence-2",
+    "sourceSkillId": "skill.take-away-models.subtract-number-line-20",
+    "targetSkillId": "skill.take-away-models.subtract-equations-20",
+    "type": "prereq_core",
+    "rationale": "Number-line subtraction supports writing matching subtraction equations."
+  },
+  {
+    "id": "edge.two-step-word-problems.sequence-1",
+    "sourceSkillId": "skill.two-step-word-problems.plan-two-step",
+    "targetSkillId": "skill.two-step-word-problems.solve-two-step",
+    "type": "prereq_core",
+    "rationale": "Planning solution steps precedes executing them in equations."
+  },
+  {
+    "id": "edge.two-step-word-problems.sequence-2",
+    "sourceSkillId": "skill.two-step-word-problems.solve-two-step",
+    "targetSkillId": "skill.two-step-word-problems.check-two-step-solutions",
+    "type": "prereq_core",
+    "rationale": "Solving problems enables checking solutions for reasonableness."
+  },
+  {
+    "id": "edge.unknown-factor.from-division",
+    "sourceSkillId": "skill.division-as-sharing.write-division-equations",
+    "targetSkillId": "skill.unknown-factor-quotient.within-100",
+    "type": "prereq_core",
+    "rationale": "Writing division equations prepares learners to reason about unknown factors and quotients."
+  },
+  {
+    "id": "edge.unknown-factor.from-multiplication",
+    "sourceSkillId": "skill.static-multiplication.multiplication-sentences",
+    "targetSkillId": "skill.unknown-factor-quotient.within-100",
+    "type": "prereq_core",
+    "rationale": "Writing multiplication sentences lays the groundwork for finding unknown factors."
+  },
+  {
+    "id": "edge.unknown-number.to-word-problems",
+    "sourceSkillId": "skill.unknown-number-eq.find-unknown-add-sub-20",
+    "targetSkillId": "skill.additive-word-problems.compare-problems",
+    "type": "prereq_core",
+    "rationale": "Solving equations with unknowns enables tackling compare word problems with missing values."
+  }
+]

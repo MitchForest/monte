@@ -5,13 +5,17 @@ import { splitProps } from 'solid-js';
 import { cn } from '../../lib/cn';
 
 const cardVariants = cva(
-  'rounded-[var(--radius-lg)] border border-[rgba(12,42,101,0.08)] text-[color:var(--color-text)] shadow-ambient transition-shadow duration-200',
+  [
+    'rounded-[var(--radius-lg)] border border-[rgba(12,42,101,0.08)] text-[color:var(--color-text)]',
+    'shadow-[0_10px_28px_rgba(12,42,101,0.12)] transition-shadow duration-200',
+  ].join(' '),
   {
     variants: {
       variant: {
-        soft: 'surface-card',
-        floating: 'surface-floating',
-        flat: 'bg-transparent',
+        soft: 'bg-[color:var(--color-surface)]',
+        floating:
+          'bg-gradient-to-br from-[color:var(--color-surface)] to-[color:var(--color-surface-strong)] shadow-[0_22px_48px_rgba(12,42,101,0.18)]',
+        flat: 'bg-transparent shadow-none border-transparent',
       },
       padding: {
         none: 'p-0',

@@ -1,0 +1,275 @@
+[
+  {
+    "id": "edge.analyze-transformations.sequence-1",
+    "sourceSkillId": "skill.analyze-transformations.identify-transformations",
+    "targetSkillId": "skill.analyze-transformations.perform-transformations",
+    "type": "prereq_core",
+    "rationale": "Recognizing transformations precedes performing them on coordinates."
+  },
+  {
+    "id": "edge.area-of-rectangles-triangles.sequence-1",
+    "sourceSkillId": "skill.area-of-rectangles-triangles.area-rectangles",
+    "targetSkillId": "skill.area-of-rectangles-triangles.area-triangles",
+    "type": "prereq_core",
+    "rationale": "Area of rectangles underlies deriving area of triangles."
+  },
+  {
+    "id": "edge.area-rectilinear-perimeter",
+    "sourceSkillId": "skill.area-of-rectangles-triangles.rectilinear-decompose",
+    "targetSkillId": "skill.perimeter.rectangles-polygons",
+    "type": "prereq_support",
+    "rationale": "Decomposing shapes helps distinguish between area and perimeter reasoning."
+  },
+  {
+    "id": "edge.area-rectilinear-support",
+    "sourceSkillId": "skill.area-of-rectangles-triangles.area-rectangles",
+    "targetSkillId": "skill.area-of-rectangles-triangles.rectilinear-decompose",
+    "type": "prereq_core",
+    "rationale": "Finding area of rectangles is prerequisite to decomposing rectilinear figures into rectangles."
+  },
+  {
+    "id": "edge.classify-2d-figures-hierarchies.sequence-1",
+    "sourceSkillId": "skill.classify-2d-figures-hierarchies.hierarchy-triangles",
+    "targetSkillId": "skill.classify-2d-figures-hierarchies.hierarchy-quadrilaterals",
+    "type": "prereq_strategy",
+    "rationale": "Building triangle hierarchies supports constructing quadrilateral hierarchies."
+  },
+  {
+    "id": "edge.classify-shapes-by-attributes.sequence-1",
+    "sourceSkillId": "skill.classify-shapes-by-attributes.sort-by-attributes",
+    "targetSkillId": "skill.classify-shapes-by-attributes.compare-2d-3d",
+    "type": "prereq_core",
+    "rationale": "Sorting by attributes supports comparing 2D and 3D shape properties."
+  },
+  {
+    "id": "edge.classify-shapes.sort-to-draw",
+    "sourceSkillId": "skill.classify-shapes-by-attributes.sort-by-attributes",
+    "targetSkillId": "skill.classify-shapes-by-attributes.draw-attributes",
+    "type": "prereq_core",
+    "rationale": "Sorting shapes by attributes prepares students to draw shapes with specified attributes."
+  },
+  {
+    "id": "edge.compose-decompose-shapes.sequence-1",
+    "sourceSkillId": "skill.compose-decompose-shapes.compose-using-shapes",
+    "targetSkillId": "skill.compose-decompose-shapes.decompose-into-shapes",
+    "type": "prereq_core",
+    "rationale": "Composing shapes provides experience necessary to decompose composites."
+  },
+  {
+    "id": "edge.compute-lengths-to-perimeter-area",
+    "sourceSkillId": "skill.coordinate-plane-polygons.compute-side-lengths",
+    "targetSkillId": "skill.coordinate-plane-polygons.perimeter-area",
+    "type": "prereq_core",
+    "rationale": "Calculating side lengths precedes finding perimeter and area from coordinates."
+  },
+  {
+    "id": "edge.coordinate-plane-polygons.sequence-1",
+    "sourceSkillId": "skill.coordinate-plane-polygons.plot-polygons-first-quadrant",
+    "targetSkillId": "skill.coordinate-plane-polygons.compute-side-lengths",
+    "type": "prereq_core",
+    "rationale": "Plotting polygons comes before computing side lengths from coordinates."
+  },
+  {
+    "id": "edge.decompose-to-halves",
+    "sourceSkillId": "skill.compose-decompose-shapes.decompose-into-shapes",
+    "targetSkillId": "skill.partition-shapes-equal-parts-geometry.partition-halves-fourths",
+    "type": "prereq_core",
+    "rationale": "Decomposing shapes provides a foundation for partitioning shapes into equal shares."
+  },
+  {
+    "id": "edge.describe-positions.sequence-1",
+    "sourceSkillId": "skill.describe-positions.use-positional-words",
+    "targetSkillId": "skill.describe-positions.map-simple-scenes",
+    "type": "prereq_core",
+    "rationale": "Using positional vocabulary precedes mapping scenes with positional descriptions."
+  },
+  {
+    "id": "edge.extend-ordered-pairs-to-lengths",
+    "sourceSkillId": "skill.graph-points-coordinate-plane.extend-ordered-pairs",
+    "targetSkillId": "skill.coordinate-plane-polygons.compute-side-lengths",
+    "type": "prereq_core",
+    "rationale": "Plotting points in all quadrants underpins using coordinates to find distances."
+  },
+  {
+    "id": "edge.graph-points-coordinate-plane.sequence-1",
+    "sourceSkillId": "skill.graph-points-coordinate-plane.extend-ordered-pairs",
+    "targetSkillId": "skill.graph-points-coordinate-plane.analyze-coordinate-patterns",
+    "type": "prereq_core",
+    "rationale": "Plotting points in all quadrants comes before analyzing coordinate patterns."
+  },
+  {
+    "id": "edge.halves-to-equal-parts",
+    "sourceSkillId": "skill.partition-shapes-equal-parts-geometry.partition-halves-fourths",
+    "targetSkillId": "skill.partition-shapes-equal-parts-geometry.partition-into-equal-parts",
+    "type": "prereq_core",
+    "rationale": "Partitioning into halves and fourths precedes partitioning into multiple equal parts."
+  },
+  {
+    "id": "edge.identify-2d-3d-shapes.sequence-1",
+    "sourceSkillId": "skill.identify-2d-3d-shapes.name-2d-shapes",
+    "targetSkillId": "skill.identify-2d-3d-shapes.name-3d-shapes",
+    "type": "prereq_core",
+    "rationale": "Learners identify plane shapes before extending to solid shapes."
+  },
+  {
+    "id": "edge.identify-2d-3d-shapes.sequence-2",
+    "sourceSkillId": "skill.identify-2d-3d-shapes.name-3d-shapes",
+    "targetSkillId": "skill.identify-2d-3d-shapes.match-faces-to-shapes",
+    "type": "prereq_core",
+    "rationale": "Recognizing solids supports matching them to their 2D faces."
+  },
+  {
+    "id": "edge.lines-angles.sequence-1",
+    "sourceSkillId": "skill.lines-angles.identify-lines",
+    "targetSkillId": "skill.lines-angles.classify-angles",
+    "type": "prereq_core",
+    "rationale": "Recognizing lines and rays precedes classifying angles."
+  },
+  {
+    "id": "edge.lines.additive-angles",
+    "sourceSkillId": "skill.lines-angles.measure-with-protractor",
+    "targetSkillId": "skill.lines-angles.additive-angles",
+    "type": "prereq_core",
+    "rationale": "Measuring angles is required before composing and decomposing angles to solve for unknowns."
+  },
+  {
+    "id": "edge.lines.angle-measure",
+    "sourceSkillId": "skill.lines-angles.classify-angles",
+    "targetSkillId": "skill.lines-angles.measure-with-protractor",
+    "type": "prereq_core",
+    "rationale": "Classifying angles provides context for measuring their size with a protractor."
+  },
+  {
+    "id": "edge.lines.parallel-perpendicular",
+    "sourceSkillId": "skill.lines-angles.identify-lines",
+    "targetSkillId": "skill.lines-angles.parallel-perpendicular",
+    "type": "prereq_core",
+    "rationale": "Recognizing different types of lines precedes identifying parallel and perpendicular relationships."
+  },
+  {
+    "id": "edge.lines.parallel-to-quadrilateral",
+    "sourceSkillId": "skill.lines-angles.parallel-perpendicular",
+    "targetSkillId": "skill.triangles-quadrilaterals.classify-quadrilaterals",
+    "type": "prereq_core",
+    "rationale": "Understanding parallel and perpendicular lines supports classifying quadrilaterals by side relationships."
+  },
+  {
+    "id": "edge.measurement-geometry.transition-2",
+    "sourceSkillId": "skill.area-of-rectangles-triangles.area-triangles",
+    "targetSkillId": "skill.surface-area-with-nets.build-nets",
+    "type": "prereq_core",
+    "rationale": "Understanding polygonal areas supports constructing nets for prisms."
+  },
+  {
+    "id": "edge.name-3d-to-compare",
+    "sourceSkillId": "skill.identify-2d-3d-shapes.name-3d-shapes",
+    "targetSkillId": "skill.classify-shapes-by-attributes.compare-2d-3d",
+    "type": "prereq_support",
+    "rationale": "Knowing 3D shape names supports comparing 2D and 3D shapes by their defining attributes."
+  },
+  {
+    "id": "edge.partition-shapes-equal-parts-geometry.sequence-1",
+    "sourceSkillId": "skill.partition-shapes-equal-parts-geometry.partition-into-equal-parts",
+    "targetSkillId": "skill.partition-shapes-equal-parts-geometry.describe-fractions-of-shape",
+    "type": "prereq_core",
+    "rationale": "Partitioning shapes precedes explaining fraction relationships in those partitions."
+  },
+  {
+    "id": "edge.perimeter-to-nets",
+    "sourceSkillId": "skill.perimeter.rectangles-polygons",
+    "targetSkillId": "skill.surface-area-with-nets.build-nets",
+    "type": "prereq_support",
+    "rationale": "Understanding perimeter of polygons supports reasoning about edges when constructing nets."
+  },
+  {
+    "id": "edge.plane-geometry.transition-1",
+    "sourceSkillId": "skill.classify-shapes-by-attributes.compare-2d-3d",
+    "targetSkillId": "skill.partition-shapes-equal-parts-geometry.partition-into-equal-parts",
+    "type": "prereq_core",
+    "rationale": "Comparing shape attributes supports understanding partitioning of shapes."
+  },
+  {
+    "id": "edge.plane-geometry.transition-2",
+    "sourceSkillId": "skill.partition-shapes-equal-parts-geometry.describe-fractions-of-shape",
+    "targetSkillId": "skill.tile-rectangles-rows-columns.tile-rectangle",
+    "type": "prereq_core",
+    "rationale": "Understanding equal parts helps connect tiling to equal rows and columns."
+  },
+  {
+    "id": "edge.plane-geometry.transition-4",
+    "sourceSkillId": "skill.lines-angles.classify-angles",
+    "targetSkillId": "skill.triangles-quadrilaterals.classify-triangles",
+    "type": "prereq_core",
+    "rationale": "Classifying angle types informs triangle classification."
+  },
+  {
+    "id": "edge.plane-geometry.transition-5",
+    "sourceSkillId": "skill.triangles-quadrilaterals.classify-quadrilaterals",
+    "targetSkillId": "skill.symmetry-and-reflection.identify-lines-symmetry",
+    "type": "prereq_core",
+    "rationale": "Understanding polygon attributes precedes symmetry analysis."
+  },
+  {
+    "id": "edge.right-triangle-support",
+    "sourceSkillId": "skill.lines-angles.classify-angles",
+    "targetSkillId": "skill.triangles-quadrilaterals.right-triangle-recognition",
+    "type": "prereq_core",
+    "rationale": "Recognizing right angles allows students to identify right triangles."
+  },
+  {
+    "id": "edge.shape-foundations.transition-1",
+    "sourceSkillId": "skill.identify-2d-3d-shapes.match-faces-to-shapes",
+    "targetSkillId": "skill.compose-decompose-shapes.compose-using-shapes",
+    "type": "prereq_core",
+    "rationale": "Understanding shape components leads into composing new shapes."
+  },
+  {
+    "id": "edge.shape-foundations.transition-2",
+    "sourceSkillId": "skill.compose-decompose-shapes.decompose-into-shapes",
+    "targetSkillId": "skill.classify-shapes-by-attributes.sort-by-attributes",
+    "type": "prereq_core",
+    "rationale": "Decomposing shapes provides insights needed to classify by attributes."
+  },
+  {
+    "id": "edge.surface-area-with-nets.sequence-1",
+    "sourceSkillId": "skill.surface-area-with-nets.build-nets",
+    "targetSkillId": "skill.surface-area-with-nets.calculate-surface-area",
+    "type": "prereq_core",
+    "rationale": "Constructing nets precedes calculating surface area from them."
+  },
+  {
+    "id": "edge.symmetry-and-reflection.sequence-1",
+    "sourceSkillId": "skill.symmetry-and-reflection.identify-lines-symmetry",
+    "targetSkillId": "skill.symmetry-and-reflection.perform-reflections",
+    "type": "prereq_core",
+    "rationale": "Identifying symmetry lines precedes performing coordinate reflections."
+  },
+  {
+    "id": "edge.tile-rectangles.sequence-1",
+    "sourceSkillId": "skill.tile-rectangles-rows-columns.tile-rectangle",
+    "targetSkillId": "skill.tile-rectangles-rows-columns.relate-array-multiplication",
+    "type": "prereq_core",
+    "rationale": "Tiling rectangles prepares learners to relate arrays to multiplication."
+  },
+  {
+    "id": "edge.triangles-quadrilaterals.sequence-1",
+    "sourceSkillId": "skill.triangles-quadrilaterals.classify-triangles",
+    "targetSkillId": "skill.triangles-quadrilaterals.classify-quadrilaterals",
+    "type": "prereq_strategy",
+    "rationale": "Classifying triangles by properties supports similar reasoning with quadrilaterals."
+  },
+  {
+    "id": "edge.volume-concepts.sequence-1",
+    "sourceSkillId": "skill.volume-concepts.volume-unit-cubes",
+    "targetSkillId": "skill.volume-concepts.volume-formula-application",
+    "type": "prereq_core",
+    "rationale": "Counting unit cubes supports applying volume formulas."
+  },
+  {
+    "id": "edge.volume-to-surface-area",
+    "sourceSkillId": "skill.volume-concepts.volume-unit-cubes",
+    "targetSkillId": "skill.surface-area-with-nets.build-nets",
+    "type": "prereq_support",
+    "rationale": "Building rectangular prisms with unit cubes supports reasoning about their surface area."
+  }
+]

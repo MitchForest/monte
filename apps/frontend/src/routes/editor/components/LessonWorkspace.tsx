@@ -11,7 +11,7 @@ import {
   GuidedStepEditor,
   PracticeSegmentEditor,
 } from './lessonEditors';
-import { Button, Card } from '../../../design-system';
+import { Button, Card } from '../../../components/ui';
 import { curriculumMaterials } from '../../../domains/curriculum/materials';
 import type { LessonSegment, PresentationSegmentType } from '../types';
 import { InventoryPanel } from './InventoryPanel';
@@ -61,12 +61,12 @@ export const LessonWorkspace = () => {
   return (
     <section class="space-y-4">
       <Card variant="soft" class="space-y-4 p-5">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Materials</h3>
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Materials</h3>
         <div class="space-y-3">
           <For each={lessonDocument()?.lesson.materials ?? []}>
             {(material, index) => (
               <div class="grid gap-2 rounded-md border border-[rgba(64,157,233,0.2)] bg-white p-3 shadow-sm md:grid-cols-3">
-                <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                   <span>Material</span>
                   <select
                     class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -80,7 +80,7 @@ export const LessonWorkspace = () => {
                     </For>
                   </select>
                 </label>
-                <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                   <span>Purpose</span>
                   <input
                     class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -91,7 +91,7 @@ export const LessonWorkspace = () => {
                   />
                 </label>
                 <div class="flex items-center justify-between gap-2">
-                  <label class="flex items-center gap-2 text-xs uppercase tracking-wide text-muted">
+                  <label class="flex items-center gap-2 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                     <input
                       type="checkbox"
                       checked={material.optional ?? false}
@@ -119,7 +119,7 @@ export const LessonWorkspace = () => {
       </Card>
 
       <Card variant="soft" class="space-y-3 p-5">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Lesson scenario seed</h3>
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Lesson scenario seed</h3>
         <div class="flex flex-wrap items-center gap-3">
           <select
             class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -149,7 +149,7 @@ export const LessonWorkspace = () => {
 
       <Card variant="soft" class="space-y-4 p-5">
         <div class="flex items-center justify-between">
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Segments</h3>
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Segments</h3>
           <div class="flex items-center gap-2">
             <For each={['presentation', 'guided', 'practice'] as const}>
               {(type) => (
@@ -163,7 +163,7 @@ export const LessonWorkspace = () => {
 
         <Show
           when={lessonDocument()?.lesson.segments.length}
-          fallback={<p class="text-xs text-muted">No segments yet. Add presentation, guided, or practice segments to begin.</p>}
+          fallback={<p class="text-xs text-[color:var(--color-text-muted)]">No segments yet. Add presentation, guided, or practice segments to begin.</p>}
         >
           <div class="space-y-4">
             <For each={lessonDocument()?.lesson.segments ?? []}>
@@ -191,7 +191,7 @@ export const LessonWorkspace = () => {
                         value={segment.title}
                         onInput={(event) => handleSegmentTitleChange(segment.id, event.currentTarget.value)}
                       />
-                      <span class="text-xs text-muted">{segment.id}</span>
+                      <span class="text-xs text-[color:var(--color-text-muted)]">{segment.id}</span>
                     </div>
                     <div class="flex items-center gap-1">
                       <Button
@@ -217,7 +217,7 @@ export const LessonWorkspace = () => {
                   </div>
 
                   <div class="grid gap-2 md:grid-cols-2">
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Representation</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -234,7 +234,7 @@ export const LessonWorkspace = () => {
                         </For>
                       </select>
                     </label>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Skills (comma separated)</span>
                       <input
                         class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -246,7 +246,7 @@ export const LessonWorkspace = () => {
 
                   <div class="space-y-2">
                     <div class="flex items-center justify-between">
-                      <span class="text-xs font-semibold uppercase tracking-wide text-muted">Materials</span>
+                      <span class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Materials</span>
                       <Button size="compact" variant="secondary" onClick={() => handleAddSegmentMaterial(segment.id)}>
                         Add material
                       </Button>
@@ -255,7 +255,7 @@ export const LessonWorkspace = () => {
                       <For each={segment.materials}>
                         {(material, materialIndex) => (
                           <div class="grid gap-2 rounded-md border border-[rgba(64,157,233,0.2)] bg-white p-3 shadow-sm md:grid-cols-3">
-                            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                               <span>Material</span>
                               <input
                                 class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -270,7 +270,7 @@ export const LessonWorkspace = () => {
                                 }
                               />
                             </label>
-                            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                               <span>Purpose</span>
                               <input
                                 class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -286,7 +286,7 @@ export const LessonWorkspace = () => {
                               />
                             </label>
                             <div class="flex items-center justify-between gap-2">
-                              <label class="flex items-center gap-2 text-xs uppercase tracking-wide text-muted">
+                              <label class="flex items-center gap-2 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                                 <input
                                   type="checkbox"
                                   checked={material.optional ?? false}
@@ -316,7 +316,7 @@ export const LessonWorkspace = () => {
                   </div>
 
                   <div class="grid gap-2 md:grid-cols-2">
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Scenario kind</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -331,7 +331,7 @@ export const LessonWorkspace = () => {
                         <For each={scenarioKindOptions}>{(kind) => <option value={kind}>{kind}</option>}</For>
                       </select>
                     </label>
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Scenario seed</span>
                       <input
                         type="number"
@@ -348,7 +348,7 @@ export const LessonWorkspace = () => {
                   </div>
 
                   <div class="grid gap-2 md:grid-cols-2">
-                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+                    <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                       <span>Material bank</span>
                       <select
                         class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -443,7 +443,7 @@ export const LessonWorkspace = () => {
       <InventoryPanel />
 
       <Card variant="soft" class="space-y-3 p-5">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Document JSON (read-only)</h3>
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Document JSON (read-only)</h3>
         <pre class="max-h-[320px] overflow-auto rounded-md border border-[rgba(64,157,233,0.4)] bg-black/80 p-4 text-xs text-[#e6f7ff]">
           {JSON.stringify(lessonDocument(), null, 2)}
         </pre>

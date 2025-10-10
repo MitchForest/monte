@@ -67,6 +67,12 @@ export type DemoEventPayload =
       reason: 'consume' | 'replenish';
     }
   | {
+      type: 'inventory.reset';
+      lessonId: string;
+      segmentId: string;
+      bankId: string;
+    }
+  | {
     type: 'notes.updated';
     lessonId: string;
     segmentId: string;

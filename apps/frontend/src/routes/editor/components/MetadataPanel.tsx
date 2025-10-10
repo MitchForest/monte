@@ -7,7 +7,7 @@ import {
   useEditorMetaTab,
 } from '../hooks/useEditorViewModel';
 import { curriculumMaterials } from '../../../domains/curriculum/materials';
-import { Button, Card, Chip } from '../../../design-system';
+import { Button, Card, Chip } from '../../../components/ui';
 
 export const MetadataPanel = () => {
   const { units, currentUnit, currentTopic, lessonDocument, currentLessonMeta } = useEditorComputed();
@@ -30,8 +30,8 @@ export const MetadataPanel = () => {
   return (
     <Card variant="soft" class="flex flex-col gap-4 p-5">
       <div>
-        <h2 class="text-xs font-semibold uppercase tracking-wide text-muted">Metadata workspace</h2>
-        <p class="text-xs text-muted">Focus on one layer at a time before saving.</p>
+        <h2 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Metadata workspace</h2>
+        <p class="text-xs text-[color:var(--color-text-muted)]">Focus on one layer at a time before saving.</p>
       </div>
       <div class="flex gap-2 rounded-full bg-white p-1 text-sm font-semibold text-[color:var(--color-heading)]">
         <For
@@ -47,7 +47,7 @@ export const MetadataPanel = () => {
               class={`rounded-full px-4 py-2 transition ${
                 metaTab.active() === tab.value
                   ? 'bg-[rgba(64,157,233,0.15)] text-[color:var(--color-heading)]'
-                  : 'text-muted hover:bg-[rgba(12,42,101,0.08)]'
+                  : 'text-[color:var(--color-text-muted)] hover:bg-[rgba(12,42,101,0.08)]'
               }`}
               disabled={tab.disabled}
               onClick={() => metaTab.setActive(tab.value)}
@@ -59,10 +59,10 @@ export const MetadataPanel = () => {
       </div>
 
       <Show when={metaTab.active() === 'unit'}>
-        <Show when={currentUnit()} fallback={<p class="text-xs text-muted">Select a unit to edit metadata.</p>}>
+        <Show when={currentUnit()} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">Select a unit to edit metadata.</p>}>
           <form class="space-y-3" onSubmit={(event) => void handleUnitFormSubmit(event)}>
             <div class="flex items-center justify-between gap-3">
-              <h3 class="text-xs font-semibold uppercase tracking-wide text-muted">Unit details</h3>
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Unit details</h3>
               <Button type="submit" size="compact">
                 Save unit
               </Button>
@@ -122,10 +122,10 @@ export const MetadataPanel = () => {
       </Show>
 
       <Show when={metaTab.active() === 'topic'}>
-        <Show when={currentTopic()} fallback={<p class="text-xs text-muted">Select a topic to edit metadata.</p>}>
+        <Show when={currentTopic()} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">Select a topic to edit metadata.</p>}>
           <form class="space-y-3" onSubmit={(event) => void handleTopicFormSubmit(event)}>
             <div class="flex items-center justify-between gap-3">
-              <h3 class="text-xs font-semibold uppercase tracking-wide text-muted">Topic details</h3>
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Topic details</h3>
               <Button type="submit" size="compact">
                 Save topic
               </Button>
@@ -196,12 +196,12 @@ export const MetadataPanel = () => {
       </Show>
 
       <Show when={metaTab.active() === 'lesson'}>
-        <Show when={lessonDocument()} fallback={<p class="text-xs text-muted">Select a lesson to manage metadata.</p>}>
+        <Show when={lessonDocument()} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">Select a lesson to manage metadata.</p>}>
           {(docAccessor) => (
             <div class="space-y-4">
               <div class="flex flex-wrap items-center gap-3">
                 <Chip tone="blue">{currentLessonMeta()?.status === 'published' ? 'Published' : 'Draft'}</Chip>
-                <span class="text-xs text-muted">Slug: {currentLessonMeta()?.slug}</span>
+                <span class="text-xs text-[color:var(--color-text-muted)]">Slug: {currentLessonMeta()?.slug}</span>
               </div>
               <div class="grid gap-3 md:grid-cols-2">
                 <label class="flex flex-col gap-1 text-sm">

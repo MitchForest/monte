@@ -87,6 +87,68 @@ declare const LessonScenarioBindingSchema: z.ZodObject<{
     snapshot?: Record<string, unknown> | undefined;
 }>;
 type LessonScenarioBinding = z.infer<typeof LessonScenarioBindingSchema>;
+declare const EntityMetadataSchema: z.ZodObject<{
+    source: z.ZodOptional<z.ZodString>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    notes: z.ZodOptional<z.ZodString>;
+    scenario: z.ZodOptional<z.ZodObject<{
+        kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+        seed: z.ZodNumber;
+        snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        notes: z.ZodOptional<z.ZodString>;
+    }, "strict", z.ZodTypeAny, {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    }, {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    }>>;
+}, "strip", z.ZodUnknown, z.objectOutputType<{
+    source: z.ZodOptional<z.ZodString>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    notes: z.ZodOptional<z.ZodString>;
+    scenario: z.ZodOptional<z.ZodObject<{
+        kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+        seed: z.ZodNumber;
+        snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        notes: z.ZodOptional<z.ZodString>;
+    }, "strict", z.ZodTypeAny, {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    }, {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    }>>;
+}, z.ZodUnknown, "strip">, z.objectInputType<{
+    source: z.ZodOptional<z.ZodString>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    notes: z.ZodOptional<z.ZodString>;
+    scenario: z.ZodOptional<z.ZodObject<{
+        kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+        seed: z.ZodNumber;
+        snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        notes: z.ZodOptional<z.ZodString>;
+    }, "strict", z.ZodTypeAny, {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    }, {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    }>>;
+}, z.ZodUnknown, "strip">>;
+type EntityMetadata = z.infer<typeof EntityMetadataSchema>;
 declare const MaterialSchema: z.ZodObject<{
     id: z.ZodString;
     name: z.ZodString;
@@ -4895,6 +4957,12 @@ declare const PresentationSegmentSchema: z.ZodObject<{
     }[];
     skills: string[];
     description?: string | undefined;
+    scenario?: {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    } | undefined;
     representation?: "concrete" | "abstract" | undefined;
     primaryMaterialId?: string | undefined;
     scriptId?: string | undefined;
@@ -5086,12 +5154,6 @@ declare const PresentationSegmentSchema: z.ZodObject<{
             durationMs?: number | undefined;
         })[];
         summary?: string | undefined;
-    } | undefined;
-    scenario?: {
-        kind: "golden-beads" | "stamp-game";
-        seed: number;
-        notes?: string | undefined;
-        snapshot?: Record<string, unknown> | undefined;
     } | undefined;
     materialBankId?: string | undefined;
 }, {
@@ -5105,6 +5167,12 @@ declare const PresentationSegmentSchema: z.ZodObject<{
     }[];
     skills: string[];
     description?: string | undefined;
+    scenario?: {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    } | undefined;
     representation?: "concrete" | "abstract" | undefined;
     primaryMaterialId?: string | undefined;
     scriptId?: string | undefined;
@@ -5296,12 +5364,6 @@ declare const PresentationSegmentSchema: z.ZodObject<{
             durationMs?: number | undefined;
         })[];
         summary?: string | undefined;
-    } | undefined;
-    scenario?: {
-        kind: "golden-beads" | "stamp-game";
-        seed: number;
-        notes?: string | undefined;
-        snapshot?: Record<string, unknown> | undefined;
     } | undefined;
     materialBankId?: string | undefined;
 }>;
@@ -5435,13 +5497,13 @@ declare const GuidedSegmentSchema: z.ZodObject<{
         explanation?: string | undefined;
     }[];
     description?: string | undefined;
-    representation?: "concrete" | "abstract" | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
         notes?: string | undefined;
         snapshot?: Record<string, unknown> | undefined;
     } | undefined;
+    representation?: "concrete" | "abstract" | undefined;
     materialBankId?: string | undefined;
 }, {
     type: "guided";
@@ -5472,13 +5534,13 @@ declare const GuidedSegmentSchema: z.ZodObject<{
         explanation?: string | undefined;
     }[];
     description?: string | undefined;
-    representation?: "concrete" | "abstract" | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
         notes?: string | undefined;
         snapshot?: Record<string, unknown> | undefined;
     } | undefined;
+    representation?: "concrete" | "abstract" | undefined;
     materialBankId?: string | undefined;
 }>;
 type GuidedSegment = z.infer<typeof GuidedSegmentSchema>;
@@ -5697,13 +5759,13 @@ declare const PracticeSegmentSchema: z.ZodObject<{
         maxMisses: number;
     };
     description?: string | undefined;
-    representation?: "concrete" | "abstract" | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
         notes?: string | undefined;
         snapshot?: Record<string, unknown> | undefined;
     } | undefined;
+    representation?: "concrete" | "abstract" | undefined;
     materialBankId?: string | undefined;
 }, {
     type: "practice";
@@ -5738,13 +5800,13 @@ declare const PracticeSegmentSchema: z.ZodObject<{
         maxMisses: number;
     };
     description?: string | undefined;
-    representation?: "concrete" | "abstract" | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
         notes?: string | undefined;
         snapshot?: Record<string, unknown> | undefined;
     } | undefined;
+    representation?: "concrete" | "abstract" | undefined;
     materialBankId?: string | undefined;
 }>;
 type PracticeSegment = z.infer<typeof PracticeSegmentSchema>;
@@ -6925,6 +6987,12 @@ declare const LessonSegmentSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<
     }[];
     skills: string[];
     description?: string | undefined;
+    scenario?: {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    } | undefined;
     representation?: "concrete" | "abstract" | undefined;
     primaryMaterialId?: string | undefined;
     scriptId?: string | undefined;
@@ -7116,12 +7184,6 @@ declare const LessonSegmentSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<
             durationMs?: number | undefined;
         })[];
         summary?: string | undefined;
-    } | undefined;
-    scenario?: {
-        kind: "golden-beads" | "stamp-game";
-        seed: number;
-        notes?: string | undefined;
-        snapshot?: Record<string, unknown> | undefined;
     } | undefined;
     materialBankId?: string | undefined;
 }, {
@@ -7135,6 +7197,12 @@ declare const LessonSegmentSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<
     }[];
     skills: string[];
     description?: string | undefined;
+    scenario?: {
+        kind: "golden-beads" | "stamp-game";
+        seed: number;
+        notes?: string | undefined;
+        snapshot?: Record<string, unknown> | undefined;
+    } | undefined;
     representation?: "concrete" | "abstract" | undefined;
     primaryMaterialId?: string | undefined;
     scriptId?: string | undefined;
@@ -7326,12 +7394,6 @@ declare const LessonSegmentSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<
             durationMs?: number | undefined;
         })[];
         summary?: string | undefined;
-    } | undefined;
-    scenario?: {
-        kind: "golden-beads" | "stamp-game";
-        seed: number;
-        notes?: string | undefined;
-        snapshot?: Record<string, unknown> | undefined;
     } | undefined;
     materialBankId?: string | undefined;
 }>, z.ZodObject<{
@@ -7463,13 +7525,13 @@ declare const LessonSegmentSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<
         explanation?: string | undefined;
     }[];
     description?: string | undefined;
-    representation?: "concrete" | "abstract" | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
         notes?: string | undefined;
         snapshot?: Record<string, unknown> | undefined;
     } | undefined;
+    representation?: "concrete" | "abstract" | undefined;
     materialBankId?: string | undefined;
 }, {
     type: "guided";
@@ -7500,13 +7562,13 @@ declare const LessonSegmentSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<
         explanation?: string | undefined;
     }[];
     description?: string | undefined;
-    representation?: "concrete" | "abstract" | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
         notes?: string | undefined;
         snapshot?: Record<string, unknown> | undefined;
     } | undefined;
+    representation?: "concrete" | "abstract" | undefined;
     materialBankId?: string | undefined;
 }>, z.ZodObject<{
     id: z.ZodString;
@@ -7650,13 +7712,13 @@ declare const LessonSegmentSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<
         maxMisses: number;
     };
     description?: string | undefined;
-    representation?: "concrete" | "abstract" | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
         notes?: string | undefined;
         snapshot?: Record<string, unknown> | undefined;
     } | undefined;
+    representation?: "concrete" | "abstract" | undefined;
     materialBankId?: string | undefined;
 }, {
     type: "practice";
@@ -7691,13 +7753,13 @@ declare const LessonSegmentSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObject<
         maxMisses: number;
     };
     description?: string | undefined;
-    representation?: "concrete" | "abstract" | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
         notes?: string | undefined;
         snapshot?: Record<string, unknown> | undefined;
     } | undefined;
+    representation?: "concrete" | "abstract" | undefined;
     materialBankId?: string | undefined;
 }>]>;
 type LessonSegment = z.infer<typeof LessonSegmentSchema>;
@@ -8886,6 +8948,12 @@ declare const LessonSchema: z.ZodObject<{
         }[];
         skills: string[];
         description?: string | undefined;
+        scenario?: {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        } | undefined;
         representation?: "concrete" | "abstract" | undefined;
         primaryMaterialId?: string | undefined;
         scriptId?: string | undefined;
@@ -9077,12 +9145,6 @@ declare const LessonSchema: z.ZodObject<{
                 durationMs?: number | undefined;
             })[];
             summary?: string | undefined;
-        } | undefined;
-        scenario?: {
-            kind: "golden-beads" | "stamp-game";
-            seed: number;
-            notes?: string | undefined;
-            snapshot?: Record<string, unknown> | undefined;
         } | undefined;
         materialBankId?: string | undefined;
     }, {
@@ -9096,6 +9158,12 @@ declare const LessonSchema: z.ZodObject<{
         }[];
         skills: string[];
         description?: string | undefined;
+        scenario?: {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        } | undefined;
         representation?: "concrete" | "abstract" | undefined;
         primaryMaterialId?: string | undefined;
         scriptId?: string | undefined;
@@ -9287,12 +9355,6 @@ declare const LessonSchema: z.ZodObject<{
                 durationMs?: number | undefined;
             })[];
             summary?: string | undefined;
-        } | undefined;
-        scenario?: {
-            kind: "golden-beads" | "stamp-game";
-            seed: number;
-            notes?: string | undefined;
-            snapshot?: Record<string, unknown> | undefined;
         } | undefined;
         materialBankId?: string | undefined;
     }>, z.ZodObject<{
@@ -9424,13 +9486,13 @@ declare const LessonSchema: z.ZodObject<{
             explanation?: string | undefined;
         }[];
         description?: string | undefined;
-        representation?: "concrete" | "abstract" | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
             notes?: string | undefined;
             snapshot?: Record<string, unknown> | undefined;
         } | undefined;
+        representation?: "concrete" | "abstract" | undefined;
         materialBankId?: string | undefined;
     }, {
         type: "guided";
@@ -9461,13 +9523,13 @@ declare const LessonSchema: z.ZodObject<{
             explanation?: string | undefined;
         }[];
         description?: string | undefined;
-        representation?: "concrete" | "abstract" | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
             notes?: string | undefined;
             snapshot?: Record<string, unknown> | undefined;
         } | undefined;
+        representation?: "concrete" | "abstract" | undefined;
         materialBankId?: string | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
@@ -9611,13 +9673,13 @@ declare const LessonSchema: z.ZodObject<{
             maxMisses: number;
         };
         description?: string | undefined;
-        representation?: "concrete" | "abstract" | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
             notes?: string | undefined;
             snapshot?: Record<string, unknown> | undefined;
         } | undefined;
+        representation?: "concrete" | "abstract" | undefined;
         materialBankId?: string | undefined;
     }, {
         type: "practice";
@@ -9652,13 +9714,13 @@ declare const LessonSchema: z.ZodObject<{
             maxMisses: number;
         };
         description?: string | undefined;
-        representation?: "concrete" | "abstract" | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
             notes?: string | undefined;
             snapshot?: Record<string, unknown> | undefined;
         } | undefined;
+        representation?: "concrete" | "abstract" | undefined;
         materialBankId?: string | undefined;
     }>]>, "many">;
     materials: z.ZodArray<z.ZodObject<{
@@ -10167,6 +10229,12 @@ declare const LessonSchema: z.ZodObject<{
         }[];
         skills: string[];
         description?: string | undefined;
+        scenario?: {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        } | undefined;
         representation?: "concrete" | "abstract" | undefined;
         primaryMaterialId?: string | undefined;
         scriptId?: string | undefined;
@@ -10359,12 +10427,6 @@ declare const LessonSchema: z.ZodObject<{
             })[];
             summary?: string | undefined;
         } | undefined;
-        scenario?: {
-            kind: "golden-beads" | "stamp-game";
-            seed: number;
-            notes?: string | undefined;
-            snapshot?: Record<string, unknown> | undefined;
-        } | undefined;
         materialBankId?: string | undefined;
     } | {
         type: "guided";
@@ -10395,13 +10457,13 @@ declare const LessonSchema: z.ZodObject<{
             explanation?: string | undefined;
         }[];
         description?: string | undefined;
-        representation?: "concrete" | "abstract" | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
             notes?: string | undefined;
             snapshot?: Record<string, unknown> | undefined;
         } | undefined;
+        representation?: "concrete" | "abstract" | undefined;
         materialBankId?: string | undefined;
     } | {
         type: "practice";
@@ -10436,13 +10498,13 @@ declare const LessonSchema: z.ZodObject<{
             maxMisses: number;
         };
         description?: string | undefined;
-        representation?: "concrete" | "abstract" | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
             notes?: string | undefined;
             snapshot?: Record<string, unknown> | undefined;
         } | undefined;
+        representation?: "concrete" | "abstract" | undefined;
         materialBankId?: string | undefined;
     })[];
     summary?: string | undefined;
@@ -10544,6 +10606,12 @@ declare const LessonSchema: z.ZodObject<{
         }[];
         skills: string[];
         description?: string | undefined;
+        scenario?: {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        } | undefined;
         representation?: "concrete" | "abstract" | undefined;
         primaryMaterialId?: string | undefined;
         scriptId?: string | undefined;
@@ -10736,12 +10804,6 @@ declare const LessonSchema: z.ZodObject<{
             })[];
             summary?: string | undefined;
         } | undefined;
-        scenario?: {
-            kind: "golden-beads" | "stamp-game";
-            seed: number;
-            notes?: string | undefined;
-            snapshot?: Record<string, unknown> | undefined;
-        } | undefined;
         materialBankId?: string | undefined;
     } | {
         type: "guided";
@@ -10772,13 +10834,13 @@ declare const LessonSchema: z.ZodObject<{
             explanation?: string | undefined;
         }[];
         description?: string | undefined;
-        representation?: "concrete" | "abstract" | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
             notes?: string | undefined;
             snapshot?: Record<string, unknown> | undefined;
         } | undefined;
+        representation?: "concrete" | "abstract" | undefined;
         materialBankId?: string | undefined;
     } | {
         type: "practice";
@@ -10813,13 +10875,13 @@ declare const LessonSchema: z.ZodObject<{
             maxMisses: number;
         };
         description?: string | undefined;
-        representation?: "concrete" | "abstract" | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
             notes?: string | undefined;
             snapshot?: Record<string, unknown> | undefined;
         } | undefined;
+        representation?: "concrete" | "abstract" | undefined;
         materialBankId?: string | undefined;
     })[];
     summary?: string | undefined;
@@ -10906,7 +10968,67 @@ declare const LessonDocumentMetaSchema: z.ZodObject<{
     updatedAt: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
     author: z.ZodOptional<z.ZodString>;
     notes: z.ZodOptional<z.ZodString>;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodOptional<z.ZodObject<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, "strip", z.ZodUnknown, z.objectOutputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip">, z.objectInputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip">>>;
     scenario: z.ZodOptional<z.ZodObject<{
         kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
         seed: z.ZodNumber;
@@ -10927,7 +11049,27 @@ declare const LessonDocumentMetaSchema: z.ZodObject<{
     createdAt?: string | number | undefined;
     updatedAt?: string | number | undefined;
     notes?: string | undefined;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: z.objectOutputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip"> | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
@@ -10939,7 +11081,27 @@ declare const LessonDocumentMetaSchema: z.ZodObject<{
     createdAt?: string | number | undefined;
     updatedAt?: string | number | undefined;
     notes?: string | undefined;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: z.objectInputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip"> | undefined;
     scenario?: {
         kind: "golden-beads" | "stamp-game";
         seed: number;
@@ -12136,6 +12298,12 @@ declare const LessonDocumentSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -12327,12 +12495,6 @@ declare const LessonDocumentSchema: z.ZodObject<{
                     durationMs?: number | undefined;
                 })[];
                 summary?: string | undefined;
-            } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
             } | undefined;
             materialBankId?: string | undefined;
         }, {
@@ -12346,6 +12508,12 @@ declare const LessonDocumentSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -12537,12 +12705,6 @@ declare const LessonDocumentSchema: z.ZodObject<{
                     durationMs?: number | undefined;
                 })[];
                 summary?: string | undefined;
-            } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
             } | undefined;
             materialBankId?: string | undefined;
         }>, z.ZodObject<{
@@ -12674,13 +12836,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         }, {
             type: "guided";
@@ -12711,13 +12873,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         }>, z.ZodObject<{
             id: z.ZodString;
@@ -12861,13 +13023,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         }, {
             type: "practice";
@@ -12902,13 +13064,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         }>]>, "many">;
         materials: z.ZodArray<z.ZodObject<{
@@ -13417,6 +13579,12 @@ declare const LessonDocumentSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -13609,12 +13777,6 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 })[];
                 summary?: string | undefined;
             } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
-            } | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "guided";
@@ -13645,13 +13807,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "practice";
@@ -13686,13 +13848,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         })[];
         summary?: string | undefined;
@@ -13794,6 +13956,12 @@ declare const LessonDocumentSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -13986,12 +14154,6 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 })[];
                 summary?: string | undefined;
             } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
-            } | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "guided";
@@ -14022,13 +14184,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "practice";
@@ -14063,13 +14225,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         })[];
         summary?: string | undefined;
@@ -14155,7 +14317,67 @@ declare const LessonDocumentSchema: z.ZodObject<{
         updatedAt: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
         author: z.ZodOptional<z.ZodString>;
         notes: z.ZodOptional<z.ZodString>;
-        metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metadata: z.ZodOptional<z.ZodObject<{
+            source: z.ZodOptional<z.ZodString>;
+            tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            notes: z.ZodOptional<z.ZodString>;
+            scenario: z.ZodOptional<z.ZodObject<{
+                kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                seed: z.ZodNumber;
+                snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                notes: z.ZodOptional<z.ZodString>;
+            }, "strict", z.ZodTypeAny, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }>>;
+        }, "strip", z.ZodUnknown, z.objectOutputType<{
+            source: z.ZodOptional<z.ZodString>;
+            tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            notes: z.ZodOptional<z.ZodString>;
+            scenario: z.ZodOptional<z.ZodObject<{
+                kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                seed: z.ZodNumber;
+                snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                notes: z.ZodOptional<z.ZodString>;
+            }, "strict", z.ZodTypeAny, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }>>;
+        }, z.ZodUnknown, "strip">, z.objectInputType<{
+            source: z.ZodOptional<z.ZodString>;
+            tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            notes: z.ZodOptional<z.ZodString>;
+            scenario: z.ZodOptional<z.ZodObject<{
+                kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                seed: z.ZodNumber;
+                snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                notes: z.ZodOptional<z.ZodString>;
+            }, "strict", z.ZodTypeAny, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }>>;
+        }, z.ZodUnknown, "strip">>>;
         scenario: z.ZodOptional<z.ZodObject<{
             kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
             seed: z.ZodNumber;
@@ -14176,7 +14398,27 @@ declare const LessonDocumentSchema: z.ZodObject<{
         createdAt?: string | number | undefined;
         updatedAt?: string | number | undefined;
         notes?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: z.objectOutputType<{
+            source: z.ZodOptional<z.ZodString>;
+            tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            notes: z.ZodOptional<z.ZodString>;
+            scenario: z.ZodOptional<z.ZodObject<{
+                kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                seed: z.ZodNumber;
+                snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                notes: z.ZodOptional<z.ZodString>;
+            }, "strict", z.ZodTypeAny, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }>>;
+        }, z.ZodUnknown, "strip"> | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
@@ -14188,7 +14430,27 @@ declare const LessonDocumentSchema: z.ZodObject<{
         createdAt?: string | number | undefined;
         updatedAt?: string | number | undefined;
         notes?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: z.objectInputType<{
+            source: z.ZodOptional<z.ZodString>;
+            tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            notes: z.ZodOptional<z.ZodString>;
+            scenario: z.ZodOptional<z.ZodObject<{
+                kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                seed: z.ZodNumber;
+                snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                notes: z.ZodOptional<z.ZodString>;
+            }, "strict", z.ZodTypeAny, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }>>;
+        }, z.ZodUnknown, "strip"> | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
@@ -14220,6 +14482,12 @@ declare const LessonDocumentSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -14412,12 +14680,6 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 })[];
                 summary?: string | undefined;
             } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
-            } | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "guided";
@@ -14448,13 +14710,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "practice";
@@ -14489,13 +14751,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         })[];
         summary?: string | undefined;
@@ -14581,7 +14843,27 @@ declare const LessonDocumentSchema: z.ZodObject<{
         createdAt?: string | number | undefined;
         updatedAt?: string | number | undefined;
         notes?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: z.objectOutputType<{
+            source: z.ZodOptional<z.ZodString>;
+            tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            notes: z.ZodOptional<z.ZodString>;
+            scenario: z.ZodOptional<z.ZodObject<{
+                kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                seed: z.ZodNumber;
+                snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                notes: z.ZodOptional<z.ZodString>;
+            }, "strict", z.ZodTypeAny, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }>>;
+        }, z.ZodUnknown, "strip"> | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
@@ -14613,6 +14895,12 @@ declare const LessonDocumentSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -14805,12 +15093,6 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 })[];
                 summary?: string | undefined;
             } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
-            } | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "guided";
@@ -14841,13 +15123,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "practice";
@@ -14882,13 +15164,13 @@ declare const LessonDocumentSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         })[];
         summary?: string | undefined;
@@ -14974,7 +15256,27 @@ declare const LessonDocumentSchema: z.ZodObject<{
         createdAt?: string | number | undefined;
         updatedAt?: string | number | undefined;
         notes?: string | undefined;
-        metadata?: Record<string, unknown> | undefined;
+        metadata?: z.objectInputType<{
+            source: z.ZodOptional<z.ZodString>;
+            tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+            notes: z.ZodOptional<z.ZodString>;
+            scenario: z.ZodOptional<z.ZodObject<{
+                kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                seed: z.ZodNumber;
+                snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                notes: z.ZodOptional<z.ZodString>;
+            }, "strict", z.ZodTypeAny, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }, {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            }>>;
+        }, z.ZodUnknown, "strip"> | undefined;
         scenario?: {
             kind: "golden-beads" | "stamp-game";
             seed: number;
@@ -16176,6 +16478,12 @@ declare const TopicSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -16367,12 +16675,6 @@ declare const TopicSchema: z.ZodObject<{
                     durationMs?: number | undefined;
                 })[];
                 summary?: string | undefined;
-            } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
             } | undefined;
             materialBankId?: string | undefined;
         }, {
@@ -16386,6 +16688,12 @@ declare const TopicSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -16577,12 +16885,6 @@ declare const TopicSchema: z.ZodObject<{
                     durationMs?: number | undefined;
                 })[];
                 summary?: string | undefined;
-            } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
             } | undefined;
             materialBankId?: string | undefined;
         }>, z.ZodObject<{
@@ -16714,13 +17016,13 @@ declare const TopicSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         }, {
             type: "guided";
@@ -16751,13 +17053,13 @@ declare const TopicSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         }>, z.ZodObject<{
             id: z.ZodString;
@@ -16901,13 +17203,13 @@ declare const TopicSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         }, {
             type: "practice";
@@ -16942,13 +17244,13 @@ declare const TopicSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         }>]>, "many">;
         materials: z.ZodArray<z.ZodObject<{
@@ -17457,6 +17759,12 @@ declare const TopicSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -17649,12 +17957,6 @@ declare const TopicSchema: z.ZodObject<{
                 })[];
                 summary?: string | undefined;
             } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
-            } | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "guided";
@@ -17685,13 +17987,13 @@ declare const TopicSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "practice";
@@ -17726,13 +18028,13 @@ declare const TopicSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         })[];
         summary?: string | undefined;
@@ -17834,6 +18136,12 @@ declare const TopicSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -18026,12 +18334,6 @@ declare const TopicSchema: z.ZodObject<{
                 })[];
                 summary?: string | undefined;
             } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
-            } | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "guided";
@@ -18062,13 +18364,13 @@ declare const TopicSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "practice";
@@ -18103,13 +18405,13 @@ declare const TopicSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         })[];
         summary?: string | undefined;
@@ -18218,6 +18520,12 @@ declare const TopicSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -18410,12 +18718,6 @@ declare const TopicSchema: z.ZodObject<{
                 })[];
                 summary?: string | undefined;
             } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
-            } | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "guided";
@@ -18446,13 +18748,13 @@ declare const TopicSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "practice";
@@ -18487,13 +18789,13 @@ declare const TopicSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         })[];
         summary?: string | undefined;
@@ -18602,6 +18904,12 @@ declare const TopicSchema: z.ZodObject<{
             }[];
             skills: string[];
             description?: string | undefined;
+            scenario?: {
+                kind: "golden-beads" | "stamp-game";
+                seed: number;
+                notes?: string | undefined;
+                snapshot?: Record<string, unknown> | undefined;
+            } | undefined;
             representation?: "concrete" | "abstract" | undefined;
             primaryMaterialId?: string | undefined;
             scriptId?: string | undefined;
@@ -18794,12 +19102,6 @@ declare const TopicSchema: z.ZodObject<{
                 })[];
                 summary?: string | undefined;
             } | undefined;
-            scenario?: {
-                kind: "golden-beads" | "stamp-game";
-                seed: number;
-                notes?: string | undefined;
-                snapshot?: Record<string, unknown> | undefined;
-            } | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "guided";
@@ -18830,13 +19132,13 @@ declare const TopicSchema: z.ZodObject<{
                 explanation?: string | undefined;
             }[];
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         } | {
             type: "practice";
@@ -18871,13 +19173,13 @@ declare const TopicSchema: z.ZodObject<{
                 maxMisses: number;
             };
             description?: string | undefined;
-            representation?: "concrete" | "abstract" | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            representation?: "concrete" | "abstract" | undefined;
             materialBankId?: string | undefined;
         })[];
         summary?: string | undefined;
@@ -19231,7 +19533,67 @@ declare const CurriculumTreeUnitSchema: z.ZodObject<{
     coverImage: z.ZodOptional<z.ZodString>;
     order: z.ZodNumber;
     status: z.ZodEnum<["active", "archived"]>;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodOptional<z.ZodObject<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, "strip", z.ZodUnknown, z.objectOutputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip">, z.objectInputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip">>>;
     createdAt: z.ZodNumber;
     updatedAt: z.ZodNumber;
     topics: z.ZodArray<z.ZodObject<{
@@ -19360,7 +19722,27 @@ declare const CurriculumTreeUnitSchema: z.ZodObject<{
         __tableName: "units";
     };
     slug: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: z.objectOutputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip"> | undefined;
     summary?: string | undefined;
     coverImage?: string | undefined;
 }, {
@@ -19399,7 +19781,27 @@ declare const CurriculumTreeUnitSchema: z.ZodObject<{
         __tableName: "units";
     };
     slug: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: z.objectInputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip"> | undefined;
     summary?: string | undefined;
     coverImage?: string | undefined;
 }>;
@@ -19412,7 +19814,67 @@ declare const CurriculumTreeSchema: z.ZodArray<z.ZodObject<{
     coverImage: z.ZodOptional<z.ZodString>;
     order: z.ZodNumber;
     status: z.ZodEnum<["active", "archived"]>;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodOptional<z.ZodObject<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, "strip", z.ZodUnknown, z.objectOutputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip">, z.objectInputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip">>>;
     createdAt: z.ZodNumber;
     updatedAt: z.ZodNumber;
     topics: z.ZodArray<z.ZodObject<{
@@ -19541,7 +20003,27 @@ declare const CurriculumTreeSchema: z.ZodArray<z.ZodObject<{
         __tableName: "units";
     };
     slug: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: z.objectOutputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip"> | undefined;
     summary?: string | undefined;
     coverImage?: string | undefined;
 }, {
@@ -19580,7 +20062,27 @@ declare const CurriculumTreeSchema: z.ZodArray<z.ZodObject<{
         __tableName: "units";
     };
     slug: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: z.objectInputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip"> | undefined;
     summary?: string | undefined;
     coverImage?: string | undefined;
 }>, "many">;
@@ -20774,6 +21276,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -20965,12 +21473,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                         durationMs?: number | undefined;
                     })[];
                     summary?: string | undefined;
-                } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
                 materialBankId?: string | undefined;
             }, {
@@ -20984,6 +21486,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -21175,12 +21683,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                         durationMs?: number | undefined;
                     })[];
                     summary?: string | undefined;
-                } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
                 materialBankId?: string | undefined;
             }>, z.ZodObject<{
@@ -21312,13 +21814,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             }, {
                 type: "guided";
@@ -21349,13 +21851,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             }>, z.ZodObject<{
                 id: z.ZodString;
@@ -21499,13 +22001,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             }, {
                 type: "practice";
@@ -21540,13 +22042,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             }>]>, "many">;
             materials: z.ZodArray<z.ZodObject<{
@@ -22055,6 +22557,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -22247,12 +22755,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -22283,13 +22785,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -22324,13 +22826,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -22432,6 +22934,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -22624,12 +23132,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -22660,13 +23162,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -22701,13 +23203,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -22793,7 +23295,67 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             updatedAt: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
             author: z.ZodOptional<z.ZodString>;
             notes: z.ZodOptional<z.ZodString>;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodOptional<z.ZodObject<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, "strip", z.ZodUnknown, z.objectOutputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip">, z.objectInputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip">>>;
             scenario: z.ZodOptional<z.ZodObject<{
                 kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
                 seed: z.ZodNumber;
@@ -22814,7 +23376,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectOutputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -22826,7 +23408,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectInputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -22858,6 +23460,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -23050,12 +23658,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -23086,13 +23688,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -23127,13 +23729,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -23219,7 +23821,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectOutputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -23251,6 +23873,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -23443,12 +24071,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -23479,13 +24101,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -23520,13 +24142,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -23612,7 +24234,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectInputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -24809,6 +25451,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -25000,12 +25648,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                         durationMs?: number | undefined;
                     })[];
                     summary?: string | undefined;
-                } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
                 materialBankId?: string | undefined;
             }, {
@@ -25019,6 +25661,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -25210,12 +25858,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                         durationMs?: number | undefined;
                     })[];
                     summary?: string | undefined;
-                } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
                 materialBankId?: string | undefined;
             }>, z.ZodObject<{
@@ -25347,13 +25989,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             }, {
                 type: "guided";
@@ -25384,13 +26026,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             }>, z.ZodObject<{
                 id: z.ZodString;
@@ -25534,13 +26176,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             }, {
                 type: "practice";
@@ -25575,13 +26217,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             }>]>, "many">;
             materials: z.ZodArray<z.ZodObject<{
@@ -26090,6 +26732,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -26282,12 +26930,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -26318,13 +26960,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -26359,13 +27001,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -26467,6 +27109,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -26659,12 +27307,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -26695,13 +27337,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -26736,13 +27378,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -26828,7 +27470,67 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             updatedAt: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodNumber]>>;
             author: z.ZodOptional<z.ZodString>;
             notes: z.ZodOptional<z.ZodString>;
-            metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            metadata: z.ZodOptional<z.ZodObject<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, "strip", z.ZodUnknown, z.objectOutputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip">, z.objectInputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip">>>;
             scenario: z.ZodOptional<z.ZodObject<{
                 kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
                 seed: z.ZodNumber;
@@ -26849,7 +27551,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectOutputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -26861,7 +27583,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectInputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -26893,6 +27635,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -27085,12 +27833,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -27121,13 +27863,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -27162,13 +27904,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -27254,7 +27996,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectOutputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -27286,6 +28048,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -27478,12 +28246,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -27514,13 +28276,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -27555,13 +28317,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -27647,7 +28409,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectInputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -27665,7 +28447,67 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
     status: z.ZodEnum<["draft", "published"]>;
     createdAt: z.ZodNumber;
     updatedAt: z.ZodNumber;
-    metadata: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metadata: z.ZodOptional<z.ZodObject<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, "strip", z.ZodUnknown, z.objectOutputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip">, z.objectInputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip">>>;
 }, "strict", z.ZodTypeAny, {
     status: "draft" | "published";
     createdAt: number;
@@ -27698,6 +28540,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -27890,12 +28738,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -27926,13 +28768,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -27967,13 +28809,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -28059,7 +28901,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectOutputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -28073,7 +28935,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
         __tableName: "lessons";
     };
     slug: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: z.objectOutputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip"> | undefined;
     summary?: string | undefined;
     published?: {
         lesson: {
@@ -28098,6 +28980,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -28290,12 +29178,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -28326,13 +29208,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -28367,13 +29249,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -28459,7 +29341,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectOutputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -28501,6 +29403,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -28693,12 +29601,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -28729,13 +29631,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -28770,13 +29672,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -28862,7 +29764,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectInputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -28876,7 +29798,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
         __tableName: "lessons";
     };
     slug: string;
-    metadata?: Record<string, unknown> | undefined;
+    metadata?: z.objectInputType<{
+        source: z.ZodOptional<z.ZodString>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        notes: z.ZodOptional<z.ZodString>;
+        scenario: z.ZodOptional<z.ZodObject<{
+            kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+            seed: z.ZodNumber;
+            snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+            notes: z.ZodOptional<z.ZodString>;
+        }, "strict", z.ZodTypeAny, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }, {
+            kind: "golden-beads" | "stamp-game";
+            seed: number;
+            notes?: string | undefined;
+            snapshot?: Record<string, unknown> | undefined;
+        }>>;
+    }, z.ZodUnknown, "strip"> | undefined;
     summary?: string | undefined;
     published?: {
         lesson: {
@@ -28901,6 +29843,12 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                 }[];
                 skills: string[];
                 description?: string | undefined;
+                scenario?: {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                } | undefined;
                 representation?: "concrete" | "abstract" | undefined;
                 primaryMaterialId?: string | undefined;
                 scriptId?: string | undefined;
@@ -29093,12 +30041,6 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     })[];
                     summary?: string | undefined;
                 } | undefined;
-                scenario?: {
-                    kind: "golden-beads" | "stamp-game";
-                    seed: number;
-                    notes?: string | undefined;
-                    snapshot?: Record<string, unknown> | undefined;
-                } | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "guided";
@@ -29129,13 +30071,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     explanation?: string | undefined;
                 }[];
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             } | {
                 type: "practice";
@@ -29170,13 +30112,13 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
                     maxMisses: number;
                 };
                 description?: string | undefined;
-                representation?: "concrete" | "abstract" | undefined;
                 scenario?: {
                     kind: "golden-beads" | "stamp-game";
                     seed: number;
                     notes?: string | undefined;
                     snapshot?: Record<string, unknown> | undefined;
                 } | undefined;
+                representation?: "concrete" | "abstract" | undefined;
                 materialBankId?: string | undefined;
             })[];
             summary?: string | undefined;
@@ -29262,7 +30204,27 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
             createdAt?: string | number | undefined;
             updatedAt?: string | number | undefined;
             notes?: string | undefined;
-            metadata?: Record<string, unknown> | undefined;
+            metadata?: z.objectInputType<{
+                source: z.ZodOptional<z.ZodString>;
+                tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+                notes: z.ZodOptional<z.ZodString>;
+                scenario: z.ZodOptional<z.ZodObject<{
+                    kind: z.ZodEnum<["golden-beads", "stamp-game"]>;
+                    seed: z.ZodNumber;
+                    snapshot: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+                    notes: z.ZodOptional<z.ZodString>;
+                }, "strict", z.ZodTypeAny, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }, {
+                    kind: "golden-beads" | "stamp-game";
+                    seed: number;
+                    notes?: string | undefined;
+                    snapshot?: Record<string, unknown> | undefined;
+                }>>;
+            }, z.ZodUnknown, "strip"> | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
                 seed: number;
@@ -29275,4 +30237,4 @@ declare const LessonDraftRecordSchema: z.ZodObject<{
 }>;
 type LessonDraftRecord = z.infer<typeof LessonDraftRecordSchema>;
 
-export { type AuthoringMeta, AuthoringMetaSchema, type BankQuantityMap, BankQuantityMapSchema, type CanvasAnchor, CanvasAnchorSchema, type ConsumptionRule, ConsumptionRuleSchema, type CurriculumTree, type CurriculumTreeLesson, CurriculumTreeLessonSchema, CurriculumTreeSchema, type CurriculumTreeTopic, CurriculumTreeTopicSchema, type CurriculumTreeUnit, CurriculumTreeUnitSchema, type Difficulty, DifficultySchema, type ExchangeRule, ExchangeRuleSchema, type GuidedEvaluatorId, GuidedEvaluatorIdSchema, type GuidedSegment, GuidedSegmentSchema, type GuidedStep, GuidedStepSchema, type Id, IdSchema, type InventoryRuleSet, InventoryRuleSetSchema, type Lesson, type LessonDocument, type LessonDocumentMeta, LessonDocumentMetaSchema, LessonDocumentSchema, type LessonDraftRecord, LessonDraftRecordSchema, type LessonMaterialInventory, LessonMaterialInventorySchema, type LessonPlan, LessonPlanSchema, type LessonScenarioBinding, LessonScenarioBindingSchema, type LessonScenarioKind, LessonScenarioKindSchema, LessonSchema, type LessonSegment, LessonSegmentSchema, type LessonStatus, LessonStatusSchema, type LessonTask, LessonTaskSchema, type Material, type MaterialBankDefinition, MaterialBankDefinitionSchema, MaterialSchema, type MaterialUsage, MaterialUsageSchema, type PracticePassCriteria, PracticePassCriteriaSchema, type PracticeQuestion, PracticeQuestionSchema, type PracticeSegment, PracticeSegmentSchema, type PresentationAction, type PresentationActionInput, PresentationActionInputSchema, PresentationActionSchema, type PresentationScript, PresentationScriptSchema, type PresentationSegment, PresentationSegmentSchema, type ReplenishRule, ReplenishRuleSchema, type Representation, RepresentationSchema, type SegmentType, SegmentTypeSchema, type TaskCategory, TaskCategorySchema, type TokenTypeDefinition, TokenTypeDefinitionSchema, type TokenVisualDefinition, TokenVisualDefinitionSchema, type Topic, TopicSchema, type TopicStatus, TopicStatusSchema, type Unit, UnitSchema, type UnitStatus, UnitStatusSchema, type UnitTopicRef, UnitTopicRefSchema, type UserProfile, UserProfileSchema, type UserRole, UserRoleSchema, type WorkspaceKind, WorkspaceKindSchema };
+export { type AuthoringMeta, AuthoringMetaSchema, type BankQuantityMap, BankQuantityMapSchema, type CanvasAnchor, CanvasAnchorSchema, type ConsumptionRule, ConsumptionRuleSchema, type CurriculumTree, type CurriculumTreeLesson, CurriculumTreeLessonSchema, CurriculumTreeSchema, type CurriculumTreeTopic, CurriculumTreeTopicSchema, type CurriculumTreeUnit, CurriculumTreeUnitSchema, type Difficulty, DifficultySchema, type EntityMetadata, EntityMetadataSchema, type ExchangeRule, ExchangeRuleSchema, type GuidedEvaluatorId, GuidedEvaluatorIdSchema, type GuidedSegment, GuidedSegmentSchema, type GuidedStep, GuidedStepSchema, type Id, IdSchema, type InventoryRuleSet, InventoryRuleSetSchema, type Lesson, type LessonDocument, type LessonDocumentMeta, LessonDocumentMetaSchema, LessonDocumentSchema, type LessonDraftRecord, LessonDraftRecordSchema, type LessonMaterialInventory, LessonMaterialInventorySchema, type LessonPlan, LessonPlanSchema, type LessonScenarioBinding, LessonScenarioBindingSchema, type LessonScenarioKind, LessonScenarioKindSchema, LessonSchema, type LessonSegment, LessonSegmentSchema, type LessonStatus, LessonStatusSchema, type LessonTask, LessonTaskSchema, type Material, type MaterialBankDefinition, MaterialBankDefinitionSchema, MaterialSchema, type MaterialUsage, MaterialUsageSchema, type PracticePassCriteria, PracticePassCriteriaSchema, type PracticeQuestion, PracticeQuestionSchema, type PracticeSegment, PracticeSegmentSchema, type PresentationAction, type PresentationActionInput, PresentationActionInputSchema, PresentationActionSchema, type PresentationScript, PresentationScriptSchema, type PresentationSegment, PresentationSegmentSchema, type ReplenishRule, ReplenishRuleSchema, type Representation, RepresentationSchema, type SegmentType, SegmentTypeSchema, type TaskCategory, TaskCategorySchema, type TokenTypeDefinition, TokenTypeDefinitionSchema, type TokenVisualDefinition, TokenVisualDefinitionSchema, type Topic, TopicSchema, type TopicStatus, TopicStatusSchema, type Unit, UnitSchema, type UnitStatus, UnitStatusSchema, type UnitTopicRef, UnitTopicRefSchema, type UserProfile, UserProfileSchema, type UserRole, UserRoleSchema, type WorkspaceKind, WorkspaceKindSchema };

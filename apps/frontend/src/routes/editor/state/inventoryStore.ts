@@ -17,8 +17,13 @@ import {
 import { clone } from '../utils';
 import type { LessonSegment } from '../types';
 
+export interface InventorySnapshotRegistration {
+  snapshot?: () => LessonMaterialInventory;
+  verify?: () => void;
+}
+
 export interface InventoryStore {
-  registerInventorySnapshot: (accessor?: () => LessonMaterialInventory) => void;
+  registerInventorySnapshot: (options?: InventorySnapshotRegistration) => void;
   applyInventorySnapshot: () => void;
   handleAddTokenType: () => void;
   handleUpdateTokenType: (
@@ -46,12 +51,17 @@ export const createInventoryStore = ({
   defaultMaterialId,
 }: InventoryStoreOptions): InventoryStore => {
   let resolveInventorySnapshot: (() => LessonMaterialInventory) | undefined;
+  let resolveInventoryVerifier: (() => void) | undefined;
 
-  const registerInventorySnapshot = (accessor?: () => LessonMaterialInventory) => {
-    resolveInventorySnapshot = accessor;
+  const registerInventorySnapshot = (options?: InventorySnapshotRegistration) => {
+    resolveInventorySnapshot = options?.snapshot;
+    resolveInventoryVerifier = options?.verify;
   };
 
   const applyInventorySnapshot = () => {
+    if (resolveInventoryVerifier) {
+      resolveInventoryVerifier();
+    }
     if (!resolveInventorySnapshot) return;
     const snapshot = resolveInventorySnapshot();
     if (!snapshot) return;

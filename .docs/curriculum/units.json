@@ -4,14 +4,22 @@
     "domainId": "number-sense-place-value",
     "name": "Foundations of Counting",
     "summary": "Establish cardinality, stable counting order, and quantity comparisons within five and ten using concrete materials.",
-    "ritRange": { "min": 130, "max": 149 },
-    "primaryCcss": ["K.CC.A", "K.CC.B", "K.OA.A"],
+    "ritRange": {
+      "min": 130,
+      "max": 149
+    },
+    "primaryCcss": [
+      "K.CC.A",
+      "K.CC.B",
+      "K.OA.A"
+    ],
     "topicOrder": [
       "counting-within-5",
       "counting-within-10",
       "compare-quantities-matching",
       "one-more-one-less",
-      "count-story-problems-5"
+      "count-story-problems-5",
+      "count-to-20-and-by-10s"
     ]
   },
   {
@@ -19,8 +27,15 @@
     "domainId": "number-sense-place-value",
     "name": "Teen Numbers & 20s",
     "summary": "Build place-value understanding for teen numbers and quantities to twenty across representations.",
-    "ritRange": { "min": 145, "max": 165 },
-    "primaryCcss": ["K.NBT.A", "1.NBT.B", "1.OA.C"],
+    "ritRange": {
+      "min": 145,
+      "max": 165
+    },
+    "primaryCcss": [
+      "K.NBT.A",
+      "1.NBT.B",
+      "1.OA.C"
+    ],
     "topicOrder": [
       "compose-decompose-teen-numbers",
       "represent-numbers-to-20",
@@ -34,14 +49,22 @@
     "domainId": "number-sense-place-value",
     "name": "Place Value to 120",
     "summary": "Extend base-ten understanding through two-digit numbers, regrouping tens and ones, and hundred-chart reasoning.",
-    "ritRange": { "min": 159, "max": 175 },
-    "primaryCcss": ["1.NBT.A", "1.NBT.C", "2.NBT.A"],
+    "ritRange": {
+      "min": 159,
+      "max": 175
+    },
+    "primaryCcss": [
+      "1.NBT.A",
+      "1.NBT.C",
+      "2.NBT.A"
+    ],
     "topicOrder": [
       "tens-ones-composition",
       "ten-more-ten-less",
       "expanded-form-to-120",
       "hundred-chart-navigation",
-      "skip-count-by-2-5-10"
+      "skip-count-by-2-5-10",
+      "add-multiple-two-digit-addends"
     ]
   },
   {
@@ -49,8 +72,14 @@
     "domainId": "number-sense-place-value",
     "name": "Introduction to the Decimal System",
     "summary": "Build understanding of four-digit numbers using bead material, place-value cards, and number lines.",
-    "ritRange": { "min": 168, "max": 185 },
-    "primaryCcss": ["2.NBT.A", "3.NBT.A"],
+    "ritRange": {
+      "min": 168,
+      "max": 185
+    },
+    "primaryCcss": [
+      "2.NBT.A",
+      "3.NBT.A"
+    ],
     "topicOrder": [
       "compose-decompose-thousands",
       "read-write-4-digit-numbers",
@@ -63,14 +92,23 @@
     "domainId": "number-sense-place-value",
     "name": "Place Value to 1000",
     "summary": "Develop hundreds understanding, rounding, and multi-step place-value reasoning for three-digit numbers.",
-    "ritRange": { "min": 170, "max": 195 },
-    "primaryCcss": ["2.NBT.B", "3.NBT.A", "4.NBT.A"],
+    "ritRange": {
+      "min": 170,
+      "max": 200
+    },
+    "primaryCcss": [
+      "2.NBT.B",
+      "3.NBT.A",
+      "4.NBT.A"
+    ],
     "topicOrder": [
       "read-write-3-digit-numbers",
       "compare-order-to-1000",
       "rounding-to-nearest-10-100",
       "compose-decompose-hundreds",
-      "place-value-word-problems"
+      "place-value-word-problems",
+      "dynamic-addition-within-1000",
+      "dynamic-subtraction-within-1000"
     ]
   },
   {
@@ -78,8 +116,15 @@
     "domainId": "number-sense-place-value",
     "name": "Number Lines & Estimation",
     "summary": "Locate numbers, estimate sums/differences, and reason about magnitude on number lines and charts.",
-    "ritRange": { "min": 170, "max": 195 },
-    "primaryCcss": ["2.NBT.B", "3.NBT.A", "2.MD.B"],
+    "ritRange": {
+      "min": 170,
+      "max": 200
+    },
+    "primaryCcss": [
+      "2.NBT.B",
+      "3.NBT.A",
+      "2.MD.B"
+    ],
     "topicOrder": [
       "locate-numbers-number-line",
       "estimate-sums-differences",
@@ -92,8 +137,15 @@
     "domainId": "number-sense-place-value",
     "name": "Decimals & Base-Ten Structure",
     "summary": "Introduce decimal place value, fraction-decimal connections, and metric scaling using Montessori decimal materials.",
-    "ritRange": { "min": 190, "max": 205 },
-    "primaryCcss": ["4.NBT.A", "4.NF.C", "5.NBT.A"],
+    "ritRange": {
+      "min": 190,
+      "max": 205
+    },
+    "primaryCcss": [
+      "4.NBT.A",
+      "4.NF.C",
+      "5.NBT.A"
+    ],
     "topicOrder": [
       "tenths-hundredths-models",
       "read-write-decimals",
@@ -107,8 +159,15 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Addition Foundations",
     "summary": "Develop addition strategies from counting-on to make-ten and doubles using concrete models.",
-    "ritRange": { "min": 150, "max": 175 },
-    "primaryCcss": ["K.OA.A", "1.OA.C", "2.OA.B"],
+    "ritRange": {
+      "min": 150,
+      "max": 182
+    },
+    "primaryCcss": [
+      "K.OA.A",
+      "1.OA.C",
+      "2.OA.B"
+    ],
     "topicOrder": [
       "counting-on-addition",
       "make-ten-bridge",
@@ -122,8 +181,15 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Subtraction Foundations",
     "summary": "Model take-away and comparison subtraction with strategies for decomposing numbers and using number lines.",
-    "ritRange": { "min": 150, "max": 178 },
-    "primaryCcss": ["K.OA.A", "1.OA.B", "2.OA.B"],
+    "ritRange": {
+      "min": 150,
+      "max": 178
+    },
+    "primaryCcss": [
+      "K.OA.A",
+      "1.OA.B",
+      "2.OA.B"
+    ],
     "topicOrder": [
       "take-away-models",
       "count-back-count-up",
@@ -136,11 +202,18 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Addition & Subtraction Memorization",
     "summary": "Build fluency with addition and subtraction facts through structured drills and strategy reinforcement.",
-    "ritRange": { "min": 160, "max": 182 },
-    "primaryCcss": ["1.OA.C.6", "2.OA.B.2"],
+    "ritRange": {
+      "min": 160,
+      "max": 195
+    },
+    "primaryCcss": [
+      "1.OA.C.6",
+      "2.OA.B.2"
+    ],
     "topicOrder": [
       "addition-fact-drills",
       "subtraction-fact-drills",
+      "even-odd-parity",
       "make-ten-fluency",
       "facts-within-20-application"
     ]
@@ -150,13 +223,20 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Multiplication Foundations",
     "summary": "Introduce multiplication and division through equal groups, arrays, and sharing contexts before abstraction.",
-    "ritRange": { "min": 176, "max": 190 },
-    "primaryCcss": ["2.OA.C", "3.OA.A"],
+    "ritRange": {
+      "min": 176,
+      "max": 200
+    },
+    "primaryCcss": [
+      "2.OA.C",
+      "3.OA.A"
+    ],
     "topicOrder": [
       "equal-groups-arrays",
       "static-multiplication",
       "division-as-sharing",
-      "skip-counting-multiplication-facts"
+      "skip-counting-multiplication-facts",
+      "multiply-by-multiples-of-10"
     ]
   },
   {
@@ -164,8 +244,14 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Multiplication & Division Memorization",
     "summary": "Solidify multiplication and division facts with targeted drills and strategy-based grouping practice.",
-    "ritRange": { "min": 180, "max": 198 },
-    "primaryCcss": ["3.OA.B", "3.OA.C"],
+    "ritRange": {
+      "min": 180,
+      "max": 198
+    },
+    "primaryCcss": [
+      "3.OA.B",
+      "3.OA.C"
+    ],
     "topicOrder": [
       "multiplication-fact-strategies",
       "division-fact-strategies",
@@ -178,8 +264,14 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Multiplication & Division Mastery",
     "summary": "Extend multiplication and division to larger factors, regrouping, and multi-step problem solving with structural strategies.",
-    "ritRange": { "min": 188, "max": 205 },
-    "primaryCcss": ["3.OA.C", "4.NBT.B"],
+    "ritRange": {
+      "min": 188,
+      "max": 205
+    },
+    "primaryCcss": [
+      "3.OA.C",
+      "4.NBT.B"
+    ],
     "topicOrder": [
       "dynamic-multiplication",
       "long-division",
@@ -192,8 +284,14 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Division Foundations",
     "summary": "Explore division as sharing and grouping using manipulatives before abstract algorithms.",
-    "ritRange": { "min": 176, "max": 190 },
-    "primaryCcss": ["3.OA.A", "3.OA.B"],
+    "ritRange": {
+      "min": 176,
+      "max": 190
+    },
+    "primaryCcss": [
+      "3.OA.A",
+      "3.OA.B"
+    ],
     "topicOrder": [
       "division-as-sharing",
       "division-as-grouping",
@@ -206,8 +304,15 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Operations Word Problems",
     "summary": "Apply addition, subtraction, multiplication, and division to multi-step contextual problems.",
-    "ritRange": { "min": 165, "max": 195 },
-    "primaryCcss": ["1.OA.A.1", "2.OA.A.1", "3.OA.D.8"],
+    "ritRange": {
+      "min": 165,
+      "max": 195
+    },
+    "primaryCcss": [
+      "1.OA.A.1",
+      "2.OA.A.1",
+      "3.OA.D.8"
+    ],
     "topicOrder": [
       "additive-word-problems",
       "comparison-word-problems",
@@ -220,8 +325,16 @@
     "domainId": "operations-algebraic-thinking",
     "name": "Expressions & Early Algebra",
     "summary": "Bridge arithmetic to algebraic thinking through factors, patterns, expressions, and simple equations.",
-    "ritRange": { "min": 195, "max": 210 },
-    "primaryCcss": ["4.OA.B", "5.OA.A", "5.OA.B", "6.EE.A"],
+    "ritRange": {
+      "min": 195,
+      "max": 210
+    },
+    "primaryCcss": [
+      "4.OA.B",
+      "5.OA.A",
+      "5.OA.B",
+      "6.EE.A"
+    ],
     "topicOrder": [
       "factors-and-multiples",
       "patterns-and-rules",
@@ -234,8 +347,14 @@
     "domainId": "fractions-rational-numbers",
     "name": "Fraction Foundations",
     "summary": "Establish understanding of fractions as equal parts of wholes, sets, and number line positions.",
-    "ritRange": { "min": 175, "max": 195 },
-    "primaryCcss": ["3.NF.A", "3.G.A.2"],
+    "ritRange": {
+      "min": 175,
+      "max": 195
+    },
+    "primaryCcss": [
+      "3.NF.A",
+      "3.G.A.2"
+    ],
     "topicOrder": [
       "partition-shapes-equal-parts",
       "unit-fractions-number-lines",
@@ -248,8 +367,14 @@
     "domainId": "fractions-rational-numbers",
     "name": "Fraction Equivalence & Ordering",
     "summary": "Develop equivalence, ordering, and benchmarking skills to prepare for operations with unlike denominators.",
-    "ritRange": { "min": 190, "max": 205 },
-    "primaryCcss": ["3.NF.A", "4.NF.A"],
+    "ritRange": {
+      "min": 190,
+      "max": 205
+    },
+    "primaryCcss": [
+      "3.NF.A",
+      "4.NF.A"
+    ],
     "topicOrder": [
       "generate-equivalent-fractions",
       "compare-unlike-fractions",
@@ -262,11 +387,22 @@
     "domainId": "fractions-rational-numbers",
     "name": "Fraction & Decimal Operations",
     "summary": "Apply fraction and decimal relationships to addition, subtraction, multiplication, and contextual problem solving.",
-    "ritRange": { "min": 200, "max": 215 },
-    "primaryCcss": ["4.NF.B", "5.NF.A", "5.NF.B", "5.NBT.A"],
+    "ritRange": {
+      "min": 200,
+      "max": 215
+    },
+    "primaryCcss": [
+      "4.NF.B",
+      "5.NF.A",
+      "5.NF.B",
+      "5.NBT.A"
+    ],
     "topicOrder": [
       "add-subtract-like-denominator",
+      "add-subtract-unlike-denominators",
       "multiply-fractions-by-whole-numbers",
+      "fraction-multiplication",
+      "unit-fraction-division",
       "fraction-decimal-conversion",
       "add-subtract-decimals"
     ]
@@ -276,8 +412,14 @@
     "domainId": "measurement-data",
     "name": "Measurement Foundations",
     "summary": "Explore measurable attributes using direct comparison and non-standard units before transitioning to standard units.",
-    "ritRange": { "min": 150, "max": 175 },
-    "primaryCcss": ["K.MD.A", "1.MD.A"],
+    "ritRange": {
+      "min": 150,
+      "max": 175
+    },
+    "primaryCcss": [
+      "K.MD.A",
+      "1.MD.A"
+    ],
     "topicOrder": [
       "compare-length-weight-capacity",
       "choose-measurement-tools",
@@ -285,17 +427,61 @@
     ]
   },
   {
+    "id": "length-in-standard-units",
+    "domainId": "measurement-data",
+    "name": "Length in Standard Units",
+    "summary": "Measure, estimate, and operate with lengths using standard inch and centimeter units.",
+    "ritRange": {
+      "min": 170,
+      "max": 188
+    },
+    "primaryCcss": [
+      "2.MD.A",
+      "2.MD.B",
+      "2.MD.D"
+    ],
+    "topicOrder": [
+      "measure-lengths-with-rulers",
+      "add-subtract-lengths",
+      "generate-measurement-data"
+    ]
+  },
+  {
     "id": "time-and-money",
     "domainId": "measurement-data",
     "name": "Time & Money",
     "summary": "Introduce telling time and counting money through concrete manipulatives and real-world contexts.",
-    "ritRange": { "min": 160, "max": 182 },
-    "primaryCcss": ["1.MD.B", "2.MD.C"],
+    "ritRange": {
+      "min": 160,
+      "max": 195
+    },
+    "primaryCcss": [
+      "1.MD.B",
+      "2.MD.C"
+    ],
     "topicOrder": [
       "tell-time-hour-half-quarter",
       "count-coins-pennies-to-quarters",
       "make-given-amounts",
+      "tell-time-five-minutes",
+      "elapsed-time-minute",
       "time-money-word-problems"
+    ]
+  },
+  {
+    "id": "mass-and-volume",
+    "domainId": "measurement-data",
+    "name": "Mass & Liquid Volume",
+    "summary": "Measure and estimate mass and liquid volume, applying addition and subtraction in context.",
+    "ritRange": {
+      "min": 188,
+      "max": 200
+    },
+    "primaryCcss": [
+      "3.MD.A"
+    ],
+    "topicOrder": [
+      "mass-and-liquid-volume"
     ]
   },
   {
@@ -303,8 +489,16 @@
     "domainId": "measurement-data",
     "name": "Data Displays",
     "summary": "Collect, represent, and interpret data using tables, picture graphs, bar graphs, and line plots.",
-    "ritRange": { "min": 165, "max": 200 },
-    "primaryCcss": ["1.MD.C", "2.MD.D", "3.MD.B", "4.MD.B"],
+    "ritRange": {
+      "min": 165,
+      "max": 200
+    },
+    "primaryCcss": [
+      "1.MD.C",
+      "2.MD.D",
+      "3.MD.B",
+      "4.MD.B"
+    ],
     "topicOrder": [
       "tally-charts-and-tables",
       "picture-graphs",
@@ -318,10 +512,19 @@
     "domainId": "measurement-data",
     "name": "Measurement & Data Extensions",
     "summary": "Advance to area, volume, fractional data displays, and coordinate graphing with problem-solving applications.",
-    "ritRange": { "min": 195, "max": 210 },
-    "primaryCcss": ["3.MD.C", "4.MD.A", "5.MD.B", "5.G.A"],
+    "ritRange": {
+      "min": 195,
+      "max": 210
+    },
+    "primaryCcss": [
+      "3.MD.C",
+      "4.MD.A",
+      "5.MD.B",
+      "5.G.A"
+    ],
     "topicOrder": [
       "area-and-perimeter-rectangles",
+      "measurement-conversions",
       "volume-rectangular-prisms",
       "line-plots-fractions",
       "coordinate-plane-graphing",
@@ -333,8 +536,15 @@
     "domainId": "geometry-spatial-reasoning",
     "name": "Shape Foundations",
     "summary": "Recognize and describe shapes, positions, and simple compositions using Montessori geometry materials.",
-    "ritRange": { "min": 150, "max": 170 },
-    "primaryCcss": ["K.G.A", "K.G.B", "1.G.A"],
+    "ritRange": {
+      "min": 150,
+      "max": 170
+    },
+    "primaryCcss": [
+      "K.G.A",
+      "K.G.B",
+      "1.G.A"
+    ],
     "topicOrder": [
       "identify-2d-3d-shapes",
       "describe-positions",
@@ -346,11 +556,19 @@
     "id": "plane-geometry",
     "domainId": "geometry-spatial-reasoning",
     "name": "Plane Geometry",
-    "summary": "Deepen understanding of polygons, lines, angles, and symmetry building toward geometric reasoning.",
-    "ritRange": { "min": 170, "max": 195 },
-    "primaryCcss": ["2.G.A", "3.G.A", "4.G.A"],
+    "summary": "Deepen understanding of polygons, arrays, lines, angles, and symmetry building toward geometric reasoning.",
+    "ritRange": {
+      "min": 170,
+      "max": 200
+    },
+    "primaryCcss": [
+      "2.G.A",
+      "3.G.A",
+      "4.G.A"
+    ],
     "topicOrder": [
       "partition-shapes-equal-parts-geometry",
+      "tile-rectangles-rows-columns",
       "lines-angles",
       "triangles-quadrilaterals",
       "symmetry-and-reflection"
@@ -361,8 +579,15 @@
     "domainId": "geometry-spatial-reasoning",
     "name": "Measurement Geometry",
     "summary": "Connect geometry to measurement through area, surface area, and volume tasks.",
-    "ritRange": { "min": 185, "max": 205 },
-    "primaryCcss": ["3.MD.C", "4.MD.C", "5.MD.C"],
+    "ritRange": {
+      "min": 185,
+      "max": 205
+    },
+    "primaryCcss": [
+      "3.MD.C",
+      "4.MD.C",
+      "5.MD.C"
+    ],
     "topicOrder": [
       "area-of-rectangles-triangles",
       "surface-area-with-nets",
@@ -375,8 +600,14 @@
     "domainId": "geometry-spatial-reasoning",
     "name": "Spatial Reasoning Extensions",
     "summary": "Apply coordinate reasoning, figure classification, and transformations to advanced spatial tasks.",
-    "ritRange": { "min": 200, "max": 215 },
-    "primaryCcss": ["5.G.A", "5.G.B"],
+    "ritRange": {
+      "min": 200,
+      "max": 215
+    },
+    "primaryCcss": [
+      "5.G.A",
+      "5.G.B"
+    ],
     "topicOrder": [
       "graph-points-coordinate-plane",
       "classify-2d-figures-hierarchies",
@@ -388,8 +619,14 @@
     "domainId": "patterns-algebraic-thinking",
     "name": "Early Patterns",
     "summary": "Recognize and extend repeating and growing patterns, building the basis for algebraic reasoning.",
-    "ritRange": { "min": 150, "max": 170 },
-    "primaryCcss": ["K.OA.A", "1.OA.B"],
+    "ritRange": {
+      "min": 150,
+      "max": 170
+    },
+    "primaryCcss": [
+      "K.OA.A",
+      "1.OA.B"
+    ],
     "topicOrder": [
       "repeating-growing-patterns",
       "unknown-addend-problems",
@@ -401,8 +638,14 @@
     "domainId": "patterns-algebraic-thinking",
     "name": "Multi-Step Thinking",
     "summary": "Solve multi-step problems, analyze input-output tables, and articulate arithmetic patterns.",
-    "ritRange": { "min": 180, "max": 200 },
-    "primaryCcss": ["3.OA.D", "4.OA.A"],
+    "ritRange": {
+      "min": 180,
+      "max": 200
+    },
+    "primaryCcss": [
+      "3.OA.D",
+      "4.OA.A"
+    ],
     "topicOrder": [
       "multi-step-word-problems",
       "input-output-tables",
@@ -414,8 +657,15 @@
     "domainId": "patterns-algebraic-thinking",
     "name": "Pre-Algebra Foundations",
     "summary": "Bridge to formal algebra with expressions, variables, coordinate relationships, and simple inequalities.",
-    "ritRange": { "min": 200, "max": 215 },
-    "primaryCcss": ["5.OA.A", "5.OA.B", "6.EE.A"],
+    "ritRange": {
+      "min": 200,
+      "max": 215
+    },
+    "primaryCcss": [
+      "5.OA.A",
+      "5.OA.B",
+      "6.EE.A"
+    ],
     "topicOrder": [
       "evaluate-numerical-expressions",
       "equations-with-variables",

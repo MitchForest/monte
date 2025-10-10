@@ -1,6 +1,6 @@
 import type { Component, JSX } from 'solid-js';
 
-import { Card } from '../../../design-system';
+import { Card } from '../../../components/ui';
 
 interface LessonCanvasProps {
   header: JSX.Element;
@@ -16,7 +16,7 @@ export const LessonCanvas: Component<LessonCanvasProps> = (props) => {
         <div class="pointer-events-none absolute inset-0 rounded-[var(--radius-lg)] border border-[rgba(140,204,212,0.35)]" />
         <div class="relative z-10 h-full w-full">{props.children}</div>
       </div>
-      {props.footer && <div class="text-subtle">{props.footer}</div>}
+      {props.footer && <div class="text-[color:var(--color-text-subtle)]">{props.footer}</div>}
     </Card>
   );
 };

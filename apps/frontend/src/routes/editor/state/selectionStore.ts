@@ -29,6 +29,8 @@ interface CreateSelectionStoreOptions {
   editor: LessonEditor;
   onResetTopicCreation: () => void;
   onResetLessonCreation: () => void;
+  selectedSegmentId: Accessor<string | undefined>;
+  setSelectedSegmentId: (segmentId: string | undefined) => void;
 }
 
 export const createSelectionStore = ({
@@ -36,11 +38,12 @@ export const createSelectionStore = ({
   editor,
   onResetTopicCreation,
   onResetLessonCreation,
+  selectedSegmentId,
+  setSelectedSegmentId,
 }: CreateSelectionStoreOptions): SelectionStore => {
   const [selectedUnitId, setSelectedUnitId] = createSignal<Id<'units'> | undefined>();
   const [selectedTopicId, setSelectedTopicId] = createSignal<Id<'topics'> | undefined>();
   const [selectedLessonId, setSelectedLessonId] = createSignal<Id<'lessons'> | undefined>();
-  const [selectedSegmentIdValue, setSelectedSegmentIdValue] = createSignal<string | undefined>(undefined);
 
   const units = createMemo<UnitNode[]>(() => curriculumTree() ?? []);
   const currentUnit = createMemo<UnitNode | undefined>(() => units().find((unit) => unit._id === selectedUnitId()));
@@ -87,9 +90,9 @@ export const createSelectionStore = ({
   const lessons = createMemo<LessonNode[]>(() => currentTopic()?.lessons ?? []);
 
   const selectSegment = (segmentId: string | undefined) => {
-    const previous = selectedSegmentIdValue();
+    const previous = selectedSegmentId();
     if (previous !== segmentId) {
-      setSelectedSegmentIdValue(segmentId);
+      setSelectedSegmentId(segmentId);
     }
     if (segmentId) {
       editor.select({ kind: 'segment', segmentId });
@@ -105,7 +108,7 @@ export const createSelectionStore = ({
     setSelectedTopicId,
     selectedLessonId,
     setSelectedLessonId,
-    selectedSegmentId: selectedSegmentIdValue,
+    selectedSegmentId,
     selectSegment,
     units,
     currentUnit,

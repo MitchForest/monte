@@ -79,3 +79,19 @@ export const buildLessonTasks = (lesson: Lesson): LessonTask[] => {
 
   return tasks;
 };
+
+export const safeBuildLessonTasks = (
+  lesson: Lesson | undefined,
+  context: string,
+): LessonTask[] => {
+  if (!lesson) return [];
+  try {
+    return buildLessonTasks(lesson);
+  } catch (error) {
+    console.warn(`[lessonTasks:${context}] Unable to build tasks`, {
+      lessonId: lesson.id,
+      error,
+    });
+    return [];
+  }
+};

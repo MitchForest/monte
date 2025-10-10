@@ -1,0 +1,905 @@
+[
+  {
+    "id": "edge.add-multiple-two-digit-addends.incoming",
+    "sourceSkillId": "skill.tens-ones-composition.regroup-tens-ones",
+    "targetSkillId": "skill.add-multiple-two-digit-addends.add-without-regroup",
+    "type": "prereq_core",
+    "rationale": "Place-value regrouping readiness is required to add multi-digit numbers."
+  },
+  {
+    "id": "edge.add-multiple-two-digit-addends.sequence-1",
+    "sourceSkillId": "skill.add-multiple-two-digit-addends.add-without-regroup",
+    "targetSkillId": "skill.add-multiple-two-digit-addends.add-with-regroup",
+    "type": "prereq_core",
+    "rationale": "Adding without regrouping lays the groundwork for problems requiring exchanges."
+  },
+  {
+    "id": "edge.add-multiple-two-digit-addends.sequence-2",
+    "sourceSkillId": "skill.add-multiple-two-digit-addends.add-with-regroup",
+    "targetSkillId": "skill.add-multiple-two-digit-addends.add-three-addends",
+    "type": "prereq_core",
+    "rationale": "Comfort with regrouping two addends precedes adding three two-digit numbers."
+  },
+  {
+    "id": "edge.compare-120",
+    "sourceSkillId": "skill.hundred-chart-navigation.read-write-120",
+    "targetSkillId": "skill.hundred-chart-navigation.compare-to-120",
+    "type": "prereq_core",
+    "rationale": "Writing numerals to 120 is prerequisite to comparing them."
+  },
+  {
+    "id": "edge.compare-numbers-to-20.incoming",
+    "sourceSkillId": "skill.represent-numbers-to-20.ten-frame-models-20",
+    "targetSkillId": "skill.compare-numbers-to-20.compare-models-20",
+    "type": "prereq_core",
+    "rationale": "Representing numbers on ten frames is a prerequisite for comparing two representations."
+  },
+  {
+    "id": "edge.compare-numbers-to-20.sequence-1",
+    "sourceSkillId": "skill.compare-numbers-to-20.compare-models-20",
+    "targetSkillId": "skill.compare-numbers-to-20.compare-numerals-20",
+    "type": "prereq_core",
+    "rationale": "Comparing concrete models comes before comparing numerals using symbols."
+  },
+  {
+    "id": "edge.compare-numbers-to-20.sequence-2",
+    "sourceSkillId": "skill.compare-numbers-to-20.compare-numerals-20",
+    "targetSkillId": "skill.compare-numbers-to-20.order-three-20",
+    "type": "prereq_core",
+    "rationale": "Learners must compare pairs before ordering sets of three numbers."
+  },
+  {
+    "id": "edge.compare-order-decimals.incoming",
+    "sourceSkillId": "skill.read-write-decimals.expanded-decimals",
+    "targetSkillId": "skill.compare-order-decimals.compare-models",
+    "type": "prereq_core",
+    "rationale": "Understanding decimal place value readies students to compare decimals with models."
+  },
+  {
+    "id": "edge.compare-order-decimals.sequence-1",
+    "sourceSkillId": "skill.compare-order-decimals.compare-models",
+    "targetSkillId": "skill.compare-order-decimals.compare-place-value",
+    "type": "prereq_core",
+    "rationale": "Comparing concrete models precedes comparing decimals abstractly."
+  },
+  {
+    "id": "edge.compare-order-decimals.sequence-2",
+    "sourceSkillId": "skill.compare-order-decimals.compare-place-value",
+    "targetSkillId": "skill.compare-order-decimals.order-decimals",
+    "type": "prereq_core",
+    "rationale": "Comparing pairs of decimals supports ordering sets of decimals."
+  },
+  {
+    "id": "edge.compare-order-to-1000.incoming",
+    "sourceSkillId": "skill.read-write-3-digit-numbers.explain-place-value",
+    "targetSkillId": "skill.compare-order-to-1000.compare-models-1000",
+    "type": "prereq_core",
+    "rationale": "Explaining place value enables comparing multi-digit numbers with models."
+  },
+  {
+    "id": "edge.compare-order-to-1000.sequence-1",
+    "sourceSkillId": "skill.compare-order-to-1000.compare-models-1000",
+    "targetSkillId": "skill.compare-order-to-1000.compare-symbols-1000",
+    "type": "prereq_core",
+    "rationale": "Comparing models precedes comparing written numerals."
+  },
+  {
+    "id": "edge.compare-order-to-1000.sequence-2",
+    "sourceSkillId": "skill.compare-order-to-1000.compare-symbols-1000",
+    "targetSkillId": "skill.compare-order-to-1000.order-multi-digit-1000",
+    "type": "prereq_core",
+    "rationale": "Comparing pairs of numbers supports ordering sequences of numbers."
+  },
+  {
+    "id": "edge.compare-quantities-matching.sequence-1",
+    "sourceSkillId": "skill.compare-quantities-matching.match-sets-10",
+    "targetSkillId": "skill.compare-quantities-matching.compare-by-counting-10",
+    "type": "prereq_core",
+    "rationale": "Matching sets builds the foundation for comparing quantities by counting each group."
+  },
+  {
+    "id": "edge.compare-quantities-matching.sequence-2",
+    "sourceSkillId": "skill.compare-quantities-matching.compare-by-counting-10",
+    "targetSkillId": "skill.compare-quantities-matching.compare-numerals-10",
+    "type": "prereq_core",
+    "rationale": "Comparing concrete sets precedes comparing abstract numerals with symbols."
+  },
+  {
+    "id": "edge.compose-decompose-hundreds.sequence-1",
+    "sourceSkillId": "skill.compose-decompose-hundreds.bundle-tens",
+    "targetSkillId": "skill.compose-decompose-hundreds.exchange-hundreds",
+    "type": "prereq_core",
+    "rationale": "Forming hundreds precedes exchanging flexibly between hundreds, tens, and ones."
+  },
+  {
+    "id": "edge.compose-decompose-hundreds.sequence-2",
+    "sourceSkillId": "skill.compose-decompose-hundreds.exchange-hundreds",
+    "targetSkillId": "skill.compose-decompose-hundreds.decompose-multi-step",
+    "type": "prereq_core",
+    "rationale": "Fluent exchanges support decomposing numbers in multi-step problems."
+  },
+  {
+    "id": "edge.compose-decompose-teen-numbers.incoming",
+    "sourceSkillId": "skill.count-to-20-and-by-10s.count-forward-any-20",
+    "targetSkillId": "skill.compose-decompose-teen-numbers.ten-frame-build",
+    "type": "prereq_core",
+    "rationale": "Comfort counting into the teens is required before building teen numbers as ten and some ones."
+  },
+  {
+    "id": "edge.compose-decompose-teen-numbers.sequence-1",
+    "sourceSkillId": "skill.compose-decompose-teen-numbers.ten-frame-build",
+    "targetSkillId": "skill.compose-decompose-teen-numbers.place-value-cards",
+    "type": "prereq_core",
+    "rationale": "Constructing teen numbers with ten frames precedes representing them with place-value cards."
+  },
+  {
+    "id": "edge.compose-decompose-teen-numbers.sequence-2",
+    "sourceSkillId": "skill.compose-decompose-teen-numbers.place-value-cards",
+    "targetSkillId": "skill.compose-decompose-teen-numbers.decompose-equations-teen",
+    "type": "prereq_core",
+    "rationale": "Concrete and card representations provide the foundation for writing decomposition equations."
+  },
+  {
+    "id": "edge.compose-decompose-thousands.incoming",
+    "sourceSkillId": "skill.add-multiple-two-digit-addends.add-with-regroup",
+    "targetSkillId": "skill.compose-decompose-thousands.build-thousands-models",
+    "type": "prereq_core",
+    "rationale": "Regrouping tens and ones prepares students to compose hundreds into thousands."
+  },
+  {
+    "id": "edge.compose-decompose-thousands.sequence-1",
+    "sourceSkillId": "skill.compose-decompose-thousands.build-thousands-models",
+    "targetSkillId": "skill.compose-decompose-thousands.exchange-thousands",
+    "type": "prereq_core",
+    "rationale": "Building thousands from hundreds comes before exchanging flexibly between them."
+  },
+  {
+    "id": "edge.compose-decompose-thousands.sequence-2",
+    "sourceSkillId": "skill.compose-decompose-thousands.exchange-thousands",
+    "targetSkillId": "skill.compose-decompose-thousands.multiple-representations",
+    "type": "prereq_core",
+    "rationale": "Fluent exchanges allow learners to translate thousands into multiple representations."
+  },
+  {
+    "id": "edge.count-story-problems-5.incoming-1",
+    "sourceSkillId": "skill.counting-within-5.cardinality-within-5",
+    "targetSkillId": "skill.count-story-problems-5.join-story-5",
+    "type": "prereq_core",
+    "rationale": "Learners must interpret cardinality to represent joining actions in stories."
+  },
+  {
+    "id": "edge.count-story-problems-5.incoming-2",
+    "sourceSkillId": "skill.compare-quantities-matching.compare-by-counting-10",
+    "targetSkillId": "skill.count-story-problems-5.separate-story-5",
+    "type": "prereq_core",
+    "rationale": "Comparing counts prepares learners to act out take-away story problems."
+  },
+  {
+    "id": "edge.count-story-problems-5.sequence-1",
+    "sourceSkillId": "skill.count-story-problems-5.join-story-5",
+    "targetSkillId": "skill.count-story-problems-5.write-equations-5",
+    "type": "prereq_core",
+    "rationale": "Modeling join scenarios comes before writing matching equations."
+  },
+  {
+    "id": "edge.count-story-problems-5.sequence-2",
+    "sourceSkillId": "skill.count-story-problems-5.separate-story-5",
+    "targetSkillId": "skill.count-story-problems-5.write-equations-5",
+    "type": "prereq_core",
+    "rationale": "Acting out separation stories supports translating them into equations."
+  },
+  {
+    "id": "edge.count-to-20-and-by-10s.incoming",
+    "sourceSkillId": "skill.counting-within-10.count-scattered-sets-10",
+    "targetSkillId": "skill.count-to-20-and-by-10s.count-forward-any-20",
+    "type": "prereq_core",
+    "rationale": "Counting scattered sets to ten readies learners to continue counting from any start point."
+  },
+  {
+    "id": "edge.count-to-20-and-by-10s.sequence-1",
+    "sourceSkillId": "skill.count-to-20-and-by-10s.count-forward-any-20",
+    "targetSkillId": "skill.count-to-20-and-by-10s.skip-count-tens",
+    "type": "prereq_core",
+    "rationale": "Counting forward from varied starting points precedes grouping counts by tens."
+  },
+  {
+    "id": "edge.count-to-20-and-by-10s.sequence-2",
+    "sourceSkillId": "skill.count-to-20-and-by-10s.skip-count-tens",
+    "targetSkillId": "skill.count-to-20-and-by-10s.extend-sequences-20",
+    "type": "prereq_core",
+    "rationale": "Skip-count experience supports completing extended number sequences to twenty."
+  },
+  {
+    "id": "edge.count-to-20-and-by-10s.sequence-objects-20",
+    "sourceSkillId": "skill.count-to-20-and-by-10s.count-forward-any-20",
+    "targetSkillId": "skill.count-to-20-and-by-10s.count-objects-20",
+    "type": "prereq_core",
+    "rationale": "Counting from varied starting points prepares learners to count concrete sets through twenty."
+  },
+  {
+    "id": "edge.count-to-20-and-by-10s.sequence-structured-30",
+    "sourceSkillId": "skill.count-to-20-and-by-10s.count-objects-20",
+    "targetSkillId": "skill.count-to-20-and-by-10s.count-structured-30",
+    "type": "prereq_core",
+    "rationale": "Fluency counting mixed sets to twenty precedes structured arrangements through thirty."
+  },
+  {
+    "id": "edge.count-to-20-and-by-10s.support-structured-30",
+    "sourceSkillId": "skill.count-to-20-and-by-10s.count-structured-30",
+    "targetSkillId": "skill.count-to-20-and-by-10s.skip-count-tens",
+    "type": "prereq_support",
+    "rationale": "Counting organized sets through thirty supports grouping by tens."
+  },
+  {
+    "id": "edge.count-to-20.backward",
+    "sourceSkillId": "skill.count-to-20-and-by-10s.count-forward-any-20",
+    "targetSkillId": "skill.count-to-20-and-by-10s.count-backward-20",
+    "type": "prereq_core",
+    "rationale": "Counting forward within twenty precedes counting backward from any start."
+  },
+  {
+    "id": "edge.counting-within-10.backward",
+    "sourceSkillId": "skill.counting-within-10.count-sequence-to-10",
+    "targetSkillId": "skill.counting-within-10.count-backward-10",
+    "type": "prereq_core",
+    "rationale": "Counting forward prepares learners to count backward within ten."
+  },
+  {
+    "id": "edge.counting-within-10.sequence-1",
+    "sourceSkillId": "skill.counting-within-10.count-sequence-to-10",
+    "targetSkillId": "skill.counting-within-10.count-scattered-sets-10",
+    "type": "prereq_core",
+    "rationale": "Fluent counting to ten is required before applying the sequence to scattered arrangements."
+  },
+  {
+    "id": "edge.counting-within-10.sequence-2",
+    "sourceSkillId": "skill.counting-within-10.count-scattered-sets-10",
+    "targetSkillId": "skill.counting-within-10.numeral-representation-10",
+    "type": "prereq_core",
+    "rationale": "After counting quantities, learners link them to written numerals."
+  },
+  {
+    "id": "edge.counting-within-5.sequence-1",
+    "sourceSkillId": "skill.counting-within-5.count-sequence-to-5",
+    "targetSkillId": "skill.counting-within-5.match-objects-to-count",
+    "type": "prereq_core",
+    "rationale": "Learners must accurately say the count sequence before they can coordinate objects with number words."
+  },
+  {
+    "id": "edge.counting-within-5.sequence-2",
+    "sourceSkillId": "skill.counting-within-5.match-objects-to-count",
+    "targetSkillId": "skill.counting-within-5.cardinality-within-5",
+    "type": "prereq_core",
+    "rationale": "One-to-one matching supports recognizing that the last count word names the total in a set."
+  },
+  {
+    "id": "edge.cross.compare-to-10",
+    "sourceSkillId": "skill.counting-within-5.cardinality-within-5",
+    "targetSkillId": "skill.compare-quantities-matching.match-sets-10",
+    "type": "prereq_core",
+    "rationale": "Recognizing set sizes up to five prepares learners to compare up to ten."
+  },
+  {
+    "id": "edge.cross.counting-to-10",
+    "sourceSkillId": "skill.counting-within-5.cardinality-within-5",
+    "targetSkillId": "skill.counting-within-10.count-sequence-to-10",
+    "type": "prereq_core",
+    "rationale": "Mastery of cardinality within five supports extending the count sequence to ten."
+  },
+  {
+    "id": "edge.cross.make-ten-to-regroup",
+    "sourceSkillId": "skill.make-ten-combinations.decompose-20-equations",
+    "targetSkillId": "skill.tens-ones-composition.regroup-tens-ones",
+    "type": "prereq_core",
+    "rationale": "Decomposing within twenty sets the stage for exchanging ten ones for a ten."
+  },
+  {
+    "id": "edge.cross.represent-to-tens-ones",
+    "sourceSkillId": "skill.represent-numbers-to-20.ten-frame-models-20",
+    "targetSkillId": "skill.tens-ones-composition.build-models-120",
+    "type": "prereq_core",
+    "rationale": "Building numbers to twenty on ten frames prepares learners to compose larger numbers with base-ten materials."
+  },
+  {
+    "id": "edge.decimals-thousandths",
+    "sourceSkillId": "skill.read-write-decimals.expanded-decimals",
+    "targetSkillId": "skill.read-write-decimals.read-thousandths",
+    "type": "prereq_core",
+    "rationale": "Using expanded form for hundredths precedes reading and writing thousandths."
+  },
+  {
+    "id": "edge.dynamic-addition.incoming",
+    "sourceSkillId": "skill.compose-decompose-hundreds.exchange-hundreds",
+    "targetSkillId": "skill.dynamic-addition-within-1000.add-ones-tens",
+    "type": "prereq_core",
+    "rationale": "Regrouping across hundreds prepares learners for multi-digit addition with regrouping."
+  },
+  {
+    "id": "edge.dynamic-addition.sequence-1",
+    "sourceSkillId": "skill.dynamic-addition-within-1000.add-ones-tens",
+    "targetSkillId": "skill.dynamic-addition-within-1000.add-multiple-terms",
+    "type": "prereq_core",
+    "rationale": "Adding two numbers with regrouping precedes adding multiple three-digit numbers."
+  },
+  {
+    "id": "edge.dynamic-addition.sequence-2",
+    "sourceSkillId": "skill.dynamic-addition-within-1000.add-multiple-terms",
+    "targetSkillId": "skill.dynamic-addition-within-1000.explain-strategies",
+    "type": "prereq_core",
+    "rationale": "Experience with multiple addends supports explaining addition strategies."
+  },
+  {
+    "id": "edge.dynamic-subtraction.incoming",
+    "sourceSkillId": "skill.compose-decompose-hundreds.decompose-multi-step",
+    "targetSkillId": "skill.dynamic-subtraction-within-1000.subtract-ones-tens",
+    "type": "prereq_core",
+    "rationale": "Decomposing hundreds equips learners to handle regrouping during subtraction."
+  },
+  {
+    "id": "edge.dynamic-subtraction.sequence-1",
+    "sourceSkillId": "skill.dynamic-subtraction-within-1000.subtract-ones-tens",
+    "targetSkillId": "skill.dynamic-subtraction-within-1000.subtract-multiple-regroup",
+    "type": "prereq_core",
+    "rationale": "Subtracting with single regrouping precedes more complex multi-regroup cases."
+  },
+  {
+    "id": "edge.dynamic-subtraction.sequence-2",
+    "sourceSkillId": "skill.dynamic-subtraction-within-1000.subtract-multiple-regroup",
+    "targetSkillId": "skill.dynamic-subtraction-within-1000.solve-word-problems",
+    "type": "prereq_core",
+    "rationale": "Fluent multi-regroup subtraction prepares learners for contextual subtraction problems."
+  },
+  {
+    "id": "edge.estimate-number-lines.incoming",
+    "sourceSkillId": "skill.thousand-chart-navigation.skip-count-hundreds",
+    "targetSkillId": "skill.estimate-number-lines.place-benchmarks",
+    "type": "prereq_core",
+    "rationale": "Navigating the thousand chart readies learners to mark benchmarks on open number lines."
+  },
+  {
+    "id": "edge.estimate-number-lines.sequence-1",
+    "sourceSkillId": "skill.estimate-number-lines.place-benchmarks",
+    "targetSkillId": "skill.estimate-number-lines.estimate-midpoints",
+    "type": "prereq_core",
+    "rationale": "Placing benchmarks precedes estimating values between them."
+  },
+  {
+    "id": "edge.estimate-number-lines.sequence-2",
+    "sourceSkillId": "skill.estimate-number-lines.estimate-midpoints",
+    "targetSkillId": "skill.estimate-number-lines.estimate-sums-differences",
+    "type": "prereq_core",
+    "rationale": "Understanding midpoints supports estimating sums and differences on number lines."
+  },
+  {
+    "id": "edge.estimate-sums-differences.incoming",
+    "sourceSkillId": "skill.locate-numbers-number-line.place-benchmarks-1000",
+    "targetSkillId": "skill.estimate-sums-differences.round-before-add",
+    "type": "prereq_core",
+    "rationale": "Knowing key benchmarks supports rounding addends before estimating sums."
+  },
+  {
+    "id": "edge.expanded-form-to-120.incoming",
+    "sourceSkillId": "skill.tens-ones-composition.write-equations-120",
+    "targetSkillId": "skill.expanded-form-to-120.write-expanded-120",
+    "type": "prereq_core",
+    "rationale": "Writing tens-plus-ones equations prepares learners to express numbers in expanded form."
+  },
+  {
+    "id": "edge.expanded-form-to-120.sequence-1",
+    "sourceSkillId": "skill.expanded-form-to-120.write-expanded-120",
+    "targetSkillId": "skill.expanded-form-to-120.convert-standard-120",
+    "type": "prereq_core",
+    "rationale": "Creating expanded forms comes before reconstructing standard numerals."
+  },
+  {
+    "id": "edge.expanded-form-to-120.sequence-2",
+    "sourceSkillId": "skill.expanded-form-to-120.convert-standard-120",
+    "targetSkillId": "skill.expanded-form-to-120.explain-expanded-120",
+    "type": "prereq_core",
+    "rationale": "Moving between forms enables learners to explain why representations are equivalent."
+  },
+  {
+    "id": "edge.hundred-chart-navigation.incoming",
+    "sourceSkillId": "skill.ten-more-ten-less.find-ten-more-120",
+    "targetSkillId": "skill.hundred-chart-navigation.find-neighbors",
+    "type": "prereq_core",
+    "rationale": "Ten-more reasoning supports identifying neighboring numbers on the hundred chart."
+  },
+  {
+    "id": "edge.hundred-chart-navigation.sequence-1",
+    "sourceSkillId": "skill.hundred-chart-navigation.find-neighbors",
+    "targetSkillId": "skill.hundred-chart-navigation.jump-patterns",
+    "type": "prereq_core",
+    "rationale": "Understanding adjacent numbers precedes making intentional jumps across the chart."
+  },
+  {
+    "id": "edge.hundred-chart-navigation.sequence-2",
+    "sourceSkillId": "skill.hundred-chart-navigation.jump-patterns",
+    "targetSkillId": "skill.hundred-chart-navigation.patterns",
+    "type": "prereq_core",
+    "rationale": "Executing chart jumps is required before generalizing underlying patterns."
+  },
+  {
+    "id": "edge.hundred-chart-navigation.sequence-count-120",
+    "sourceSkillId": "skill.hundred-chart-navigation.jump-patterns",
+    "targetSkillId": "skill.hundred-chart-navigation.count-within-120",
+    "type": "prereq_core",
+    "rationale": "Using repeated chart jumps prepares learners to extend counting within 120."
+  },
+  {
+    "id": "edge.hundred-chart-navigation.support-count-120",
+    "sourceSkillId": "skill.count-to-20-and-by-10s.count-structured-30",
+    "targetSkillId": "skill.hundred-chart-navigation.count-within-120",
+    "type": "prereq_support",
+    "rationale": "Counting structured sets through thirty supports extending sequences on the hundred chart."
+  },
+  {
+    "id": "edge.hundreds-to-thousands.bundle",
+    "sourceSkillId": "skill.compose-decompose-hundreds.decompose-multi-step",
+    "targetSkillId": "skill.compose-decompose-thousands.build-thousands-models",
+    "type": "prereq_core",
+    "rationale": "Mastering hundreds exchanges prepares learners to model thousands."
+  },
+  {
+    "id": "edge.hundreds-to-thousands.exchange",
+    "sourceSkillId": "skill.compose-decompose-hundreds.decompose-multi-step",
+    "targetSkillId": "skill.compose-decompose-thousands.exchange-thousands",
+    "type": "prereq_core",
+    "rationale": "Understanding hundreds exchanges supports exchanging thousand units."
+  },
+  {
+    "id": "edge.hundreds-to-three-digit",
+    "sourceSkillId": "skill.compose-decompose-hundreds.exchange-hundreds",
+    "targetSkillId": "skill.read-write-3-digit-numbers.identify-digit-values",
+    "type": "prereq_core",
+    "rationale": "Exchanging hundreds and tens underpins interpreting each digit in three-digit numbers."
+  },
+  {
+    "id": "edge.locate-number-line.incoming",
+    "sourceSkillId": "skill.rounding-to-nearest-10-100.round-to-10",
+    "targetSkillId": "skill.locate-numbers-number-line.locate-multiples-10",
+    "type": "prereq_core",
+    "rationale": "Rounding to ten builds awareness of key benchmarks on number lines."
+  },
+  {
+    "id": "edge.locate-number-line.sequence-1",
+    "sourceSkillId": "skill.locate-numbers-number-line.locate-multiples-10",
+    "targetSkillId": "skill.locate-numbers-number-line.locate-between-tens",
+    "type": "prereq_core",
+    "rationale": "Placing multiples of ten comes before estimating between them."
+  },
+  {
+    "id": "edge.locate-number-line.sequence-2",
+    "sourceSkillId": "skill.locate-numbers-number-line.locate-between-tens",
+    "targetSkillId": "skill.locate-numbers-number-line.place-benchmarks-1000",
+    "type": "prereq_core",
+    "rationale": "Estimating between tens prepares students to mark custom benchmarks."
+  },
+  {
+    "id": "edge.make-ten-combinations.incoming-1",
+    "sourceSkillId": "skill.compose-decompose-teen-numbers.ten-frame-build",
+    "targetSkillId": "skill.make-ten-combinations.ten-partners-20",
+    "type": "prereq_core",
+    "rationale": "Building teens on ten frames is the basis for identifying complements to ten."
+  },
+  {
+    "id": "edge.make-ten-combinations.sequence-1",
+    "sourceSkillId": "skill.make-ten-combinations.ten-partners-20",
+    "targetSkillId": "skill.make-ten-combinations.compose-teens",
+    "type": "prereq_core",
+    "rationale": "Knowing ten partners supports composing teens as ten plus ones."
+  },
+  {
+    "id": "edge.make-ten-combinations.sequence-2",
+    "sourceSkillId": "skill.make-ten-combinations.compose-teens",
+    "targetSkillId": "skill.make-ten-combinations.decompose-20-equations",
+    "type": "prereq_core",
+    "rationale": "Composing teens prepares learners to write and interpret related equations."
+  },
+  {
+    "id": "edge.metric-measurement-scaling.incoming",
+    "sourceSkillId": "skill.relate-fractions-decimals.explain-equivalence",
+    "targetSkillId": "skill.metric-measurement-scaling.convert-centimeters-meters",
+    "type": "prereq_core",
+    "rationale": "Reasoning about decimal equivalence supports metric conversions based on place value."
+  },
+  {
+    "id": "edge.metric-measurement-scaling.sequence-1",
+    "sourceSkillId": "skill.metric-measurement-scaling.convert-centimeters-meters",
+    "targetSkillId": "skill.metric-measurement-scaling.convert-millimeters-centimeters",
+    "type": "prereq_core",
+    "rationale": "Converting centimeters and meters precedes finer-grained millimeter conversions."
+  },
+  {
+    "id": "edge.metric-measurement-scaling.sequence-2",
+    "sourceSkillId": "skill.metric-measurement-scaling.convert-millimeters-centimeters",
+    "targetSkillId": "skill.metric-measurement-scaling.solve-scaling-problems",
+    "type": "prereq_core",
+    "rationale": "Performing metric conversions prepares learners to solve scaling word problems."
+  },
+  {
+    "id": "edge.one-more-one-less.incoming-1",
+    "sourceSkillId": "skill.counting-within-10.numeral-representation-10",
+    "targetSkillId": "skill.one-more-one-less.find-one-more-10",
+    "type": "prereq_core",
+    "rationale": "Understanding numerals up to ten is necessary before finding the next number."
+  },
+  {
+    "id": "edge.one-more-one-less.incoming-2",
+    "sourceSkillId": "skill.counting-within-10.numeral-representation-10",
+    "targetSkillId": "skill.one-more-one-less.find-one-less-10",
+    "type": "prereq_core",
+    "rationale": "Learners need numeral meaning to reason about one less within ten."
+  },
+  {
+    "id": "edge.one-more-one-less.sequence-1",
+    "sourceSkillId": "skill.one-more-one-less.find-one-more-10",
+    "targetSkillId": "skill.one-more-one-less.successor-predecessor-10",
+    "type": "prereq_core",
+    "rationale": "Finding one more supports solving for unknown successors or predecessors."
+  },
+  {
+    "id": "edge.one-more-one-less.sequence-2",
+    "sourceSkillId": "skill.one-more-one-less.find-one-less-10",
+    "targetSkillId": "skill.one-more-one-less.successor-predecessor-10",
+    "type": "prereq_strategy",
+    "rationale": "Locating one less offers a complementary strategy when reasoning about missing numbers."
+  },
+  {
+    "id": "edge.place-value-word-problems.incoming",
+    "sourceSkillId": "skill.rounding-to-nearest-10-100.round-number-line",
+    "targetSkillId": "skill.place-value-word-problems.solve-contexts",
+    "type": "prereq_core",
+    "rationale": "Justifying rounding provides context for evaluating place-value word problems."
+  },
+  {
+    "id": "edge.place-value-word-problems.sequence-1",
+    "sourceSkillId": "skill.place-value-word-problems.solve-contexts",
+    "targetSkillId": "skill.place-value-word-problems.explain-strategies",
+    "type": "prereq_core",
+    "rationale": "Solving place-value problems is required before explaining strategies."
+  },
+  {
+    "id": "edge.place-value-word-problems.sequence-2",
+    "sourceSkillId": "skill.place-value-word-problems.explain-strategies",
+    "targetSkillId": "skill.place-value-word-problems.multi-step-contexts",
+    "type": "prereq_core",
+    "rationale": "Articulating strategies opens the door to multi-step applications."
+  },
+  {
+    "id": "edge.read-write-120",
+    "sourceSkillId": "skill.represent-numbers-to-20.read-write-numerals-20",
+    "targetSkillId": "skill.hundred-chart-navigation.read-write-120",
+    "type": "prereq_core",
+    "rationale": "Reading and writing numbers to twenty extends naturally to 120 using hundred charts."
+  },
+  {
+    "id": "edge.read-write-3-digit.sequence-1",
+    "sourceSkillId": "skill.read-write-3-digit-numbers.identify-digit-values",
+    "targetSkillId": "skill.read-write-3-digit-numbers.write-from-models",
+    "type": "prereq_core",
+    "rationale": "Recognizing digit values precedes writing numerals from models."
+  },
+  {
+    "id": "edge.read-write-3-digit.sequence-2",
+    "sourceSkillId": "skill.read-write-3-digit-numbers.write-from-models",
+    "targetSkillId": "skill.read-write-3-digit-numbers.explain-place-value",
+    "type": "prereq_core",
+    "rationale": "Translating between models and numerals supports verbal explanations of place value."
+  },
+  {
+    "id": "edge.read-write-4-digit.incoming",
+    "sourceSkillId": "skill.compose-decompose-thousands.multiple-representations",
+    "targetSkillId": "skill.read-write-4-digit-numbers.read-four-digit",
+    "type": "prereq_core",
+    "rationale": "Working with multiple forms of thousands prepares students to read four-digit numerals."
+  },
+  {
+    "id": "edge.read-write-4-digit.sequence-1",
+    "sourceSkillId": "skill.read-write-4-digit-numbers.read-four-digit",
+    "targetSkillId": "skill.read-write-4-digit-numbers.write-from-words",
+    "type": "prereq_core",
+    "rationale": "Reading numerals precedes writing them from verbal descriptions."
+  },
+  {
+    "id": "edge.read-write-4-digit.sequence-2",
+    "sourceSkillId": "skill.read-write-4-digit-numbers.write-from-words",
+    "targetSkillId": "skill.read-write-4-digit-numbers.expanded-form",
+    "type": "prereq_core",
+    "rationale": "Writing standard form supports decomposing numbers into expanded form."
+  },
+  {
+    "id": "edge.read-write-decimals.incoming",
+    "sourceSkillId": "skill.tenths-hundredths-models.compose-decimals",
+    "targetSkillId": "skill.read-write-decimals.read-decimals",
+    "type": "prereq_core",
+    "rationale": "Building decimal models supports reading decimals with understanding."
+  },
+  {
+    "id": "edge.read-write-decimals.sequence-1",
+    "sourceSkillId": "skill.read-write-decimals.read-decimals",
+    "targetSkillId": "skill.read-write-decimals.write-word-form",
+    "type": "prereq_core",
+    "rationale": "Reading decimals precedes writing them from verbal descriptions."
+  },
+  {
+    "id": "edge.read-write-decimals.sequence-2",
+    "sourceSkillId": "skill.read-write-decimals.write-word-form",
+    "targetSkillId": "skill.read-write-decimals.expanded-decimals",
+    "type": "prereq_core",
+    "rationale": "Writing decimals in words supports expressing them in expanded form."
+  },
+  {
+    "id": "edge.relate-fractions-decimals.incoming",
+    "sourceSkillId": "skill.compare-order-decimals.order-decimals",
+    "targetSkillId": "skill.relate-fractions-decimals.convert-tenths",
+    "type": "prereq_core",
+    "rationale": "Ordering decimals prepares learners to connect decimals to fractional benchmarks."
+  },
+  {
+    "id": "edge.relate-fractions-decimals.sequence-1",
+    "sourceSkillId": "skill.relate-fractions-decimals.convert-tenths",
+    "targetSkillId": "skill.relate-fractions-decimals.convert-hundredths",
+    "type": "prereq_core",
+    "rationale": "Converting tenths is a stepping stone to converting hundredths."
+  },
+  {
+    "id": "edge.relate-fractions-decimals.sequence-2",
+    "sourceSkillId": "skill.relate-fractions-decimals.convert-hundredths",
+    "targetSkillId": "skill.relate-fractions-decimals.explain-equivalence",
+    "type": "prereq_core",
+    "rationale": "Mastering conversions enables explaining fraction-decimal equivalence."
+  },
+  {
+    "id": "edge.represent-numbers-to-20.incoming",
+    "sourceSkillId": "skill.compose-decompose-teen-numbers.decompose-equations-teen",
+    "targetSkillId": "skill.represent-numbers-to-20.read-write-numerals-20",
+    "type": "prereq_core",
+    "rationale": "Understanding teen decompositions readies learners to read and write numerals to twenty."
+  },
+  {
+    "id": "edge.represent-numbers-to-20.sequence-1",
+    "sourceSkillId": "skill.represent-numbers-to-20.read-write-numerals-20",
+    "targetSkillId": "skill.represent-numbers-to-20.match-words-models-20",
+    "type": "prereq_core",
+    "rationale": "Reading and writing numerals supports matching number words and models."
+  },
+  {
+    "id": "edge.represent-numbers-to-20.sequence-2",
+    "sourceSkillId": "skill.represent-numbers-to-20.match-words-models-20",
+    "targetSkillId": "skill.represent-numbers-to-20.ten-frame-models-20",
+    "type": "prereq_core",
+    "rationale": "Connecting words and numerals precedes building quantities on ten frames."
+  },
+  {
+    "id": "edge.rounding-number-lines.incoming",
+    "sourceSkillId": "skill.estimate-sums-differences.number-line-jumps",
+    "targetSkillId": "skill.rounding-number-lines.identify-benchmarks",
+    "type": "prereq_core",
+    "rationale": "Making number line jumps informs the selection of rounding benchmarks."
+  },
+  {
+    "id": "edge.rounding-number-lines.sequence-1",
+    "sourceSkillId": "skill.rounding-number-lines.identify-benchmarks",
+    "targetSkillId": "skill.rounding-number-lines.round-with-explanation",
+    "type": "prereq_core",
+    "rationale": "Identifying benchmarks precedes explaining rounding decisions."
+  },
+  {
+    "id": "edge.rounding-number-lines.sequence-2",
+    "sourceSkillId": "skill.rounding-number-lines.round-with-explanation",
+    "targetSkillId": "skill.rounding-number-lines.apply-rounding-word-problems",
+    "type": "prereq_core",
+    "rationale": "Explaining rounding choices prepares learners to apply rounding in word problems."
+  },
+  {
+    "id": "edge.rounding-to-nearest-10-100.incoming",
+    "sourceSkillId": "skill.estimate-number-lines.estimate-midpoints",
+    "targetSkillId": "skill.rounding-to-nearest-10-100.round-to-10",
+    "type": "prereq_core",
+    "rationale": "Estimating midpoints is foundational for rounding to the nearest ten."
+  },
+  {
+    "id": "edge.rounding-to-nearest-10-100.sequence-1",
+    "sourceSkillId": "skill.rounding-to-nearest-10-100.round-to-10",
+    "targetSkillId": "skill.rounding-to-nearest-10-100.round-to-100",
+    "type": "prereq_core",
+    "rationale": "Rounding to the nearest ten comes before extending reasoning to hundreds."
+  },
+  {
+    "id": "edge.rounding-to-nearest-10-100.sequence-2",
+    "sourceSkillId": "skill.rounding-to-nearest-10-100.round-to-100",
+    "targetSkillId": "skill.rounding-to-nearest-10-100.round-number-line",
+    "type": "prereq_core",
+    "rationale": "Mastery of rounding to tens and hundreds supports defending choices on number lines."
+  },
+  {
+    "id": "edge.skip-count-number-lines.incoming",
+    "sourceSkillId": "skill.skip-count-by-2-5-10.mixed-intervals",
+    "targetSkillId": "skill.skip-count-number-lines.skip-count-10-100",
+    "type": "prereq_core",
+    "rationale": "Mixed skip counting transitions into making repeated jumps on number lines."
+  },
+  {
+    "id": "edge.skip-count-number-lines.sequence-1",
+    "sourceSkillId": "skill.skip-count-number-lines.skip-count-10-100",
+    "targetSkillId": "skill.skip-count-number-lines.skip-count-5s-on-line",
+    "type": "prereq_core",
+    "rationale": "Counting by tens and hundreds supports adding intermediate fives jumps."
+  },
+  {
+    "id": "edge.skip-count-number-lines.sequence-2",
+    "sourceSkillId": "skill.skip-count-number-lines.skip-count-5s-on-line",
+    "targetSkillId": "skill.skip-count-number-lines.skip-count-patterns",
+    "type": "prereq_core",
+    "rationale": "Practicing multiple intervals enables articulation of skip-count patterns."
+  },
+  {
+    "id": "edge.skip-count.incoming",
+    "sourceSkillId": "skill.hundred-chart-navigation.jump-patterns",
+    "targetSkillId": "skill.skip-count-by-2-5-10.skip-count-2s",
+    "type": "prereq_core",
+    "rationale": "Moving along the hundred chart supports structured skip counting."
+  },
+  {
+    "id": "edge.skip-count.sequence-1",
+    "sourceSkillId": "skill.skip-count-by-2-5-10.skip-count-2s",
+    "targetSkillId": "skill.skip-count-by-2-5-10.skip-count-5s",
+    "type": "prereq_core",
+    "rationale": "Mastery of counting by twos supports generalizing to counting by fives."
+  },
+  {
+    "id": "edge.skip-count.sequence-2",
+    "sourceSkillId": "skill.skip-count-by-2-5-10.skip-count-5s",
+    "targetSkillId": "skill.skip-count-by-2-5-10.mixed-intervals",
+    "type": "prereq_core",
+    "rationale": "Counting by consistent intervals precedes switching flexibly among intervals."
+  },
+  {
+    "id": "edge.subitize-10",
+    "sourceSkillId": "skill.counting-within-10.count-scattered-sets-10",
+    "targetSkillId": "skill.counting-within-10.subitize-within-10",
+    "type": "prereq_support",
+    "rationale": "Counting scattered sets builds toward subitizing structured quantities to ten."
+  },
+  {
+    "id": "edge.subitize-5",
+    "sourceSkillId": "skill.counting-within-5.match-objects-to-count",
+    "targetSkillId": "skill.counting-within-5.subitize-within-5",
+    "type": "prereq_support",
+    "rationale": "Connecting objects to counts supports instantly recognizing quantities to five."
+  },
+  {
+    "id": "edge.subtraction-within-10.incoming-1",
+    "sourceSkillId": "skill.make-ten-combinations.decompose-20-equations",
+    "targetSkillId": "skill.subtraction-within-10.take-away-objects-10",
+    "type": "prereq_core",
+    "rationale": "Breaking apart numbers within twenty underpins modeling subtraction with take-away actions."
+  },
+  {
+    "id": "edge.subtraction-within-10.incoming-2",
+    "sourceSkillId": "skill.make-ten-combinations.compose-teens",
+    "targetSkillId": "skill.subtraction-within-10.compare-sets-10",
+    "type": "prereq_strategy",
+    "rationale": "Viewing teens as ten and ones supports comparison strategies for subtraction."
+  },
+  {
+    "id": "edge.subtraction-within-10.sequence-1",
+    "sourceSkillId": "skill.subtraction-within-10.take-away-objects-10",
+    "targetSkillId": "skill.subtraction-within-10.compare-sets-10",
+    "type": "prereq_core",
+    "rationale": "Hands-on take-away experiences precede interpreting subtraction as comparison."
+  },
+  {
+    "id": "edge.subtraction-within-10.sequence-2",
+    "sourceSkillId": "skill.subtraction-within-10.compare-sets-10",
+    "targetSkillId": "skill.subtraction-within-10.solve-equations-10",
+    "type": "prereq_core",
+    "rationale": "Understanding comparison models of subtraction leads to solving equations symbolically."
+  },
+  {
+    "id": "edge.ten-more-ten-less.incoming",
+    "sourceSkillId": "skill.tens-ones-composition.regroup-tens-ones",
+    "targetSkillId": "skill.ten-more-ten-less.find-ten-more-120",
+    "type": "prereq_core",
+    "rationale": "Facility with regrouping supports moving ten more on a hundred chart."
+  },
+  {
+    "id": "edge.ten-more-ten-less.sequence-core",
+    "sourceSkillId": "skill.ten-more-ten-less.find-ten-more-120",
+    "targetSkillId": "skill.ten-more-ten-less.solve-word-problems-120",
+    "type": "prereq_core",
+    "rationale": "Finding ten more is essential before applying the idea in story contexts."
+  },
+  {
+    "id": "edge.ten-more-ten-less.sequence-strategy",
+    "sourceSkillId": "skill.ten-more-ten-less.find-ten-less-120",
+    "targetSkillId": "skill.ten-more-ten-less.solve-word-problems-120",
+    "type": "prereq_strategy",
+    "rationale": "Understanding ten less offers a complementary strategy in ten-more/less problems."
+  },
+  {
+    "id": "edge.ten-times-place",
+    "sourceSkillId": "skill.compose-decompose-thousands.ten-times-place",
+    "targetSkillId": "skill.compose-decompose-thousands.exchange-thousands",
+    "type": "prereq_support",
+    "rationale": "Recognizing ten-times relationships reinforces exchanging thousands for hundreds."
+  },
+  {
+    "id": "edge.ten-times-to-thousands",
+    "sourceSkillId": "skill.compose-decompose-thousands.ten-times-place",
+    "targetSkillId": "skill.read-write-4-digit-numbers.read-four-digit",
+    "type": "prereq_support",
+    "rationale": "Understanding ten-times relationships enriches reading multi-digit numbers."
+  },
+  {
+    "id": "edge.tens-ones-composition.sequence-1",
+    "sourceSkillId": "skill.tens-ones-composition.build-models-120",
+    "targetSkillId": "skill.tens-ones-composition.write-equations-120",
+    "type": "prereq_core",
+    "rationale": "Constructing tens and ones with models precedes writing matching equations."
+  },
+  {
+    "id": "edge.tens-ones-composition.sequence-2",
+    "sourceSkillId": "skill.tens-ones-composition.write-equations-120",
+    "targetSkillId": "skill.tens-ones-composition.regroup-tens-ones",
+    "type": "prereq_core",
+    "rationale": "Writing tens-plus-ones equations supports regrouping between place values."
+  },
+  {
+    "id": "edge.tenths-hundredths.incoming",
+    "sourceSkillId": "skill.rounding-number-lines.apply-rounding-word-problems",
+    "targetSkillId": "skill.tenths-hundredths-models.model-tenths",
+    "type": "prereq_core",
+    "rationale": "Reasoning about place-value benchmarks prepares students to model tenths on number lines."
+  },
+  {
+    "id": "edge.tenths-hundredths.sequence-1",
+    "sourceSkillId": "skill.tenths-hundredths-models.model-tenths",
+    "targetSkillId": "skill.tenths-hundredths-models.model-hundredths",
+    "type": "prereq_core",
+    "rationale": "Understanding tenths comes before extending to hundredths."
+  },
+  {
+    "id": "edge.tenths-hundredths.sequence-2",
+    "sourceSkillId": "skill.tenths-hundredths-models.model-hundredths",
+    "targetSkillId": "skill.tenths-hundredths-models.compose-decimals",
+    "type": "prereq_core",
+    "rationale": "Modeling hundredths enables composing decimals from tenths and hundredths."
+  },
+  {
+    "id": "edge.thousand-chart-navigation.incoming",
+    "sourceSkillId": "skill.skip-count-by-2-5-10.mixed-intervals",
+    "targetSkillId": "skill.thousand-chart-navigation.locate-benchmarks",
+    "type": "prereq_core",
+    "rationale": "Flexible skip counting sets up work with extended thousand charts."
+  },
+  {
+    "id": "edge.thousand-chart-navigation.sequence-3",
+    "sourceSkillId": "skill.thousand-chart-navigation.locate-benchmarks",
+    "targetSkillId": "skill.thousand-chart-navigation.skip-count-hundreds",
+    "type": "prereq_core",
+    "rationale": "Locating benchmarks precedes making large jumps by tens and hundreds."
+  },
+  {
+    "id": "edge.thousand-chart-navigation.sequence-4",
+    "sourceSkillId": "skill.thousand-chart-navigation.skip-count-hundreds",
+    "targetSkillId": "skill.thousand-chart-navigation.patterns",
+    "type": "prereq_core",
+    "rationale": "Experience jumping by tens and hundreds enables recognition of thousand-chart patterns."
+  },
+  {
+    "id": "edge.zero-placeholder",
+    "sourceSkillId": "skill.tens-ones-composition.regroup-tens-ones",
+    "targetSkillId": "skill.compose-decompose-hundreds.interpret-zero",
+    "type": "prereq_core",
+    "rationale": "Regrouping tens and ones lays groundwork for understanding zero as a placeholder in larger numbers."
+  },
+  {
+    "id": "edge.zero-to-compare-1000",
+    "sourceSkillId": "skill.compose-decompose-hundreds.interpret-zero",
+    "targetSkillId": "skill.compare-order-to-1000.compare-models-1000",
+    "type": "prereq_support",
+    "rationale": "Interpreting zero supports comparing multi-digit numbers with zeros in different places."
+  }
+]

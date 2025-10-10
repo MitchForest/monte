@@ -1,0 +1,1476 @@
+[
+  {
+    "id": "skill.partition-shapes-equal-parts.identify-equal-parts",
+    "name": "Identify Equal Parts in Shapes",
+    "description": "Recognize and highlight equal shares in partitioned shapes.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "partition-shapes-equal-parts",
+    "ccss": [
+      "3.G.A.2"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 190
+    },
+    "representations": [
+      "area-model",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.partition-shape-equal"
+      ],
+      "medium": [
+        "25.equal-shares-rectangles"
+      ],
+      "hard": [
+        "25.equal-shares-irregular"
+      ]
+    }
+  },
+  {
+    "id": "skill.partition-shapes-equal-parts.partition-shapes",
+    "name": "Partition Shapes into Equal Parts",
+    "description": "Partition circles and rectangles into halves, thirds, fourths, and sixths using multiple representations.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "partition-shapes-equal-parts",
+    "ccss": [
+      "3.G.A.2",
+      "3.NF.A.1"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 190
+    },
+    "representations": [
+      "area-model",
+      "geoboard"
+    ],
+    "practice": {
+      "easy": [
+        "25.partition-shape-models"
+      ],
+      "medium": [
+        "25.partition-geoboard"
+      ],
+      "hard": [
+        "25.partition-equal-challenge"
+      ]
+    }
+  },
+  {
+    "id": "skill.partition-shapes-equal-parts.name-unit-fractions",
+    "name": "Name Unit Fractions from Partitions",
+    "description": "Name the unit fraction represented by one part of an equally partitioned shape.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "partition-shapes-equal-parts",
+    "ccss": [
+      "3.NF.A.1"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 190
+    },
+    "representations": [
+      "area-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.name-unit-fraction"
+      ],
+      "medium": [
+        "25.unit-fraction-multiple-models"
+      ],
+      "hard": [
+        "25.name-unit-fraction-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.unit-fractions-number-lines.locate-unit-fraction",
+    "name": "Locate Unit Fractions on Number Lines",
+    "description": "Mark unit fractions on number lines using equal partitions between 0 and 1.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "unit-fractions-number-lines",
+    "ccss": [
+      "3.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 193
+    },
+    "representations": [
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.locate-unit-fraction"
+      ],
+      "medium": [
+        "25.number-line-unit-fraction"
+      ],
+      "hard": [
+        "25.locate-unit-fraction-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.unit-fractions-number-lines.generate-fraction-symbols",
+    "name": "Represent Unit Fractions with Symbols",
+    "description": "Write fractional notation that corresponds to unit fraction locations on number lines.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "unit-fractions-number-lines",
+    "ccss": [
+      "3.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 193
+    },
+    "representations": [
+      "number-line",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.write-unit-fraction"
+      ],
+      "medium": [
+        "25.match-unit-fraction-number-line"
+      ],
+      "hard": [
+        "25.describe-unit-fraction-point"
+      ]
+    }
+  },
+  {
+    "id": "skill.unit-fractions-number-lines.compare-unit-fraction-location",
+    "name": "Compare Unit Fraction Locations",
+    "description": "Use number lines to compare the size of different unit fractions by interval length.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "unit-fractions-number-lines",
+    "ccss": [
+      "3.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 193
+    },
+    "representations": [
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-unit-fraction-number-line"
+      ],
+      "medium": [
+        "25.order-unit-fraction-number-line"
+      ],
+      "hard": [
+        "25.unit-fraction-comparison-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.unit-fractions-number-lines.place-nonunit-fractions",
+    "name": "Place Non-Unit Fractions on Number Lines",
+    "description": "Partition number lines into equal parts and locate non-unit fractions, including values greater than one.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "unit-fractions-number-lines",
+    "ccss": [
+      "3.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.place-fraction-number-line"
+      ],
+      "medium": [
+        "25.place-improper-fraction"
+      ],
+      "hard": [
+        "25.place-fraction-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.unit-fractions-number-lines.whole-as-fractions",
+    "name": "Express Wholes as Fractions",
+    "description": "Recognize that n/n = 1 and express whole numbers as fractions on number lines and models.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "unit-fractions-number-lines",
+    "ccss": [
+      "3.NF.A.3"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 196
+    },
+    "representations": [
+      "number-line",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.whole-as-fraction"
+      ],
+      "medium": [
+        "25.fraction-equals-one"
+      ],
+      "hard": [
+        "25.whole-number-as-fraction"
+      ]
+    }
+  },
+  {
+    "id": "skill.fractions-of-sets.model-fractions-of-sets",
+    "name": "Model Fractions of Sets",
+    "description": "Use manipulatives and visuals to show a unit fraction of a set.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "fractions-of-sets",
+    "ccss": [
+      "3.NF.A.1"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "set-model",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.fraction-of-set-basic"
+      ],
+      "medium": [
+        "25.fraction-of-set-larger"
+      ],
+      "hard": [
+        "25.fraction-of-set-story"
+      ]
+    }
+  },
+  {
+    "id": "skill.fractions-of-sets.calculate-fraction-set",
+    "name": "Calculate Fractions of Sets",
+    "description": "Compute how many objects represent a unit or simple fraction of a whole set.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "fractions-of-sets",
+    "ccss": [
+      "4.NF.B.4"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "set-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.fraction-of-set-count"
+      ],
+      "medium": [
+        "25.fraction-of-set-equations"
+      ],
+      "hard": [
+        "25.fraction-of-set-word-problem"
+      ]
+    }
+  },
+  {
+    "id": "skill.fractions-of-sets.explain-fraction-set",
+    "name": "Explain Fractions of Sets",
+    "description": "Justify why a selected subset represents a given fraction of the whole.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "fractions-of-sets",
+    "ccss": [
+      "3.NF.A.1",
+      "4.NF.B.4"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "discussion",
+      "set-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.explain-fraction-of-set"
+      ],
+      "medium": [
+        "25.fraction-set-justify"
+      ],
+      "hard": [
+        "25.fraction-set-argument"
+      ]
+    }
+  },
+  {
+    "id": "skill.fractions-as-division.interpret",
+    "name": "Interpret Fractions as Division",
+    "description": "Interpret a/b as a divided by b using sharing and measurement models.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "fractions-of-sets",
+    "ccss": [
+      "5.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 198,
+      "max": 212
+    },
+    "representations": [
+      "tape-diagram",
+      "number-line",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.fraction-as-division-model"
+      ],
+      "medium": [
+        "25.fraction-as-division-table"
+      ],
+      "hard": [
+        "25.fraction-as-division-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.compare-unit-fractions.reason-unit-fraction-size",
+    "name": "Reason About Unit Fraction Size",
+    "description": "Explain why unit fractions with larger denominators are smaller.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "compare-unit-fractions",
+    "ccss": [
+      "3.NF.A.3"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "area-model",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.reason-unit-fraction-size"
+      ],
+      "medium": [
+        "25.reason-unit-fraction-number-line"
+      ],
+      "hard": [
+        "25.reason-unit-fraction-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.compare-unit-fractions.compare-same-numerator",
+    "name": "Compare Fractions with Same Numerator",
+    "description": "Compare fractions sharing numerators using visual models and number lines.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "compare-unit-fractions",
+    "ccss": [
+      "3.NF.A.3"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "area-model",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-same-numerator"
+      ],
+      "medium": [
+        "25.compare-same-numerator-number-line"
+      ],
+      "hard": [
+        "25.compare-same-numerator-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.compare-unit-fractions.compare-same-denominator",
+    "name": "Compare Fractions with Same Denominator",
+    "description": "Decide which of two fractions with like denominators is greater and explain why.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-foundations",
+    "topicId": "compare-unit-fractions",
+    "ccss": [
+      "3.NF.A.3"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "area-model",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-same-denominator"
+      ],
+      "medium": [
+        "25.compare-same-denominator-number-line"
+      ],
+      "hard": [
+        "25.compare-same-denominator-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.generate-equivalent-fractions.area-model-equivalence",
+    "name": "Generate Equivalent Fractions with Area Models",
+    "description": "Shade area models to create and verify equivalent fractions.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "generate-equivalent-fractions",
+    "ccss": [
+      "3.NF.A.3",
+      "4.NF.A.1"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 205
+    },
+    "representations": [
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.equivalent-fraction-area"
+      ],
+      "medium": [
+        "25.create-equivalent-fraction-area"
+      ],
+      "hard": [
+        "25.area-equivalence-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.generate-equivalent-fractions.number-line-equivalence",
+    "name": "Generate Equivalent Fractions on Number Lines",
+    "description": "Subdivide number lines to show fractions with the same location.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "generate-equivalent-fractions",
+    "ccss": [
+      "4.NF.A.1"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 205
+    },
+    "representations": [
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.number-line-equivalent"
+      ],
+      "medium": [
+        "25.number-line-rename"
+      ],
+      "hard": [
+        "25.number-line-equivalent-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.generate-equivalent-fractions.multiply-denominator",
+    "name": "Generate Equivalent Fractions by Multiplying",
+    "description": "Multiply numerator and denominator by the same number to produce equivalent fractions.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "generate-equivalent-fractions",
+    "ccss": [
+      "4.NF.A.1"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 205
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.multiply-equivalent-fraction"
+      ],
+      "medium": [
+        "25.equivalent-fraction-multiply-table"
+      ],
+      "hard": [
+        "25.equivalent-fraction-multiply-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.compare-unlike-fractions.common-denominator",
+    "name": "Compare Fractions Using Common Denominators",
+    "description": "Rename fractions with unlike denominators to compare their sizes.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "compare-unlike-fractions",
+    "ccss": [
+      "4.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 207
+    },
+    "representations": [
+      "symbolic",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-common-denominator"
+      ],
+      "medium": [
+        "25.compare-common-denominator-table"
+      ],
+      "hard": [
+        "25.compare-common-denominator-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.compare-unlike-fractions.common-numerator",
+    "name": "Compare Fractions Using Common Numerators",
+    "description": "Draw on unit fraction reasoning to compare fractions with the same numerator.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "compare-unlike-fractions",
+    "ccss": [
+      "4.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 207
+    },
+    "representations": [
+      "area-model",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-common-numerator"
+      ],
+      "medium": [
+        "25.compare-common-numerator-model"
+      ],
+      "hard": [
+        "25.compare-common-numerator-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.compare-unlike-fractions.cross-multiply",
+    "name": "Use Cross-Multiplication to Compare Fractions",
+    "description": "Apply cross-multiplication as a shortcut to compare unlike fractions.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "compare-unlike-fractions",
+    "ccss": [
+      "4.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 207
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-cross-multiply"
+      ],
+      "medium": [
+        "25.cross-multiply-number-sense"
+      ],
+      "hard": [
+        "25.cross-multiply-context"
+      ]
+    },
+    "type": "strategy_extension"
+  },
+  {
+    "id": "skill.benchmark-fractions.use-half-third-quarter",
+    "name": "Use Benchmark Fractions for Comparison",
+    "description": "Compare fractions to benchmarks like 0, 1/2, and 1 to reason about size.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "benchmark-fractions",
+    "ccss": [
+      "4.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 207
+    },
+    "representations": [
+      "number-line",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.benchmark-half"
+      ],
+      "medium": [
+        "25.benchmark-quarter-third"
+      ],
+      "hard": [
+        "25.benchmark-context-reason"
+      ]
+    }
+  },
+  {
+    "id": "skill.benchmark-fractions.estimation",
+    "name": "Estimate Sums and Differences with Benchmarks",
+    "description": "Use benchmark fractions to estimate the result of fraction operations.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "benchmark-fractions",
+    "ccss": [
+      "5.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 207
+    },
+    "representations": [
+      "number-line",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.estimate-fraction-sum"
+      ],
+      "medium": [
+        "25.estimate-fraction-difference"
+      ],
+      "hard": [
+        "25.estimate-fraction-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.mixed-numbers-number-lines.place-mixed-number",
+    "name": "Place Mixed Numbers on Number Lines",
+    "description": "Plot mixed numbers on number lines and identify equivalent improper fractions.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "mixed-numbers-number-lines",
+    "ccss": [
+      "4.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 194,
+      "max": 209
+    },
+    "representations": [
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.place-mixed-number"
+      ],
+      "medium": [
+        "25.mixed-number-improper"
+      ],
+      "hard": [
+        "25.mixed-number-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.mixed-numbers-number-lines.decompose-mixed-number",
+    "name": "Decompose Mixed Numbers",
+    "description": "Break mixed numbers into whole and fractional parts using equations and models.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "mixed-numbers-number-lines",
+    "ccss": [
+      "4.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 194,
+      "max": 209
+    },
+    "representations": [
+      "number-line",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.decompose-mixed-number"
+      ],
+      "medium": [
+        "25.mixed-number-decompose-equation"
+      ],
+      "hard": [
+        "25.decompose-mixed-number-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-like-denominator.area-model-add",
+    "name": "Add Fractions with Like Denominators Using Area Models",
+    "description": "Add fractions with common denominators by combining shaded parts.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "add-subtract-like-denominator",
+    "ccss": [
+      "4.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 210
+    },
+    "representations": [
+      "area-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.add-like-denominator-area"
+      ],
+      "medium": [
+        "25.add-like-denominator-symbolic"
+      ],
+      "hard": [
+        "25.add-like-denominator-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-like-denominator.decompose-to-units",
+    "name": "Decompose Fractions into Unit Fractions",
+    "description": "Break fractions into sums of unit fractions and recompose them to support addition and subtraction with like denominators.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "add-subtract-like-denominator",
+    "ccss": [
+      "4.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 204
+    },
+    "representations": [
+      "number-line",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.decompose-fraction-units"
+      ],
+      "medium": [
+        "25.recompose-fraction"
+      ],
+      "hard": [
+        "25.decompose-mixed-number"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-unlike-denominators.build-common-units",
+    "name": "Create Common Denominators",
+    "description": "Use equivalent fractions to build common denominators for unlike fractions.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "add-subtract-unlike-denominators",
+    "ccss": [
+      "5.NF.A.1"
+    ],
+    "ritBand": {
+      "min": 198,
+      "max": 212
+    },
+    "representations": [
+      "area-model",
+      "number-line",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.common-denominator-least"
+      ],
+      "medium": [
+        "25.common-denominator-table"
+      ],
+      "hard": [
+        "25.common-denominator-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-unlike-denominators.word-problems",
+    "name": "Solve Word Problems with Unlike Denominators",
+    "description": "Solve addition and subtraction word problems with unlike denominators and use benchmarks to assess reasonableness.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "add-subtract-unlike-denominators",
+    "ccss": [
+      "5.NF.A.2"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 214
+    },
+    "representations": [
+      "bar-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.unlike-fraction-word"
+      ],
+      "medium": [
+        "25.unlike-fraction-estimate"
+      ],
+      "hard": [
+        "25.unlike-fraction-reason"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-like-denominator.subtract-number-line",
+    "name": "Subtract Fractions with Like Denominators Using Number Lines",
+    "description": "Use number line jumps to subtract fractions sharing denominators.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "add-subtract-like-denominator",
+    "ccss": [
+      "4.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 210
+    },
+    "representations": [
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.subtract-like-denominator-number-line"
+      ],
+      "medium": [
+        "25.subtract-like-denominator-symbolic"
+      ],
+      "hard": [
+        "25.subtract-like-denominator-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-like-denominator.word-problems",
+    "name": "Solve Word Problems with Like Denominator Fractions",
+    "description": "Apply addition and subtraction of fractions with like denominators to story contexts.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "add-subtract-like-denominator",
+    "ccss": [
+      "4.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 210
+    },
+    "representations": [
+      "story-context",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.fraction-like-denominator-word"
+      ],
+      "medium": [
+        "25.fraction-like-denominator-two-step"
+      ],
+      "hard": [
+        "25.fraction-like-denominator-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.multiply-fractions-by-whole-numbers.area-model",
+    "name": "Multiply Fractions by Whole Numbers Using Area Models",
+    "description": "Scale unit fractions by whole numbers using repeated addition and area models.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "multiply-fractions-by-whole-numbers",
+    "ccss": [
+      "4.NF.B.4"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 212
+    },
+    "representations": [
+      "area-model",
+      "repeated-addition"
+    ],
+    "practice": {
+      "easy": [
+        "25.multiply-fraction-whole-area"
+      ],
+      "medium": [
+        "25.multiply-fraction-repeated-add"
+      ],
+      "hard": [
+        "25.multiply-fraction-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.multiply-fractions-by-whole-numbers.equation",
+    "name": "Multiply Fractions by Whole Numbers with Equations",
+    "description": "Write and evaluate equations that multiply unit and non-unit fractions by whole numbers.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "multiply-fractions-by-whole-numbers",
+    "ccss": [
+      "4.NF.B.4"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 212
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.multiply-fraction-equation"
+      ],
+      "medium": [
+        "25.multiply-fraction-equation-table"
+      ],
+      "hard": [
+        "25.multiply-fraction-equation-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.multiply-fractions-by-whole-numbers.explain-scaling",
+    "name": "Explain Fraction Scaling",
+    "description": "Describe how multiplying by whole numbers changes the size of a fraction.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "multiply-fractions-by-whole-numbers",
+    "ccss": [
+      "4.NF.B.4"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 212
+    },
+    "representations": [
+      "discussion",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.explain-scaling-fractions"
+      ],
+      "medium": [
+        "25.fraction-scaling-reason"
+      ],
+      "hard": [
+        "25.fraction-scaling-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.fraction-decimal-conversion.tenths-hundredths",
+    "name": "Convert Fractions with Denominators 10 and 100 to Decimals",
+    "description": "Express tenths and hundredths as decimals and explain equivalence using models.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "fraction-decimal-conversion",
+    "ccss": [
+      "4.NF.C.5",
+      "4.NF.C.6"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 212
+    },
+    "representations": [
+      "decimal-grid",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.convert-tenths-decimals"
+      ],
+      "medium": [
+        "25.convert-hundredths-decimals"
+      ],
+      "hard": [
+        "25.fraction-decimal-conversion-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.fraction-decimal-conversion.add-tenths-hundredths",
+    "name": "Add Tenths and Hundredths",
+    "description": "Express tenths as hundredths and add decimals that have denominators of 10 and 100.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "fraction-decimal-conversion",
+    "ccss": [
+      "4.NF.C.5"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 205
+    },
+    "representations": [
+      "decimal-grid",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.add-tenths-hundredths"
+      ],
+      "medium": [
+        "25.add-decimals-10-100"
+      ],
+      "hard": [
+        "25.add-decimals-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.fraction-decimal-conversion.compare-hundredths",
+    "name": "Compare Decimals to Hundredths",
+    "description": "Compare decimals to the hundredths place using place value reasoning and number lines.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "fraction-decimal-conversion",
+    "ccss": [
+      "4.NF.C.7"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 205
+    },
+    "representations": [
+      "number-line",
+      "decimal-grid",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-decimals-place"
+      ],
+      "medium": [
+        "25.compare-decimals-table"
+      ],
+      "hard": [
+        "25.compare-decimals-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.fraction-decimal-conversion.solve-word-problems",
+    "name": "Solve Word Problems Involving Fractions and Decimals",
+    "description": "Solve word problems that require converting between fractions and decimals and applying decimal operations.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "fraction-decimal-conversion",
+    "ccss": [
+      "4.NF.C.6",
+      "4.NF.C.7",
+      "5.NBT.B.7"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 212
+    },
+    "representations": [
+      "story-context",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.decimal-fraction-word-problems"
+      ],
+      "medium": [
+        "25.fraction-decimal-table"
+      ],
+      "hard": [
+        "25.fraction-decimal-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-decimals.align-place-value",
+    "name": "Add and Subtract Decimals by Aligning Place Value",
+    "description": "Use place-value reasoning to add and subtract decimals to hundredths.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "add-subtract-decimals",
+    "ccss": [
+      "5.NBT.B.7"
+    ],
+    "ritBand": {
+      "min": 204,
+      "max": 215
+    },
+    "representations": [
+      "place-value-chart",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.add-decimals-align"
+      ],
+      "medium": [
+        "25.subtract-decimals-align"
+      ],
+      "hard": [
+        "25.decimal-add-subtract-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-decimals.model-decimals",
+    "name": "Model Decimal Operations",
+    "description": "Use base-ten blocks and grids to model addition and subtraction of decimals.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "add-subtract-decimals",
+    "ccss": [
+      "5.NBT.B.7"
+    ],
+    "ritBand": {
+      "min": 204,
+      "max": 215
+    },
+    "representations": [
+      "decimal-grid",
+      "base-ten-blocks"
+    ],
+    "practice": {
+      "easy": [
+        "25.model-add-decimals"
+      ],
+      "medium": [
+        "25.model-subtract-decimals"
+      ],
+      "hard": [
+        "25.model-decimal-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-subtract-decimals.estimation",
+    "name": "Estimate Decimal Sums and Differences",
+    "description": "Use rounding and benchmarks to estimate results of decimal operations.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "add-subtract-decimals",
+    "ccss": [
+      "5.NBT.B.7"
+    ],
+    "ritBand": {
+      "min": 204,
+      "max": 215
+    },
+    "representations": [
+      "strategy",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.estimate-decimal-sum"
+      ],
+      "medium": [
+        "25.estimate-decimal-difference"
+      ],
+      "hard": [
+        "25.estimate-decimal-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.mixed-numbers-number-lines.add-mixed-number",
+    "name": "Add Mixed Numbers with Like Denominators",
+    "description": "Add mixed numbers by combining whole parts and fractional parts with like denominators.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "mixed-numbers-number-lines",
+    "ccss": [
+      "4.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 194,
+      "max": 209
+    },
+    "representations": [
+      "number-line",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.add-mixed-number-like"
+      ],
+      "medium": [
+        "25.add-mixed-number-number-line"
+      ],
+      "hard": [
+        "25.add-mixed-number-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.mixed-numbers-number-lines.subtract-mixed-number",
+    "name": "Subtract Mixed Numbers with Like Denominators",
+    "description": "Subtract mixed numbers using decompositions and regrouping of fractional parts.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-equivalence-ordering",
+    "topicId": "mixed-numbers-number-lines",
+    "ccss": [
+      "4.NF.B.3"
+    ],
+    "ritBand": {
+      "min": 194,
+      "max": 209
+    },
+    "representations": [
+      "number-line",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.subtract-mixed-number-like"
+      ],
+      "medium": [
+        "25.subtract-mixed-number-number-line"
+      ],
+      "hard": [
+        "25.subtract-mixed-number-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.fraction-decimal-conversion.compare-fraction-decimal",
+    "name": "Compare Fractions and Decimals",
+    "description": "Compare fractions with denominators 10 or 100 to decimals by reasoning about place value.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-decimal-operations",
+    "topicId": "fraction-decimal-conversion",
+    "ccss": [
+      "4.NF.C.6",
+      "4.NF.C.7"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 212
+    },
+    "representations": [
+      "number-line",
+      "decimal-grid"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-fraction-decimal"
+      ],
+      "medium": [
+        "25.compare-fraction-decimal-table"
+      ],
+      "hard": [
+        "25.compare-fraction-decimal-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.fraction-multiplication.area-model",
+    "name": "Multiply Fractions with Area Models",
+    "description": "Use area models to represent multiplication of fractions and mixed numbers.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "fraction-multiplication",
+    "ccss": [
+      "5.NF.B.4"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 214
+    },
+    "representations": [
+      "area-model",
+      "grid"
+    ],
+    "practice": {
+      "easy": [
+        "25.fraction-area-model"
+      ],
+      "medium": [
+        "25.fraction-area-model-mixed"
+      ],
+      "hard": [
+        "25.fraction-area-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.fraction-multiplication.equations",
+    "name": "Multiply Fractions Using Equations",
+    "description": "Compute fraction products and interpret results as scaling relative to 1.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "fraction-multiplication",
+    "ccss": [
+      "5.NF.B.4",
+      "5.NF.B.5"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 215
+    },
+    "representations": [
+      "symbolic",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.multiply-fractions-equation"
+      ],
+      "medium": [
+        "25.multiply-fractions-mixed"
+      ],
+      "hard": [
+        "25.multiply-fractions-scaling"
+      ]
+    }
+  },
+  {
+    "id": "skill.fraction-multiplication.word-problems",
+    "name": "Fraction Multiplication Word Problems",
+    "description": "Solve word problems involving multiplication of fractions and mixed numbers.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "fraction-multiplication",
+    "ccss": [
+      "5.NF.B.6"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 215
+    },
+    "representations": [
+      "bar-model",
+      "area-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.multiply-fractions-context"
+      ],
+      "medium": [
+        "25.multiply-fractions-two-step"
+      ],
+      "hard": [
+        "25.multiply-fractions-scaling-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.unit-fraction-division.models",
+    "name": "Model Division with Unit Fractions",
+    "description": "Model division of unit fractions by whole numbers and whole numbers by unit fractions using diagrams.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "unit-fraction-division",
+    "ccss": [
+      "5.NF.B.7"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 215
+    },
+    "representations": [
+      "number-line",
+      "bar-model",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.divide-unit-fraction-model"
+      ],
+      "medium": [
+        "25.divide-whole-by-unit-model"
+      ],
+      "hard": [
+        "25.divide-unit-fraction-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.unit-fraction-division.equations",
+    "name": "Compute Division with Unit Fractions",
+    "description": "Compute quotients involving unit fractions and whole numbers and explain the results in context.",
+    "domainId": "fractions-rational-numbers",
+    "unitId": "fraction-operations",
+    "topicId": "unit-fraction-division",
+    "ccss": [
+      "5.NF.B.7"
+    ],
+    "ritBand": {
+      "min": 204,
+      "max": 216
+    },
+    "representations": [
+      "symbolic",
+      "bar-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.divide-unit-fraction-equation"
+      ],
+      "medium": [
+        "25.divide-whole-by-unit-equation"
+      ],
+      "hard": [
+        "25.divide-unit-fraction-two-step"
+      ]
+    }
+  }
+]

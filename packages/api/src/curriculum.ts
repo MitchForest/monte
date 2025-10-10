@@ -16,6 +16,8 @@ import {
   UserProfileSchema,
   UserRole,
   UserRoleSchema,
+  EntityMetadata,
+  EntityMetadataSchema,
 } from '@monte/types';
 
 export type {
@@ -49,15 +51,15 @@ export interface CurriculumClient {
     slug?: string;
     summary?: string;
     coverImage?: string;
-    metadata?: Record<string, unknown>;
-  }) => Promise<{ unitId: Id<'units'> }>;
+    metadata?: EntityMetadata;
+  }) => Promise<{ unitId: Id<'units'> }>; 
   updateUnit: (input: {
     unitId: Id<'units'>;
     title?: string;
     slug?: string;
     summary?: string;
     coverImage?: string;
-    metadata?: Record<string, unknown>;
+    metadata?: EntityMetadata;
     status?: 'active' | 'archived';
   }) => Promise<void>;
   deleteUnit: (unitId: Id<'units'>) => Promise<void>;
@@ -69,7 +71,7 @@ export interface CurriculumClient {
     overview?: string;
     focusSkills?: string[];
     estimatedDurationMinutes?: number;
-    metadata?: Record<string, unknown>;
+    metadata?: EntityMetadata;
   }) => Promise<{ topicId: Id<'topics'> }>;
   updateTopic: (input: {
     topicId: Id<'topics'>;
@@ -78,7 +80,7 @@ export interface CurriculumClient {
     overview?: string;
     focusSkills?: string[];
     estimatedDurationMinutes?: number;
-    metadata?: Record<string, unknown>;
+    metadata?: EntityMetadata;
     status?: 'active' | 'archived';
   }) => Promise<void>;
   deleteTopic: (topicId: Id<'topics'>) => Promise<void>;
@@ -202,10 +204,18 @@ export const createCurriculumClient = (httpClient: ConvexHttpClient): Curriculum
       return record ?? undefined;
     },
     async createUnit(input) {
-      return await executeMutation(api.curriculum.createUnit, input, CreateUnitResultSchema);
+      const payload = {
+        ...input,
+        metadata: input.metadata ? EntityMetadataSchema.parse(input.metadata) : undefined,
+      };
+      return await executeMutation(api.curriculum.createUnit, payload, CreateUnitResultSchema);
     },
     async updateUnit(input) {
-      await executeMutation(api.curriculum.updateUnit, input, z.void());
+      const payload = {
+        ...input,
+        metadata: input.metadata ? EntityMetadataSchema.parse(input.metadata) : undefined,
+      };
+      await executeMutation(api.curriculum.updateUnit, payload, z.void());
     },
     async deleteUnit(unitId) {
       await executeMutation(api.curriculum.deleteUnit, { unitId }, z.void());
@@ -214,10 +224,18 @@ export const createCurriculumClient = (httpClient: ConvexHttpClient): Curriculum
       await executeMutation(api.curriculum.reorderUnits, { unitIds }, z.void());
     },
     async createTopic(input) {
-      return await executeMutation(api.curriculum.createTopic, input, CreateTopicResultSchema);
+      const payload = {
+        ...input,
+        metadata: input.metadata ? EntityMetadataSchema.parse(input.metadata) : undefined,
+      };
+      return await executeMutation(api.curriculum.createTopic, payload, CreateTopicResultSchema);
     },
     async updateTopic(input) {
-      await executeMutation(api.curriculum.updateTopic, input, z.void());
+      const payload = {
+        ...input,
+        metadata: input.metadata ? EntityMetadataSchema.parse(input.metadata) : undefined,
+      };
+      await executeMutation(api.curriculum.updateTopic, payload, z.void());
     },
     async deleteTopic(topicId) {
       await executeMutation(api.curriculum.deleteTopic, { topicId }, z.void());

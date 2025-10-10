@@ -14,7 +14,7 @@ export const ColoredBeadStair: Component<ColoredBeadStairProps> = (props) => {
         const color = beadColors[index] ?? '#ffffff';
         return (
           <div class="flex items-center gap-1">
-            <span class="text-xs text-subtle">{value}</span>
+            <span class="text-xs text-[color:var(--color-text-subtle)]">{value}</span>
             <div class="flex gap-1">
               {Array.from({ length: value }).map((_, beadIndex) => (
                 <span

@@ -1,0 +1,1277 @@
+[
+  {
+    "id": "skill.identify-2d-3d-shapes.name-2d-shapes",
+    "name": "Name Common 2D Shapes",
+    "description": "Identify circles, triangles, squares, rectangles, and hexagons regardless of orientation or size.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "identify-2d-3d-shapes",
+    "ccss": [
+      "K.G.A.2",
+      "K.G.A.3"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 165
+    },
+    "representations": [
+      "pictures",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "k2.name-plane-shapes"
+      ],
+      "medium": [
+        "k2.identify-shapes-orientation"
+      ],
+      "hard": [
+        "k2.classify-plane-shapes-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.identify-2d-3d-shapes.name-3d-shapes",
+    "name": "Name Common 3D Shapes",
+    "description": "Identify cubes, cones, cylinders, and spheres using physical models and images.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "identify-2d-3d-shapes",
+    "ccss": [
+      "K.G.A.3"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 165
+    },
+    "representations": [
+      "manipulatives",
+      "pictures"
+    ],
+    "practice": {
+      "easy": [
+        "k2.name-solid-shapes"
+      ],
+      "medium": [
+        "k2.match-2d-3d"
+      ],
+      "hard": [
+        "k2.describe-solid-shapes"
+      ]
+    }
+  },
+  {
+    "id": "skill.identify-2d-3d-shapes.match-faces-to-shapes",
+    "name": "Match 3D Shapes to Their Faces",
+    "description": "Relate 3D solids to the 2D shapes of their faces.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "identify-2d-3d-shapes",
+    "ccss": [
+      "K.G.A.3",
+      "K.G.B.4"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 165
+    },
+    "representations": [
+      "manipulatives",
+      "nets"
+    ],
+    "practice": {
+      "easy": [
+        "k2.match-solid-faces"
+      ],
+      "medium": [
+        "k2.face-shape-sort"
+      ],
+      "hard": [
+        "k2.face-shape-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.describe-positions.use-positional-words",
+    "name": "Use Positional Words",
+    "description": "Describe the position of objects using terms such as above, below, beside, and next to.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "describe-positions",
+    "ccss": [
+      "K.G.A.1"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 165
+    },
+    "representations": [
+      "manipulatives",
+      "discussion"
+    ],
+    "practice": {
+      "easy": [
+        "k2.describe-position-picture"
+      ],
+      "medium": [
+        "k2.follow-positional-directions"
+      ],
+      "hard": [
+        "k2.positional-language-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.describe-positions.map-simple-scenes",
+    "name": "Map Simple Scenes",
+    "description": "Interpret or create simple maps that show object positions using positional language.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "describe-positions",
+    "ccss": [
+      "K.G.A.1"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 165
+    },
+    "representations": [
+      "map",
+      "diagram"
+    ],
+    "practice": {
+      "easy": [
+        "k2.map-positions"
+      ],
+      "medium": [
+        "k2.position-draw-map"
+      ],
+      "hard": [
+        "k2.map-directions-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.compose-decompose-shapes.compose-using-shapes",
+    "name": "Compose Shapes from Smaller Shapes",
+    "description": "Combine triangles, rectangles, and squares to create composite shapes.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "compose-decompose-shapes",
+    "ccss": [
+      "K.G.B.6",
+      "1.G.A.2"
+    ],
+    "ritBand": {
+      "min": 155,
+      "max": 170
+    },
+    "representations": [
+      "pattern-blocks",
+      "tangrams"
+    ],
+    "practice": {
+      "easy": [
+        "k2.compose-shapes"
+      ],
+      "medium": [
+        "k2.compose-pattern-block"
+      ],
+      "hard": [
+        "k2.compose-figure-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.compose-decompose-shapes.decompose-into-shapes",
+    "name": "Decompose Shapes into Parts",
+    "description": "Break composite shapes into basic shapes and discuss different decompositions.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "compose-decompose-shapes",
+    "ccss": [
+      "K.G.B.6"
+    ],
+    "ritBand": {
+      "min": 155,
+      "max": 170
+    },
+    "representations": [
+      "pattern-blocks",
+      "diagram"
+    ],
+    "practice": {
+      "easy": [
+        "k2.decompose-shapes"
+      ],
+      "medium": [
+        "k2.decompose-multiple-ways"
+      ],
+      "hard": [
+        "k2.decompose-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.classify-shapes-by-attributes.sort-by-attributes",
+    "name": "Sort Shapes by Attributes",
+    "description": "Classify shapes based on number of sides, vertices, or curved surfaces.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "classify-shapes-by-attributes",
+    "ccss": [
+      "1.G.A.1"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 175
+    },
+    "representations": [
+      "manipulatives",
+      "t-chart"
+    ],
+    "practice": {
+      "easy": [
+        "k2.sort-shapes"
+      ],
+      "medium": [
+        "k2.classify-sides-vertices"
+      ],
+      "hard": [
+        "k2.sort-shapes-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.classify-shapes-by-attributes.draw-attributes",
+    "name": "Draw Shapes with Given Attributes",
+    "description": "Draw and recognize shapes that have specified attributes such as number of sides or right angles.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "classify-shapes-by-attributes",
+    "ccss": [
+      "2.G.A.1"
+    ],
+    "ritBand": {
+      "min": 170,
+      "max": 185
+    },
+    "representations": [
+      "drawing",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.draw-shape-attributes"
+      ],
+      "medium": [
+        "25.recognize-shape-attributes"
+      ],
+      "hard": [
+        "25.draw-checklist-attributes"
+      ]
+    }
+  },
+  {
+    "id": "skill.classify-shapes-by-attributes.compare-2d-3d",
+    "name": "Compare 2D and 3D Shapes",
+    "description": "Explain similarities and differences between plane and solid shapes.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "classify-shapes-by-attributes",
+    "ccss": [
+      "K.G.B.4",
+      "1.G.A.1"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 175
+    },
+    "representations": [
+      "discussion",
+      "Venn-diagram"
+    ],
+    "practice": {
+      "easy": [
+        "k2.compare-plane-solid"
+      ],
+      "medium": [
+        "k2.venn-shapes"
+      ],
+      "hard": [
+        "k2.compare-shapes-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.partition-shapes-equal-parts-geometry.partition-into-equal-parts",
+    "name": "Partition Shapes into Equal Shares",
+    "description": "Partition circles and rectangles into halves, thirds, and fourths and name the shares.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "partition-shapes-equal-parts-geometry",
+    "ccss": [
+      "2.G.A.3"
+    ],
+    "ritBand": {
+      "min": 170,
+      "max": 185
+    },
+    "representations": [
+      "area-model",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.partition-halves-thirds"
+      ],
+      "medium": [
+        "25.partition-fourths"
+      ],
+      "hard": [
+        "25.partition-equal-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.partition-shapes-equal-parts-geometry.partition-halves-fourths",
+    "name": "Partition Shapes into Halves and Fourths",
+    "description": "Partition circles and rectangles into two and four equal shares and describe the shares using unit fraction language.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "partition-shapes-equal-parts-geometry",
+    "ccss": [
+      "1.G.A.3"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 172
+    },
+    "representations": [
+      "area-model",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "k2.partition-halves"
+      ],
+      "medium": [
+        "k2.partition-fourths"
+      ],
+      "hard": [
+        "k2.partition-halves-story"
+      ]
+    }
+  },
+  {
+    "id": "skill.partition-shapes-equal-parts-geometry.describe-fractions-of-shape",
+    "name": "Describe Fractions of Shapes",
+    "description": "Explain how the same whole can be partitioned into different numbers of equal parts.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "partition-shapes-equal-parts-geometry",
+    "ccss": [
+      "2.G.A.3",
+      "3.G.A.2"
+    ],
+    "ritBand": {
+      "min": 170,
+      "max": 185
+    },
+    "representations": [
+      "area-model",
+      "discussion"
+    ],
+    "practice": {
+      "easy": [
+        "25.describe-fraction-shares"
+      ],
+      "medium": [
+        "25.compare-fraction-partitions"
+      ],
+      "hard": [
+        "25.fraction-partition-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.tile-rectangles-rows-columns.tile-rectangle",
+    "name": "Tile Rectangles with Equal Rows and Columns",
+    "description": "Use square tiles to cover rectangles and connect tiling to repeated addition.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "tile-rectangles-rows-columns",
+    "ccss": [
+      "2.G.A.2"
+    ],
+    "ritBand": {
+      "min": 172,
+      "max": 185
+    },
+    "representations": [
+      "array",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.tile-rectangle"
+      ],
+      "medium": [
+        "25.array-rows-columns"
+      ],
+      "hard": [
+        "25.tile-rectangle-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.tile-rectangles-rows-columns.relate-array-multiplication",
+    "name": "Relate Arrays to Multiplication",
+    "description": "Represent tiling as repeated addition and multiplication sentences.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "tile-rectangles-rows-columns",
+    "ccss": [
+      "2.OA.C.4",
+      "3.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 172,
+      "max": 185
+    },
+    "representations": [
+      "array",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.array-multiplication"
+      ],
+      "medium": [
+        "25.array-equation"
+      ],
+      "hard": [
+        "25.array-word-problem"
+      ]
+    }
+  },
+  {
+    "id": "skill.lines-angles.identify-lines",
+    "name": "Identify Lines, Segments, and Rays",
+    "description": "Distinguish between lines, line segments, and rays in diagrams.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "lines-angles",
+    "ccss": [
+      "4.G.A.1"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 195
+    },
+    "representations": [
+      "diagram"
+    ],
+    "practice": {
+      "easy": [
+        "25.name-lines-rays"
+      ],
+      "medium": [
+        "25.lines-segments-sort"
+      ],
+      "hard": [
+        "25.lines-geometry-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.lines-angles.parallel-perpendicular",
+    "name": "Identify Parallel and Perpendicular Lines",
+    "description": "Identify and mark parallel and perpendicular lines in drawings and real-world shapes.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "lines-angles",
+    "ccss": [
+      "4.G.A.1"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 195
+    },
+    "representations": [
+      "diagram",
+      "manipulatives",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.identify-parallel"
+      ],
+      "medium": [
+        "25.identify-perpendicular"
+      ],
+      "hard": [
+        "25.parallel-perpendicular-world"
+      ]
+    }
+  },
+  {
+    "id": "skill.lines-angles.classify-angles",
+    "name": "Classify Angles",
+    "description": "Identify right, acute, and obtuse angles using benchmarks and tools.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "lines-angles",
+    "ccss": [
+      "4.G.A.1",
+      "4.MD.C.5"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 195
+    },
+    "representations": [
+      "diagram",
+      "geoboard"
+    ],
+    "practice": {
+      "easy": [
+        "25.classify-angles"
+      ],
+      "medium": [
+        "25.identify-angles-rotation"
+      ],
+      "hard": [
+        "25.angle-context-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.lines-angles.measure-with-protractor",
+    "name": "Measure Angles with a Protractor",
+    "description": "Measure angles in whole-number degrees using a protractor.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "lines-angles",
+    "ccss": [
+      "4.MD.C.6"
+    ],
+    "ritBand": {
+      "min": 186,
+      "max": 202
+    },
+    "representations": [
+      "protractor",
+      "diagram"
+    ],
+    "practice": {
+      "easy": [
+        "25.measure-angle-protractor"
+      ],
+      "medium": [
+        "25.measure-angle-right"
+      ],
+      "hard": [
+        "25.measure-angle-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.lines-angles.additive-angles",
+    "name": "Additive Angle Reasoning",
+    "description": "Decompose and compose angles to find unknown measures and solve additive angle problems.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "lines-angles",
+    "ccss": [
+      "4.MD.C.7"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 205
+    },
+    "representations": [
+      "diagram",
+      "protractor",
+      "equation"
+    ],
+    "practice": {
+      "easy": [
+        "25.additive-angles"
+      ],
+      "medium": [
+        "25.angle-subtraction"
+      ],
+      "hard": [
+        "25.angle-decomposition-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.triangles-quadrilaterals.classify-triangles",
+    "name": "Classify Triangles",
+    "description": "Sort triangles by side lengths or angles and justify classifications.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "triangles-quadrilaterals",
+    "ccss": [
+      "4.G.A.2"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "diagram",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.classify-triangles"
+      ],
+      "medium": [
+        "25.sort-triangles-table"
+      ],
+      "hard": [
+        "25.triangle-classify-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.triangles-quadrilaterals.right-triangle-recognition",
+    "name": "Identify Right Triangles",
+    "description": "Recognize and categorize triangles that contain a right angle.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "triangles-quadrilaterals",
+    "ccss": [
+      "4.G.A.2"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "diagram",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.right-triangle-identify"
+      ],
+      "medium": [
+        "25.right-triangle-sort"
+      ],
+      "hard": [
+        "25.right-triangle-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.triangles-quadrilaterals.classify-quadrilaterals",
+    "name": "Classify Quadrilaterals",
+    "description": "Identify rectangles, squares, rhombuses, and trapezoids based on attributes.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "triangles-quadrilaterals",
+    "ccss": [
+      "4.G.A.2"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "diagram",
+      "Venn-diagram"
+    ],
+    "practice": {
+      "easy": [
+        "25.classify-quadrilaterals"
+      ],
+      "medium": [
+        "25.quadrilateral-hierarchy"
+      ],
+      "hard": [
+        "25.quadrilateral-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.symmetry-and-reflection.identify-lines-symmetry",
+    "name": "Identify Lines of Symmetry",
+    "description": "Determine whether shapes have lines of symmetry by folding or drawing lines.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "symmetry-and-reflection",
+    "ccss": [
+      "4.G.A.3"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 198
+    },
+    "representations": [
+      "paper-folding",
+      "diagram"
+    ],
+    "practice": {
+      "easy": [
+        "25.identify-symmetry"
+      ],
+      "medium": [
+        "25.count-lines-symmetry"
+      ],
+      "hard": [
+        "25.symmetry-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.symmetry-and-reflection.perform-reflections",
+    "name": "Perform Reflections on Coordinate Grids",
+    "description": "Reflect simple shapes across axes and verify symmetry.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "plane-geometry",
+    "topicId": "symmetry-and-reflection",
+    "ccss": [
+      "8.G.A.1",
+      "8.G.A.3"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 198
+    },
+    "representations": [
+      "coordinate-plane",
+      "graph-paper"
+    ],
+    "practice": {
+      "easy": [
+        "25.reflect-across-line"
+      ],
+      "medium": [
+        "25.symmetry-coordinate"
+      ],
+      "hard": [
+        "25.reflection-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.area-of-rectangles-triangles.area-rectangles",
+    "name": "Compute Area of Rectangles",
+    "description": "Use multiplication to find the area of rectangles and explain the reasoning.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "area-of-rectangles-triangles",
+    "ccss": [
+      "3.MD.C.7"
+    ],
+    "ritBand": {
+      "min": 188,
+      "max": 205
+    },
+    "representations": [
+      "array",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.area-rectangle-multiply"
+      ],
+      "medium": [
+        "25.area-rectangle-word"
+      ],
+      "hard": [
+        "25.area-rectangle-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.area-of-rectangles-triangles.rectilinear-decompose",
+    "name": "Area of Rectilinear Figures",
+    "description": "Decompose rectilinear shapes into rectangles and sum their areas.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "area-of-rectangles-triangles",
+    "ccss": [
+      "3.MD.C.7"
+    ],
+    "ritBand": {
+      "min": 188,
+      "max": 202
+    },
+    "representations": [
+      "grid",
+      "diagram",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.rectilinear-area-grid"
+      ],
+      "medium": [
+        "25.rectilinear-area-decompose"
+      ],
+      "hard": [
+        "25.rectilinear-area-story"
+      ]
+    }
+  },
+  {
+    "id": "skill.perimeter.rectangles-polygons",
+    "name": "Perimeter of Rectangles and Polygons",
+    "description": "Find the perimeter of rectangles and other polygons and distinguish between area and perimeter.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "area-of-rectangles-triangles",
+    "ccss": [
+      "3.MD.D.8"
+    ],
+    "ritBand": {
+      "min": 188,
+      "max": 200
+    },
+    "representations": [
+      "grid",
+      "diagram",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.perimeter-rectangle"
+      ],
+      "medium": [
+        "25.perimeter-square-grid"
+      ],
+      "hard": [
+        "25.perimeter-word-problem"
+      ]
+    }
+  },
+  {
+    "id": "skill.area-of-rectangles-triangles.area-triangles",
+    "name": "Compute Area of Right Triangles",
+    "description": "Use half the product of base and height to find triangle areas.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "area-of-rectangles-triangles",
+    "ccss": [
+      "6.G.A.1"
+    ],
+    "ritBand": {
+      "min": 205,
+      "max": 220
+    },
+    "representations": [
+      "area-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.area-right-triangle"
+      ],
+      "medium": [
+        "25.area-triangle-composite"
+      ],
+      "hard": [
+        "25.area-triangle-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.surface-area-with-nets.build-nets",
+    "name": "Build Nets of Prisms",
+    "description": "Construct nets for rectangular and triangular prisms and identify their faces.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "surface-area-with-nets",
+    "ccss": [
+      "6.G.A.4"
+    ],
+    "ritBand": {
+      "min": 205,
+      "max": 220
+    },
+    "representations": [
+      "nets",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.build-net-rectangular"
+      ],
+      "medium": [
+        "25.build-net-triangular"
+      ],
+      "hard": [
+        "25.choose-net"
+      ]
+    }
+  },
+  {
+    "id": "skill.surface-area-with-nets.calculate-surface-area",
+    "name": "Calculate Surface Area from Nets",
+    "description": "Sum the areas of faces in nets to determine surface area of prisms.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "surface-area-with-nets",
+    "ccss": [
+      "6.G.A.4"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "nets",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.surface-area-net"
+      ],
+      "medium": [
+        "25.surface-area-calculate"
+      ],
+      "hard": [
+        "25.surface-area-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.volume-concepts.volume-unit-cubes",
+    "name": "Determine Volume with Unit Cubes",
+    "description": "Use unit cubes to measure volume and relate to length \u00d7 width \u00d7 height.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "volume-concepts",
+    "ccss": [
+      "5.MD.C.3",
+      "5.MD.C.4"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "unit-cubes",
+      "3d-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.volume-count-cubes"
+      ],
+      "medium": [
+        "25.volume-layer"
+      ],
+      "hard": [
+        "25.volume-cubes-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.volume-concepts.volume-formula-application",
+    "name": "Apply Volume Formula",
+    "description": "Use V = l \u00d7 w \u00d7 h and additive volume reasoning to solve problems.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "volume-concepts",
+    "ccss": [
+      "5.MD.C.5"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "symbolic",
+      "story-context"
+    ],
+    "practice": {
+      "easy": [
+        "25.volume-formula"
+      ],
+      "medium": [
+        "25.volume-composite"
+      ],
+      "hard": [
+        "25.volume-word-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.coordinate-plane-polygons.plot-polygons-first-quadrant",
+    "name": "Plot Polygons in the First Quadrant",
+    "description": "Graph vertices with whole-number coordinates and connect them to form polygons.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "coordinate-plane-polygons",
+    "ccss": [
+      "5.G.A.1",
+      "5.G.A.2"
+    ],
+    "ritBand": {
+      "min": 198,
+      "max": 210
+    },
+    "representations": [
+      "coordinate-plane"
+    ],
+    "practice": {
+      "easy": [
+        "25.plot-polygon"
+      ],
+      "medium": [
+        "25.coordinate-polygon-table"
+      ],
+      "hard": [
+        "25.coordinate-polygon-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.coordinate-plane-polygons.compute-side-lengths",
+    "name": "Compute Side Lengths on Coordinate Plane",
+    "description": "Use differences in coordinates to compute horizontal and vertical side lengths.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "measurement-geometry",
+    "topicId": "coordinate-plane-polygons",
+    "ccss": [
+      "6.NS.C.8",
+      "6.G.A.3"
+    ],
+    "ritBand": {
+      "min": 205,
+      "max": 218
+    },
+    "representations": [
+      "coordinate-plane",
+      "table"
+    ],
+    "practice": {
+      "easy": [
+        "25.coordinate-side-length"
+      ],
+      "medium": [
+        "25.coordinate-perimeter"
+      ],
+      "hard": [
+        "25.coordinate-distance-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.coordinate-plane-polygons.perimeter-area",
+    "name": "Perimeter and Area on the Coordinate Plane",
+    "description": "Use coordinates to find side lengths, perimeter, and area of polygons on the coordinate plane.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "spatial-reasoning-extensions",
+    "topicId": "coordinate-plane-polygons",
+    "ccss": [
+      "6.G.A.3"
+    ],
+    "ritBand": {
+      "min": 205,
+      "max": 220
+    },
+    "representations": [
+      "coordinate-plane",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.coordinate-perimeter-rectangle"
+      ],
+      "medium": [
+        "25.coordinate-area-rectilinear"
+      ],
+      "hard": [
+        "25.coordinate-perimeter-area-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.graph-points-coordinate-plane.extend-ordered-pairs",
+    "name": "Graph Ordered Pairs in All Quadrants",
+    "description": "Plot points with positive and negative coordinates and describe positions.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "spatial-reasoning-extensions",
+    "topicId": "graph-points-coordinate-plane",
+    "ccss": [
+      "6.NS.C.6",
+      "6.NS.C.8"
+    ],
+    "ritBand": {
+      "min": 205,
+      "max": 218
+    },
+    "representations": [
+      "coordinate-plane"
+    ],
+    "practice": {
+      "easy": [
+        "25.graph-points-quadrants"
+      ],
+      "medium": [
+        "25.coordinate-reflections"
+      ],
+      "hard": [
+        "25.graph-points-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.graph-points-coordinate-plane.analyze-coordinate-patterns",
+    "name": "Analyze Coordinate Patterns",
+    "description": "Describe relationships between x and y coordinates in graphed points.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "spatial-reasoning-extensions",
+    "topicId": "graph-points-coordinate-plane",
+    "ccss": [
+      "5.OA.B.3",
+      "5.G.A.2"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 212
+    },
+    "representations": [
+      "table",
+      "coordinate-plane"
+    ],
+    "practice": {
+      "easy": [
+        "25.coordinate-pattern-table"
+      ],
+      "medium": [
+        "25.graph-pattern-interpret"
+      ],
+      "hard": [
+        "25.coordinate-rule-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.classify-2d-figures-hierarchies.hierarchy-triangles",
+    "name": "Create Triangle Hierarchies",
+    "description": "Organize triangles into hierarchical diagrams based on properties.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "spatial-reasoning-extensions",
+    "topicId": "classify-2d-figures-hierarchies",
+    "ccss": [
+      "5.G.B.3"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 212
+    },
+    "representations": [
+      "tree-diagram",
+      "table"
+    ],
+    "practice": {
+      "easy": [
+        "25.triangle-hierarchy"
+      ],
+      "medium": [
+        "25.classify-triangle-properties"
+      ],
+      "hard": [
+        "25.triangle-hierarchy-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.classify-2d-figures-hierarchies.hierarchy-quadrilaterals",
+    "name": "Create Quadrilateral Hierarchies",
+    "description": "Build inclusion hierarchies for quadrilaterals and explain relationships.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "spatial-reasoning-extensions",
+    "topicId": "classify-2d-figures-hierarchies",
+    "ccss": [
+      "5.G.B.3"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 212
+    },
+    "representations": [
+      "tree-diagram",
+      "Venn-diagram"
+    ],
+    "practice": {
+      "easy": [
+        "25.quadrilateral-hierarchy"
+      ],
+      "medium": [
+        "25.quadrilateral-properties"
+      ],
+      "hard": [
+        "25.quadrilateral-hierarchy-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.analyze-transformations.identify-transformations",
+    "name": "Identify Transformations",
+    "description": "Recognize translations, rotations, and reflections of plane figures.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "spatial-reasoning-extensions",
+    "topicId": "analyze-transformations",
+    "ccss": [
+      "8.G.A.1",
+      "8.G.A.3"
+    ],
+    "ritBand": {
+      "min": 215,
+      "max": 230
+    },
+    "representations": [
+      "diagram",
+      "coordinate-plane"
+    ],
+    "practice": {
+      "easy": [
+        "25.identify-transformation"
+      ],
+      "medium": [
+        "25.transformation-sort"
+      ],
+      "hard": [
+        "25.transformation-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.analyze-transformations.perform-transformations",
+    "name": "Perform Coordinate Transformations",
+    "description": "Apply translations, rotations, and reflections to coordinates and describe results.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "spatial-reasoning-extensions",
+    "topicId": "analyze-transformations",
+    "ccss": [
+      "8.G.A.1",
+      "8.G.A.3"
+    ],
+    "ritBand": {
+      "min": 215,
+      "max": 230
+    },
+    "representations": [
+      "coordinate-plane"
+    ],
+    "practice": {
+      "easy": [
+        "25.translate-coordinate"
+      ],
+      "medium": [
+        "25.rotate-coordinate"
+      ],
+      "hard": [
+        "25.transform-context"
+      ]
+    }
+  }
+]

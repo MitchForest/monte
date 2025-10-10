@@ -16,9 +16,9 @@ const designSystemStub = vi.hoisted(() => {
   return { Button: StubButton };
 });
 
-vi.mock('../../../../design-system', () => designSystemStub);
-vi.mock('../../../../design-system/index.ts', () => designSystemStub);
-vi.mock('../../../../design-system/index.tsx', () => designSystemStub);
+vi.mock('../../../../components/ui', () => designSystemStub);
+vi.mock('../../../../components/ui/index.ts', () => designSystemStub);
+vi.mock('../../../../components/ui/index.tsx', () => designSystemStub);
 
 import { LessonCanvas } from '../LessonCanvas';
 

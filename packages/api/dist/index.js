@@ -15,7 +15,8 @@ import {
   CurriculumTreeSchema,
   CurriculumTreeUnitSchema,
   UserProfileSchema,
-  UserRoleSchema
+  UserRoleSchema,
+  EntityMetadataSchema
 } from "@monte/types";
 var now = () => Date.now();
 var pickScenarioBinding = (document) => {
@@ -105,10 +106,18 @@ var createCurriculumClient = (httpClient) => {
       return record ?? void 0;
     },
     async createUnit(input) {
-      return await executeMutation(api.curriculum.createUnit, input, CreateUnitResultSchema);
+      const payload = {
+        ...input,
+        metadata: input.metadata ? EntityMetadataSchema.parse(input.metadata) : void 0
+      };
+      return await executeMutation(api.curriculum.createUnit, payload, CreateUnitResultSchema);
     },
     async updateUnit(input) {
-      await executeMutation(api.curriculum.updateUnit, input, z.void());
+      const payload = {
+        ...input,
+        metadata: input.metadata ? EntityMetadataSchema.parse(input.metadata) : void 0
+      };
+      await executeMutation(api.curriculum.updateUnit, payload, z.void());
     },
     async deleteUnit(unitId) {
       await executeMutation(api.curriculum.deleteUnit, { unitId }, z.void());
@@ -117,10 +126,18 @@ var createCurriculumClient = (httpClient) => {
       await executeMutation(api.curriculum.reorderUnits, { unitIds }, z.void());
     },
     async createTopic(input) {
-      return await executeMutation(api.curriculum.createTopic, input, CreateTopicResultSchema);
+      const payload = {
+        ...input,
+        metadata: input.metadata ? EntityMetadataSchema.parse(input.metadata) : void 0
+      };
+      return await executeMutation(api.curriculum.createTopic, payload, CreateTopicResultSchema);
     },
     async updateTopic(input) {
-      await executeMutation(api.curriculum.updateTopic, input, z.void());
+      const payload = {
+        ...input,
+        metadata: input.metadata ? EntityMetadataSchema.parse(input.metadata) : void 0
+      };
+      await executeMutation(api.curriculum.updateTopic, payload, z.void());
     },
     async deleteTopic(topicId) {
       await executeMutation(api.curriculum.deleteTopic, { topicId }, z.void());

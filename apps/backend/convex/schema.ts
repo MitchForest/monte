@@ -2,10 +2,11 @@ import { zodToConvex } from 'convex-helpers/server/zod';
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 
-import { LessonDocumentSchema, UserRoleSchema } from '@monte/types';
+import { EntityMetadataSchema, LessonDocumentSchema, UserRoleSchema } from '@monte/types';
 
 export const lessonDocument = zodToConvex(LessonDocumentSchema);
 const userRole = zodToConvex(UserRoleSchema);
+const entityMetadata = zodToConvex(EntityMetadataSchema);
 
 export default defineSchema({
   units: defineTable({
@@ -15,7 +16,7 @@ export default defineSchema({
     coverImage: v.optional(v.string()),
     order: v.number(),
     status: v.union(v.literal('active'), v.literal('archived')),
-    metadata: v.optional(v.any()),
+    metadata: v.optional(entityMetadata),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
@@ -31,7 +32,7 @@ export default defineSchema({
     estimatedDurationMinutes: v.optional(v.number()),
     order: v.number(),
     status: v.union(v.literal('active'), v.literal('archived')),
-    metadata: v.optional(v.any()),
+    metadata: v.optional(entityMetadata),
     createdAt: v.number(),
     updatedAt: v.number(),
   })

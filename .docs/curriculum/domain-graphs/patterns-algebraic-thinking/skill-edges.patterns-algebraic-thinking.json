@@ -1,0 +1,163 @@
+[
+  {
+    "id": "edge.balance-contexts.sequence-1",
+    "sourceSkillId": "skill.balance-contexts.explain-equivalence",
+    "targetSkillId": "skill.balance-contexts.find-missing-to-balance",
+    "type": "prereq_core",
+    "rationale": "Understanding equality prepares learners to find missing values that balance equations."
+  },
+  {
+    "id": "edge.coordinate-relationships.sequence-1",
+    "sourceSkillId": "skill.coordinate-relationships.graph-proportional-points",
+    "targetSkillId": "skill.coordinate-relationships.describe-dependent-independent",
+    "type": "prereq_core",
+    "rationale": "Graphing points supports describing dependent and independent relationships."
+  },
+  {
+    "id": "edge.early-patterns.transition-1",
+    "sourceSkillId": "skill.repeating-growing-patterns.create-patterns",
+    "targetSkillId": "skill.unknown-addend-problems.represent-unknown-addend",
+    "type": "prereq_core",
+    "rationale": "Experience generating patterns supports representing unknown values in equations."
+  },
+  {
+    "id": "edge.early-patterns.transition-2",
+    "sourceSkillId": "skill.unknown-addend-problems.solve-number-line",
+    "targetSkillId": "skill.balance-contexts.explain-equivalence",
+    "type": "prereq_core",
+    "rationale": "Solving unknown addends leads to reasoning about balanced equations."
+  },
+  {
+    "id": "edge.equations-with-variables.sequence-1",
+    "sourceSkillId": "skill.equations-with-variables.solve-one-step",
+    "targetSkillId": "skill.equations-with-variables.test-solutions",
+    "type": "prereq_core",
+    "rationale": "Solving equations precedes verifying solutions by substitution."
+  },
+  {
+    "id": "edge.evaluate-numerical-expressions.sequence-1",
+    "sourceSkillId": "skill.evaluate-numerical-expressions.order-of-operations",
+    "targetSkillId": "skill.evaluate-numerical-expressions.write-from-words",
+    "type": "prereq_core",
+    "rationale": "Evaluating expressions supports translating verbal descriptions into expressions."
+  },
+  {
+    "id": "edge.input-output-tables.sequence-1",
+    "sourceSkillId": "skill.input-output-tables.complete-table",
+    "targetSkillId": "skill.input-output-tables.determine-rule",
+    "type": "prereq_core",
+    "rationale": "Completing tables provides data needed to determine underlying rules."
+  },
+  {
+    "id": "edge.intro-inequalities.sequence-1",
+    "sourceSkillId": "skill.intro-inequalities.write-inequalities",
+    "targetSkillId": "skill.intro-inequalities.graph-inequalities",
+    "type": "prereq_core",
+    "rationale": "Writing inequalities comes before graphing their solution sets."
+  },
+  {
+    "id": "edge.multi-step-problem-solving.sequence-1",
+    "sourceSkillId": "skill.multi-step-problem-solving.plan-strategy",
+    "targetSkillId": "skill.multi-step-problem-solving.write-equations",
+    "type": "prereq_core",
+    "rationale": "Planning a multi-step approach precedes writing equations for each step."
+  },
+  {
+    "id": "edge.multi-step-problem-solving.sequence-2",
+    "sourceSkillId": "skill.multi-step-problem-solving.write-equations",
+    "targetSkillId": "skill.multi-step-problem-solving.explain-solution",
+    "type": "prereq_core",
+    "rationale": "Writing equations helps learners justify their multi-step solutions."
+  },
+  {
+    "id": "edge.multi-step.transition-1",
+    "sourceSkillId": "skill.balance-contexts.find-missing-to-balance",
+    "targetSkillId": "skill.multi-step-problem-solving.plan-strategy",
+    "type": "prereq_core",
+    "rationale": "Balancing equations supports planning multi-step solutions with unknowns."
+  },
+  {
+    "id": "edge.multi-step.transition-2",
+    "sourceSkillId": "skill.multi-step-problem-solving.explain-solution",
+    "targetSkillId": "skill.input-output-tables.complete-table",
+    "type": "prereq_core",
+    "rationale": "Explaining multi-step reasoning sets up filling and interpreting input-output tables."
+  },
+  {
+    "id": "edge.multi-step.transition-3",
+    "sourceSkillId": "skill.input-output-tables.determine-rule",
+    "targetSkillId": "skill.pattern-rules-arithmetic-structure.analyze-arithmetic-patterns",
+    "type": "prereq_core",
+    "rationale": "Understanding table rules feeds into analyzing arithmetic patterns."
+  },
+  {
+    "id": "edge.pattern-rules.sequence-1",
+    "sourceSkillId": "skill.pattern-rules-arithmetic-structure.analyze-arithmetic-patterns",
+    "targetSkillId": "skill.pattern-rules-arithmetic-structure.generalize-pattern-rule",
+    "type": "prereq_core",
+    "rationale": "Analyzing arithmetic patterns precedes generalizing them with variables."
+  },
+  {
+    "id": "edge.pre-algebra.transition-1",
+    "sourceSkillId": "skill.pattern-rules-arithmetic-structure.generalize-pattern-rule",
+    "targetSkillId": "skill.evaluate-numerical-expressions.order-of-operations",
+    "type": "prereq_core",
+    "rationale": "Generalizing pattern rules prepares learners to work with complex expressions."
+  },
+  {
+    "id": "edge.pre-algebra.transition-2",
+    "sourceSkillId": "skill.evaluate-numerical-expressions.write-from-words",
+    "targetSkillId": "skill.equations-with-variables.solve-one-step",
+    "type": "prereq_core",
+    "rationale": "Writing structured expressions leads naturally to solving equations with variables."
+  },
+  {
+    "id": "edge.pre-algebra.transition-3",
+    "sourceSkillId": "skill.equations-with-variables.test-solutions",
+    "targetSkillId": "skill.coordinate-relationships.graph-proportional-points",
+    "type": "prereq_core",
+    "rationale": "Testing solutions supports interpreting relationships between variables on a graph."
+  },
+  {
+    "id": "edge.pre-algebra.transition-4",
+    "sourceSkillId": "skill.coordinate-relationships.describe-dependent-independent",
+    "targetSkillId": "skill.intro-inequalities.write-inequalities",
+    "type": "prereq_core",
+    "rationale": "Describing variable relationships prepares students to represent constraints with inequalities."
+  },
+  {
+    "id": "edge.repeating-growing-patterns.sequence-1",
+    "sourceSkillId": "skill.repeating-growing-patterns.identify-repeating-patterns",
+    "targetSkillId": "skill.repeating-growing-patterns.extend-growing-patterns",
+    "type": "prereq_core",
+    "rationale": "Recognizing repeating units precedes extending growing patterns."
+  },
+  {
+    "id": "edge.repeating-growing-patterns.sequence-2",
+    "sourceSkillId": "skill.repeating-growing-patterns.extend-growing-patterns",
+    "targetSkillId": "skill.repeating-growing-patterns.create-patterns",
+    "type": "prereq_core",
+    "rationale": "Extending patterns prepares learners to create and explain new patterns."
+  },
+  {
+    "id": "edge.true-false.to-balance",
+    "sourceSkillId": "skill.equality.true-false-equations-20",
+    "targetSkillId": "skill.balance-contexts.find-missing-to-balance",
+    "type": "prereq_core",
+    "rationale": "Reasoning about true equations prepares learners to balance equations with missing values."
+  },
+  {
+    "id": "edge.unknown-addend-problems.sequence-1",
+    "sourceSkillId": "skill.unknown-addend-problems.represent-unknown-addend",
+    "targetSkillId": "skill.unknown-addend-problems.solve-number-line",
+    "type": "prereq_core",
+    "rationale": "Modeling an unknown addend comes before solving using number lines."
+  },
+  {
+    "id": "edge.unknown-addend.to-true-false",
+    "sourceSkillId": "skill.unknown-addend-problems.represent-unknown-addend",
+    "targetSkillId": "skill.equality.true-false-equations-20",
+    "type": "prereq_core",
+    "rationale": "Working with unknown addends sets the stage for evaluating true and false equations."
+  }
+]

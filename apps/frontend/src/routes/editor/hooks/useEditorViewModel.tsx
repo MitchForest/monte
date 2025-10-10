@@ -3,13 +3,13 @@ import {
   createEffect,
   createMemo,
   createResource,
-  createSignal,
   useContext,
   type Accessor,
   type ParentComponent,
   type Setter,
 } from 'solid-js';
-import { createStore, type SetStoreFunction } from 'solid-js/store';
+import type { SetStoreFunction } from 'solid-js/store';
+import { createEditorFormsStore } from '../state/formsStore';
 
 import type { Id } from '@monte/types';
 import {
@@ -32,7 +32,6 @@ import {
   type LessonDraftRecord,
 } from '../../../domains/curriculum/api/curriculumClient';
 import { curriculumMaterials } from '../../../domains/curriculum/materials';
-import { createLessonEditor } from '../../../domains/curriculum/state/lessonEditor';
 import type { LessonEditor } from '../../../domains/curriculum/state/lessonEditor';
 import { toast } from 'solid-sonner';
 import type {
@@ -79,8 +78,8 @@ import {
   slugify,
   validateLessonDocument,
 } from '../utils';
-import { createEmptyInventory } from '../../../domains/curriculum/utils/inventory';
-import { createInventoryStore } from '../state/inventoryStore';
+import { createLessonDocumentStore } from '../state/lessonDocumentStore';
+import type { InventorySnapshotRegistration } from '../state/inventoryStore';
 
 type UnitNode = CurriculumTree[number];
 type TopicNode = UnitNode['topics'][number];
@@ -274,7 +273,7 @@ interface EditorActions {
     mutate: (bank: MaterialBankDefinition) => MaterialBankDefinition,
   ) => void;
   handleRemoveMaterialBank: (bankId: string) => void;
-  registerInventorySnapshot: (accessor?: () => LessonMaterialInventory) => void;
+  registerInventorySnapshot: (options?: InventorySnapshotRegistration) => void;
   selectSegment: (segmentId: string | undefined) => void;
 }
 
@@ -294,12 +293,19 @@ export interface EditorViewModel {
 }
 
 export const useEditorViewModel = () => {
-  const editor: LessonEditor = createLessonEditor();
+  const defaultMaterialId = curriculumMaterials[0]?.id ?? 'golden-beads';
+  const documentStore = createLessonDocumentStore({ defaultMaterialId });
+  const {
+    editor,
+    lessonDocument,
+    materialInventory,
+    selectedSegmentId: docSelectedSegmentId,
+    setSelectedSegmentId: setDocSelectedSegmentId,
+    selectedSegment,
+    inventory: inventoryStore,
+  } = documentStore;
   const [curriculumTree, { mutate: mutateCurriculumTree, refetch: refetchTree }] =
     createResource<CurriculumTree | undefined>(fetchCurriculumTree);
-
-  const defaultMaterialId = curriculumMaterials[0]?.id ?? 'golden-beads';
-  const emptyInventory = createEmptyInventory();
 
   const confirm = createConfirmController();
 
@@ -311,6 +317,8 @@ export const useEditorViewModel = () => {
     editor,
     onResetTopicCreation: () => resetTopicCreation(),
     onResetLessonCreation: () => resetLessonCreation(),
+    selectedSegmentId: docSelectedSegmentId,
+    setSelectedSegmentId: setDocSelectedSegmentId,
   });
 
   const {
@@ -320,7 +328,6 @@ export const useEditorViewModel = () => {
     setSelectedTopicId,
     selectedLessonId,
     setSelectedLessonId,
-    selectedSegmentId,
     selectSegment,
     units,
     currentUnit,
@@ -328,9 +335,6 @@ export const useEditorViewModel = () => {
     currentTopic,
     lessons,
   } = selectionStore;
-  const materialInventory = createMemo<LessonMaterialInventory>(
-    () => editor.state.document?.lesson.materialInventory ?? emptyInventory,
-  );
 
   const updateCurriculumTree = (mutator: (tree: CurriculumTree) => CurriculumTree) => {
     const tree = curriculumTree();
@@ -343,61 +347,54 @@ export const useEditorViewModel = () => {
     window.alert(message);
   };
 
-  const [unitForm, setUnitForm] = createStore<UnitFormState>({
-    title: '',
-    slug: '',
-    summary: '',
-    coverImage: '',
-    status: 'active',
-  });
-  const [unitFormError, setUnitFormError] = createSignal<string | undefined>(undefined);
-
-  const [topicForm, setTopicForm] = createStore<TopicFormState>({
-    title: '',
-    slug: '',
-    overview: '',
-    focusSkills: '',
-    estimatedDurationMinutes: '',
-    status: 'active',
-  });
-  const [topicFormError, setTopicFormError] = createSignal<string | undefined>(undefined);
-
-  const [lessonMetaForm, setLessonMetaForm] = createStore<LessonMetaFormState>({
-    author: '',
-    notes: '',
-  });
-
-  const [activeMetaTab, setActiveMetaTab] = createSignal<'unit' | 'topic' | 'lesson'>('unit');
-
-  const [isCreatingUnit, setIsCreatingUnit] = createSignal(false);
-  const [createUnitForm, setCreateUnitForm] = createStore<UnitFormState>({
-    title: '',
-    slug: '',
-    summary: '',
-    coverImage: '',
-    status: 'active',
-  });
-  const [createUnitError, setCreateUnitError] = createSignal<string | undefined>(undefined);
-
-  const [isCreatingTopic, setIsCreatingTopic] = createSignal(false);
-  const [createTopicForm, setCreateTopicForm] = createStore<TopicFormState>({
-    title: '',
-    slug: '',
-    overview: '',
-    focusSkills: '',
-    estimatedDurationMinutes: '',
-    status: 'active',
-  });
-  const [createTopicError, setCreateTopicError] = createSignal<string | undefined>(undefined);
-
-  const [isCreatingLesson, setIsCreatingLesson] = createSignal(false);
+  const formsStore = createEditorFormsStore();
+  const {
+    unit: {
+      form: unitForm,
+      setForm: setUnitForm,
+      error: unitFormError,
+      setError: setUnitFormError,
+    },
+    topic: {
+      form: topicForm,
+      setForm: setTopicForm,
+      error: topicFormError,
+      setError: setTopicFormError,
+    },
+    lessonMeta: { form: lessonMetaForm, setForm: setLessonMetaForm },
+    createUnit: {
+      form: createUnitForm,
+      setForm: setCreateUnitForm,
+      error: createUnitError,
+      setError: setCreateUnitError,
+      isCreating: isCreatingUnit,
+      setIsCreating: setIsCreatingUnit,
+    },
+    createTopic: {
+      form: createTopicForm,
+      setForm: setCreateTopicForm,
+      error: createTopicError,
+      setError: setCreateTopicError,
+      isCreating: isCreatingTopic,
+      setIsCreating: setIsCreatingTopic,
+    },
+    createLesson: {
+      form: createLessonForm,
+      setForm: setCreateLessonForm,
+      error: createLessonError,
+      setError: setCreateLessonError,
+      isCreating: isCreatingLesson,
+      setIsCreating: setIsCreatingLesson,
+    },
+    metaTab: { active: activeMetaTab, setActive: setActiveMetaTab },
+    helpers: {
+      resetCreateUnitForm,
+      resetCreateTopicForm,
+      resetCreateLessonForm,
+    },
+  } = formsStore;
   resetTopicCreation = () => setIsCreatingTopic(false);
   resetLessonCreation = () => setIsCreatingLesson(false);
-  const [createLessonForm, setCreateLessonForm] = createStore<CreateLessonFormState>({
-    title: '',
-    slug: '',
-  });
-  const [createLessonError, setCreateLessonError] = createSignal<string | undefined>(undefined);
 
   const [lessonRecord, { refetch: refetchLessonRecord }] = createResource<
     LessonDraftRecord | undefined,
@@ -477,7 +474,14 @@ export const useEditorViewModel = () => {
   const handleSave = async () => {
     const lessonId = selectedLessonId();
     if (!lessonId) return;
-    inventoryStore.applyInventorySnapshot();
+    try {
+      inventoryStore.applyInventorySnapshot();
+    } catch (error) {
+      const message = (error as Error).message;
+      editor.setError(message);
+      toast.error('Inventory mismatch', { description: message });
+      return;
+    }
     const document = editor.state.document;
     if (!document) return;
     const validationErrors = validateLessonDocument(document);
@@ -500,7 +504,14 @@ export const useEditorViewModel = () => {
   const handlePublish = async () => {
     const lessonId = selectedLessonId();
     if (!lessonId) return;
-    inventoryStore.applyInventorySnapshot();
+    try {
+      inventoryStore.applyInventorySnapshot();
+    } catch (error) {
+      const message = (error as Error).message;
+      editor.setError(message);
+      toast.error('Inventory mismatch', { description: message });
+      return;
+    }
     const document = editor.state.document;
     if (!document) return;
     const validationErrors = validateLessonDocument(document);
@@ -531,11 +542,6 @@ export const useEditorViewModel = () => {
     }
     editor.resetToInitial();
     toast.info('Changes discarded');
-  };
-
-  const resetCreateUnitForm = () => {
-    setCreateUnitForm({ title: '', slug: '', summary: '', coverImage: '', status: 'active' });
-    setCreateUnitError(undefined);
   };
 
   const startCreateUnit = () => {
@@ -652,18 +658,6 @@ export const useEditorViewModel = () => {
     } catch (error) {
       reportActionError('Unable to reorder units. Please try again.', error);
     }
-  };
-
-  const resetCreateTopicForm = () => {
-    setCreateTopicForm({
-      title: '',
-      slug: '',
-      overview: '',
-      focusSkills: '',
-      estimatedDurationMinutes: '',
-      status: 'active',
-    });
-    setCreateTopicError(undefined);
   };
 
   const startCreateTopic = () => {
@@ -815,11 +809,6 @@ export const useEditorViewModel = () => {
     } catch (error) {
       reportActionError('Unable to reorder topics. Please try again.', error);
     }
-  };
-
-  const resetCreateLessonForm = () => {
-    setCreateLessonForm({ title: '', slug: '' });
-    setCreateLessonError(undefined);
   };
 
   const startCreateLesson = () => {
@@ -1425,39 +1414,9 @@ export const useEditorViewModel = () => {
     });
   };
 
-  const lessonDocument = createMemo<LessonDocument | undefined>(() => editor.state.document);
-
-  const inventoryStore = createInventoryStore({
-    editor,
-    lessonDocument,
-    defaultMaterialId,
-  });
-
-  createEffect(() => {
-    const doc = lessonDocument();
-    const segments = doc?.lesson.segments ?? [];
-    if (segments.length === 0) {
-      if (selectedSegmentId() !== undefined) {
-        selectSegment(undefined);
-      }
-      return;
-    }
-    const current = selectedSegmentId();
-    if (!current || !segments.some((segment) => segment.id === current)) {
-      selectSegment(segments[0].id);
-    }
-  });
-
   const currentLessonMeta = createMemo<LessonNode | undefined>(() =>
     lessons().find((lesson) => lesson._id === selectedLessonId()),
   );
-  const selectedSegment = createMemo<LessonSegment | undefined>(() => {
-    const doc = lessonDocument();
-    if (!doc) return undefined;
-    const segmentId = selectedSegmentId();
-    if (!segmentId) return undefined;
-    return doc.lesson.segments.find((segment) => segment.id === segmentId);
-  });
 
   createEffect(() => {
     const doc = lessonDocument();
@@ -1492,7 +1451,7 @@ export const useEditorViewModel = () => {
       setSelectedTopicId,
       selectedLessonId,
       setSelectedLessonId,
-      selectedSegmentId,
+      selectedSegmentId: docSelectedSegmentId,
       setSelectedSegmentId: selectSegment,
     },
     resources: {

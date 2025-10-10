@@ -21,7 +21,7 @@ import type {
   PracticeQuestion,
   PresentationAction,
 } from '@monte/types';
-import { Button } from '../../../design-system';
+import { Button } from '../../../components/ui';
 
 export interface PresentationActionEditorProps {
   segment: PresentationSegmentType;
@@ -292,7 +292,7 @@ export const PresentationActionEditor = (props: PresentationActionEditorProps) =
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
           <h4 class="text-sm font-semibold">{props.segment.title}</h4>
-          <span class="text-xs text-muted">{props.segment.id}</span>
+          <span class="text-xs text-[color:var(--color-text-muted)]">{props.segment.id}</span>
         </div>
         <div class="flex items-center gap-1">
           <Button
@@ -308,7 +308,7 @@ export const PresentationActionEditor = (props: PresentationActionEditorProps) =
 
       <div class="space-y-3 rounded-md border border-[rgba(64,157,233,0.2)] bg-white p-4 shadow-sm">
         <div class="flex items-center justify-between gap-3">
-          <h5 class="text-xs font-semibold uppercase tracking-wide text-muted">Actions</h5>
+          <h5 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Actions</h5>
           <select
             class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
             onChange={(event) =>
@@ -323,7 +323,7 @@ export const PresentationActionEditor = (props: PresentationActionEditorProps) =
           </select>
         </div>
 
-        <Show when={actions().length > 0} fallback={<p class="text-xs text-muted">No actions added yet.</p>}>
+        <Show when={actions().length > 0} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">No actions added yet.</p>}>
           <div class="space-y-3">
             <For each={actions()}>
               {(action, index) => (
@@ -343,7 +343,7 @@ export const PresentationActionEditor = (props: PresentationActionEditorProps) =
                       >
                         <For each={actionTypeOptions}>{(option) => <option value={option.value}>{option.label}</option>}</For>
                       </select>
-                      <span class="text-xs text-muted">#{action.id}</span>
+                      <span class="text-xs text-[color:var(--color-text-muted)]">#{action.id}</span>
                     </div>
                     <div class="flex items-center gap-1">
                       <Button
@@ -411,7 +411,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
   return (
     <div class="space-y-3 rounded-md border border-[rgba(140,204,212,0.35)] bg-white p-4 text-sm shadow-sm">
       <div class="flex flex-wrap items-center gap-2">
-        <span class="text-xs font-semibold uppercase tracking-wide text-muted">Guided workspace</span>
+        <span class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Guided workspace</span>
         <select
           class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
           value={props.segment.workspace}
@@ -428,7 +428,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
         {(step, index) => (
           <div class="space-y-2 rounded-md border border-[rgba(64,157,233,0.2)] bg-white p-3 shadow-sm">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-xs text-muted">{step.id}</span>
+              <span class="text-xs text-[color:var(--color-text-muted)]">{step.id}</span>
               <div class="flex items-center gap-1">
                 <Button
                   size="compact"
@@ -457,7 +457,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
             </div>
 
             <div class="grid gap-2 md:grid-cols-2">
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Prompt</span>
                 <textarea
                   rows={2}
@@ -471,7 +471,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
                   }
                 />
               </label>
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Expectation</span>
                 <textarea
                   rows={2}
@@ -488,7 +488,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
             </div>
 
             <div class="grid gap-2 md:grid-cols-2">
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Success Check</span>
                 <textarea
                   rows={2}
@@ -502,7 +502,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
                   }
                 />
               </label>
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Nudge</span>
                 <textarea
                   rows={2}
@@ -516,7 +516,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
                   }
                 />
               </label>
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted md:col-span-2">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)] md:col-span-2">
                 <span>Explanation</span>
                 <textarea
                   rows={2}
@@ -530,7 +530,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
                   }
                 />
               </label>
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Duration (ms)</span>
                 <input
                   type="number"
@@ -544,7 +544,7 @@ export const GuidedStepEditor = (props: GuidedStepEditorProps) => {
                   }
                 />
               </label>
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Evaluator</span>
                 <select
                   class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -597,7 +597,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
   return (
     <div class="space-y-4 rounded-md border border-[rgba(64,157,233,0.2)] bg-white p-4 shadow-sm text-sm">
       <div class="flex flex-wrap items-center gap-2">
-        <span class="text-xs font-semibold uppercase tracking-wide text-muted">Practice workspace</span>
+        <span class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Practice workspace</span>
         <select
           class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
           value={props.segment.workspace}
@@ -611,7 +611,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
       </div>
 
       <div class="grid gap-2 md:grid-cols-3">
-        <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+        <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
           <span>First correct</span>
           <input
             type="number"
@@ -622,7 +622,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
             }
           />
         </label>
-        <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+        <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
           <span>Total correct</span>
           <input
             type="number"
@@ -633,7 +633,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
             }
           />
         </label>
-        <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+        <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
           <span>Max misses</span>
           <input
             type="number"
@@ -650,7 +650,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
         {(question, index) => (
           <div class="space-y-2 rounded-md border border-[rgba(64,157,233,0.2)] bg-white p-3 shadow-sm">
             <div class="flex items-center justify-between gap-2">
-              <span class="text-xs text-muted">{question.id}</span>
+              <span class="text-xs text-[color:var(--color-text-muted)]">{question.id}</span>
               <div class="flex items-center gap-1">
                 <Button
                   size="compact"
@@ -679,7 +679,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
             </div>
 
             <div class="grid gap-2 md:grid-cols-3">
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Multiplicand</span>
                 <input
                   type="number"
@@ -697,7 +697,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
                   }}
                 />
               </label>
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Multiplier</span>
                 <input
                   type="number"
@@ -715,7 +715,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
                   }}
                 />
               </label>
-              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+              <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
                 <span>Difficulty</span>
                 <select
                   class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -738,7 +738,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
               </label>
             </div>
 
-            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
               <span>Prompt</span>
               <input
                 class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 text-sm shadow-sm"
@@ -752,7 +752,7 @@ export const PracticeSegmentEditor = (props: PracticeSegmentEditorProps) => {
               />
             </label>
 
-            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-muted">
+            <label class="flex flex-col gap-1 text-xs uppercase tracking-wide text-[color:var(--color-text-muted)]">
               <span>Correct answer</span>
               <input
                 type="number"

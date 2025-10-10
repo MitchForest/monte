@@ -10,7 +10,7 @@ import type {
   PracticeSegment as PracticeSegmentType,
   PresentationScript,
 } from '@monte/types';
-import { Card } from '../../../design-system';
+import { Card } from '../../../components/ui';
 import { PresentationSegment } from '../../../domains/curriculum/components/segments/PresentationSegment';
 import { GuidedSegment } from '../../../domains/curriculum/components/segments/GuidedSegment';
 import { PracticeSegment } from '../../../domains/curriculum/components/segments/PracticeSegment';
@@ -27,11 +27,16 @@ const handleGuidedComplete: GuidedSegmentProps['onSegmentComplete'] = () => {};
 const handlePracticeResult: PracticeSegmentProps['onSegmentResult'] = () => {};
 const handlePracticeTaskResult: PracticeSegmentProps['onTaskResult'] = () => {};
 
+interface InventorySnapshotOptions {
+  snapshot?: () => LessonMaterialInventory;
+  verify?: () => void;
+}
+
 interface SegmentPreviewProps {
   lesson: Lesson;
   segment: LessonSegment;
   scenario?: LessonScenarioBinding;
-  onInventorySnapshot?: (accessor?: () => LessonMaterialInventory) => void;
+  onInventorySnapshot?: (options?: InventorySnapshotOptions) => void;
 }
 
 export const SegmentPreview = (props: SegmentPreviewProps) => {
@@ -45,7 +50,10 @@ export const SegmentPreview = (props: SegmentPreviewProps) => {
   });
 
   createEffect(() => {
-    props.onInventorySnapshot?.(() => inventory.snapshot());
+    props.onInventorySnapshot?.({
+      snapshot: () => inventory.snapshot(),
+      verify: inventory.verifyConsistency,
+    });
   });
 
   onCleanup(() => {
@@ -55,8 +63,8 @@ export const SegmentPreview = (props: SegmentPreviewProps) => {
   return (
     <Card variant="soft" class="space-y-4 p-5">
       <header class="flex flex-col gap-1">
-        <h3 class="text-sm font-semibold uppercase tracking-wide text-muted">Segment preview</h3>
-        <p class="text-sm text-subtle">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Segment preview</h3>
+        <p class="text-sm text-[color:var(--color-text-subtle)]">
           Live view of the selected segment with shared canvas + inventory state.
         </p>
       </header>

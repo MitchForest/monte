@@ -4,10 +4,10 @@ import { splitProps } from 'solid-js';
 
 import { cn } from '../../lib/cn';
 
-const breadcrumbVariants = cva('flex items-center gap-2 text-sm text-muted');
+const breadcrumbVariants = cva('flex items-center gap-2 text-sm text-[color:var(--color-text-muted)]');
 const breadcrumbListVariants = cva('flex items-center gap-2');
 const breadcrumbItemVariants = cva('inline-flex items-center gap-2');
-const breadcrumbSeparatorVariants = cva('text-xs text-muted');
+const breadcrumbSeparatorVariants = cva('text-xs text-[color:var(--color-text-muted)]');
 
 const breadcrumbLinkVariants = cva(
   'inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgba(64,157,233,0.45)]',
@@ -15,7 +15,7 @@ const breadcrumbLinkVariants = cva(
     variants: {
       state: {
         default:
-          'text-muted hover:text-[color:var(--color-heading)] hover:bg-[rgba(12,42,101,0.08)]',
+          'text-[color:var(--color-text-muted)] hover:text-[color:var(--color-heading)] hover:bg-[rgba(12,42,101,0.08)]',
         current: 'cursor-default bg-[rgba(64,157,233,0.15)] text-[color:var(--color-heading)]',
       },
       interactive: {

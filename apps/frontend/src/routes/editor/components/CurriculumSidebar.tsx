@@ -8,7 +8,7 @@ import {
   useEditorSelection,
   useLessonEditor,
 } from '../hooks/useEditorViewModel';
-import { Button, Card } from '../../../design-system';
+import { Button, Card, Input, Textarea } from '../../../components/ui';
 
 export const CurriculumSidebar = () => {
   const { units, topics, lessons } = useEditorComputed();
@@ -45,8 +45,8 @@ export const CurriculumSidebar = () => {
       <Card variant="soft" class="flex flex-col gap-3 p-4">
         <div class="flex items-center justify-between gap-3">
           <div>
-            <h2 class="text-xs font-semibold uppercase tracking-wide text-muted">Units</h2>
-            <p class="text-xs text-muted">Reorder or jump between units.</p>
+            <h2 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Units</h2>
+            <p class="text-xs text-[color:var(--color-text-muted)]">Reorder or jump between units.</p>
           </div>
           <Button
             size="compact"
@@ -56,7 +56,7 @@ export const CurriculumSidebar = () => {
             {createUnit.isCreating() ? 'Close' : 'New unit'}
           </Button>
         </div>
-        <Show when={units().length > 0} fallback={<p class="text-xs text-muted">No units yet.</p>}>
+        <Show when={units().length > 0} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">No units yet.</p>}>
           <div class="max-h-72 space-y-2 overflow-y-auto pr-1">
             <For each={units()}>
               {(unit, index) => (
@@ -83,7 +83,7 @@ export const CurriculumSidebar = () => {
                   <div class="flex items-start justify-between gap-3">
                     <div class="flex flex-col">
                       <span class="font-medium">{unit.title}</span>
-                      <span class="text-xs text-muted">/{unit.slug}</span>
+                      <span class="text-xs text-[color:var(--color-text-muted)]">/{unit.slug}</span>
                     </div>
                     <div class="flex items-center gap-1">
                       <Button
@@ -130,45 +130,33 @@ export const CurriculumSidebar = () => {
             class="space-y-2 rounded-md border border-[rgba(64,157,233,0.35)] bg-white p-3 text-sm shadow-sm"
             onSubmit={(event) => void submitCreateUnit(event)}
           >
-            <div class="grid gap-2">
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Title</span>
-                <input
-                  class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 shadow-sm"
-                  value={createUnit.form.title}
-                  onInput={(event) => createUnit.setForm('title', event.currentTarget.value)}
-                  required
-                />
-              </label>
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Slug</span>
-                <input
-                  class="rounded-md border border-[rgba(64,157,233,0.2)] bg-white px-3 py-2 shadow-sm"
-                  value={createUnit.form.slug}
-                  onInput={(event) => createUnit.setForm('slug', event.currentTarget.value)}
-                  placeholder="auto from title"
-                />
-              </label>
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Summary</span>
-                <textarea
-                  rows={2}
-                  class="rounded-md border border-[rgba(64,157,233,0.2)] bg-white px-3 py-2 shadow-sm"
-                  value={createUnit.form.summary}
-                  onInput={(event) => createUnit.setForm('summary', event.currentTarget.value)}
-                />
-              </label>
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Cover image</span>
-                <input
-                  class="rounded-md border border-[rgba(64,157,233,0.2)] bg-white px-3 py-2 shadow-sm"
-                  value={createUnit.form.coverImage}
-                  onInput={(event) => createUnit.setForm('coverImage', event.currentTarget.value)}
-                />
-              </label>
+            <div class="grid gap-3">
+              <Input
+                label="Title"
+                value={createUnit.form.title}
+                onValueChange={(value) => createUnit.setForm('title', value)}
+                required
+              />
+              <Input
+                label="Slug"
+                value={createUnit.form.slug}
+                onValueChange={(value) => createUnit.setForm('slug', value)}
+                placeholder="auto from title"
+              />
+              <Textarea
+                label="Summary"
+                value={createUnit.form.summary}
+                onValueChange={(value) => createUnit.setForm('summary', value)}
+                rows={3}
+              />
+              <Input
+                label="Cover image"
+                value={createUnit.form.coverImage}
+                onValueChange={(value) => createUnit.setForm('coverImage', value)}
+              />
             </div>
             <Show when={createUnit.error()}>
-              <p class="text-xs text-danger">{createUnit.error()}</p>
+              <p class="text-xs text-[color:rgba(239,68,68,0.9)]">{createUnit.error()}</p>
             </Show>
             <div class="flex justify-end gap-2">
               <Button type="button" size="compact" variant="ghost" onClick={cancelCreateUnit}>
@@ -185,8 +173,8 @@ export const CurriculumSidebar = () => {
       <Card variant="soft" class="flex flex-col gap-3 p-4">
         <div class="flex items-center justify-between gap-3">
           <div>
-            <h2 class="text-xs font-semibold uppercase tracking-wide text-muted">Topics</h2>
-            <p class="text-xs text-muted">Organize lessons within each unit.</p>
+            <h2 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Topics</h2>
+            <p class="text-xs text-[color:var(--color-text-muted)]">Organize lessons within each unit.</p>
           </div>
           <Button
             size="compact"
@@ -197,7 +185,7 @@ export const CurriculumSidebar = () => {
             {createTopic.isCreating() ? 'Close' : 'New topic'}
           </Button>
         </div>
-        <Show when={topics().length > 0} fallback={<p class="text-xs text-muted">No topics yet.</p>}>
+        <Show when={topics().length > 0} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">No topics yet.</p>}>
           <div class="max-h-72 space-y-2 overflow-y-auto pr-1">
             <For each={topics()}>
               {(topic, index) => (
@@ -225,7 +213,7 @@ export const CurriculumSidebar = () => {
                   <div class="flex items-start justify-between gap-3">
                     <div class="flex flex-col">
                       <span class="font-medium">{topic.title}</span>
-                      <span class="text-xs text-muted">/{topic.slug}</span>
+                      <span class="text-xs text-[color:var(--color-text-muted)]">/{topic.slug}</span>
                     </div>
                     <div class="flex items-center gap-1">
                       <Button
@@ -272,56 +260,41 @@ export const CurriculumSidebar = () => {
             class="space-y-2 rounded-md border border-[rgba(140,204,212,0.35)] bg-white p-3 text-sm shadow-sm"
             onSubmit={(event) => void submitCreateTopic(event)}
           >
-            <div class="grid gap-2">
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Title</span>
-                <input
-                  class="rounded-md border border-[rgba(140,204,212,0.4)] bg-white px-3 py-2 shadow-sm"
-                  value={createTopic.form.title}
-                  onInput={(event) => createTopic.setForm('title', event.currentTarget.value)}
-                  required
-                />
-              </label>
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Slug</span>
-                <input
-                  class="rounded-md border border-[rgba(140,204,212,0.2)] bg-white px-3 py-2 shadow-sm"
-                  value={createTopic.form.slug}
-                  onInput={(event) => createTopic.setForm('slug', event.currentTarget.value)}
-                  placeholder="auto from title"
-                />
-              </label>
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Overview</span>
-                <textarea
-                  rows={2}
-                  class="rounded-md border border-[rgba(140,204,212,0.2)] bg-white px-3 py-2 shadow-sm"
-                  value={createTopic.form.overview}
-                  onInput={(event) => createTopic.setForm('overview', event.currentTarget.value)}
-                />
-              </label>
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Focus skills</span>
-                <input
-                  class="rounded-md border border-[rgba(140,204,212,0.2)] bg-white px-3 py-2 shadow-sm"
-                  value={createTopic.form.focusSkills}
-                  onInput={(event) => createTopic.setForm('focusSkills', event.currentTarget.value)}
-                  placeholder="skill.one, skill.two"
-                />
-              </label>
-              <label class="flex flex-col gap-1">
-                <span class="text-xs font-semibold uppercase tracking-wide text-muted">Estimated minutes</span>
-                <input
-                  type="number"
-                  min="0"
-                  class="rounded-md border border-[rgba(140,204,212,0.2)] bg-white px-3 py-2 shadow-sm"
-                  value={createTopic.form.estimatedDurationMinutes}
-                  onInput={(event) => createTopic.setForm('estimatedDurationMinutes', event.currentTarget.value)}
-                />
-              </label>
+            <div class="grid gap-3">
+              <Input
+                label="Title"
+                value={createTopic.form.title}
+                onValueChange={(value) => createTopic.setForm('title', value)}
+                required
+              />
+              <Input
+                label="Slug"
+                value={createTopic.form.slug}
+                onValueChange={(value) => createTopic.setForm('slug', value)}
+                placeholder="auto from title"
+              />
+              <Textarea
+                label="Overview"
+                value={createTopic.form.overview}
+                onValueChange={(value) => createTopic.setForm('overview', value)}
+                rows={3}
+              />
+              <Input
+                label="Focus skills"
+                value={createTopic.form.focusSkills}
+                onValueChange={(value) => createTopic.setForm('focusSkills', value)}
+                placeholder="skill.one, skill.two"
+              />
+              <Input
+                label="Estimated minutes"
+                type="number"
+                min={0}
+                value={createTopic.form.estimatedDurationMinutes}
+                onValueChange={(value) => createTopic.setForm('estimatedDurationMinutes', value)}
+              />
             </div>
             <Show when={createTopic.error()}>
-              <p class="text-xs text-danger">{createTopic.error()}</p>
+              <p class="text-xs text-[color:rgba(239,68,68,0.9)]">{createTopic.error()}</p>
             </Show>
             <div class="flex justify-end gap-2">
               <Button type="button" size="compact" variant="ghost" onClick={cancelCreateTopic}>
@@ -338,8 +311,8 @@ export const CurriculumSidebar = () => {
       <Card variant="soft" class="flex flex-col gap-3 p-4">
         <div class="flex items-center justify-between gap-3">
           <div>
-            <h2 class="text-xs font-semibold uppercase tracking-wide text-muted">Lessons</h2>
-            <p class="text-xs text-muted">Keep draft and publish state synchronized.</p>
+            <h2 class="text-xs font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Lessons</h2>
+            <p class="text-xs text-[color:var(--color-text-muted)]">Keep draft and publish state synchronized.</p>
           </div>
           <Button
             size="compact"
@@ -350,7 +323,7 @@ export const CurriculumSidebar = () => {
             {createLesson.isCreating() ? 'Close' : 'New lesson'}
           </Button>
         </div>
-        <Show when={lessons().length > 0} fallback={<p class="text-xs text-muted">No lessons in this topic.</p>}>
+        <Show when={lessons().length > 0} fallback={<p class="text-xs text-[color:var(--color-text-muted)]">No lessons in this topic.</p>}>
           <div class="max-h-72 space-y-2 overflow-y-auto pr-1">
             <For each={lessons()}>
               {(lesson, index) => (
@@ -365,7 +338,7 @@ export const CurriculumSidebar = () => {
                   <div class="flex items-start justify-between gap-3">
                     <div class="flex flex-col">
                       <span class="font-medium">{lesson.title || 'Untitled lesson'}</span>
-                      <span class="text-xs text-muted">
+                      <span class="text-xs text-[color:var(--color-text-muted)]">
                         {lesson.status === 'published' ? 'Published' : 'Draft'} ·{' '}
                         {new Date(lesson.updatedAt).toLocaleDateString()}
                       </span>
@@ -415,26 +388,20 @@ export const CurriculumSidebar = () => {
             class="space-y-2 rounded-md border border-[rgba(64,157,233,0.35)] bg-white p-3 text-sm shadow-sm"
             onSubmit={(event) => void submitCreateLesson(event)}
           >
-            <label class="flex flex-col gap-1">
-              <span class="text-xs font-semibold uppercase tracking-wide text-muted">Title</span>
-              <input
-                class="rounded-md border border-[rgba(64,157,233,0.4)] bg-white px-3 py-2 shadow-sm"
-                value={createLesson.form.title}
-                onInput={(event) => createLesson.setForm('title', event.currentTarget.value)}
-                required
-              />
-            </label>
-            <label class="flex flex-col gap-1">
-              <span class="text-xs font-semibold uppercase tracking-wide text-muted">Slug</span>
-              <input
-                class="rounded-md border border-[rgba(64,157,233,0.2)] bg-white px-3 py-2 shadow-sm"
-                value={createLesson.form.slug}
-                onInput={(event) => createLesson.setForm('slug', event.currentTarget.value)}
-                placeholder="auto from title"
-              />
-            </label>
+            <Input
+              label="Title"
+              value={createLesson.form.title}
+              onValueChange={(value) => createLesson.setForm('title', value)}
+              required
+            />
+            <Input
+              label="Slug"
+              value={createLesson.form.slug}
+              onValueChange={(value) => createLesson.setForm('slug', value)}
+              placeholder="auto from title"
+            />
             <Show when={createLesson.error()}>
-              <p class="text-xs text-danger">{createLesson.error()}</p>
+              <p class="text-xs text-[color:rgba(239,68,68,0.9)]">{createLesson.error()}</p>
             </Show>
             <div class="flex justify-end gap-2">
               <Button type="button" size="compact" variant="ghost" onClick={cancelCreateLesson}>

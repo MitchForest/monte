@@ -9,7 +9,7 @@ const dotVariants = cva('flex h-4 w-4 items-center justify-center rounded-full t
   variants: {
     state: {
       default: 'bg-[rgba(12,42,101,0.08)]',
-      current: 'bg-[color:var(--color-primary)] shadow-ambient',
+      current: 'bg-[color:var(--color-primary)] shadow-[0_10px_22px_rgba(12,42,101,0.18)]',
       complete: 'bg-[color:var(--color-accent-green)]',
     },
   },

@@ -29,6 +29,12 @@ var LessonScenarioBindingSchema = z.object({
   snapshot: z.record(z.unknown()).optional(),
   notes: z.string().optional()
 }).strict();
+var EntityMetadataSchema = z.object({
+  source: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  notes: z.string().optional(),
+  scenario: LessonScenarioBindingSchema.optional()
+}).catchall(z.unknown());
 var MaterialSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -354,7 +360,7 @@ var LessonDocumentMetaSchema = z.object({
   updatedAt: z.union([z.string(), z.number()]).optional(),
   author: z.string().optional(),
   notes: z.string().optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: EntityMetadataSchema.optional(),
   scenario: LessonScenarioBindingSchema.optional()
 }).strict();
 var LessonDocumentSchema = z.object({
@@ -434,7 +440,7 @@ var CurriculumTreeUnitSchema = z.object({
   coverImage: z.string().optional(),
   order: z.number(),
   status: UnitStatusSchema,
-  metadata: z.record(z.unknown()).optional(),
+  metadata: EntityMetadataSchema.optional(),
   createdAt: z.number(),
   updatedAt: z.number(),
   topics: z.array(CurriculumTreeTopicSchema)
@@ -452,7 +458,7 @@ var LessonDraftRecordSchema = z.object({
   status: LessonStatusSchema,
   createdAt: z.number(),
   updatedAt: z.number(),
-  metadata: z.record(z.unknown()).optional()
+  metadata: EntityMetadataSchema.optional()
 }).strict();
 export {
   AuthoringMetaSchema,
@@ -464,6 +470,7 @@ export {
   CurriculumTreeTopicSchema,
   CurriculumTreeUnitSchema,
   DifficultySchema,
+  EntityMetadataSchema,
   ExchangeRuleSchema,
   GuidedEvaluatorIdSchema,
   GuidedSegmentSchema,

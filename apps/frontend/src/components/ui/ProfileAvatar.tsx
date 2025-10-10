@@ -5,7 +5,7 @@ import { splitProps } from 'solid-js';
 import { cn } from '../../lib/cn';
 
 const avatarContainer = cva(
-  'relative inline-flex shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.6)] p-1 shadow-ambient',
+  'relative inline-flex shrink-0 items-center justify-center rounded-full bg-[rgba(255,255,255,0.6)] p-1 shadow-[0_10px_24px_rgba(12,42,101,0.16)]',
 );
 
 const statusDot = cva('absolute -bottom-0.5 right-1 h-3.5 w-3.5 rounded-full border-2 border-white');

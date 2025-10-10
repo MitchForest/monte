@@ -11,9 +11,10 @@ import {
 } from '../domains/curriculum/api/curriculumClient';
 import { curriculumMaterials } from '../domains/curriculum/materials';
 import { getLessonTaskStatus, useProgress } from '../domains/curriculum/state/progress';
-import { buildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
+import { safeBuildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
 import type { Lesson, LessonTask } from '@monte/types';
-import { Button, Card, Chip, PageSection, ProgressDots, type ChipProps } from '../design-system';
+import { Button, Card, Chip, PageSection, ProgressDots, type ChipProps } from '../components/ui';
+import { CurriculumAccessNotice, type CurriculumAvailabilityStatus } from '../components/CurriculumAccessNotice';
 import { useAuth } from '../providers/AuthProvider';
 
 const materialNameMap = new Map(curriculumMaterials.map((material) => [material.id, material.name]));
@@ -76,11 +77,20 @@ const Unit = () => {
   const unitSlug = createMemo(() => params().unitSlug);
   const { actions, state } = useProgress();
   const auth = useAuth();
+  type Availability = 'ready' | CurriculumAvailabilityStatus;
+  const availability = createMemo<Availability>(() => {
+    if (!isCurriculumApiAvailable) return 'offline';
+    if (auth.loading()) return 'loading';
+    if (!isCurriculumAuthReady()) return 'offline';
+    if (!auth.isAuthenticated()) return 'unauthorized';
+    return 'ready';
+  });
+  const curriculumReady = createMemo(() => availability() === 'ready');
 
   const [unitResource, { refetch: refetchUnit }] = createResource<CurriculumTreeUnit | undefined, string | undefined>(
     unitSlug,
     async (slug) => {
-      if (!slug || !isCurriculumApiAvailable || !isCurriculumAuthReady() || auth.loading()) {
+      if (!slug || !curriculumReady()) {
         return undefined;
       }
       return fetchUnitBySlug(slug);
@@ -88,7 +98,7 @@ const Unit = () => {
   );
 
   const fetchLessonListSafe = async (): Promise<LessonDraftRecord[]> => {
-    if (!isCurriculumApiAvailable || !isCurriculumAuthReady() || auth.loading()) {
+    if (!curriculumReady()) {
       return [];
     }
     return listLessons();
@@ -97,7 +107,7 @@ const Unit = () => {
   const [lessonsResource, { refetch: refetchLessons }] = createResource(fetchLessonListSafe);
 
   createEffect(() => {
-    if (isCurriculumApiAvailable && isCurriculumAuthReady() && !auth.loading()) {
+    if (curriculumReady()) {
       void refetchLessons();
       const slug = unitSlug();
       if (slug) {
@@ -120,11 +130,9 @@ const Unit = () => {
         const document = record?.published ?? record?.draft;
         if (!document) return;
         const lesson = document.lesson;
-        try {
-          const tasks = buildLessonTasks(lesson);
+        const tasks = safeBuildLessonTasks(lesson, 'unit.ensureTasks');
+        if (tasks.length > 0) {
           actions.ensureTasks(lesson.id, tasks);
-        } catch (error) {
-          console.warn('Unable to register lesson tasks for unit view', { lessonId: lesson.id, error });
         }
       });
     });
@@ -171,11 +179,7 @@ const Unit = () => {
         const lessonId = lesson?.id ?? `${meta.slug}-draft`;
         let tasks: LessonTask[] = [];
         if (lesson) {
-          try {
-            tasks = buildLessonTasks(lesson);
-          } catch (error) {
-            console.warn('Skipping tasks in unit path rendering', { lessonId: lesson.id, error });
-          }
+          tasks = safeBuildLessonTasks(lesson, 'unit.pathData');
         }
         const progress = lesson ? state.lessons[lesson.id] : undefined;
         const orderedTaskIds = lesson
@@ -260,43 +264,57 @@ const Unit = () => {
     });
   };
 
+  const handleSignIn = () => {
+    void navigate({ to: '/auth/sign-in' });
+  };
+
   return (
-    <div class="min-h-screen bg-shell px-4 pb-16 pt-16">
-      <PageSection class="mx-auto flex w-full max-w-5xl flex-col gap-6">
-        <Show when={unitData()} fallback={<Card class="p-6 text-center text-muted">Loading unit…</Card>}>
-          {(unit) => (
-            <>
+    <div class="min-h-screen bg-[linear-gradient(180deg,var(--color-background)_0%,var(--color-background-soft)_100%)] px-4 pb-16 pt-16">
+      <Show
+        when={curriculumReady()}
+        fallback=
+          {
+            <CurriculumAccessNotice
+              status={availability() === 'ready' ? 'loading' : (availability() as CurriculumAvailabilityStatus)}
+              onSignIn={handleSignIn}
+            />
+          }
+      >
+        <PageSection class="mx-auto flex w-full max-w-5xl flex-col gap-6">
+          <Show when={unitData()} fallback={<Card class="p-6 text-center text-[color:var(--color-text-muted)]">Loading unit…</Card>}>
+            {(unit) => (
+              <>
               <header class="space-y-3">
                 <Chip tone="primary" size="sm">
                   Learning path
                 </Chip>
                 <h1 class="text-3xl font-semibold leading-tight">{unit().title}</h1>
-                <p class="text-muted text-base">{unit().summary ?? 'Expand this unit in the authoring tool to add a description.'}</p>
+                <p class="text-[color:var(--color-text-muted)] text-base">{unit().summary ?? 'Expand this unit in the authoring tool to add a description.'}</p>
               </header>
 
               <section class="grid gap-4 md:grid-cols-2">
                 <Card variant="soft" class="space-y-3 p-4">
-                  <h2 class="text-sm font-semibold uppercase tracking-wide text-muted">Progress</h2>
+                  <h2 class="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Progress</h2>
                   <div class="flex items-center gap-3">
                     <ProgressDots
                       total={allLessons().length}
                       completed={completedLessonCount()}
                     />
-                    <span class="text-sm text-muted">
+                    <span class="text-sm text-[color:var(--color-text-muted)]">
                       {completedLessonCount()}/{playableLessons().length} lessons completed
                     </span>
                   </div>
                 </Card>
 
                 <Card variant="soft" class="space-y-3 p-4">
-                  <h2 class="text-sm font-semibold uppercase tracking-wide text-muted">Lessons</h2>
+                  <h2 class="text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">Lessons</h2>
                   <div class="space-y-2">
                     <For each={playableLessons()}>
                       {(lesson) => (
                         <div class="flex items-center justify-between rounded-md border border-[rgba(64,157,233,0.2)] bg-white px-3 py-2 text-sm shadow-sm">
                           <div class="flex flex-col">
                             <span class="font-medium">{lesson.title}</span>
-                            <span class="text-xs text-muted">
+                            <span class="text-xs text-[color:var(--color-text-muted)]">
                               {lesson.material ?? 'Material TBD'} · {lesson.estimatedDurationMinutes ?? 15} min
                             </span>
                           </div>
@@ -307,7 +325,7 @@ const Unit = () => {
                       )}
                     </For>
                     <Show when={playableLessons().length === 0}>
-                      <p class="text-xs text-muted">Add lessons in the editor to populate this unit.</p>
+                      <p class="text-xs text-[color:var(--color-text-muted)]">Add lessons in the editor to populate this unit.</p>
                     </Show>
                   </div>
                 </Card>
@@ -324,7 +342,7 @@ const Unit = () => {
                             {topic.complete ? 'Complete' : topic.locked ? 'Locked' : 'In progress'}
                           </Chip>
                         </div>
-                        <p class="text-muted text-sm">{topic.overview ?? 'Describe this topic in the editor.'}</p>
+                        <p class="text-[color:var(--color-text-muted)] text-sm">{topic.overview ?? 'Describe this topic in the editor.'}</p>
                       </header>
 
                       <div class="space-y-3">
@@ -333,11 +351,11 @@ const Unit = () => {
                             <div class="flex flex-wrap items-center justify-between gap-3 rounded-md border border-[rgba(64,157,233,0.2)] bg-white px-3 py-3 text-sm shadow-sm">
                               <div class="flex-1 min-w-[200px]">
                                 <p class="font-medium">{lesson.title}</p>
-                                <p class="text-xs text-muted">
+                                <p class="text-xs text-[color:var(--color-text-muted)]">
                                   {lesson.summary ?? 'Add a summary to this lesson in the editor.'}
                                 </p>
                                 <Show when={lesson.totalTasks > 0}>
-                                  <p class="text-xs text-muted mt-1">
+                                  <p class="text-xs text-[color:var(--color-text-muted)] mt-1">
                                     {lesson.completedTasks}/{lesson.totalTasks} tasks completed
                                   </p>
                                 </Show>
@@ -369,13 +387,14 @@ const Unit = () => {
                   )}
                 </For>
                 <Show when={pathData().topics.length === 0}>
-                  <Card class="p-6 text-center text-muted">No topics yet. Add topics to this unit in the editor.</Card>
+                  <Card class="p-6 text-center text-[color:var(--color-text-muted)]">No topics yet. Add topics to this unit in the editor.</Card>
                 </Show>
               </section>
-            </>
-          )}
-        </Show>
-      </PageSection>
+              </>
+            )}
+          </Show>
+        </PageSection>
+      </Show>
     </div>
   );
 };

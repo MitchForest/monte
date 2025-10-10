@@ -406,7 +406,7 @@
     }
   }
 
-  /* Breadcrumb styles are handled via design-system components */
+  /* Breadcrumb styles are handled via components/ui exports */
 
   /* Start overlay - no auto-play for K-3 learners */
   .lesson-start-overlay {

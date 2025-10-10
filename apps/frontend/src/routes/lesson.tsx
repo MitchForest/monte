@@ -13,7 +13,7 @@ import {
 import { useNavigate, useParams } from '@tanstack/solid-router';
 import { createActor, type ActorRefFrom } from 'xstate';
 
-import { buildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
+import { safeBuildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
 import { useProgress } from '../domains/curriculum/state/progress';
 import { createLessonPlayerMachine, type PlayerEvent, type PlayerStatus } from '../domains/curriculum/machines/lessonPlayer';
 import type {
@@ -38,6 +38,8 @@ import {
   type GoldenBeadScenario,
   type StampGameScenario,
 } from '../domains/curriculum/scenarios/multiplication';
+import { CurriculumAccessNotice, type CurriculumAvailabilityStatus } from '../components/CurriculumAccessNotice';
+import { resolveNarrationAssets } from '../domains/curriculum/utils/assets';
 import {
   fetchLessonBySlug,
   fetchUnitBySlug,
@@ -56,7 +58,7 @@ import {
   Card,
   PageSection,
   ProfileAvatar,
-} from '../design-system';
+} from '../components/ui';
 import { LessonInventoryProvider, useLessonInventory } from '../domains/curriculum/inventory/context';
 import { useAuth } from '../providers/AuthProvider';
 
@@ -289,7 +291,15 @@ const Lesson = () => {
   const unitSlug = createMemo(() => params().unitSlug);
   const navigate = useNavigate();
   const auth = useAuth();
-  const apiReady = createMemo(() => isCurriculumApiAvailable && isCurriculumAuthReady() && !auth.loading());
+  type Availability = 'ready' | CurriculumAvailabilityStatus;
+  const availability = createMemo<Availability>(() => {
+    if (!isCurriculumApiAvailable) return 'offline';
+    if (auth.loading()) return 'loading';
+    if (!isCurriculumAuthReady()) return 'offline';
+    if (!auth.isAuthenticated()) return 'unauthorized';
+    return 'ready';
+  });
+  const curriculumReady = createMemo(() => availability() === 'ready');
 
   const [lessonRecordResource, { refetch: refetchLessonRecord }] = createResource<
     LessonDraftRecord | undefined,
@@ -297,7 +307,7 @@ const Lesson = () => {
   >(
     () => {
       const slug = lessonSlug();
-      return apiReady() && slug ? slug : undefined;
+      return curriculumReady() && slug ? slug : undefined;
     },
     async (slug) => {
       if (!slug) return undefined;
@@ -308,7 +318,7 @@ const Lesson = () => {
   const [unitResource] = createResource<CurriculumTreeUnit | undefined, string | undefined>(
     () => {
       const slug = unitSlug();
-      return apiReady() && slug ? slug : undefined;
+      return curriculumReady() && slug ? slug : undefined;
     },
     async (slug) => {
       if (!slug) return undefined;
@@ -324,15 +334,7 @@ const Lesson = () => {
 
   const lesson = createMemo<Lesson | undefined>(() => lessonDocument()?.lesson);
   const segments = createMemo(() => lesson()?.segments ?? []);
-  const tasks = createMemo(() => {
-    if (!lesson()) return [];
-    try {
-      return buildLessonTasks(lesson()!);
-    } catch (error) {
-      console.warn('Unable to build lesson tasks for playback', { lessonId: lesson()!.id, error });
-      return [];
-    }
-  });
+  const tasks = createMemo(() => safeBuildLessonTasks(lesson(), 'lesson.playback'));
 
   const { actions: progressActions } = useProgress();
   const recordEvent = createLocalEventRecorder();
@@ -433,18 +435,18 @@ const Lesson = () => {
   });
 
   const renderLoading = () => (
-    <div class="min-h-screen bg-shell">
+    <div class="min-h-screen bg-[linear-gradient(180deg,var(--color-background)_0%,var(--color-background-soft)_100%)]">
       <PageSection class="flex h-[70vh] flex-col items-center justify-center space-y-4">
         <Card class="space-y-3 text-center">
           <p class="text-lg font-semibold">Loading lesson…</p>
-          <p class="text-sm text-muted">Fetching the latest content.</p>
+          <p class="text-sm text-[color:var(--color-text-muted)]">Fetching the latest content.</p>
         </Card>
       </PageSection>
     </div>
   );
 
   const renderNotFound = () => (
-    <div class="min-h-screen bg-shell">
+    <div class="min-h-screen bg-[linear-gradient(180deg,var(--color-background)_0%,var(--color-background-soft)_100%)]">
       <PageSection class="flex h-[70vh] flex-col items-center justify-center space-y-4">
         <Card class="space-y-4 text-center">
           <p class="text-lg font-semibold">We could not find that lesson.</p>
@@ -463,11 +465,11 @@ const Lesson = () => {
   );
 
   const renderError = (message: string) => (
-    <div class="min-h-screen bg-shell">
+    <div class="min-h-screen bg-[linear-gradient(180deg,var(--color-background)_0%,var(--color-background-soft)_100%)]">
       <PageSection class="flex h-[70vh] flex-col items-center justify-center space-y-4">
         <Card class="space-y-4 text-center">
           <p class="text-lg font-semibold">Something went wrong.</p>
-          <p class="text-sm text-muted">{message}</p>
+          <p class="text-sm text-[color:var(--color-text-muted)]">{message}</p>
           <Button
             variant="secondary"
             size="compact"
@@ -661,7 +663,7 @@ const Lesson = () => {
           {/* Top section - mini equation */}
           <div class="lesson-equation-section">
             <Show when={paperNotes().length > 0} fallback={
-              <div class="text-muted text-sm text-center">
+              <div class="text-[color:var(--color-text-muted)] text-sm text-center">
                 Equation will appear here...
               </div>
             }>
@@ -760,21 +762,34 @@ const Lesson = () => {
     return typeof error === 'string' ? error : 'Unable to load lesson.';
   };
 
+  const fallbackStatus = createMemo<CurriculumAvailabilityStatus>(() =>
+    availability() === 'ready' ? 'loading' : (availability() as CurriculumAvailabilityStatus),
+  );
+
+  const handleSignIn = () => {
+    void navigate({ to: '/auth/sign-in' });
+  };
+
   return (
-    <Switch>
-      <Match when={showLoading()}>
-        {renderLoading()}
-      </Match>
-      <Match when={lessonError()}>
-        {renderError(lessonErrorMessage())}
-      </Match>
-      <Match when={lesson()}>
-        {renderLessonView()}
-      </Match>
-      <Match when={showNotFound()}>
-        {renderNotFound()}
-      </Match>
-    </Switch>
+    <Show
+      when={curriculumReady()}
+      fallback={<CurriculumAccessNotice status={fallbackStatus()} onSignIn={handleSignIn} />}
+    >
+      <Switch>
+        <Match when={showLoading()}>
+          {renderLoading()}
+        </Match>
+        <Match when={lessonError()}>
+          {renderError(lessonErrorMessage())}
+        </Match>
+        <Match when={lesson()}>
+          {renderLessonView()}
+        </Match>
+        <Match when={showNotFound()}>
+          {renderNotFound()}
+        </Match>
+      </Switch>
+    </Show>
   );
 };
 
@@ -903,7 +918,7 @@ const SegmentContent = (props: {
     const script = presentationScript();
     if (!script || script.actions.length === 0) {
       return (
-        <Card variant="soft" class="space-y-3 text-subtle">
+        <Card variant="soft" class="space-y-3 text-[color:var(--color-text-subtle)]">
           <p>Presentation segment "{props.segment.title}" is missing authored script actions. Update the lesson draft to continue.</p>
         </Card>
       );
@@ -914,6 +929,13 @@ const SegmentContent = (props: {
       props.onPresentationComplete();
     };
 
+    const [narrationAssets] = createResource(
+      () => ({ lessonId: props.lesson.id, segmentId: props.segment.id }),
+      ({ lessonId, segmentId }) => resolveNarrationAssets(lessonId, segmentId),
+    );
+
+    const assets = () => narrationAssets() ?? { audio: undefined, caption: undefined };
+
     return (
       <PresentationSegment
         lessonId={props.lesson.id}
@@ -921,8 +943,9 @@ const SegmentContent = (props: {
         playerStatus={props.playerStatus}
         onAutoAdvance={handlePresentationComplete}
         script={script}
-        audioSrc={`/curriculum/assets/audio/${props.lesson.id}/${props.segment.id}.mp3`}
-        captionSrc={`/curriculum/assets/audio/${props.lesson.id}/${props.segment.id}.vtt`}
+        audioSrc={assets().audio}
+        captionSrc={assets().caption}
+        audioLoading={narrationAssets.loading}
         recordEvent={props.recordEvent}
         onNarrationChange={props.onNarrationChange}
         onPaperNotesChange={props.onPaperNotesChange}
@@ -936,7 +959,7 @@ const SegmentContent = (props: {
     const steps = guidedSteps();
     if (steps.length === 0) {
       return (
-        <Card variant="soft" class="space-y-3 text-subtle">
+        <Card variant="soft" class="space-y-3 text-[color:var(--color-text-subtle)]">
           <p>Guided segment "{props.segment.title}" requires at least one step before it can run.</p>
         </Card>
       );
@@ -961,7 +984,7 @@ const SegmentContent = (props: {
     const questions = practiceQuestions();
     if (questions.length === 0 || !props.segment.passCriteria) {
       return (
-        <Card variant="soft" class="space-y-3 text-subtle">
+        <Card variant="soft" class="space-y-3 text-[color:var(--color-text-subtle)]">
           <p>Practice segment "{props.segment.title}" needs authored questions and pass criteria.</p>
         </Card>
       );
@@ -991,7 +1014,7 @@ const SegmentContent = (props: {
   }
 
   return (
-    <div class="rounded-[var(--radius-md)] border border-[rgba(64,157,233,0.2)] bg-[rgba(233,245,251,0.7)] p-4 text-base text-subtle">
+    <div class="rounded-[var(--radius-md)] border border-[rgba(64,157,233,0.2)] bg-[rgba(233,245,251,0.7)] p-4 text-base text-[color:var(--color-text-subtle)]">
       <p>Unsupported segment configuration.</p>
     </div>
   );

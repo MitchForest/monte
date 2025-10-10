@@ -9,6 +9,12 @@ import type {
   WorkspaceKind,
 } from '@monte/types';
 import { createEmptyInventory } from '../utils/inventory';
+import {
+  buildRuntimeState,
+  detectInventoryConsistencyIssues,
+  type InventoryDelta,
+  type RuntimeInventoryState,
+} from './consistency';
 
 interface TokenTypeWithQuantity {
   definition: TokenTypeDefinition;
@@ -26,72 +32,14 @@ interface LessonInventoryContextValue {
   resetBank: (bankId: string | undefined) => void;
   resetAll: () => void;
   snapshot: () => LessonMaterialInventory;
+  deltas: () => InventoryDelta[];
+  recordDelta: (delta: InventoryDelta) => void;
+  verifyConsistency: () => void;
 }
 
 const EMPTY_INVENTORY = createEmptyInventory();
 
 const LessonInventoryContext = createContext<LessonInventoryContextValue>();
-
-interface BankRuntimeState {
-  available: Record<string, number>;
-  initial: Record<string, number>;
-}
-
-type RuntimeInventoryState = {
-  banks: Record<string, BankRuntimeState>;
-};
-
-const deriveAcceptedTokenIds = (
-  bank: MaterialBankDefinition,
-  inventory: LessonMaterialInventory,
-): string[] => {
-  if (bank.accepts.length > 0) {
-    return bank.accepts;
-  }
-  return inventory.tokenTypes.map((token) => token.id);
-};
-
-const toRecord = (entries: Array<[string, number]>): Record<string, number> => {
-  const map: Record<string, number> = {};
-  entries.forEach(([key, value]) => {
-    map[key] = value;
-  });
-  return map;
-};
-
-const createBankState = (
-  bank: MaterialBankDefinition,
-  inventory: LessonMaterialInventory,
-): BankRuntimeState => {
-  const tokenIds = deriveAcceptedTokenIds(bank, inventory);
-  const initialQuantity = bank.initialQuantity;
-  let initial: Record<string, number>;
-  if (typeof initialQuantity === 'number') {
-    initial = toRecord(tokenIds.map((id) => [id, initialQuantity]));
-  } else {
-    initial = { ...initialQuantity };
-  }
-
-  // Ensure every accepted token id exists in the map
-  tokenIds.forEach((id) => {
-    if (typeof initial[id] !== 'number') {
-      initial[id] = 0;
-    }
-  });
-
-  return {
-    available: { ...initial },
-    initial,
-  };
-};
-
-const buildRuntimeState = (inventory: LessonMaterialInventory): RuntimeInventoryState => {
-  const banks: Record<string, BankRuntimeState> = {};
-  for (const bank of inventory.banks) {
-    banks[bank.id] = createBankState(bank, inventory);
-  }
-  return { banks };
-};
 
 export const LessonInventoryProvider: ParentComponent<{
   inventory?: LessonMaterialInventory | null;
@@ -99,6 +47,7 @@ export const LessonInventoryProvider: ParentComponent<{
   const resolved = createMemo<LessonMaterialInventory>(() => props.inventory ?? EMPTY_INVENTORY);
 
   const [runtime, setRuntime] = createStore<RuntimeInventoryState>(buildRuntimeState(resolved()));
+  const [deltas, setDeltas] = createStore<InventoryDelta[]>([]);
 
   createEffect(() => {
     const latest = resolved();
@@ -132,18 +81,40 @@ export const LessonInventoryProvider: ParentComponent<{
     if (!current) return false;
     const available = current.available[tokenTypeId] ?? 0;
     if (available < amount) {
+      console.warn('[inventory] insufficient supply', { bankId, tokenTypeId, requested: amount, available });
       return false;
     }
     setRuntime('banks', bankId, 'available', tokenTypeId, available - amount);
+    setDeltas((previous) => [
+      ...previous,
+      {
+        tokenTypeId,
+        delta: -amount,
+        reason: 'consume',
+        bankId,
+      },
+    ]);
     return true;
   };
 
   const replenishToken = (bankId: string | undefined, tokenTypeId: string, amount = 1) => {
     if (!bankId) return;
     const current = runtime.banks[bankId];
-    if (!current) return;
+    if (!current) {
+      console.warn('[inventory] replenish target missing bank', { bankId, tokenTypeId, amount });
+      return;
+    }
     const available = current.available[tokenTypeId] ?? 0;
     setRuntime('banks', bankId, 'available', tokenTypeId, available + amount);
+    setDeltas((previous) => [
+      ...previous,
+      {
+        tokenTypeId,
+        delta: amount,
+        reason: 'replenish',
+        bankId,
+      },
+    ]);
   };
 
   const resetBank = (bankId: string | undefined) => {
@@ -151,11 +122,21 @@ export const LessonInventoryProvider: ParentComponent<{
     const current = runtime.banks[bankId];
     if (!current) return;
     setRuntime('banks', bankId, 'available', { ...current.initial });
+    setDeltas((previous) => [
+      ...previous,
+      {
+        tokenTypeId: '*',
+        delta: 0,
+        reason: 'reset',
+        bankId,
+      },
+    ]);
   };
 
   const resetAll = () => {
     const snapshot = buildRuntimeState(resolved());
     setRuntime(snapshot);
+    setDeltas([]);
   };
 
   const snapshotInventory = (): LessonMaterialInventory => {
@@ -175,6 +156,17 @@ export const LessonInventoryProvider: ParentComponent<{
     } satisfies LessonMaterialInventory;
   };
 
+  const verifyConsistency = () => {
+    const issues = detectInventoryConsistencyIssues(resolved(), runtime, deltas);
+    if (issues.length > 0) {
+      console.warn('[inventory] consistency check failed', {
+        issues,
+        deltas,
+      });
+      throw new Error('Inventory runtime state diverged from authored material inventory.');
+    }
+  };
+
   const value: LessonInventoryContextValue = {
     inventory: resolved,
     getBank: (bankId) => {
@@ -192,6 +184,9 @@ export const LessonInventoryProvider: ParentComponent<{
     resetBank,
     resetAll,
     snapshot: snapshotInventory,
+    deltas: () => deltas,
+    recordDelta: (delta) => setDeltas((previous) => [...previous, delta]),
+    verifyConsistency,
   };
 
   return <LessonInventoryContext.Provider value={value}>{props.children}</LessonInventoryContext.Provider>;
@@ -244,18 +239,51 @@ export const useSegmentInventory = (segment: Pick<LessonSegment, 'id' | 'materia
       consumeToken: (tokenTypeId: string, amount = 1) => {
         const currentBank = bank();
         if (!currentBank) return false;
-        return context.consumeToken(currentBank.id, tokenTypeId, amount);
+        const success = context.consumeToken(currentBank.id, tokenTypeId, amount);
+        if (success) {
+          context.recordDelta({
+            tokenTypeId,
+            delta: -amount,
+            reason: 'consume',
+            bankId: currentBank.id,
+            segmentId: segment.id,
+          });
+        }
+        return success;
       },
       replenishToken: (tokenTypeId: string, amount = 1) => {
         const currentBank = bank();
         if (!currentBank) return;
         context.replenishToken(currentBank.id, tokenTypeId, amount);
+        context.recordDelta({
+          tokenTypeId,
+          delta: amount,
+          reason: 'replenish',
+          bankId: currentBank.id,
+          segmentId: segment.id,
+        });
       },
       resetBank: () => {
         const currentBank = bank();
         if (!currentBank) return;
         context.resetBank(currentBank.id);
+        context.recordDelta({
+          tokenTypeId: '*',
+          delta: 0,
+          reason: 'reset',
+          bankId: currentBank.id,
+          segmentId: segment.id,
+        });
       },
+      recordDelta: (delta: InventoryDelta) => {
+        const currentBank = bank();
+        context.recordDelta({
+          bankId: currentBank?.id,
+          segmentId: segment.id,
+          ...delta,
+        });
+      },
+      deltas: context.deltas,
     },
   };
 };
@@ -285,3 +313,5 @@ export const LessonInventoryOverlay = (props: {
     )}
   </Show>
 );
+
+export type { InventoryDelta } from './consistency';

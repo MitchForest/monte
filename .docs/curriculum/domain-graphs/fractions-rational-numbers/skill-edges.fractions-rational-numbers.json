@@ -1,0 +1,345 @@
+[
+  {
+    "id": "edge.add-subtract-decimals.sequence-1",
+    "sourceSkillId": "skill.add-subtract-decimals.align-place-value",
+    "targetSkillId": "skill.add-subtract-decimals.model-decimals",
+    "type": "prereq_core",
+    "rationale": "Aligning place value supports modeling decimal operations concretely."
+  },
+  {
+    "id": "edge.add-subtract-decimals.sequence-2",
+    "sourceSkillId": "skill.add-subtract-decimals.model-decimals",
+    "targetSkillId": "skill.add-subtract-decimals.estimation",
+    "type": "prereq_core",
+    "rationale": "Modeling decimal operations supports estimating sums and differences."
+  },
+  {
+    "id": "edge.add-subtract-like-denominator.sequence-1",
+    "sourceSkillId": "skill.add-subtract-like-denominator.area-model-add",
+    "targetSkillId": "skill.add-subtract-like-denominator.subtract-number-line",
+    "type": "prereq_strategy",
+    "rationale": "Adding with models introduces fraction operations before subtracting on number lines."
+  },
+  {
+    "id": "edge.add-subtract-like-denominator.sequence-2",
+    "sourceSkillId": "skill.add-subtract-like-denominator.subtract-number-line",
+    "targetSkillId": "skill.add-subtract-like-denominator.word-problems",
+    "type": "prereq_core",
+    "rationale": "Subtracting with shared denominators prepares learners for contextual word problems."
+  },
+  {
+    "id": "edge.add-tenths-to-compare-decimals",
+    "sourceSkillId": "skill.fraction-decimal-conversion.add-tenths-hundredths",
+    "targetSkillId": "skill.fraction-decimal-conversion.compare-hundredths",
+    "type": "prereq_support",
+    "rationale": "Adding tenths and hundredths reinforces place value used to compare decimals."
+  },
+  {
+    "id": "edge.area-model-to-equations",
+    "sourceSkillId": "skill.fraction-multiplication.area-model",
+    "targetSkillId": "skill.fraction-multiplication.equations",
+    "type": "prereq_core",
+    "rationale": "Area models build conceptual understanding before symbolic multiplication."
+  },
+  {
+    "id": "edge.benchmark-fractions.sequence-1",
+    "sourceSkillId": "skill.benchmark-fractions.use-half-third-quarter",
+    "targetSkillId": "skill.benchmark-fractions.estimation",
+    "type": "prereq_core",
+    "rationale": "Using benchmark comparisons precedes applying them to estimation tasks."
+  },
+  {
+    "id": "edge.benchmark-to-word",
+    "sourceSkillId": "skill.benchmark-fractions.estimation",
+    "targetSkillId": "skill.add-subtract-unlike-denominators.word-problems",
+    "type": "prereq_support",
+    "rationale": "Benchmark estimation supports assessing reasonableness in fraction sum/difference problems."
+  },
+  {
+    "id": "edge.build-common-to-word",
+    "sourceSkillId": "skill.add-subtract-unlike-denominators.build-common-units",
+    "targetSkillId": "skill.add-subtract-unlike-denominators.word-problems",
+    "type": "prereq_core",
+    "rationale": "Building common denominators prepares students for solving word problems with unlike denominators."
+  },
+  {
+    "id": "edge.compare-unit-fractions.sequence-1",
+    "sourceSkillId": "skill.compare-unit-fractions.reason-unit-fraction-size",
+    "targetSkillId": "skill.compare-unit-fractions.compare-same-numerator",
+    "type": "prereq_core",
+    "rationale": "Reasoning about unit fraction size precedes comparing fractions with the same numerator."
+  },
+  {
+    "id": "edge.compare-unit.branch-denominator",
+    "sourceSkillId": "skill.compare-unit-fractions.reason-unit-fraction-size",
+    "targetSkillId": "skill.compare-unit-fractions.same-denominator",
+    "type": "prereq_core",
+    "rationale": "Reasoning about unit fractions supports comparing fractions with equal denominators."
+  },
+  {
+    "id": "edge.compare-unit.branch-numerator",
+    "sourceSkillId": "skill.compare-unit-fractions.reason-unit-fraction-size",
+    "targetSkillId": "skill.compare-unit-fractions.same-numerator",
+    "type": "prereq_core",
+    "rationale": "Understanding unit fraction size allows comparing fractions with the same numerator."
+  },
+  {
+    "id": "edge.compare-unlike-fractions.sequence-1",
+    "sourceSkillId": "skill.compare-unlike-fractions.common-denominator",
+    "targetSkillId": "skill.compare-unlike-fractions.common-numerator",
+    "type": "prereq_strategy",
+    "rationale": "Using common denominators complements comparing fractions with like numerators."
+  },
+  {
+    "id": "edge.decompose-to-like-add",
+    "sourceSkillId": "skill.add-subtract-like-denominator.decompose-to-units",
+    "targetSkillId": "skill.add-subtract-like-denominator.area-model-add",
+    "type": "prereq_core",
+    "rationale": "Decomposing fractions into units supports adding like denominators."
+  },
+  {
+    "id": "edge.equivalent-to-build-common",
+    "sourceSkillId": "skill.generate-equivalent-fractions.multiply-denominator",
+    "targetSkillId": "skill.add-subtract-unlike-denominators.build-common-units",
+    "type": "prereq_core",
+    "rationale": "Creating equivalent fractions is required to build common denominators."
+  },
+  {
+    "id": "edge.fraction-decimal-conversion.sequence-1",
+    "sourceSkillId": "skill.fraction-decimal-conversion.tenths-hundredths",
+    "targetSkillId": "skill.fraction-decimal-conversion.add-tenths-hundredths",
+    "type": "prereq_core",
+    "rationale": "Converting fractions informs comparisons between fractions and decimals."
+  },
+  {
+    "id": "edge.fraction-decimal-conversion.sequence-2",
+    "sourceSkillId": "skill.fraction-decimal-conversion.add-tenths-hundredths",
+    "targetSkillId": "skill.fraction-decimal-conversion.compare-hundredths",
+    "type": "prereq_core",
+    "rationale": "Comparing representations equips learners to solve fraction-decimal problems."
+  },
+  {
+    "id": "edge.fraction-decimal-conversion.sequence-3",
+    "sourceSkillId": "skill.fraction-decimal-conversion.compare-hundredths",
+    "targetSkillId": "skill.fraction-decimal-conversion.compare-fraction-decimal",
+    "type": "prereq_core",
+    "rationale": "Comparing decimals supports comparing fractions and decimals expressed in different forms."
+  },
+  {
+    "id": "edge.fraction-decimal-conversion.sequence-4",
+    "sourceSkillId": "skill.fraction-decimal-conversion.compare-fraction-decimal",
+    "targetSkillId": "skill.fraction-decimal-conversion.solve-word-problems",
+    "type": "prereq_core",
+    "rationale": "Comparing fractions and decimals prepares learners for solving contextual problems that mix representations."
+  },
+  {
+    "id": "edge.fraction-decimal-operations.transition-1",
+    "sourceSkillId": "skill.add-subtract-like-denominator.area-model-add",
+    "targetSkillId": "skill.add-subtract-like-denominator.subtract-mixed-number",
+    "type": "prereq_core",
+    "rationale": "Operations with mixed numbers segue into fraction addition/subtraction with like denominators."
+  },
+  {
+    "id": "edge.fraction-decimal-operations.transition-2",
+    "sourceSkillId": "skill.add-subtract-like-denominator.word-problems",
+    "targetSkillId": "skill.multiply-fractions-by-whole-numbers.area-model",
+    "type": "prereq_core",
+    "rationale": "Applying like-denominator operations transitions into multiplying fractions by whole numbers."
+  },
+  {
+    "id": "edge.fraction-decimal-operations.transition-3",
+    "sourceSkillId": "skill.multiply-fractions-by-whole-numbers.explain-scaling",
+    "targetSkillId": "skill.fraction-decimal-conversion.tenths-hundredths",
+    "type": "prereq_core",
+    "rationale": "Understanding scaling sets up conversions between fractions and decimals."
+  },
+  {
+    "id": "edge.fraction-decimal-operations.transition-4",
+    "sourceSkillId": "skill.fraction-decimal-conversion.solve-word-problems",
+    "targetSkillId": "skill.add-subtract-decimals.align-place-value",
+    "type": "prereq_core",
+    "rationale": "Solving fraction-decimal word problems leads into precise decimal operations."
+  },
+  {
+    "id": "edge.fraction-division-to-area-multiply",
+    "sourceSkillId": "skill.fractions-as-division.interpret",
+    "targetSkillId": "skill.fraction-multiplication.area-model",
+    "type": "prereq_core",
+    "rationale": "Interpreting fractions as division prepares learners to model fraction multiplication."
+  },
+  {
+    "id": "edge.fraction-equivalence.transition-1",
+    "sourceSkillId": "skill.compare-unit-fractions.compare-same-denominator",
+    "targetSkillId": "skill.generate-equivalent-fractions.area-model-equivalence",
+    "type": "prereq_core",
+    "rationale": "Comparing like fractions prepares learners to explore equivalence across models."
+  },
+  {
+    "id": "edge.fraction-equivalence.transition-2",
+    "sourceSkillId": "skill.generate-equivalent-fractions.multiply-denominator",
+    "targetSkillId": "skill.compare-unlike-fractions.common-denominator",
+    "type": "prereq_core",
+    "rationale": "Generating equivalent fractions enables comparing fractions by common denominators."
+  },
+  {
+    "id": "edge.fraction-equivalence.transition-3",
+    "sourceSkillId": "skill.compare-unlike-fractions.cross-multiply",
+    "targetSkillId": "skill.benchmark-fractions.use-half-third-quarter",
+    "type": "prereq_strategy",
+    "rationale": "Comparing fractions numerically supports reasoning with benchmark fractions."
+  },
+  {
+    "id": "edge.fraction-equivalence.transition-4",
+    "sourceSkillId": "skill.benchmark-fractions.estimation",
+    "targetSkillId": "skill.mixed-numbers-number-lines.place-mixed-number",
+    "type": "prereq_core",
+    "rationale": "Benchmark reasoning prepares learners to place mixed numbers accurately."
+  },
+  {
+    "id": "edge.fraction-foundations.transition-1",
+    "sourceSkillId": "skill.partition-shapes-equal-parts.name-unit-fractions",
+    "targetSkillId": "skill.unit-fractions-number-lines.locate-unit-fraction",
+    "type": "prereq_core",
+    "rationale": "Naming unit fractions from shapes prepares learners to plot them on number lines."
+  },
+  {
+    "id": "edge.fraction-foundations.transition-2",
+    "sourceSkillId": "skill.unit-fractions-number-lines.compare-unit-fraction-location",
+    "targetSkillId": "skill.compare-unit-fractions.reason-unit-fraction-size",
+    "type": "prereq_core",
+    "rationale": "Comparing unit fractions on number lines leads into reasoning about fractional size."
+  },
+  {
+    "id": "edge.fraction-multiply-equations-to-word",
+    "sourceSkillId": "skill.fraction-multiplication.equations",
+    "targetSkillId": "skill.fraction-multiplication.word-problems",
+    "type": "prereq_core",
+    "rationale": "Computational fluency precedes applying fraction multiplication to word problems."
+  },
+  {
+    "id": "edge.fraction-multiply-word-to-division-models",
+    "sourceSkillId": "skill.fraction-multiplication.word-problems",
+    "targetSkillId": "skill.unit-fraction-division.models",
+    "type": "prereq_support",
+    "rationale": "Solving multiplication problems provides context for interpreting division with unit fractions."
+  },
+  {
+    "id": "edge.fractions-of-sets.sequence-1",
+    "sourceSkillId": "skill.fractions-of-sets.model-fractions-of-sets",
+    "targetSkillId": "skill.fractions-of-sets.calculate-fraction-set",
+    "type": "prereq_core",
+    "rationale": "Modeling fractions of sets precedes computing how many items match a fractional amount."
+  },
+  {
+    "id": "edge.fractions-of-sets.sequence-2",
+    "sourceSkillId": "skill.fractions-of-sets.calculate-fraction-set",
+    "targetSkillId": "skill.fractions-of-sets.explain-fraction-set",
+    "type": "prereq_core",
+    "rationale": "Calculating fractional parts sets up explaining the reasoning behind them."
+  },
+  {
+    "id": "edge.generate-equivalent-fractions.sequence-1",
+    "sourceSkillId": "skill.generate-equivalent-fractions.area-model-equivalence",
+    "targetSkillId": "skill.generate-equivalent-fractions.number-line-equivalence",
+    "type": "prereq_core",
+    "rationale": "Establishing equivalence with area models precedes demonstrating it on number lines."
+  },
+  {
+    "id": "edge.generate-equivalent-fractions.sequence-2",
+    "sourceSkillId": "skill.generate-equivalent-fractions.number-line-equivalence",
+    "targetSkillId": "skill.generate-equivalent-fractions.multiply-denominator",
+    "type": "prereq_core",
+    "rationale": "Visual evidence of equivalence supports symbolic generation using multiplication."
+  },
+  {
+    "id": "edge.mixed-numbers-number-lines.sequence-1",
+    "sourceSkillId": "skill.mixed-numbers-number-lines.place-mixed-number",
+    "targetSkillId": "skill.mixed-numbers-number-lines.decompose-mixed-number",
+    "type": "prereq_core",
+    "rationale": "Locating mixed numbers on number lines precedes decomposing them into parts."
+  },
+  {
+    "id": "edge.mixed-numbers-number-lines.sequence-2",
+    "sourceSkillId": "skill.mixed-numbers-number-lines.decompose-mixed-number",
+    "targetSkillId": "skill.mixed-numbers-number-lines.add-mixed-number",
+    "type": "prereq_core",
+    "rationale": "Decomposing mixed numbers supports addition of like denominators."
+  },
+  {
+    "id": "edge.mixed-numbers-number-lines.sequence-3",
+    "sourceSkillId": "skill.mixed-numbers-number-lines.add-mixed-number",
+    "targetSkillId": "skill.mixed-numbers-number-lines.subtract-mixed-number",
+    "type": "prereq_core",
+    "rationale": "Adding mixed numbers lays the groundwork for subtraction with regrouping."
+  },
+  {
+    "id": "edge.multiply-fractions-by-whole-numbers.sequence-1",
+    "sourceSkillId": "skill.multiply-fractions-by-whole-numbers.area-model",
+    "targetSkillId": "skill.multiply-fractions-by-whole-numbers.equation",
+    "type": "prereq_core",
+    "rationale": "Area-model reasoning precedes symbolic equations for fraction multiplication."
+  },
+  {
+    "id": "edge.multiply-fractions-by-whole-numbers.sequence-2",
+    "sourceSkillId": "skill.multiply-fractions-by-whole-numbers.equation",
+    "targetSkillId": "skill.multiply-fractions-by-whole-numbers.explain-scaling",
+    "type": "prereq_core",
+    "rationale": "Equation fluency supports explaining fractional scaling."
+  },
+  {
+    "id": "edge.partition-shapes.sequence-1",
+    "sourceSkillId": "skill.partition-shapes-equal-parts.identify-equal-parts",
+    "targetSkillId": "skill.partition-shapes-equal-parts.partition-shapes",
+    "type": "prereq_core",
+    "rationale": "Recognizing equal parts comes before partitioning shapes independently."
+  },
+  {
+    "id": "edge.partition-shapes.sequence-2",
+    "sourceSkillId": "skill.partition-shapes-equal-parts.partition-shapes",
+    "targetSkillId": "skill.partition-shapes-equal-parts.name-unit-fractions",
+    "type": "prereq_core",
+    "rationale": "Partitioning experience prepares learners to name unit fractions."
+  },
+  {
+    "id": "edge.place-nonunit-from-generate",
+    "sourceSkillId": "skill.unit-fractions-number-lines.generate-fraction-symbols",
+    "targetSkillId": "skill.unit-fractions-number-lines.place-nonunit-fractions",
+    "type": "prereq_core",
+    "rationale": "Generating symbols for unit fractions precedes placing non-unit fractions on number lines."
+  },
+  {
+    "id": "edge.place-nonunit-to-whole",
+    "sourceSkillId": "skill.unit-fractions-number-lines.place-nonunit-fractions",
+    "targetSkillId": "skill.unit-fractions-number-lines.whole-as-fractions",
+    "type": "prereq_support",
+    "rationale": "Locating non-unit fractions supports recognizing whole numbers written as fractions."
+  },
+  {
+    "id": "edge.unit-division-models-to-equations",
+    "sourceSkillId": "skill.unit-fraction-division.models",
+    "targetSkillId": "skill.unit-fraction-division.equations",
+    "type": "prereq_core",
+    "rationale": "Modeling division with unit fractions precedes writing equations to solve them."
+  },
+  {
+    "id": "edge.unit-fractions-number-lines.sequence-1",
+    "sourceSkillId": "skill.unit-fractions-number-lines.locate-unit-fraction",
+    "targetSkillId": "skill.unit-fractions-number-lines.generate-fraction-symbols",
+    "type": "prereq_core",
+    "rationale": "Locating unit fractions on number lines precedes writing symbolic fractions."
+  },
+  {
+    "id": "edge.unit-fractions-number-lines.sequence-2",
+    "sourceSkillId": "skill.unit-fractions-number-lines.generate-fraction-symbols",
+    "targetSkillId": "skill.unit-fractions-number-lines.compare-unit-fraction-location",
+    "type": "prereq_core",
+    "rationale": "Writing symbols supports comparing unit fraction locations."
+  },
+  {
+    "id": "edge.whole-fractions-to-equivalence",
+    "sourceSkillId": "skill.unit-fractions-number-lines.whole-as-fractions",
+    "targetSkillId": "skill.generate-equivalent-fractions.area-model-equivalence",
+    "type": "prereq_support",
+    "rationale": "Seeing wholes as fractions reinforces generating equivalent fractions."
+  }
+]

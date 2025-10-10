@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 import { Show, createMemo } from 'solid-js';
 import { Portal } from 'solid-js/web';
 
-import { Button } from '../../../design-system';
+import { Button } from '../../../components/ui';
 import { useLessonCanvas } from './hooks';
 import type { ViewportState } from './types';
 

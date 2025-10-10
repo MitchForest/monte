@@ -3,7 +3,7 @@ import { createStore } from 'solid-js/store';
 
 import type { DemoEventRecorder } from '../../analytics/events';
 import type { PracticePassCriteria, PracticeQuestion, PracticeSegment as PracticeSegmentType } from '@monte/types';
-import { Button, Chip } from '../../../../design-system';
+import { Button, Chip } from '../../../../components/ui';
 import { LessonCanvas, useViewportObserver } from '../../canvas';
 import { LessonInventoryOverlay, useSegmentInventory } from '../../inventory/context';
 
@@ -38,32 +38,70 @@ const createSeededRng = (seed: number) => {
 
 const randomInclusive = (rand: () => number, min: number, max: number) => Math.floor(rand() * (max - min + 1)) + min;
 
+type PracticeQuestionValidator = (input: {
+  multiplicand: number;
+  multiplier: number;
+}) => boolean;
+
 const regenerateQuestions = (
   workspace: PracticeSegmentType['workspace'],
   base: PracticeQuestion[],
   seed?: number,
+  validator?: PracticeQuestionValidator,
 ) => {
   const rand = typeof seed === 'number' ? createSeededRng(seed) : Math.random;
   return base.map((question) => {
     let multiplicand = question.multiplicand;
     let multiplier = question.multiplier;
 
-    if (workspace === 'golden-beads') {
-      multiplicand = randomInclusive(rand, 1200, 4999);
-      multiplier = randomInclusive(rand, 2, 8);
-    } else {
+    const generateCandidate = () => {
+      if (workspace === 'golden-beads') {
+        multiplicand = randomInclusive(rand, 1200, 4999);
+        multiplier = randomInclusive(rand, 2, 8);
+        return;
+      }
       multiplicand = randomInclusive(rand, 210, 599);
       multiplier = randomInclusive(rand, 2, 6);
+    };
+
+    if (workspace === 'golden-beads' || workspace === 'stamp-game') {
+      const MAX_ATTEMPTS = 25;
+      let attempts = 0;
+      do {
+        generateCandidate();
+        attempts += 1;
+      } while (
+        validator &&
+        !validator({ multiplicand, multiplier }) &&
+        attempts < MAX_ATTEMPTS
+      );
+
+      if (validator && !validator({ multiplicand, multiplier })) {
+        multiplicand = question.multiplicand;
+        multiplier = question.multiplier;
+      }
+    } else {
+      generateCandidate();
     }
+
+    const correctAnswer = multiplicand * multiplier;
 
     return {
       ...question,
       multiplicand,
       multiplier,
-      correctAnswer: multiplicand * multiplier,
+      correctAnswer,
       prompt: `Solve ${multiplicand} × ${multiplier}.`,
     } satisfies PracticeQuestion;
   });
+};
+
+const extractDigits = (value: number) => {
+  const units = value % 10;
+  const tens = Math.floor(value / 10) % 10;
+  const hundreds = Math.floor(value / 100) % 10;
+  const thousands = Math.floor(value / 1000) % 10;
+  return { thousands, hundreds, tens, units };
 };
 
 export const PracticeSegment = (props: PracticeSegmentProps) => {
@@ -74,7 +112,87 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
   });
   const inventoryBank = segmentInventory.bank;
   const inventoryTokens = segmentInventory.tokenTypes;
+  const inventoryActions = segmentInventory.actions;
   const workspace = createMemo<PracticeSegmentType['workspace']>(() => segmentInventory.workspace() ?? props.segment.workspace);
+
+  const beadAvailability = createMemo<Record<'thousand' | 'hundred' | 'ten' | 'unit', number>>(() => {
+    const counts = { thousand: 0, hundred: 0, ten: 0, unit: 0 };
+    const tokens = inventoryTokens();
+    tokens.forEach((token) => {
+      const visual = token.definition.visual;
+      if (visual.kind === 'bead') {
+        counts[visual.place] = token.quantity;
+      }
+    });
+    return counts;
+  });
+
+  const stampAvailability = createMemo<Record<'1' | '10' | '100', number>>(() => {
+    const counts: Record<'1' | '10' | '100', number> = { '1': 0, '10': 0, '100': 0 };
+    const tokens = inventoryTokens();
+    tokens.forEach((token) => {
+      const visual = token.definition.visual;
+      if (visual.kind === 'stamp') {
+        counts[String(visual.value) as '1' | '10' | '100'] = token.quantity;
+      }
+    });
+    return counts;
+  });
+
+  const questionValidator = createMemo<PracticeQuestionValidator | undefined>(() => {
+    const currentWorkspace = workspace();
+    if (currentWorkspace === 'golden-beads') {
+      const limits = beadAvailability();
+      return ({ multiplicand }) => {
+        const digits = extractDigits(multiplicand);
+        return (
+          digits.thousands <= limits.thousand &&
+          digits.hundreds <= limits.hundred &&
+          digits.tens <= limits.ten &&
+          digits.units <= limits.unit
+        );
+      };
+    }
+    if (currentWorkspace === 'stamp-game') {
+      const limits = stampAvailability();
+      return ({ multiplicand }) => {
+        const digits = extractDigits(multiplicand);
+        return (
+          digits.hundreds <= limits['100'] &&
+          digits.tens <= limits['10'] &&
+          digits.units <= limits['1']
+        );
+      };
+    }
+    return undefined;
+  });
+
+  const recordInventoryDelta = (tokenTypeId: string, delta: number, reason: 'consume' | 'replenish') => {
+    const bank = inventoryBank();
+    if (bank) {
+      props.recordEvent?.({
+        type: 'inventory.delta',
+        lessonId: props.lessonId,
+        segmentId: props.segment.id,
+        bankId: bank.id,
+        tokenTypeId,
+        delta,
+        reason,
+      });
+    }
+  };
+
+  const recordInventoryReset = () => {
+    const bank = inventoryBank();
+    if (bank) {
+      props.recordEvent?.({
+        type: 'inventory.reset',
+        lessonId: props.lessonId,
+        segmentId: props.segment.id,
+        bankId: bank.id,
+      });
+    }
+  };
 
   const buildInitialStates = (qs: PracticeQuestion[]) => {
     const initial: Record<string, QuestionState> = {};
@@ -126,7 +244,10 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
       setRegenerationCount(generationSeed);
     }
     const seed = typeof props.scenarioSeed === 'number' ? props.scenarioSeed + generationSeed : undefined;
-    const resetQuestions = regenerate ? regenerateQuestions(workspace(), props.questions, seed) : props.questions;
+    const validator = questionValidator();
+    const resetQuestions = regenerate
+      ? regenerateQuestions(workspace(), props.questions, seed, validator)
+      : props.questions;
     setQuestions([...resetQuestions]);
     setQuestionStates(() => buildInitialStates(resetQuestions));
     setIndex(0);
@@ -155,6 +276,20 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
     setAnsweredCount(totalAnswered);
 
     if (isCorrect) {
+      const tokenEntry = inventoryTokens()[0];
+      if (tokenEntry) {
+        const tokenId = tokenEntry.definition.id;
+        const consumed = inventoryActions.consumeToken(tokenId, 1);
+        if (consumed) {
+          recordInventoryDelta(tokenId, -1, 'consume');
+        } else {
+          inventoryActions.recordDelta({
+            tokenTypeId: tokenId,
+            delta: 0,
+            reason: 'consume',
+          });
+        }
+      }
       setCorrectCount((value) => value + 1);
       setFeedback('Nice! That matches the expected product.');
       props.onTaskResult?.(`${props.segment.id}-${question.id}`, 'completed');
@@ -200,6 +335,12 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
           props.onTaskResult?.(`${props.segment.id}-${item.id}`, 'completed');
         }
       });
+      recordInventoryReset();
+      inventoryActions.recordDelta({
+        tokenTypeId: '*',
+        delta: 0,
+        reason: 'reset',
+      });
       props.onSegmentResult('pass');
       return;
     }
@@ -210,6 +351,12 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
         if (questionStates[item.id]?.status === 'pending') {
           props.onTaskResult?.(`${props.segment.id}-${item.id}`, 'incorrect');
         }
+      });
+      recordInventoryReset();
+      inventoryActions.recordDelta({
+        tokenTypeId: '*',
+        delta: 0,
+        reason: 'reset',
       });
       props.onSegmentResult('fail');
       return;
@@ -226,6 +373,12 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
           props.onTaskResult?.(`${props.segment.id}-${item.id}`, 'incorrect');
         }
       });
+      recordInventoryReset();
+      inventoryActions.recordDelta({
+        tokenTypeId: '*',
+        delta: 0,
+        reason: 'reset',
+      });
       props.onSegmentResult('fail');
     }
   };
@@ -239,6 +392,8 @@ export const PracticeSegment = (props: PracticeSegmentProps) => {
   };
 
   const handleReset = (regenerate = false) => {
+    inventoryActions.resetBank();
+    recordInventoryReset();
     resetState(regenerate);
   };
 

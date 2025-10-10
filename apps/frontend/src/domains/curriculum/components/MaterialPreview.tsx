@@ -32,7 +32,7 @@ export const MaterialPreview: Component<MaterialPreviewProps> = (props) => {
       return <AdditionStripBoard strips={{ red: 4, blue: 3 }} />;
     case 'addition-charts':
       return (
-        <div class="surface-neutral rounded-[var(--radius-md)] p-4 text-[11px] leading-snug text-subtle">
+        <div class="bg-[rgba(233,245,251,0.78)] border border-[rgba(64,157,233,0.18)] rounded-[var(--radius-md)] p-4 text-[11px] leading-snug text-[color:var(--color-text-subtle)]">
           <p>1 + 1 = 2</p>
           <p>2 + 1 = 3</p>
           <p>3 + 1 = 4</p>
@@ -42,7 +42,7 @@ export const MaterialPreview: Component<MaterialPreviewProps> = (props) => {
       );
     default:
       return (
-        <div class="dash-connector rounded-[var(--radius-md)] p-4 text-sm text-subtle">
+        <div class="border-2 border-dashed border-[rgba(64,157,233,0.35)] rounded-[var(--radius-md)] rounded-[var(--radius-md)] p-4 text-sm text-[color:var(--color-text-subtle)]">
           Material preview coming soon
         </div>
       );

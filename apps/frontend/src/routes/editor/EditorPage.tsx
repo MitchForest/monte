@@ -3,11 +3,11 @@ import { CurriculumSidebar } from './components/CurriculumSidebar';
 import { EditorHeader } from './components/EditorHeader';
 import { MetadataPanel } from './components/MetadataPanel';
 import { EditorStoresProvider, useEditorConfirm } from './hooks/useEditorViewModel';
-import { Button, Modal, PageSection } from '../../design-system';
+import { Button, Modal, PageSection } from '../../components/ui';
 
 export const EditorPage = () => (
   <EditorStoresProvider>
-    <div class="min-h-screen bg-shell px-4 pb-16 pt-16">
+    <div class="min-h-screen bg-[linear-gradient(180deg,var(--color-background)_0%,var(--color-background-soft)_100%)] px-4 pb-16 pt-16">
       <PageSection class="mx-auto flex w-full max-w-7xl flex-col gap-6">
         <EditorHeader />
 
@@ -47,7 +47,7 @@ const ConfirmDialog = () => {
       padding="md"
       class="space-y-4"
       children={
-        <p class="text-sm text-muted">
+        <p class="text-sm text-[color:var(--color-text-muted)]">
           {state()?.message ?? 'Are you sure you want to continue?'}
         </p>
       }

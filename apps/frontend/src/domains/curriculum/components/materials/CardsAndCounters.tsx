@@ -9,7 +9,7 @@ export const CardsAndCounters: Component<CardsAndCountersProps> = (props) => {
     <div class="flex gap-3">
       {props.values.map((value) => (
         <div class="flex flex-col items-center gap-2">
-          <div class="flex h-12 w-8 items-center justify-center rounded-lg border border-[rgba(64,157,233,0.25)] bg-[rgba(233,245,251,0.75)] text-sm font-semibold text-[color:var(--color-heading)] shadow-ambient">
+          <div class="flex h-12 w-8 items-center justify-center rounded-lg border border-[rgba(64,157,233,0.25)] bg-[rgba(233,245,251,0.75)] text-sm font-semibold text-[color:var(--color-heading)] shadow-[0_12px_28px_rgba(12,42,101,0.12)]">
             {value}
           </div>
           <div class="grid grid-cols-2 gap-1">

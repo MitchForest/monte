@@ -5,7 +5,7 @@ import { Motion } from 'solid-motionone';
 import type { PlayerStatus } from '../../machines/lessonPlayer';
 import type { DemoEventRecorder } from '../../analytics/events';
 import type { LessonSegment, PresentationAction, PresentationScript } from '@monte/types';
-import { Card } from '../../../../design-system';
+import { Card } from '../../../../components/ui';
 import {
   NumberCard,
   GoldenBeadUnit,
@@ -26,6 +26,7 @@ export interface PresentationSegmentProps {
   script: PresentationScript;
   audioSrc?: string;
   captionSrc?: string;
+  audioLoading?: boolean;
   recordEvent?: DemoEventRecorder;
   onNarrationChange?: (narration: string, actionIndex: number) => void;
   onPaperNotesChange?: (notes: string[]) => void;
@@ -201,6 +202,14 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
   const [processedScriptId, setProcessedScriptId] = createSignal<string | undefined>(undefined);
   const [hasPlayedAudio, setHasPlayedAudio] = createSignal(false);
   const [audioUnavailable, setAudioUnavailable] = createSignal(false);
+  const hasAudio = createMemo(() => Boolean(props.audioSrc));
+  const audioLoading = createMemo(() => Boolean(props.audioLoading));
+
+  createEffect(() => {
+    if (props.audioSrc) {
+      setAudioUnavailable(false);
+    }
+  });
   const segmentInventory = useSegmentInventory({
     id: props.segment.id,
     materialBankId: props.segment.materialBankId,
@@ -265,6 +274,32 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
 
   const handleInventoryShortage = (label: string) => {
     logPaperNote(`Not enough ${label.toLowerCase()} available in supply.`);
+  };
+
+  const recordInventoryReset = () => {
+    const bank = inventoryBank();
+    if (!bank) return;
+    props.recordEvent?.({
+      type: 'inventory.reset',
+      lessonId: props.lessonId,
+      segmentId: props.segment.id,
+      bankId: bank.id,
+    });
+  };
+
+  const getAvailableQuantity = (kind: TokenKind) => tokensByKind().get(kind)?.quantity ?? 0;
+
+  const ensureInventoryAvailable = (requirements: Array<[TokenKind, number]>) => {
+    for (const [kind, amount] of requirements) {
+      if (amount <= 0) continue;
+      if (getAvailableQuantity(kind) < amount) {
+        const label = tokensByKind().get(kind)?.definition.label ?? kind;
+        handleInventoryShortage(label);
+        setStage('highlight', kind);
+        return false;
+      }
+    }
+    return true;
   };
 
   const consumeInventory = (kind: TokenKind, amount: number) => {
@@ -334,6 +369,7 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
     setActiveIndex(0);
     setAppliedCount(0);
     completionSignalled = false;
+    recordInventoryReset();
     inventoryActions.resetBank();
     // Don't reset processedScriptId here - we track it separately
   };
@@ -416,10 +452,12 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
             ['ten', source.ten.length * additional],
             ['unit', source.unit.length * additional],
           ];
+          if (!ensureInventoryAvailable(requirements)) {
+            return;
+          }
           for (const [kind, amount] of requirements) {
-            if (amount > 0 && !consumeInventory(kind, amount)) {
-              setStage('highlight', kind);
-              return;
+            if (amount > 0) {
+              consumeInventory(kind, amount);
             }
           }
 
@@ -445,10 +483,12 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
             ['ten', source.tens.length * additionalColumns],
             ['unit', source.units.length * additionalColumns],
           ];
+          if (!ensureInventoryAvailable(stampRequirements)) {
+            return;
+          }
           for (const [kind, amount] of stampRequirements) {
-            if (amount > 0 && !consumeInventory(kind, amount)) {
-              setStage('highlight', kind);
-              return;
+            if (amount > 0) {
+              consumeInventory(kind, amount);
             }
           }
 
@@ -740,6 +780,7 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
     if (audioElement) {
       audioElement.pause();
     }
+    recordInventoryReset();
     inventoryActions.resetBank();
   });
 
@@ -1085,7 +1126,7 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
 
   if (!script()) {
     return (
-      <Card variant="soft" class="space-y-3 text-subtle">
+      <Card variant="soft" class="space-y-3 text-[color:var(--color-text-subtle)]">
         <p>No scripted presentation available.</p>
       </Card>
     );
@@ -1097,7 +1138,7 @@ export const PresentationSegment = (props: PresentationSegmentProps) => {
       stageClass="lesson-segment lesson-segment--presentation"
       renderOverlay={<LessonInventoryOverlay bank={inventoryBank} tokens={inventoryTokens} />}
     >
-      <Show when={audioUnavailable()}>
+      <Show when={(audioUnavailable() || !hasAudio()) && !audioLoading()}>
         <div class="mb-3 inline-flex items-center gap-2 rounded-md bg-[rgba(255,195,74,0.25)] px-3 py-2 text-sm font-medium text-[color:#8a5a00]">
           Narration audio is unavailable. Continue with the on-screen presentation.
         </div>

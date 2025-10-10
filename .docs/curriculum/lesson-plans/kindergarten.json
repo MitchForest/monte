@@ -1,0 +1,1070 @@
+[
+  {
+    "id": "lesson.k.counting-within-5.number-rods",
+    "topicId": "counting-within-5",
+    "name": "Count 1\u20135 with Number Rods",
+    "materialId": "number-rods",
+    "skills": [
+      "skill.counting-within-5.count-sequence-to-5",
+      "skill.counting-within-5.match-objects-to-count"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [],
+    "notes": "Digital number rods three-period lesson establishing the sequence 1\u20135."
+  },
+  {
+    "id": "lesson.k.counting-within-5.cards-counters",
+    "topicId": "counting-within-5",
+    "name": "Cards and Counters to 5",
+    "materialId": "cards-counters",
+    "skills": [
+      "skill.counting-within-5.match-objects-to-count",
+      "skill.counting-within-5.cardinality-within-5"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-5.number-rods"
+    ],
+    "notes": "Learners place counters under numeral cards and identify the total without recounting."
+  },
+  {
+    "id": "lesson.k.counting-within-5.subitize-dots",
+    "topicId": "counting-within-5",
+    "name": "Quick Look Dots to 5",
+    "materialId": "dot-card-display",
+    "skills": [
+      "skill.counting-within-5.subitize-within-5"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "five-frame"
+      },
+      {
+        "type": "guided",
+        "representation": "five-frame"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-5.cards-counters"
+    ],
+    "notes": "Flash dot cards and five-frames to build instant recognition of quantities to five."
+  },
+  {
+    "id": "lesson.k.counting-within-10.bead-stair",
+    "topicId": "counting-within-10",
+    "name": "Bead Stair Counting to 10",
+    "materialId": "bead-stair",
+    "skills": [
+      "skill.counting-within-10.count-sequence-to-10",
+      "skill.counting-within-10.count-scattered-sets-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-5.cards-counters"
+    ],
+    "notes": "Use the colored bead stair to extend counting and recognize scattered arrangements."
+  },
+  {
+    "id": "lesson.k.counting-within-10.ten-frame",
+    "topicId": "counting-within-10",
+    "name": "Ten Frame Numbers to 10",
+    "materialId": "ten-frame",
+    "skills": [
+      "skill.counting-within-10.numeral-representation-10",
+      "skill.counting-within-10.count-scattered-sets-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-10.bead-stair"
+    ],
+    "notes": "Drag counters into digital ten frames, then record matching numerals."
+  },
+  {
+    "id": "lesson.k.counting-within-10.subitize-ten-frame",
+    "topicId": "counting-within-10",
+    "name": "Ten Frame Quick Looks",
+    "materialId": "flash-ten-frame",
+    "skills": [
+      "skill.counting-within-10.subitize-within-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "ten-frame"
+      },
+      {
+        "type": "guided",
+        "representation": "ten-frame"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-10.ten-frame"
+    ],
+    "notes": "Show ten-frame flashes and have learners state the total without counting."
+  },
+  {
+    "id": "lesson.k.counting-within-10.backward-number-line",
+    "topicId": "counting-within-10",
+    "name": "Backward Number Line Jumps",
+    "materialId": "number-line",
+    "skills": [
+      "skill.counting-within-10.count-backward-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "number-line"
+      },
+      {
+        "type": "guided",
+        "representation": "number-line"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-10.subitize-ten-frame"
+    ],
+    "notes": "Move a marker backward along a number line and narrate the count sequence."
+  },
+  {
+    "id": "lesson.k.counting-within-10.number-bonds",
+    "topicId": "counting-within-10",
+    "name": "Number Bonds to 10",
+    "materialId": "number-bond-board",
+    "skills": [
+      "skill.k-decompose.decompose-to-10-multiple-ways"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-10.ten-frame"
+    ],
+    "notes": "Build number bonds for each total to ten using bead stair bars and record matching equations."
+  },
+  {
+    "id": "lesson.k.compare-quantities.cards-counters-match",
+    "topicId": "compare-quantities-matching",
+    "name": "Match Sets with Cards and Counters",
+    "materialId": "cards-counters",
+    "skills": [
+      "skill.compare-quantities-matching.match-sets-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-within-10.ten-frame"
+    ],
+    "notes": "Learners pair counters to determine whether sets are equal before labeling greater or fewer."
+  },
+  {
+    "id": "lesson.k.compare-quantities.bead-bar-compare",
+    "topicId": "compare-quantities-matching",
+    "name": "Compare Sets with Bead Bars",
+    "materialId": "bead-bar-comparator",
+    "skills": [
+      "skill.compare-quantities-matching.compare-by-counting-10",
+      "skill.compare-quantities-matching.compare-numerals-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-quantities.cards-counters-match"
+    ],
+    "notes": "Place bead bars on scales, count totals, then choose comparison symbols to match."
+  },
+  {
+    "id": "lesson.k.one-more-one-less.number-line",
+    "topicId": "one-more-one-less",
+    "name": "Number Line One More and One Less",
+    "materialId": "number-line",
+    "skills": [
+      "skill.one-more-one-less.find-one-more-10",
+      "skill.one-more-one-less.find-one-less-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-quantities.bead-bar-compare"
+    ],
+    "notes": "Learners move a marker along a digital number line to show the next and previous number."
+  },
+  {
+    "id": "lesson.k.one-more-one-less.bead-stair-successor",
+    "topicId": "one-more-one-less",
+    "name": "Successor and Predecessor with Bead Stair",
+    "materialId": "bead-stair",
+    "skills": [
+      "skill.one-more-one-less.successor-predecessor-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.one-more-one-less.number-line"
+    ],
+    "notes": "Swap bead bars to identify unknown numbers that come before or after in a sequence."
+  },
+  {
+    "id": "lesson.k.count-story-problems.story-mat",
+    "topicId": "count-story-problems-5",
+    "name": "Act Out Join and Separate Stories",
+    "materialId": "story-mat",
+    "skills": [
+      "skill.count-story-problems-5.join-story-5",
+      "skill.count-story-problems-5.separate-story-5"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.one-more-one-less.bead-stair-successor"
+    ],
+    "notes": "Miniature objects move in and out of scenes; children retell the story with totals."
+  },
+  {
+    "id": "lesson.k.count-story-problems.ten-frame-equations",
+    "topicId": "count-story-problems-5",
+    "name": "Ten Frame Story Equations",
+    "materialId": "ten-frame",
+    "skills": [
+      "skill.count-story-problems-5.write-equations-5"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.count-story-problems.story-mat"
+    ],
+    "notes": "Learners model the story on ten frames and record matching addition or subtraction equations."
+  },
+  {
+    "id": "lesson.k.count-story-problems.fact-fluency-5",
+    "topicId": "count-story-problems-5",
+    "name": "Fast Facts within 5",
+    "materialId": "flash-ten-frame",
+    "skills": [
+      "skill.k-fluency.add-sub-within-5"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.count-story-problems.ten-frame-equations"
+    ],
+    "notes": "Flash ten frames and bead stair images to build fluent addition and subtraction facts within five."
+  },
+  {
+    "id": "lesson.k.count-to-20.bead-chain-walk",
+    "topicId": "count-to-20-and-by-10s",
+    "name": "Teen Bead Chain Walk",
+    "materialId": "teen-bead-chain",
+    "skills": [
+      "skill.count-to-20-and-by-10s.count-forward-any-20",
+      "skill.count-to-20-and-by-10s.count-objects-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.count-story-problems.ten-frame-equations"
+    ],
+    "notes": "Move a marker along bead chains, place counting arrows, and narrate numbers 11\u201320."
+  },
+  {
+    "id": "lesson.k.count-to-20.hundred-board-explore",
+    "topicId": "count-to-20-and-by-10s",
+    "name": "Hundred Board Skip Counting",
+    "materialId": "hundred-board",
+    "skills": [
+      "skill.count-to-20-and-by-10s.count-structured-30",
+      "skill.count-to-20-and-by-10s.skip-count-tens",
+      "skill.count-to-20-and-by-10s.extend-sequences-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.count-to-20.bead-chain-walk"
+    ],
+    "notes": "Fill rows on the digital hundred board and highlight counting-by-ten patterns."
+  },
+  {
+    "id": "lesson.k.count-to-20.backward-chain",
+    "topicId": "count-to-20-and-by-10s",
+    "name": "Backward Counting Chain",
+    "materialId": "teen-bead-chain",
+    "skills": [
+      "skill.count-to-20-and-by-10s.count-backward-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "bead-chain"
+      },
+      {
+        "type": "guided",
+        "representation": "bead-chain"
+      },
+      {
+        "type": "independent",
+        "representation": "number-line"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.count-to-20.hundred-board-explore"
+    ],
+    "notes": "Slide arrows backward along the bead chain to practise counting down from teen numbers."
+  },
+  {
+    "id": "lesson.k.teen-numbers.teens-board",
+    "topicId": "compose-decompose-teen-numbers",
+    "name": "Build Teen Numbers with the Teens Board",
+    "materialId": "teens-board",
+    "skills": [
+      "skill.compose-decompose-teen-numbers.ten-frame-build",
+      "skill.compose-decompose-teen-numbers.place-value-cards"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.count-to-20.hundred-board-explore"
+    ],
+    "notes": "Slide unit cards over the ten board to read each teen number as ten and some ones."
+  },
+  {
+    "id": "lesson.k.teen-numbers.golden-bead-teens",
+    "topicId": "compose-decompose-teen-numbers",
+    "name": "Teens with Golden Beads",
+    "materialId": "golden-beads-lite",
+    "skills": [
+      "skill.compose-decompose-teen-numbers.place-value-cards",
+      "skill.compose-decompose-teen-numbers.decompose-equations-teen"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.teen-numbers.teens-board"
+    ],
+    "notes": "Form each teen with a ten bar and loose units, then record ten-plus-ones equations."
+  },
+  {
+    "id": "lesson.k.represent-20.cards-and-beads",
+    "topicId": "represent-numbers-to-20",
+    "name": "Match Numerals, Words, and Beads",
+    "materialId": "number-cards",
+    "skills": [
+      "skill.represent-numbers-to-20.read-write-numerals-20",
+      "skill.represent-numbers-to-20.match-words-models-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.teen-numbers.golden-bead-teens"
+    ],
+    "notes": "Pair bead layouts with numeral cards and moveable word labels."
+  },
+  {
+    "id": "lesson.k.represent-20.ten-frame-words",
+    "topicId": "represent-numbers-to-20",
+    "name": "Ten Frames and Word Forms",
+    "materialId": "ten-frame",
+    "skills": [
+      "skill.represent-numbers-to-20.ten-frame-models-20",
+      "skill.represent-numbers-to-20.match-words-models-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.represent-20.cards-and-beads"
+    ],
+    "notes": "Fill double ten frames and select matching number words from a digital tray."
+  },
+  {
+    "id": "lesson.k.compare-measure.red-rods",
+    "topicId": "compare-length-weight-capacity",
+    "name": "Compare Length with Red Rods",
+    "materialId": "red-rods",
+    "skills": [
+      "skill.compare-length-weight-capacity.identify-attributes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.represent-20.ten-frame-words"
+    ],
+    "notes": "Order red rods by length and verbalize the attribute being compared."
+  },
+  {
+    "id": "lesson.k.compare-measure.balance-scale",
+    "topicId": "compare-length-weight-capacity",
+    "name": "Balance Scale Weight Comparisons",
+    "materialId": "balance-scale",
+    "skills": [
+      "skill.compare-length-weight-capacity.compare-directly"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-measure.red-rods"
+    ],
+    "notes": "Place objects on a digital balance to determine heavier, lighter, or equal."
+  },
+  {
+    "id": "lesson.k.compare-measure.pouring-pitchers",
+    "topicId": "compare-length-weight-capacity",
+    "name": "Capacity Comparisons with Pitchers",
+    "materialId": "measuring-pitchers",
+    "skills": [
+      "skill.compare-length-weight-capacity.describe-comparisons"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-measure.balance-scale"
+    ],
+    "notes": "Fill pitchers to matching lines and describe which holds more or less."
+  },
+  {
+    "id": "lesson.k.shapes.geometry-cabinet",
+    "topicId": "identify-2d-3d-shapes",
+    "name": "Name Plane Shapes with the Geometry Cabinet",
+    "materialId": "geometry-cabinet",
+    "skills": [
+      "skill.identify-2d-3d-shapes.name-2d-shapes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-measure.pouring-pitchers"
+    ],
+    "notes": "Trace insets, match outlines, and label common 2D shapes."
+  },
+  {
+    "id": "lesson.k.shapes.compare-2d-3d",
+    "topicId": "classify-shapes-by-attributes",
+    "name": "Compare 2D and 3D Shapes",
+    "materialId": "geometry-solids",
+    "skills": [
+      "skill.classify-shapes-by-attributes.compare-2d-3d"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.shapes.geometry-cabinet"
+    ],
+    "notes": "Match solids to the flat shapes on their faces and discuss similarities and differences."
+  },
+  {
+    "id": "lesson.k.shapes.geometric-solids",
+    "topicId": "identify-2d-3d-shapes",
+    "name": "Explore Geometric Solids",
+    "materialId": "geometry-solids",
+    "skills": [
+      "skill.identify-2d-3d-shapes.name-3d-shapes",
+      "skill.identify-2d-3d-shapes.match-faces-to-shapes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.shapes.geometry-cabinet"
+    ],
+    "notes": "Reveal solids from a mystery bag and match them to face cards."
+  },
+  {
+    "id": "lesson.k.positions.position-mat",
+    "topicId": "describe-positions",
+    "name": "Positional Words with Object Mat",
+    "materialId": "position-mat",
+    "skills": [
+      "skill.describe-positions.use-positional-words"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.shapes.geometric-solids"
+    ],
+    "notes": "Move shapes around landmarks and describe locations using Montessori positional language."
+  },
+  {
+    "id": "lesson.k.positions.command-game",
+    "topicId": "describe-positions",
+    "name": "Command Game Maps",
+    "materialId": "command-cards",
+    "skills": [
+      "skill.describe-positions.map-simple-scenes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.positions.position-mat"
+    ],
+    "notes": "Follow and create commands to place objects on simple digital maps."
+  },
+  {
+    "id": "lesson.k.compose-shapes.constructive-triangles",
+    "topicId": "compose-decompose-shapes",
+    "name": "Constructive Triangles Designs",
+    "materialId": "constructive-triangles",
+    "skills": [
+      "skill.compose-decompose-shapes.compose-using-shapes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.positions.command-game"
+    ],
+    "notes": "Combine triangles to build larger shapes and discuss the composite figure."
+  },
+  {
+    "id": "lesson.k.compose-shapes.pattern-blocks",
+    "topicId": "compose-decompose-shapes",
+    "name": "Decompose Shapes with Pattern Blocks",
+    "materialId": "pattern-blocks",
+    "skills": [
+      "skill.compose-decompose-shapes.decompose-into-shapes"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compose-shapes.constructive-triangles"
+    ],
+    "notes": "Cover outlines with pattern blocks and explain how the whole is partitioned."
+  },
+  {
+    "id": "lesson.k.patterns.color-tablets",
+    "topicId": "repeating-growing-patterns",
+    "name": "Color Tablet Repeating Patterns",
+    "materialId": "color-tablets",
+    "skills": [
+      "skill.repeating-growing-patterns.identify-repeating-patterns"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compose-shapes.pattern-blocks"
+    ],
+    "notes": "Extend and label repeating cores using digital color tablets."
+  },
+  {
+    "id": "lesson.k.patterns.bead-stair-growing",
+    "topicId": "repeating-growing-patterns",
+    "name": "Growing Patterns with the Bead Stair",
+    "materialId": "bead-stair",
+    "skills": [
+      "skill.repeating-growing-patterns.extend-growing-patterns",
+      "skill.repeating-growing-patterns.create-patterns"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.patterns.color-tablets"
+    ],
+    "notes": "Use bead bars to build increasing patterns and articulate the growth rule."
+  },
+  {
+    "id": "lesson.k.counting-on.addition-strip-board",
+    "topicId": "counting-on-addition",
+    "name": "Counting-On with the Addition Strip Board",
+    "materialId": "addition-strip-board",
+    "skills": [
+      "skill.counting-on-addition.count-on-objects-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.patterns.bead-stair-growing"
+    ],
+    "notes": "Slide strips to begin at a known addend and count on to find the sum."
+  },
+  {
+    "id": "lesson.k.counting-on.number-line-hop",
+    "topicId": "counting-on-addition",
+    "name": "Number Line Counting-On",
+    "materialId": "number-line",
+    "skills": [
+      "skill.counting-on-addition.count-on-number-line-20",
+      "skill.counting-on-addition.count-on-equations-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-on.addition-strip-board"
+    ],
+    "notes": "Hop forward from the larger addend and record the matching addition equation."
+  },
+  {
+    "id": "lesson.k.take-away.golden-beads",
+    "topicId": "take-away-models",
+    "name": "Subtraction with Golden Beads",
+    "materialId": "golden-beads-lite",
+    "skills": [
+      "skill.take-away-models.subtract-with-objects-10"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.counting-on.number-line-hop"
+    ],
+    "notes": "Remove unit beads to model basic take-away stories and state the difference."
+  },
+  {
+    "id": "lesson.k.take-away.number-line",
+    "topicId": "take-away-models",
+    "name": "Number Line Take-Away",
+    "materialId": "number-line",
+    "skills": [
+      "skill.take-away-models.subtract-number-line-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.take-away.golden-beads"
+    ],
+    "notes": "Hop backward on a number line to show take-away within 20."
+  },
+  {
+    "id": "lesson.k.take-away.equation-tablet",
+    "topicId": "take-away-models",
+    "name": "Record Subtraction Equations",
+    "materialId": "equation-tablet",
+    "skills": [
+      "skill.take-away-models.subtract-equations-20"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "symbolic"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.take-away.number-line"
+    ],
+    "notes": "Use digit tiles to build subtraction equations that match modeled situations."
+  }
+]

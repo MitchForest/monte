@@ -18,7 +18,7 @@ type AuthUserDoc = Awaited<ReturnType<typeof authComponent.safeGetAuthUser>>;
 type AuthInstance = ReturnType<typeof betterAuth>;
 
 const asGenericCtx = (ctx: QueryCtx | MutationCtx): GenericCtx<DataModel> =>
-  ctx as unknown as GenericCtx<DataModel>;
+  ctx as GenericCtx<DataModel>;
 
 export const createAuth = (
   ctx: GenericCtx<DataModel>,
@@ -56,7 +56,7 @@ export const getCurrentUserProfile = query({
     if (!user) return null;
     const profile = await ctx.db
       .query('userProfiles')
-      .withIndex('by_user_id', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_user_id', (q) => q.eq('userId', user._id))
       .first();
     return profile ?? null;
   },
@@ -69,7 +69,7 @@ export const getCurrentUserRole = query({
     if (!user) return null;
     const profile = await ctx.db
       .query('userProfiles')
-      .withIndex('by_user_id', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_user_id', (q) => q.eq('userId', user._id))
       .first();
     return profile?.role ?? null;
   },
@@ -84,7 +84,7 @@ export const ensureUserProfile = mutation({
     }
     const existing = await ctx.db
       .query('userProfiles')
-      .withIndex('by_user_id', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_user_id', (q) => q.eq('userId', user._id))
       .first();
     if (existing) {
       return existing.role;
@@ -117,7 +117,7 @@ export const updateUserRole = mutation({
     }
     const actorProfile = await ctx.db
       .query('userProfiles')
-      .withIndex('by_user_id', (q: any) => q.eq('userId', actor._id))
+      .withIndex('by_user_id', (q) => q.eq('userId', actor._id))
       .first();
     if (!actorProfile || actorProfile.role !== 'admin') {
       throw new Error('Not authorized');
@@ -125,7 +125,7 @@ export const updateUserRole = mutation({
 
     const targetProfile = await ctx.db
       .query('userProfiles')
-      .withIndex('by_user_id', (q: any) => q.eq('userId', args.targetUserId))
+      .withIndex('by_user_id', (q) => q.eq('userId', args.targetUserId))
       .first();
 
     const timestamp = Date.now();

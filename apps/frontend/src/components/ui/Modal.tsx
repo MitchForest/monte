@@ -8,7 +8,7 @@ import { cn } from '../../lib/cn';
 const overlayVariants = cva('fixed inset-0 z-50 bg-[rgba(15,23,42,0.45)] backdrop-blur');
 
 const contentVariants = cva(
-  'fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-lg)] bg-surface shadow-floating',
+  'fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-[var(--radius-lg)] bg-surface shadow-[0_22px_48px_rgba(12,42,101,0.18)]',
   {
     variants: {
       padding: {
@@ -60,7 +60,7 @@ export const Modal: Component<ModalProps> = (props) => {
               {local.title}
             </Dialog.Title>
             {local.description && (
-              <Dialog.Description class="text-sm text-muted">{local.description}</Dialog.Description>
+              <Dialog.Description class="text-sm text-[color:var(--color-text-muted)]">{local.description}</Dialog.Description>
             )}
           </div>
 

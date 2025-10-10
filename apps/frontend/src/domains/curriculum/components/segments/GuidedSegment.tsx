@@ -1,4 +1,4 @@
-import { For, Show, createEffect, createMemo, createSignal } from 'solid-js';
+import { For, Show, createEffect, createMemo, createSignal, onCleanup } from 'solid-js';
 import type { Accessor, JSX } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
@@ -10,7 +10,7 @@ import type {
   WorkspaceKind,
 } from '@monte/types';
 import type { GoldenBeadScenario, StampGameScenario } from '../../scenarios/multiplication';
-import { Button, Card } from '../../../../design-system';
+import { Button, Card } from '../../../../components/ui';
 import { LessonCanvas, useViewportObserver } from '../../canvas';
 import type { DemoEventRecorder } from '../../analytics/events';
 import {
@@ -22,7 +22,11 @@ import {
   StampTile,
   YellowRibbon,
 } from '../materials';
-import { LessonInventoryOverlay, useSegmentInventory } from '../../inventory/context';
+import {
+  LessonInventoryOverlay,
+  useSegmentInventory,
+  type InventoryDelta,
+} from '../../inventory/context';
 
 export interface GuidedSegmentProps {
   lessonId: string;
@@ -172,6 +176,7 @@ const GoldenBeadsWorkspace = (props: {
   inventoryActions: {
     consumeToken: (tokenTypeId: string, amount?: number) => boolean;
     replenishToken: (tokenTypeId: string, amount?: number) => void;
+    recordDelta: (delta: InventoryDelta) => void;
   };
   reportInventoryFeedback: (message: string) => void;
   recordInventoryDelta: (tokenTypeId: string, delta: number, reason: 'consume' | 'replenish') => void;
@@ -779,6 +784,7 @@ const StampGameWorkspace = (props: {
   inventoryActions: {
     consumeToken: (tokenTypeId: string, amount?: number) => boolean;
     replenishToken: (tokenTypeId: string, amount?: number) => void;
+    recordDelta: (delta: InventoryDelta) => void;
   };
   reportInventoryFeedback: (message: string) => void;
   recordInventoryDelta: (tokenTypeId: string, delta: number, reason: 'consume' | 'replenish') => void;
@@ -1207,7 +1213,7 @@ const StampGameWorkspace = (props: {
       <div class="space-y-3">
         <p class="text-sm font-semibold text-[color:var(--color-heading)]">Build base column</p>
         <Show when={multiplicandHint()}>
-          {(hint) => <p class="text-xs text-subtle">Target: {hint()}</p>}
+          {(hint) => <p class="text-xs text-[color:var(--color-text-subtle)]">Target: {hint()}</p>}
         </Show>
         <div class="grid gap-3 sm:grid-cols-3">
           <Zone zoneId="layout-hundred" label="Hundreds" hint={props.scenario?.digits.hundreds?.toString()}>
@@ -1272,7 +1278,7 @@ const StampGameWorkspace = (props: {
             {() => renderDigitToken(layout.finalDigits.units, 'final-digit-units')}
           </Zone>
         </div>
-        <div class="mt-1 text-sm text-subtle">
+        <div class="mt-1 text-sm text-[color:var(--color-text-subtle)]">
           Current reading:{' '}
           <span class="font-semibold text-[color:var(--color-heading)]">
             {deriveState().finalValue?.toLocaleString() ?? '—'}
@@ -1342,17 +1348,61 @@ export const GuidedSegment = (props: GuidedSegmentProps) => {
 
   const recordInventoryDelta = (tokenTypeId: string, delta: number, reason: 'consume' | 'replenish') => {
     const bank = inventoryBank();
-    if (!bank || !props.recordEvent) return;
-    props.recordEvent({
-      type: 'inventory.delta',
-      lessonId: props.lessonId,
-      segmentId: props.segment.id,
-      bankId: bank.id,
+    if (bank) {
+      props.recordEvent?.({
+        type: 'inventory.delta',
+        lessonId: props.lessonId,
+        segmentId: props.segment.id,
+        bankId: bank.id,
+        tokenTypeId,
+        delta,
+        reason,
+      });
+    }
+    inventoryActions.recordDelta({
       tokenTypeId,
       delta,
       reason,
+      bankId: bank?.id,
+      segmentId: props.segment.id,
     });
   };
+
+  let didResetInventory = false;
+  let lastSegmentId: string | undefined;
+
+  const recordInventoryReset = () => {
+    const bank = inventoryBank();
+    if (!bank) return;
+    props.recordEvent?.({
+      type: 'inventory.reset',
+      lessonId: props.lessonId,
+      segmentId: props.segment.id,
+      bankId: bank.id,
+    });
+    inventoryActions.recordDelta({
+      tokenTypeId: '*',
+      delta: 0,
+      reason: 'reset',
+      bankId: bank.id,
+      segmentId: props.segment.id,
+    });
+  };
+
+  const resetInventory = () => {
+    if (didResetInventory) return;
+    didResetInventory = true;
+    recordInventoryReset();
+    inventoryActions.resetBank();
+  };
+
+  createEffect(() => {
+    const segmentId = props.segment.id;
+    if (segmentId !== lastSegmentId) {
+      didResetInventory = false;
+      lastSegmentId = segmentId;
+    }
+  });
 
   const currentStep = createMemo(() => steps()[currentIndex()]);
 
@@ -1379,6 +1429,7 @@ export const GuidedSegment = (props: GuidedSegmentProps) => {
     setFeedback('Great work! Move to the next step when you are ready.');
 
     if (currentIndex() >= steps().length - 1) {
+      resetInventory();
       props.onSegmentComplete();
     } else {
       setCurrentIndex((index) => index + 1);
@@ -1429,12 +1480,14 @@ export const GuidedSegment = (props: GuidedSegmentProps) => {
         );
       default:
         return (
-          <Card variant="soft" class="p-4 text-sm text-subtle">
+          <Card variant="soft" class="p-4 text-sm text-[color:var(--color-text-subtle)]">
             Workspace coming soon.
           </Card>
         );
     }
   };
+
+  onCleanup(() => resetInventory());
 
   return (
     <LessonCanvas

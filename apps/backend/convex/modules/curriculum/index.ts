@@ -2,8 +2,12 @@ import type { Doc, Id } from '@monte/api/convex/_generated/dataModel.js';
 import { mutation, query } from '@monte/api/convex/_generated/server.js';
 import type { MutationCtx, QueryCtx } from '@monte/api/convex/_generated/server.js';
 import { v, type Infer } from 'convex/values';
+import { zodToConvex } from 'convex-helpers/server/zod';
+import { EntityMetadataSchema } from '@monte/types';
 
 import { lessonDocument as lessonDocumentSchema } from '../../schema.js';
+
+const metadataValue = zodToConvex(EntityMetadataSchema);
 
 const now = () => Date.now();
 
@@ -253,7 +257,7 @@ export const createUnit = mutation({
     slug: v.optional(v.string()),
     summary: v.optional(v.string()),
     coverImage: v.optional(v.string()),
-    metadata: v.optional(v.any()),
+    metadata: v.optional(metadataValue),
   },
   handler: async (ctx, args) => {
     const slugBase = slugify(args.slug ?? args.title);
@@ -282,7 +286,7 @@ export const updateUnit = mutation({
     slug: v.optional(v.string()),
     summary: v.optional(v.string()),
     coverImage: v.optional(v.string()),
-    metadata: v.optional(v.any()),
+    metadata: v.optional(metadataValue),
     status: v.optional(v.union(v.literal('active'), v.literal('archived'))),
   },
   handler: async (ctx, args) => {
@@ -345,7 +349,7 @@ export const createTopic = mutation({
     overview: v.optional(v.string()),
     focusSkills: v.optional(v.array(v.string())),
     estimatedDurationMinutes: v.optional(v.number()),
-    metadata: v.optional(v.any()),
+    metadata: v.optional(metadataValue),
   },
   handler: async (ctx, args) => {
     const unit = await ctx.db.get(args.unitId);
@@ -379,7 +383,7 @@ export const updateTopic = mutation({
     overview: v.optional(v.string()),
     focusSkills: v.optional(v.array(v.string())),
     estimatedDurationMinutes: v.optional(v.number()),
-    metadata: v.optional(v.any()),
+    metadata: v.optional(metadataValue),
     status: v.optional(v.union(v.literal('active'), v.literal('archived'))),
   },
   handler: async (ctx, args) => {

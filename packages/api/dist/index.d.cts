@@ -1,5 +1,5 @@
 import { ConvexHttpClient } from 'convex/browser';
-import { CurriculumTree, CurriculumTreeUnit, LessonDraftRecord, Id, LessonDocument, UserRole, UserProfile } from '@monte/types';
+import { CurriculumTree, CurriculumTreeUnit, LessonDraftRecord, Id, EntityMetadata, LessonDocument, UserRole, UserProfile } from '@monte/types';
 export { CurriculumTree, CurriculumTreeLesson, CurriculumTreeTopic, CurriculumTreeUnit, LessonDraftRecord } from '@monte/types';
 
 interface CurriculumClient {
@@ -14,7 +14,7 @@ interface CurriculumClient {
         slug?: string;
         summary?: string;
         coverImage?: string;
-        metadata?: Record<string, unknown>;
+        metadata?: EntityMetadata;
     }) => Promise<{
         unitId: Id<'units'>;
     }>;
@@ -24,7 +24,7 @@ interface CurriculumClient {
         slug?: string;
         summary?: string;
         coverImage?: string;
-        metadata?: Record<string, unknown>;
+        metadata?: EntityMetadata;
         status?: 'active' | 'archived';
     }) => Promise<void>;
     deleteUnit: (unitId: Id<'units'>) => Promise<void>;
@@ -36,7 +36,7 @@ interface CurriculumClient {
         overview?: string;
         focusSkills?: string[];
         estimatedDurationMinutes?: number;
-        metadata?: Record<string, unknown>;
+        metadata?: EntityMetadata;
     }) => Promise<{
         topicId: Id<'topics'>;
     }>;
@@ -47,7 +47,7 @@ interface CurriculumClient {
         overview?: string;
         focusSkills?: string[];
         estimatedDurationMinutes?: number;
-        metadata?: Record<string, unknown>;
+        metadata?: EntityMetadata;
         status?: 'active' | 'archived';
     }) => Promise<void>;
     deleteTopic: (topicId: Id<'topics'>) => Promise<void>;

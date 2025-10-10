@@ -53,6 +53,16 @@ export const LessonScenarioBindingSchema = z
   .strict();
 export type LessonScenarioBinding = z.infer<typeof LessonScenarioBindingSchema>;
 
+export const EntityMetadataSchema = z
+  .object({
+    source: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    notes: z.string().optional(),
+    scenario: LessonScenarioBindingSchema.optional(),
+  })
+  .catchall(z.unknown());
+export type EntityMetadata = z.infer<typeof EntityMetadataSchema>;
+
 export const MaterialSchema = z
   .object({
     id: z.string(),
@@ -488,7 +498,7 @@ export const LessonDocumentMetaSchema = z
     updatedAt: z.union([z.string(), z.number()]).optional(),
     author: z.string().optional(),
     notes: z.string().optional(),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: EntityMetadataSchema.optional(),
     scenario: LessonScenarioBindingSchema.optional(),
   })
   .strict();
@@ -612,7 +622,7 @@ export const CurriculumTreeUnitSchema = z
     coverImage: z.string().optional(),
     order: z.number(),
     status: UnitStatusSchema,
-    metadata: z.record(z.unknown()).optional(),
+    metadata: EntityMetadataSchema.optional(),
     createdAt: z.number(),
     updatedAt: z.number(),
     topics: z.array(CurriculumTreeTopicSchema),
@@ -636,7 +646,7 @@ export const LessonDraftRecordSchema = z
     status: LessonStatusSchema,
     createdAt: z.number(),
     updatedAt: z.number(),
-    metadata: z.record(z.unknown()).optional(),
+    metadata: EntityMetadataSchema.optional(),
   })
   .strict();
 export type LessonDraftRecord = z.infer<typeof LessonDraftRecordSchema>;

@@ -2,7 +2,7 @@ import { Show, createMemo, type Component } from 'solid-js';
 import { Outlet, useNavigate, useRouterState } from '@tanstack/solid-router';
 
 import { ProgressProvider } from './domains/curriculum/state/progress';
-import { PageSection, ProfileAvatar, Button } from './design-system';
+import { PageSection, ProfileAvatar, Button } from './components/ui';
 import { useAuth } from './providers/AuthProvider';
 
 const App: Component = () => {
@@ -37,7 +37,7 @@ const App: Component = () => {
 
   return (
     <ProgressProvider>
-      <div classList={{ 'bg-shell': true, 'text-[color:var(--color-text)]': true, 'min-h-screen': !isLessonView(), 'h-screen': isLessonView(), 'overflow-hidden': isLessonView() }}>
+      <div classList={{ 'bg-[linear-gradient(180deg,var(--color-background)_0%,var(--color-background-soft)_100%)]': true, 'text-[color:var(--color-text)]': true, 'min-h-screen': !isLessonView(), 'h-screen': isLessonView(), 'overflow-hidden': isLessonView() }}>
         <Show when={!isLessonView()}>
           <header class="sticky top-0 z-30 bg-[rgba(244,250,252,0.85)] backdrop-blur-md">
             <PageSection bleed class="relative flex h-20 items-center justify-center">
@@ -59,7 +59,7 @@ const App: Component = () => {
               <div class="absolute right-0 flex min-w-[160px] items-center justify-end gap-3">
                 <Show
                   when={!auth.loading()}
-                  fallback={<span class="text-xs text-muted">Loading…</span>}
+                  fallback={<span class="text-xs text-[color:var(--color-text-muted)]">Loading…</span>}
                 >
                   <Show
                     when={auth.isAuthenticated()}

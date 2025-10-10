@@ -1,0 +1,506 @@
+[
+  {
+    "id": "edge.add-lengths.word-problems",
+    "sourceSkillId": "skill.add-subtract-lengths.use-number-line",
+    "targetSkillId": "skill.add-subtract-lengths.solve-word-problems",
+    "type": "prereq_core",
+    "rationale": "Strategy work comes before applying length operations to word problems."
+  },
+  {
+    "id": "edge.add-subtract-lengths.sequence-1",
+    "sourceSkillId": "skill.add-subtract-lengths.use-number-line",
+    "targetSkillId": "skill.add-subtract-lengths.solve-word-problems",
+    "type": "prereq_core",
+    "rationale": "Combining lengths on number lines precedes solving context problems."
+  },
+  {
+    "id": "edge.align-zero.measure-nearest",
+    "sourceSkillId": "skill.measure-lengths-with-rulers.align-zero",
+    "targetSkillId": "skill.measure-lengths-with-rulers.measure-to-nearest-unit",
+    "type": "prereq_core",
+    "rationale": "Aligning the zero mark is required before measuring accurately."
+  },
+  {
+    "id": "edge.area-and-perimeter.sequence-1",
+    "sourceSkillId": "skill.area-and-perimeter-rectangles.tile-and-count",
+    "targetSkillId": "skill.area-and-perimeter-rectangles.use-formulas",
+    "type": "prereq_core",
+    "rationale": "Tiling rectangles builds conceptual understanding before applying formulas."
+  },
+  {
+    "id": "edge.area-rectilinear",
+    "sourceSkillId": "skill.area-and-perimeter-rectangles.tile-and-count",
+    "targetSkillId": "skill.area-and-perimeter-rectangles.rectilinear-decompose",
+    "type": "prereq_core",
+    "rationale": "Tiling rectangles builds the basis for decomposing rectilinear figures."
+  },
+  {
+    "id": "edge.area-to-perimeter",
+    "sourceSkillId": "skill.area-and-perimeter-rectangles.rectilinear-decompose",
+    "targetSkillId": "skill.perimeter.rectangles-polygons",
+    "type": "prereq_support",
+    "rationale": "Understanding area of rectilinear figures helps distinguish perimeter as a separate measure."
+  },
+  {
+    "id": "edge.center-to-variability",
+    "sourceSkillId": "skill.data-variability-and-measures.calculate-center",
+    "targetSkillId": "skill.data-variability-and-measures.measures-variability",
+    "type": "prereq_core",
+    "rationale": "Understanding center prepares learners to compute measures of variability."
+  },
+  {
+    "id": "edge.choose-measurement-tools.sequence-1",
+    "sourceSkillId": "skill.choose-measurement-tools.match-tool-to-attribute",
+    "targetSkillId": "skill.choose-measurement-tools.choose-units",
+    "type": "prereq_core",
+    "rationale": "Matching tools to attributes precedes choosing appropriate measurement units."
+  },
+  {
+    "id": "edge.collect-data.create-line-plot",
+    "sourceSkillId": "skill.generate-measurement-data.collect-and-record",
+    "targetSkillId": "skill.generate-measurement-data.create-line-plot",
+    "type": "prereq_core",
+    "rationale": "Collected data is plotted on line plots."
+  },
+  {
+    "id": "edge.compare-length-weight-capacity.sequence-1",
+    "sourceSkillId": "skill.compare-length-weight-capacity.identify-attributes",
+    "targetSkillId": "skill.compare-length-weight-capacity.compare-directly",
+    "type": "prereq_core",
+    "rationale": "Learners identify measurable attributes before making direct comparisons."
+  },
+  {
+    "id": "edge.compare-length-weight-capacity.sequence-2",
+    "sourceSkillId": "skill.compare-length-weight-capacity.compare-directly",
+    "targetSkillId": "skill.compare-length-weight-capacity.describe-comparisons",
+    "type": "prereq_core",
+    "rationale": "Comparison experience supports using descriptive measurement language."
+  },
+  {
+    "id": "edge.conversions-to-volume",
+    "sourceSkillId": "skill.measurement-conversions.grade5",
+    "targetSkillId": "skill.volume-rectangular-prisms.find-volume",
+    "type": "prereq_support",
+    "rationale": "Converting units supports solving volume problems in applied contexts."
+  },
+  {
+    "id": "edge.conversions.grade4",
+    "sourceSkillId": "skill.time-money-word-problems.solve-multi-step",
+    "targetSkillId": "skill.measurement-conversions.grade4",
+    "type": "prereq_support",
+    "rationale": "Applying measurement in word problems provides a foundation for unit conversions."
+  },
+  {
+    "id": "edge.conversions.grade5",
+    "sourceSkillId": "skill.measurement-conversions.grade4",
+    "targetSkillId": "skill.measurement-conversions.grade5",
+    "type": "prereq_core",
+    "rationale": "Grade 4 conversions support multi-step conversions in Grade 5."
+  },
+  {
+    "id": "edge.coordinate-plane.sequence-1",
+    "sourceSkillId": "skill.coordinate-plane-graphing.plot-ordered-pairs",
+    "targetSkillId": "skill.coordinate-plane-graphing.interpret-coordinate-plane",
+    "type": "prereq_core",
+    "rationale": "Plotting points precedes interpreting relationships on the coordinate plane."
+  },
+  {
+    "id": "edge.count-coins.sequence-1",
+    "sourceSkillId": "skill.count-coins-pennies-to-quarters.identify-coin-values",
+    "targetSkillId": "skill.count-coins-pennies-to-quarters.count-mixed-coins",
+    "type": "prereq_core",
+    "rationale": "Identifying coin values comes before counting mixed coin collections."
+  },
+  {
+    "id": "edge.create-line-plot.line-plots-whole",
+    "sourceSkillId": "skill.generate-measurement-data.create-line-plot",
+    "targetSkillId": "skill.line-plots-whole-numbers.create-line-plot",
+    "type": "prereq_core",
+    "rationale": "Creating simple line plots precedes interpreting them."
+  },
+  {
+    "id": "edge.data-displays.transition-2",
+    "sourceSkillId": "skill.scaled-bar-graphs.solve-bar-graph-problems",
+    "targetSkillId": "skill.interpret-data-word-problems.choose-representation",
+    "type": "prereq_core",
+    "rationale": "Experience solving scaled bar graph problems prepares students to choose data displays."
+  },
+  {
+    "id": "edge.data-displays.transition-3",
+    "sourceSkillId": "skill.line-plots-whole-numbers.analyze-line-plot",
+    "targetSkillId": "skill.interpret-data-word-problems.solve-graph-problems",
+    "type": "prereq_strategy",
+    "rationale": "Analyzing line plots supports multi-step data problem solving."
+  },
+  {
+    "id": "edge.data-variability.sequence-1",
+    "sourceSkillId": "skill.data-variability-and-measures.calculate-center",
+    "targetSkillId": "skill.data-variability-and-measures.describe-variability",
+    "type": "prereq_core",
+    "rationale": "Calculating measures of center prepares learners to describe variability."
+  },
+  {
+    "id": "edge.display-to-center",
+    "sourceSkillId": "skill.data-variability-and-measures.display-dot-hist-box",
+    "targetSkillId": "skill.data-variability-and-measures.calculate-center",
+    "type": "prereq_support",
+    "rationale": "Visualizing data supports calculating measures of center."
+  },
+  {
+    "id": "edge.elapsed-calc-to-solve",
+    "sourceSkillId": "skill.elapsed-time-minute.calculate-elapsed",
+    "targetSkillId": "skill.elapsed-time-minute.solve-start-end",
+    "type": "prereq_core",
+    "rationale": "Finding elapsed time supports solving for missing start or end times."
+  },
+  {
+    "id": "edge.elapsed-time.sequence-1",
+    "sourceSkillId": "skill.elapsed-time-minute.calculate-elapsed",
+    "targetSkillId": "skill.elapsed-time-minute.solve-start-end",
+    "type": "prereq_core",
+    "rationale": "Finding elapsed time prepares learners for solving start and end time problems."
+  },
+  {
+    "id": "edge.generate-measurement-data.sequence-1",
+    "sourceSkillId": "skill.generate-measurement-data.collect-and-record",
+    "targetSkillId": "skill.generate-measurement-data.create-line-plot",
+    "type": "prereq_core",
+    "rationale": "Recording measurement data comes before graphing it on line plots."
+  },
+  {
+    "id": "edge.interpret-data.sequence-1",
+    "sourceSkillId": "skill.interpret-data-word-problems.choose-representation",
+    "targetSkillId": "skill.interpret-data-word-problems.solve-graph-problems",
+    "type": "prereq_core",
+    "rationale": "Selecting a representation supports solving data word problems."
+  },
+  {
+    "id": "edge.interpret-word-to-solve",
+    "sourceSkillId": "skill.interpret-data-word-problems.choose-representation",
+    "targetSkillId": "skill.interpret-data-word-problems.solve-graph-problems",
+    "type": "prereq_core",
+    "rationale": "Selecting appropriate displays comes before solving multi-step graph problems."
+  },
+  {
+    "id": "edge.length-difference.number-line",
+    "sourceSkillId": "skill.measure-lengths-with-rulers.length-difference",
+    "targetSkillId": "skill.add-subtract-lengths.use-number-line",
+    "type": "prereq_core",
+    "rationale": "Analyzing length differences prepares learners to add or subtract lengths on number lines."
+  },
+  {
+    "id": "edge.length-in-standard-units.transition-1",
+    "sourceSkillId": "skill.order-objects-by-attribute.measure-and-record",
+    "targetSkillId": "skill.measure-lengths-with-rulers.align-zero",
+    "type": "prereq_core",
+    "rationale": "Recording informal measures lays groundwork for using standard rulers."
+  },
+  {
+    "id": "edge.length-in-standard-units.transition-2",
+    "sourceSkillId": "skill.measure-lengths-with-rulers.compare-different-units",
+    "targetSkillId": "skill.add-subtract-lengths.use-number-line",
+    "type": "prereq_core",
+    "rationale": "Understanding unit relationships supports adding and subtracting lengths."
+  },
+  {
+    "id": "edge.line-plot-to-stat-question",
+    "sourceSkillId": "skill.line-plots-fractions.solve-line-plot-problems",
+    "targetSkillId": "skill.data-variability-and-measures.statistical-questions",
+    "type": "prereq_core",
+    "rationale": "Working with data sets prepares learners to distinguish statistical questions."
+  },
+  {
+    "id": "edge.line-plots-fractions.sequence-1",
+    "sourceSkillId": "skill.line-plots-fractions.create-line-plot-fractions",
+    "targetSkillId": "skill.line-plots-fractions.solve-line-plot-problems",
+    "type": "prereq_core",
+    "rationale": "Creating fractional line plots is required before solving associated problems."
+  },
+  {
+    "id": "edge.line-plots-fractions.to-solve",
+    "sourceSkillId": "skill.line-plots-fractions.create-line-plot-fractions",
+    "targetSkillId": "skill.line-plots-fractions.solve-line-plot-problems",
+    "type": "prereq_core",
+    "rationale": "Representing fractional data is prerequisite to solving line-plot problems."
+  },
+  {
+    "id": "edge.line-plots-halves.to-fractions",
+    "sourceSkillId": "skill.line-plots-fractions.create-line-plot-halves",
+    "targetSkillId": "skill.line-plots-fractions.create-line-plot-fractions",
+    "type": "prereq_core",
+    "rationale": "Creating line plots with halves and fourths precedes operations with fractional measurements."
+  },
+  {
+    "id": "edge.line-plots-whole-numbers.sequence-1",
+    "sourceSkillId": "skill.line-plots-whole-numbers.create-line-plot",
+    "targetSkillId": "skill.line-plots-whole-numbers.analyze-line-plot",
+    "type": "prereq_core",
+    "rationale": "Creating line plots precedes analyzing them."
+  },
+  {
+    "id": "edge.line-plots-whole.analyze",
+    "sourceSkillId": "skill.line-plots-whole-numbers.create-line-plot",
+    "targetSkillId": "skill.line-plots-whole-numbers.analyze-line-plot",
+    "type": "prereq_core",
+    "rationale": "Building a line plot comes before answering questions about it."
+  },
+  {
+    "id": "edge.line-plots-whole.to-fraction-halves",
+    "sourceSkillId": "skill.line-plots-whole-numbers.analyze-line-plot",
+    "targetSkillId": "skill.line-plots-fractions.create-line-plot-halves",
+    "type": "prereq_core",
+    "rationale": "Interpreting whole-number plots prepares learners for fractional scales."
+  },
+  {
+    "id": "edge.make-given-amounts.sequence-1",
+    "sourceSkillId": "skill.make-given-amounts.compose-target-amount",
+    "targetSkillId": "skill.make-given-amounts.least-number-coins",
+    "type": "prereq_core",
+    "rationale": "Composing amounts sets the stage for finding the fewest coins."
+  },
+  {
+    "id": "edge.mass-and-volume.sequence-1",
+    "sourceSkillId": "skill.mass-and-liquid-volume.measure-mass",
+    "targetSkillId": "skill.mass-and-liquid-volume.measure-volume",
+    "type": "prereq_strategy",
+    "rationale": "Measuring mass complements measuring liquid volume with similar reasoning."
+  },
+  {
+    "id": "edge.mass-and-volume.sequence-2",
+    "sourceSkillId": "skill.mass-and-liquid-volume.measure-volume",
+    "targetSkillId": "skill.mass-and-liquid-volume.solve-problems",
+    "type": "prereq_core",
+    "rationale": "Measuring mass and volume prepares students to solve word problems."
+  },
+  {
+    "id": "edge.measure-lengths-with-rulers.sequence-1",
+    "sourceSkillId": "skill.measure-lengths-with-rulers.align-zero",
+    "targetSkillId": "skill.measure-lengths-with-rulers.measure-to-nearest-unit",
+    "type": "prereq_core",
+    "rationale": "Proper alignment precedes measuring to the nearest unit."
+  },
+  {
+    "id": "edge.measure-lengths-with-rulers.sequence-2",
+    "sourceSkillId": "skill.measure-lengths-with-rulers.measure-to-nearest-unit",
+    "targetSkillId": "skill.measure-lengths-with-rulers.compare-different-units",
+    "type": "prereq_core",
+    "rationale": "Confidence measuring in one unit supports comparing measurements across units."
+  },
+  {
+    "id": "edge.measure-nearest.collect-data",
+    "sourceSkillId": "skill.measure-lengths-with-rulers.measure-to-nearest-unit",
+    "targetSkillId": "skill.generate-measurement-data.collect-and-record",
+    "type": "prereq_core",
+    "rationale": "Accurate measurement provides data for recording and analysis."
+  },
+  {
+    "id": "edge.measure-nearest.estimate-length",
+    "sourceSkillId": "skill.measure-lengths-with-rulers.measure-to-nearest-unit",
+    "targetSkillId": "skill.measure-lengths-with-rulers.estimate-length",
+    "type": "prereq_core",
+    "rationale": "Concrete measurement supports making reasonable estimates."
+  },
+  {
+    "id": "edge.measure-nearest.length-difference",
+    "sourceSkillId": "skill.measure-lengths-with-rulers.measure-to-nearest-unit",
+    "targetSkillId": "skill.measure-lengths-with-rulers.length-difference",
+    "type": "prereq_core",
+    "rationale": "Measuring to the nearest unit precedes computing differences in length."
+  },
+  {
+    "id": "edge.measurement-foundations.transition-1",
+    "sourceSkillId": "skill.compare-length-weight-capacity.describe-comparisons",
+    "targetSkillId": "skill.choose-measurement-tools.match-tool-to-attribute",
+    "type": "prereq_core",
+    "rationale": "Describing comparisons builds readiness for selecting measurement tools."
+  },
+  {
+    "id": "edge.measurement-foundations.transition-2",
+    "sourceSkillId": "skill.choose-measurement-tools.choose-units",
+    "targetSkillId": "skill.order-objects-by-attribute.order-three-objects",
+    "type": "prereq_core",
+    "rationale": "Choosing units primes students to order objects with informal measures."
+  },
+  {
+    "id": "edge.order-objects-by-attribute.sequence-1",
+    "sourceSkillId": "skill.order-objects-by-attribute.order-three-objects",
+    "targetSkillId": "skill.order-objects-by-attribute.measure-and-record",
+    "type": "prereq_core",
+    "rationale": "Ordering by comparison comes before measuring and recording results."
+  },
+  {
+    "id": "edge.order-objects.measure-record",
+    "sourceSkillId": "skill.order-objects-by-attribute.order-three-objects",
+    "targetSkillId": "skill.order-objects-by-attribute.measure-and-record",
+    "type": "prereq_core",
+    "rationale": "Ordering objects precedes recording their measurements."
+  },
+  {
+    "id": "edge.order-record.align-zero",
+    "sourceSkillId": "skill.order-objects-by-attribute.measure-and-record",
+    "targetSkillId": "skill.measure-lengths-with-rulers.align-zero",
+    "type": "prereq_core",
+    "rationale": "Measuring and recording comparisons prepares learners to align rulers correctly."
+  },
+  {
+    "id": "edge.picture-create-to-interpret",
+    "sourceSkillId": "skill.picture-graphs.create-picture-graph",
+    "targetSkillId": "skill.picture-graphs.interpret-picture-graph",
+    "type": "prereq_core",
+    "rationale": "Creating picture graphs leads to interpreting them."
+  },
+  {
+    "id": "edge.picture-graphs.sequence-1",
+    "sourceSkillId": "skill.picture-graphs.create-picture-graph",
+    "targetSkillId": "skill.picture-graphs.interpret-picture-graph",
+    "type": "prereq_core",
+    "rationale": "Creating picture graphs precedes answering questions from them."
+  },
+  {
+    "id": "edge.picture-interpret-to-bar-create",
+    "sourceSkillId": "skill.picture-graphs.interpret-picture-graph",
+    "targetSkillId": "skill.scaled-bar-graphs.create-scaled-bar-graph",
+    "type": "prereq_core",
+    "rationale": "Interpreting picture graphs prepares learners for scaled bar graphs."
+  },
+  {
+    "id": "edge.scaled-bar-create-to-solve",
+    "sourceSkillId": "skill.scaled-bar-graphs.create-scaled-bar-graph",
+    "targetSkillId": "skill.scaled-bar-graphs.solve-bar-graph-problems",
+    "type": "prereq_core",
+    "rationale": "Creating scaled bar graphs precedes solving related problems."
+  },
+  {
+    "id": "edge.scaled-bar-graphs.sequence-1",
+    "sourceSkillId": "skill.scaled-bar-graphs.create-scaled-bar-graph",
+    "targetSkillId": "skill.scaled-bar-graphs.solve-bar-graph-problems",
+    "type": "prereq_core",
+    "rationale": "Building scaled bar graphs is prerequisite to solving related problems."
+  },
+  {
+    "id": "edge.scaled-bar-solve-to-interpret-word",
+    "sourceSkillId": "skill.scaled-bar-graphs.solve-bar-graph-problems",
+    "targetSkillId": "skill.interpret-data-word-problems.choose-representation",
+    "type": "prereq_core",
+    "rationale": "Solving graph problems prepares students to choose representations."
+  },
+  {
+    "id": "edge.stat-question-to-display",
+    "sourceSkillId": "skill.data-variability-and-measures.statistical-questions",
+    "targetSkillId": "skill.data-variability-and-measures.display-dot-hist-box",
+    "type": "prereq_core",
+    "rationale": "Identifying statistical questions precedes selecting data displays."
+  },
+  {
+    "id": "edge.tally-charts.incoming-read",
+    "sourceSkillId": "skill.tally-charts-and-tables.read-tally-marks",
+    "targetSkillId": "skill.tally-charts-and-tables.create-tally-chart",
+    "type": "prereq_core",
+    "rationale": "Reading tally marks prepares learners to record their own tallies accurately."
+  },
+  {
+    "id": "edge.tally-charts.sequence-1",
+    "sourceSkillId": "skill.tally-charts-and-tables.create-tally-chart",
+    "targetSkillId": "skill.tally-charts-and-tables.interpret-table",
+    "type": "prereq_core",
+    "rationale": "Recording data supports interpreting tables and tallies."
+  },
+  {
+    "id": "edge.tally-charts.sequence-read-interpret",
+    "sourceSkillId": "skill.tally-charts-and-tables.read-tally-marks",
+    "targetSkillId": "skill.tally-charts-and-tables.interpret-table",
+    "type": "prereq_support",
+    "rationale": "Recognizing tally values supports answering questions about completed tables."
+  },
+  {
+    "id": "edge.tally-create-to-interpret",
+    "sourceSkillId": "skill.tally-charts-and-tables.create-tally-chart",
+    "targetSkillId": "skill.tally-charts-and-tables.interpret-table",
+    "type": "prereq_core",
+    "rationale": "Constructing tally tables precedes interpreting them."
+  },
+  {
+    "id": "edge.tally-interpret-to-picture-create",
+    "sourceSkillId": "skill.tally-charts-and-tables.interpret-table",
+    "targetSkillId": "skill.picture-graphs.create-picture-graph",
+    "type": "prereq_core",
+    "rationale": "Understanding tally data prepares students to create picture graphs."
+  },
+  {
+    "id": "edge.tally-read-to-create",
+    "sourceSkillId": "skill.tally-charts-and-tables.read-tally-chart",
+    "targetSkillId": "skill.tally-charts-and-tables.create-tally-chart",
+    "type": "prereq_core",
+    "rationale": "Reading tallies supports making tally charts."
+  },
+  {
+    "id": "edge.tell-time-five-minutes.sequence-1",
+    "sourceSkillId": "skill.tell-time-five-minutes.read-five-minute",
+    "targetSkillId": "skill.elapsed-time-minute.calculate-elapsed",
+    "type": "prereq_core",
+    "rationale": "Reading time to five minutes is necessary before calculating elapsed time."
+  },
+  {
+    "id": "edge.tell-time-hour-half-quarter.sequence-1",
+    "sourceSkillId": "skill.tell-time-hour-half-quarter.read-analog-clock",
+    "targetSkillId": "skill.tell-time-hour-half-quarter.read-quarter-hour",
+    "type": "prereq_core",
+    "rationale": "Reading to the hour and half hour precedes quarter-hour readings."
+  },
+  {
+    "id": "edge.time-and-money.transition-1",
+    "sourceSkillId": "skill.count-coins-pennies-to-quarters.count-mixed-coins",
+    "targetSkillId": "skill.make-given-amounts.compose-target-amount",
+    "type": "prereq_core",
+    "rationale": "Counting coins prepares learners to compose target amounts."
+  },
+  {
+    "id": "edge.time-and-money.transition-2",
+    "sourceSkillId": "skill.make-given-amounts.least-number-coins",
+    "targetSkillId": "skill.time-money-word-problems.select-operation",
+    "type": "prereq_core",
+    "rationale": "Working with coin combinations supports analyzing money word problems."
+  },
+  {
+    "id": "edge.time-and-money.transition-3",
+    "sourceSkillId": "skill.elapsed-time-minute.solve-start-end",
+    "targetSkillId": "skill.time-money-word-problems.select-operation",
+    "type": "prereq_core",
+    "rationale": "Elapsed time strategies inform mixed time-money contexts."
+  },
+  {
+    "id": "edge.time-five-to-elapsed",
+    "sourceSkillId": "skill.tell-time-five-minutes.read-five-minute",
+    "targetSkillId": "skill.elapsed-time-minute.calculate-elapsed",
+    "type": "prereq_core",
+    "rationale": "Reading time to five minutes precedes calculating elapsed time."
+  },
+  {
+    "id": "edge.time-money-word-problems.sequence-1",
+    "sourceSkillId": "skill.time-money-word-problems.select-operation",
+    "targetSkillId": "skill.time-money-word-problems.solve-multi-step",
+    "type": "prereq_core",
+    "rationale": "Choosing operations precedes solving multi-step time and money problems."
+  },
+  {
+    "id": "edge.time-quarter-to-five",
+    "sourceSkillId": "skill.tell-time-hour-half-quarter.read-quarter-hour",
+    "targetSkillId": "skill.tell-time-five-minutes.read-five-minute",
+    "type": "prereq_core",
+    "rationale": "Understanding quarter hours supports reading time to the nearest five minutes."
+  },
+  {
+    "id": "edge.variability-to-describe",
+    "sourceSkillId": "skill.data-variability-and-measures.measures-variability",
+    "targetSkillId": "skill.data-variability-and-measures.describe-variability",
+    "type": "prereq_core",
+    "rationale": "Calculating variability precedes describing what it means in context."
+  },
+  {
+    "id": "edge.volume-rectangular-prisms.sequence-1",
+    "sourceSkillId": "skill.volume-rectangular-prisms.count-unit-cubes",
+    "targetSkillId": "skill.volume-rectangular-prisms.use-volume-formula",
+    "type": "prereq_core",
+    "rationale": "Counting unit cubes leads to using the volume formula."
+  }
+]
