@@ -1,11 +1,169 @@
+var __defProp = Object.defineProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+
 // src/index.ts
 import { z } from "zod";
+
+// src/auth/access.ts
+var access_exports = {};
+__export(access_exports, {
+  ADMIN_ROLE_PERMISSIONS: () => ADMIN_ROLE_PERMISSIONS,
+  ADMIN_STATEMENTS: () => ADMIN_STATEMENTS,
+  ORGANIZATION_ROLE_PERMISSIONS: () => ORGANIZATION_ROLE_PERMISSIONS,
+  ORGANIZATION_STATEMENTS: () => ORGANIZATION_STATEMENTS
+});
+var ADMIN_STATEMENTS = {
+  user: ["create", "list", "set-role", "ban", "impersonate", "delete", "set-password"],
+  session: ["list", "revoke", "delete"]
+};
+var ADMIN_ROLE_PERMISSIONS = {
+  internal: {
+    user: [...ADMIN_STATEMENTS.user],
+    session: [...ADMIN_STATEMENTS.session]
+  },
+  admin: {
+    user: ["list", "set-role", "impersonate"],
+    session: ["list", "revoke"]
+  },
+  guide: {
+    user: [],
+    session: []
+  },
+  guardian: {
+    user: [],
+    session: []
+  },
+  student: {
+    user: [],
+    session: []
+  }
+};
+var ORGANIZATION_STATEMENTS = {
+  organization: ["update", "billing", "set-plan", "set-join-code", "delete"],
+  member: ["create", "update", "delete"],
+  invitation: ["create", "cancel"]
+};
+var ORGANIZATION_ROLE_PERMISSIONS = {
+  owner: {
+    organization: [...ORGANIZATION_STATEMENTS.organization],
+    member: [...ORGANIZATION_STATEMENTS.member],
+    invitation: [...ORGANIZATION_STATEMENTS.invitation]
+  },
+  admin: {
+    organization: ["update", "set-plan", "set-join-code"],
+    member: [...ORGANIZATION_STATEMENTS.member],
+    invitation: [...ORGANIZATION_STATEMENTS.invitation]
+  },
+  member: {
+    organization: [],
+    member: [],
+    invitation: []
+  },
+  guide: {
+    organization: [],
+    member: [],
+    invitation: []
+  },
+  guardian: {
+    organization: [],
+    member: [],
+    invitation: []
+  },
+  student: {
+    organization: [],
+    member: [],
+    invitation: []
+  }
+};
+
+// src/index.ts
 var IdSchema = () => z.string();
-var UserRoleSchema = z.enum(["admin", "curriculum_writer", "teacher", "student"]);
+var UserRoleSchema = z.enum(["internal", "admin", "guide", "guardian", "student"]);
+var OrganizationPlanKeySchema = z.enum([
+  "solo_monthly",
+  "solo_annual",
+  "family_monthly",
+  "family_annual",
+  "org_monthly",
+  "org_annual",
+  "org_highvolume_monthly",
+  "org_highvolume_annual"
+]);
+var BillingCycleSchema = z.enum(["monthly", "annual"]);
+var BillingAccountStatusSchema = z.enum(["trial", "active", "past_due", "paused", "canceled"]);
+var OrganizationLifecycleStatusSchema = z.enum(["active", "inactive", "archived"]);
+var OrganizationSchema = z.object({
+  name: z.string(),
+  slug: z.string(),
+  joinCode: z.string(),
+  planKey: OrganizationPlanKeySchema,
+  billingCycle: BillingCycleSchema,
+  lifecycleStatus: OrganizationLifecycleStatusSchema,
+  primaryAdminId: z.string(),
+  seatLimit: z.number().nullable().optional(),
+  seatsInUse: z.number().optional(),
+  metadata: z.record(z.unknown()).optional(),
+  createdAt: z.number(),
+  updatedAt: z.number()
+});
+var OrgMembershipStatusSchema = z.enum(["pending", "active", "invited", "suspended", "revoked"]);
+var OrgMembershipSchema = z.object({
+  userId: z.string(),
+  orgId: z.string(),
+  role: UserRoleSchema,
+  status: OrgMembershipStatusSchema,
+  invitedByUserId: z.string().optional(),
+  inviteId: z.string().optional(),
+  relationships: z.object({
+    guardianForStudentIds: z.array(z.string()).optional(),
+    guideForStudentIds: z.array(z.string()).optional(),
+    notes: z.string().optional()
+  }).partial().optional(),
+  createdAt: z.number(),
+  updatedAt: z.number()
+});
+var OrgInviteStatusSchema = z.enum(["pending", "accepted", "expired", "revoked"]);
+var OrgInviteSchema = z.object({
+  orgId: z.string(),
+  email: z.string().email(),
+  role: z.enum(["admin", "guide", "guardian", "student"]),
+  token: z.string(),
+  status: OrgInviteStatusSchema,
+  createdByUserId: z.string(),
+  expiresAt: z.number(),
+  createdAt: z.number(),
+  acceptedAt: z.number().optional(),
+  redeemedByUserId: z.string().optional()
+});
+var BillingAccountSchema = z.object({
+  orgId: z.string(),
+  planKey: OrganizationPlanKeySchema,
+  billingCycle: BillingCycleSchema,
+  seatsIncluded: z.number(),
+  seatsInUse: z.number(),
+  basePriceCents: z.number(),
+  pricePerSeatCents: z.number(),
+  overageSeatPriceCents: z.number().optional(),
+  externalCustomerId: z.string().optional(),
+  externalSubscriptionId: z.string().optional(),
+  trialEndsAt: z.number().optional(),
+  status: BillingAccountStatusSchema,
+  createdAt: z.number(),
+  updatedAt: z.number()
+});
 var UserProfileSchema = z.object({
   userId: z.string(),
-  role: UserRoleSchema,
-  organizationId: z.string().optional(),
+  accountRole: UserRoleSchema,
+  displayName: z.string().optional(),
+  activeOrgId: z.string().optional(),
+  impersonationState: z.object({
+    active: z.boolean(),
+    actorUserId: z.string(),
+    startedAt: z.number()
+  }).optional(),
   preferences: z.object({
     theme: z.string(),
     defaultView: z.string()
@@ -139,7 +297,67 @@ var LessonMaterialInventorySchema = z.object({
   version: z.literal(1),
   tokenTypes: z.array(TokenTypeDefinitionSchema),
   banks: z.array(MaterialBankDefinitionSchema),
-  defaultRules: InventoryRuleSetSchema.optional()
+  defaultRules: InventoryRuleSetSchema.optional(),
+  sceneNodes: z.array(
+    z.object({
+      id: z.string(),
+      materialId: z.string(),
+      label: z.string().optional(),
+      transform: z.object({
+        position: z.object({ x: z.number(), y: z.number() }),
+        rotation: z.number().optional(),
+        scale: z.object({
+          x: z.number(),
+          y: z.number()
+        }).optional(),
+        opacity: z.number().optional()
+      }).optional(),
+      metadata: z.record(z.unknown()).optional()
+    }).strict()
+  ).optional()
+}).strict();
+var TimelineTransformSchema = z.object({
+  position: z.object({ x: z.number(), y: z.number() }),
+  rotation: z.number().optional(),
+  scale: z.object({
+    x: z.number(),
+    y: z.number()
+  }).optional(),
+  opacity: z.number().optional()
+}).strict();
+var TimelineKeyframeSchema = z.object({
+  timeMs: z.number(),
+  transform: TimelineTransformSchema,
+  easing: z.string().optional(),
+  metadata: z.record(z.unknown()).optional()
+}).strict();
+var TimelineTrackSchema = z.object({
+  nodeId: z.string(),
+  keyframes: z.array(TimelineKeyframeSchema),
+  metadata: z.record(z.unknown()).optional()
+}).strict();
+var TimelineInteractionSchema = z.object({
+  id: z.string(),
+  kind: z.enum(["drop-zone", "input", "custom"]),
+  targetNodeId: z.string().optional(),
+  props: z.record(z.unknown()).optional()
+}).strict();
+var SegmentStepBaseSchema = z.object({
+  id: z.string(),
+  title: z.string().optional(),
+  caption: z.string().optional(),
+  actor: z.enum(["guide", "student"]),
+  durationMs: z.number(),
+  keyframes: z.array(TimelineTrackSchema),
+  interactions: z.array(TimelineInteractionSchema).optional(),
+  metadata: z.record(z.unknown()).optional()
+}).strict();
+var SegmentStepSchema = SegmentStepBaseSchema;
+var SegmentTimelineSchema = z.object({
+  version: z.literal(1),
+  label: z.string().optional(),
+  steps: z.array(SegmentStepSchema),
+  metadata: z.record(z.unknown()).optional()
 }).strict();
 var PresentationActionDetailsSchema = z.object({
   durationMs: z.number().optional(),
@@ -290,7 +508,8 @@ var PresentationSegmentSchema = z.object({
   scriptId: z.string().optional(),
   script: PresentationScriptSchema.optional(),
   scenario: LessonScenarioBindingSchema.optional(),
-  materialBankId: z.string().optional()
+  materialBankId: z.string().optional(),
+  timeline: SegmentTimelineSchema.optional()
 }).strict();
 var GuidedSegmentSchema = z.object({
   id: z.string(),
@@ -307,7 +526,8 @@ var GuidedSegmentSchema = z.object({
     })
   ),
   scenario: LessonScenarioBindingSchema.optional(),
-  materialBankId: z.string().optional()
+  materialBankId: z.string().optional(),
+  timeline: SegmentTimelineSchema.optional()
 }).strict();
 var PracticeQuestionSchema = z.object({
   id: z.string(),
@@ -336,7 +556,8 @@ var PracticeSegmentSchema = z.object({
   questions: z.array(PracticeQuestionSchema),
   passCriteria: PracticePassCriteriaSchema,
   scenario: LessonScenarioBindingSchema.optional(),
-  materialBankId: z.string().optional()
+  materialBankId: z.string().optional(),
+  timeline: SegmentTimelineSchema.optional()
 }).strict();
 var LessonSegmentSchema = z.discriminatedUnion("type", [
   PresentationSegmentSchema,
@@ -409,6 +630,16 @@ var UnitSchema = z.object({
   topics: z.array(UnitTopicRefSchema)
 }).strict();
 var LessonStatusSchema = z.enum(["draft", "published"]);
+var LessonAuthoringStatusSchema = z.enum([
+  "not_started",
+  "outline",
+  "presentation",
+  "guided",
+  "practice",
+  "qa",
+  "published"
+]);
+var LessonGradeLevelSchema = z.enum(["kindergarten", "grade1", "grade2", "grade3"]);
 var TopicStatusSchema = z.enum(["active", "archived"]);
 var UnitStatusSchema = TopicStatusSchema;
 var CurriculumTreeLessonSchema = z.object({
@@ -418,7 +649,10 @@ var CurriculumTreeLessonSchema = z.object({
   status: LessonStatusSchema,
   title: z.string(),
   summary: z.string(),
-  updatedAt: z.number()
+  updatedAt: z.number(),
+  authoringStatus: LessonAuthoringStatusSchema.optional(),
+  assigneeId: z.string().optional(),
+  gradeLevels: z.array(LessonGradeLevelSchema).optional()
 }).strict();
 var CurriculumTreeTopicSchema = z.object({
   _id: IdSchema(),
@@ -458,13 +692,120 @@ var LessonDraftRecordSchema = z.object({
   status: LessonStatusSchema,
   createdAt: z.number(),
   updatedAt: z.number(),
-  metadata: EntityMetadataSchema.optional()
+  metadata: EntityMetadataSchema.optional(),
+  authoringStatus: LessonAuthoringStatusSchema.optional(),
+  assigneeId: z.string().optional(),
+  authoringNotes: z.string().optional(),
+  gradeLevels: z.array(LessonGradeLevelSchema).optional(),
+  manifestHash: z.string().optional(),
+  manifestGeneratedAt: z.string().optional(),
+  manifestCommit: z.string().optional()
+}).strict();
+var RitRangeSchema = z.object({
+  min: z.number(),
+  max: z.number()
+}).strict();
+var CurriculumSkillPracticeSchema = z.object({
+  easy: z.array(z.string()).optional(),
+  medium: z.array(z.string()).optional(),
+  hard: z.array(z.string()).optional()
+}).strict().optional();
+var CurriculumSkillSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  domainId: z.string(),
+  unitId: z.string().optional(),
+  topicId: z.string().optional(),
+  ccss: z.array(z.string()).optional(),
+  ritBand: RitRangeSchema.optional(),
+  representations: z.array(z.string()).optional(),
+  practice: CurriculumSkillPracticeSchema,
+  mentalMathEligible: z.boolean().optional()
+}).passthrough();
+var CurriculumManifestUnitSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  title: z.string(),
+  summary: z.string().optional(),
+  domainId: z.string().optional(),
+  ritRange: RitRangeSchema.optional(),
+  primaryCcss: z.array(z.string()).optional(),
+  topicOrder: z.array(z.string())
+}).strict();
+var CurriculumManifestTopicSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  unitId: z.string(),
+  title: z.string(),
+  overview: z.string().optional(),
+  focusSkills: z.array(z.string()),
+  ritRange: RitRangeSchema.optional(),
+  ccssFocus: z.array(z.string()).optional(),
+  priority: z.number().optional(),
+  prerequisiteTopicIds: z.array(z.string())
+}).strict();
+var CurriculumManifestLessonSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  topicId: z.string(),
+  title: z.string(),
+  materialId: z.string().optional(),
+  gradeLevels: z.array(LessonGradeLevelSchema),
+  segments: z.array(
+    z.object({
+      type: z.string(),
+      representation: z.string().optional()
+    }).strict()
+  ),
+  prerequisiteLessonIds: z.array(z.string()),
+  skills: z.array(z.string()),
+  notes: z.string().optional()
+}).strict();
+var CurriculumManifestSchema = z.object({
+  generatedAt: z.string(),
+  domains: z.array(z.record(z.unknown())),
+  units: z.array(CurriculumManifestUnitSchema),
+  topics: z.array(CurriculumManifestTopicSchema),
+  lessons: z.array(CurriculumManifestLessonSchema)
+}).strict();
+var CurriculumSyncSummarySchema = z.object({
+  manifestHash: z.string(),
+  manifestGeneratedAt: z.string(),
+  manifestCommit: z.string().optional(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+  units: z.object({
+    created: z.number(),
+    updated: z.number(),
+    deleted: z.number()
+  }).strict(),
+  topics: z.object({
+    created: z.number(),
+    updated: z.number(),
+    deleted: z.number()
+  }).strict(),
+  lessons: z.object({
+    created: z.number(),
+    updated: z.number(),
+    deleted: z.number()
+  }).strict()
 }).strict();
 export {
+  access_exports as AuthAccess,
   AuthoringMetaSchema,
   BankQuantityMapSchema,
+  BillingAccountSchema,
+  BillingAccountStatusSchema,
+  BillingCycleSchema,
   CanvasAnchorSchema,
   ConsumptionRuleSchema,
+  CurriculumManifestLessonSchema,
+  CurriculumManifestSchema,
+  CurriculumManifestTopicSchema,
+  CurriculumManifestUnitSchema,
+  CurriculumSkillSchema,
+  CurriculumSyncSummarySchema,
   CurriculumTreeLessonSchema,
   CurriculumTreeSchema,
   CurriculumTreeTopicSchema,
@@ -477,9 +818,11 @@ export {
   GuidedStepSchema,
   IdSchema,
   InventoryRuleSetSchema,
+  LessonAuthoringStatusSchema,
   LessonDocumentMetaSchema,
   LessonDocumentSchema,
   LessonDraftRecordSchema,
+  LessonGradeLevelSchema,
   LessonMaterialInventorySchema,
   LessonPlanSchema,
   LessonScenarioBindingSchema,
@@ -491,6 +834,13 @@ export {
   MaterialBankDefinitionSchema,
   MaterialSchema,
   MaterialUsageSchema,
+  OrgInviteSchema,
+  OrgInviteStatusSchema,
+  OrgMembershipSchema,
+  OrgMembershipStatusSchema,
+  OrganizationLifecycleStatusSchema,
+  OrganizationPlanKeySchema,
+  OrganizationSchema,
   PracticePassCriteriaSchema,
   PracticeQuestionSchema,
   PracticeSegmentSchema,
@@ -500,8 +850,14 @@ export {
   PresentationSegmentSchema,
   ReplenishRuleSchema,
   RepresentationSchema,
+  SegmentStepSchema,
+  SegmentTimelineSchema,
   SegmentTypeSchema,
   TaskCategorySchema,
+  TimelineInteractionSchema,
+  TimelineKeyframeSchema,
+  TimelineTrackSchema,
+  TimelineTransformSchema,
   TokenTypeDefinitionSchema,
   TokenVisualDefinitionSchema,
   TopicSchema,

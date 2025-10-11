@@ -3,6 +3,7 @@ import { createStore } from 'solid-js/store';
 
 import type { LessonDocument, LessonMaterialInventory } from '@monte/types';
 import { createEmptyInventory } from '../utils/inventory';
+import { ensureLessonDocumentTimelines } from '../utils/timeline';
 
 const cloneDocument = <T>(value: T): T => {
   if (typeof structuredClone === 'function') {
@@ -57,7 +58,7 @@ export const createLessonEditor = () => {
   });
 
   const loadDocument = (document: LessonDocument) => {
-    const cloned = cloneDocument(document);
+    const cloned = ensureLessonDocumentTimelines(cloneDocument(document));
     setState({
       activeLessonId: cloned.lesson.id,
       document: cloned,
@@ -75,8 +76,9 @@ export const createLessonEditor = () => {
     if (!state.document) return;
     try {
       const snapshot = cloneDocument(state.document);
-      const draft = cloneDocument(state.document);
+      const draft = ensureLessonDocumentTimelines(cloneDocument(state.document));
       makeChange(draft);
+      ensureLessonDocumentTimelines(draft);
       setState({
         document: draft,
         dirty: true,

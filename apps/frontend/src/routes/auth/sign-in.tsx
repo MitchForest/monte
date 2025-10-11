@@ -8,14 +8,13 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const auth = useAuth();
   const [email, setEmail] = createSignal('');
-  const [name, setName] = createSignal('');
   const [loading, setLoading] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
   const [success, setSuccess] = createSignal<string | null>(null);
 
   createEffect(() => {
     if (auth.isAuthenticated()) {
-      void navigate({ to: '/editor' });
+      void navigate({ to: '/app' });
     }
   });
 
@@ -26,7 +25,7 @@ const SignInPage = () => {
     setSuccess(null);
 
     try {
-      await auth.signIn(email().trim(), name().trim() || undefined);
+      await auth.signIn(email().trim());
       setSuccess('Magic link sent! Check your email to continue.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to send magic link');
@@ -74,15 +73,6 @@ const SignInPage = () => {
             onValueChange={setEmail}
             required
             autocomplete="email"
-            size="md"
-          />
-
-          <Input
-            label="Name (optional)"
-            type="text"
-            value={name()}
-            onValueChange={setName}
-            autocomplete="name"
             size="md"
           />
 

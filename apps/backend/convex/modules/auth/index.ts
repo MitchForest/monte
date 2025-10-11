@@ -1,18 +1,32 @@
 import { createClient, type GenericCtx } from '@convex-dev/better-auth';
 import { convex, crossDomain } from '@convex-dev/better-auth/plugins';
 import { betterAuth } from 'better-auth';
-import { magicLink } from 'better-auth/plugins';
+import { admin, magicLink, organization } from 'better-auth/plugins';
 import { v } from 'convex/values';
 
 import type { DataModel } from '@monte/api/convex/_generated/dataModel.d.ts';
 import { components } from '@monte/api/convex/_generated/api.js';
 import { mutation, query } from '@monte/api/convex/_generated/server.js';
 import type { MutationCtx, QueryCtx } from '@monte/api/convex/_generated/server.js';
-import type { UserRole } from '@monte/types';
+import type {
+  BillingAccountStatus,
+  BillingCycle,
+  OrganizationPlanKey,
+  OrgInviteStatus,
+  OrgMembershipStatus,
+  UserRole,
+} from '@monte/types';
+import {
+  adminAccessControl,
+  adminRoles,
+  organizationAccessControl,
+  organizationRoles,
+} from './access.js';
 
 const convexSiteUrl = process.env.CONVEX_SITE_URL!;
 const siteUrl = process.env.SITE_URL ?? 'http://localhost:3000';
-const DEFAULT_USER_ROLE: UserRole = 'teacher';
+const INTERNAL_ACCESS_CODE = process.env.INTERNAL_ACCESS_CODE ?? null;
+const DEFAULT_USER_ROLE: UserRole = 'guardian';
 
 export const authComponent = createClient<DataModel>(components.betterAuth, {
   verbose: true,
@@ -21,7 +35,7 @@ export const authComponent = createClient<DataModel>(components.betterAuth, {
 type AuthUserDoc = Awaited<ReturnType<typeof authComponent.getAuthUser>>;
 type AuthInstance = ReturnType<typeof betterAuth>;
 
-const asGenericCtx = (ctx: QueryCtx | MutationCtx): GenericCtx<DataModel> =>
+export const asGenericCtx = (ctx: QueryCtx | MutationCtx): GenericCtx<DataModel> =>
   ctx as GenericCtx<DataModel>;
 
 const getDb = (ctx: GenericCtx<DataModel>): QueryCtx['db'] =>
@@ -36,6 +50,136 @@ const resolveResendApiKey = () =>
 const defaultFromAddress = 'Monte <no-reply@monte.app>';
 
 const getFromAddress = () => process.env.MAGIC_LINK_FROM_EMAIL ?? defaultFromAddress;
+
+const parseEnvList = (raw: string | undefined | null) =>
+  raw
+    ? raw
+        .split(',')
+        .map((value) => value.trim())
+        .filter(Boolean)
+    : [];
+
+const ADMIN_USER_IDS = parseEnvList(
+  process.env.INTERNAL_ADMIN_USER_IDS ?? process.env.ADMIN_USER_IDS ?? undefined,
+);
+
+type PlanSpec = {
+  billingCycle: BillingCycle;
+  seatsIncluded: number;
+  basePriceCents: number;
+  pricePerSeatCents: number;
+  overageSeatPriceCents?: number;
+  overageThreshold?: number;
+  pricingTier: 'solo' | 'family' | 'org' | 'org_highvolume';
+};
+
+const PLAN_DIRECTORY: Record<OrganizationPlanKey, PlanSpec> = {
+  solo_monthly: {
+    billingCycle: 'monthly',
+    seatsIncluded: 1,
+    basePriceCents: 4900,
+    pricePerSeatCents: 4900,
+    pricingTier: 'solo',
+  },
+  solo_annual: {
+    billingCycle: 'annual',
+    seatsIncluded: 1,
+    basePriceCents: 49000,
+    pricePerSeatCents: 49000,
+    pricingTier: 'solo',
+  },
+  family_monthly: {
+    billingCycle: 'monthly',
+    seatsIncluded: 4,
+    basePriceCents: 7900,
+    pricePerSeatCents: 7900,
+    pricingTier: 'family',
+  },
+  family_annual: {
+    billingCycle: 'annual',
+    seatsIncluded: 4,
+    basePriceCents: 79000,
+    pricePerSeatCents: 79000,
+    pricingTier: 'family',
+  },
+  org_monthly: {
+    billingCycle: 'monthly',
+    seatsIncluded: 100,
+    basePriceCents: 0,
+    pricePerSeatCents: 1900,
+    overageSeatPriceCents: 900,
+    overageThreshold: 100,
+    pricingTier: 'org',
+  },
+  org_annual: {
+    billingCycle: 'annual',
+    seatsIncluded: 100,
+    basePriceCents: 0,
+    pricePerSeatCents: 19000,
+    overageSeatPriceCents: 9000,
+    overageThreshold: 100,
+    pricingTier: 'org',
+  },
+  org_highvolume_monthly: {
+    billingCycle: 'monthly',
+    seatsIncluded: 0,
+    basePriceCents: 0,
+    pricePerSeatCents: 900,
+    pricingTier: 'org_highvolume',
+  },
+  org_highvolume_annual: {
+    billingCycle: 'annual',
+    seatsIncluded: 0,
+    basePriceCents: 0,
+    pricePerSeatCents: 9000,
+    pricingTier: 'org_highvolume',
+  },
+};
+
+const DEFAULT_PLAN_KEY: OrganizationPlanKey = 'family_monthly';
+
+export const getPlanSpec = (planKey: OrganizationPlanKey): PlanSpec => {
+  return PLAN_DIRECTORY[planKey] ?? PLAN_DIRECTORY[DEFAULT_PLAN_KEY];
+};
+
+const userRoleLiteral = v.union(
+  v.literal('internal'),
+  v.literal('admin'),
+  v.literal('guide'),
+  v.literal('guardian'),
+  v.literal('student'),
+);
+
+const planKeyLiteral = v.union(
+  v.literal('solo_monthly'),
+  v.literal('solo_annual'),
+  v.literal('family_monthly'),
+  v.literal('family_annual'),
+  v.literal('org_monthly'),
+  v.literal('org_annual'),
+  v.literal('org_highvolume_monthly'),
+  v.literal('org_highvolume_annual'),
+);
+
+export const randomFromAlphabet = (alphabet: string, length: number) => {
+  let result = '';
+  for (let i = 0; i < length; i += 1) {
+    const index = Math.floor(Math.random() * alphabet.length);
+    result += alphabet[index]!;
+  }
+  return result;
+};
+
+export const generateJoinCode = () => randomFromAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 8);
+
+export const normalizeSlug = (raw: string) => {
+  const base = raw
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 50);
+  return base.length > 0 ? base : randomFromAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 6);
+};
 
 const escapeHtml = (raw: string) =>
   raw
@@ -186,7 +330,7 @@ export const createAuth = (
       enabled: false,
     },
     session: {
-      expiresIn: 60 * 60 * 24 * 7,
+      expiresIn: 60 * 60 * 24 * 30,
       updateAge: 60 * 60 * 24,
     },
     trustedOrigins: [siteUrl, 'http://localhost:3000'].filter(Boolean) as string[],
@@ -199,140 +343,120 @@ export const createAuth = (
       crossDomain({
         siteUrl,
       }),
+      admin({
+        defaultRole: DEFAULT_USER_ROLE,
+        adminRoles: ['internal'],
+        adminUserIds: ADMIN_USER_IDS,
+        ac: adminAccessControl,
+        roles: adminRoles,
+      }),
+      organization({
+        ac: organizationAccessControl,
+        roles: organizationRoles,
+        allowUserToCreateOrganization: async (user) => {
+          const rawRole = user.role ?? '';
+          const segments = rawRole.split(',').map((part: string) => part.trim());
+          return segments.includes('internal') || segments.includes('admin');
+        },
+        schema: {
+          organization: {
+            additionalFields: {
+              joinCode: {
+                type: 'string',
+                required: true,
+                input: false,
+              },
+              planKey: {
+                type: 'string',
+                required: true,
+                input: true,
+                defaultValue: DEFAULT_PLAN_KEY,
+              },
+              billingCycle: {
+                type: 'string',
+                required: true,
+                input: true,
+                defaultValue: PLAN_DIRECTORY[DEFAULT_PLAN_KEY].billingCycle,
+              },
+              seatLimit: {
+                type: 'number',
+                required: false,
+                input: true,
+              },
+              seatsInUse: {
+                type: 'number',
+                required: true,
+                input: false,
+                defaultValue: 0,
+              },
+              pricingTier: {
+                type: 'string',
+                required: true,
+                input: false,
+                defaultValue: PLAN_DIRECTORY[DEFAULT_PLAN_KEY].pricingTier,
+              },
+            },
+          },
+          member: {
+            additionalFields: {
+              status: {
+                type: 'string',
+                required: true,
+                input: true,
+                defaultValue: 'active',
+              },
+              relationships: {
+                type: 'json',
+                required: false,
+                input: true,
+              },
+              invitedByUserId: {
+                type: 'string',
+                required: false,
+                input: false,
+              },
+            },
+          },
+          invitation: {
+            additionalFields: {
+              createdByUserId: {
+                type: 'string',
+                required: false,
+                input: false,
+              },
+            },
+          },
+        },
+        organizationHooks: {
+          beforeCreateOrganization: async ({ organization }) => {
+            const rawPlanKey = (organization as { planKey?: OrganizationPlanKey }).planKey;
+            const planKey = rawPlanKey ?? DEFAULT_PLAN_KEY;
+            const planSpec = getPlanSpec(planKey);
+
+            const desiredSlug =
+              typeof (organization as { slug?: string }).slug === 'string'
+                ? (organization as { slug?: string }).slug!
+                : (organization as { name?: string }).name ?? generateJoinCode().toLowerCase();
+            const normalizedSlug = normalizeSlug(desiredSlug);
+            const slugSuffix = randomFromAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 4);
+            const uniquelySlugged = `${normalizedSlug}-${slugSuffix}`.slice(0, 50);
+
+            return {
+              data: {
+                ...organization,
+                slug: uniquelySlugged,
+                joinCode: generateJoinCode(),
+                planKey,
+                billingCycle: planSpec.billingCycle,
+                seatsInUse: 0,
+                seatLimit: planSpec.seatsIncluded > 0 ? planSpec.seatsIncluded : null,
+                pricingTier: planSpec.pricingTier,
+              },
+            };
+          },
+        },
+      }),
       convex(),
     ],
   });
 };
-
-export const getCurrentUser = query({
-  args: {},
-  handler: async (ctx): Promise<AuthUserDoc> => {
-    return await authComponent.getAuthUser(asGenericCtx(ctx));
-  },
-});
-
-export const requireAuth = async (ctx: GenericCtx<DataModel>) => {
-  const authUser = await authComponent.getAuthUser(ctx);
-  if (!authUser) {
-    throw new Error('Authentication required');
-  }
-  return authUser;
-};
-
-export const requireRole = async (
-  ctx: GenericCtx<DataModel>,
-  allowedRoles: Array<UserRole>,
-) => {
-  const authUser = await requireAuth(ctx);
-  const db = getDb(ctx);
-  const profile = await db
-    .query('userProfiles')
-    .withIndex('by_user_id', (q) => q.eq('userId', authUser._id))
-    .first();
-
-  if (!profile) {
-    throw new Error('User profile not found');
-  }
-
-  if (!allowedRoles.includes(profile.role)) {
-    throw new Error('Access denied');
-  }
-
-  return { authUser, profile };
-};
-
-export const getCurrentUserProfile = query({
-  args: {},
-  handler: async (ctx) => {
-    const user = await authComponent.getAuthUser(asGenericCtx(ctx));
-    if (!user) return null;
-    const profile = await ctx.db
-      .query('userProfiles')
-      .withIndex('by_user_id', (q) => q.eq('userId', user._id))
-      .first();
-    return profile ?? null;
-  },
-});
-
-export const getCurrentUserRole = query({
-  args: {},
-  handler: async (ctx) => {
-    const user = await authComponent.getAuthUser(asGenericCtx(ctx));
-    if (!user) return null;
-    const profile = await ctx.db
-      .query('userProfiles')
-      .withIndex('by_user_id', (q) => q.eq('userId', user._id))
-      .first();
-    return profile?.role ?? null;
-  },
-});
-
-export const ensureUserProfile = mutation({
-  args: {},
-  handler: async (ctx) => {
-    const user = await authComponent.getAuthUser(asGenericCtx(ctx));
-    if (!user) {
-      throw new Error('Authentication required');
-    }
-    const existing = await ctx.db
-      .query('userProfiles')
-      .withIndex('by_user_id', (q) => q.eq('userId', user._id))
-      .first();
-    if (existing) {
-      return existing.role;
-    }
-    const timestamp = Date.now();
-    await ctx.db.insert('userProfiles', {
-      userId: user._id,
-      role: DEFAULT_USER_ROLE,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    });
-    return DEFAULT_USER_ROLE;
-  },
-});
-
-export const updateUserRole = mutation({
-  args: {
-    targetUserId: v.string(),
-    role: v.union(
-      v.literal('admin'),
-      v.literal('curriculum_writer'),
-      v.literal('teacher'),
-      v.literal('student'),
-    ),
-  },
-  handler: async (ctx, args) => {
-    const actor = await authComponent.getAuthUser(asGenericCtx(ctx));
-    if (!actor) {
-      throw new Error('Authentication required');
-    }
-    const actorProfile = await ctx.db
-      .query('userProfiles')
-      .withIndex('by_user_id', (q) => q.eq('userId', actor._id))
-      .first();
-    if (!actorProfile || actorProfile.role !== 'admin') {
-      throw new Error('Not authorized');
-    }
-
-    const targetProfile = await ctx.db
-      .query('userProfiles')
-      .withIndex('by_user_id', (q) => q.eq('userId', args.targetUserId))
-      .first();
-
-    const timestamp = Date.now();
-    if (targetProfile) {
-      await ctx.db.patch(targetProfile._id, {
-        role: args.role as UserRole,
-        updatedAt: timestamp,
-      });
-    } else {
-      await ctx.db.insert('userProfiles', {
-        userId: args.targetUserId,
-        role: args.role as UserRole,
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      });
-    }
-  },
-});

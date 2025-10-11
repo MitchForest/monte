@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as curriculum from "../curriculum.js";
 import type * as http from "../http.js";
+import type * as modules_auth_access from "../modules/auth/access.js";
 import type * as modules_auth_index from "../modules/auth/index.js";
 import type * as modules_curriculum_index from "../modules/curriculum/index.js";
 
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   curriculum: typeof curriculum;
   http: typeof http;
+  "modules/auth/access": typeof modules_auth_access;
   "modules/auth/index": typeof modules_auth_index;
   "modules/curriculum/index": typeof modules_curriculum_index;
 }>;

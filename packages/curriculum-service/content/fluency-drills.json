@@ -1,0 +1,319 @@
+[
+  {
+    "id": "drill.prek.successor-snap",
+    "name": "Successor & Predecessor Snap",
+    "gradeBand": "PreK-K",
+    "ritRange": { "min": 130, "max": 148 },
+    "focusSkills": [
+      "skill.one-more-one-less.find-one-more-10",
+      "skill.one-more-one-less.find-one-less-10"
+    ],
+    "spiralSkills": [
+      "skill.counting-within-5.count-sequence-to-5",
+      "skill.counting-within-10.count-sequence-to-10"
+    ],
+    "phases": [
+      {
+        "label": "focus",
+        "durationSeconds": 75,
+        "itemMix": {
+          "skillIds": [
+            "skill.one-more-one-less.find-one-more-10",
+            "skill.one-more-one-less.find-one-less-10"
+          ],
+          "difficultyWeights": { "easy": 0.6, "medium": 0.3, "hard": 0.1 }
+        }
+      },
+      {
+        "label": "spiral",
+        "durationSeconds": 75,
+        "itemMix": {
+          "skillIds": [
+            "skill.counting-within-5.count-sequence-to-5",
+            "skill.counting-within-10.count-sequence-to-10"
+          ],
+          "difficultyWeights": { "easy": 0.5, "medium": 0.35, "hard": 0.15 }
+        }
+      }
+    ],
+    "triggerRules": {
+      "onSkillProficiency": [
+        "skill.one-more-one-less.find-one-more-10",
+        "skill.one-more-one-less.find-one-less-10"
+      ],
+      "spacedInterval": { "initialDays": 2, "growthFactor": 1.5 },
+      "masteryFloor": 0.7,
+      "priorityWeight": 0.8
+    },
+    "successCriteria": {
+      "minItems": 12,
+      "minAccuracy": 0.9,
+      "maxMedianLatencySec": 4.0
+    }
+  },
+  {
+    "id": "drill.k1.ten-friends-sprint",
+    "name": "Ten Friends Sprint",
+    "gradeBand": "K-1",
+    "ritRange": { "min": 148, "max": 165 },
+    "focusSkills": [
+      "skill.doubles-near-doubles.near-doubles-adjust",
+      "skill.addition-fact-drills.fluent-addition-10"
+    ],
+    "spiralSkills": [
+      "skill.one-more-one-less.find-one-more-10",
+      "skill.one-more-one-less.find-one-less-10"
+    ],
+    "phases": [
+      {
+        "label": "focus",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.doubles-near-doubles.near-doubles-adjust",
+            "skill.addition-fact-drills.fluent-addition-10"
+          ],
+          "difficultyWeights": { "easy": 0.4, "medium": 0.4, "hard": 0.2 }
+        }
+      },
+      {
+        "label": "spiral",
+        "durationSeconds": 75,
+        "itemMix": {
+          "skillIds": [
+            "skill.one-more-one-less.find-one-more-10",
+            "skill.one-more-one-less.find-one-less-10"
+          ],
+          "difficultyWeights": { "easy": 0.5, "medium": 0.35, "hard": 0.15 }
+        }
+      }
+    ],
+    "triggerRules": {
+      "onSkillProficiency": [
+        "skill.doubles-near-doubles.near-doubles-adjust",
+        "skill.addition-fact-drills.fluent-addition-10"
+      ],
+      "spacedInterval": { "initialDays": 3, "growthFactor": 1.6 },
+      "masteryFloor": 0.78,
+      "priorityWeight": 0.85
+    },
+    "successCriteria": {
+      "minItems": 14,
+      "minAccuracy": 0.92,
+      "maxMedianLatencySec": 3.5
+    }
+  },
+  {
+    "id": "drill.g1.ten-ladder",
+    "name": "Hundreds Chart Ladder",
+    "gradeBand": "1-2",
+    "ritRange": { "min": 160, "max": 176 },
+    "focusSkills": [
+      "skill.ten-more-ten-less.find-ten-more-120",
+      "skill.ten-more-ten-less.find-ten-less-120"
+    ],
+    "spiralSkills": [
+      "skill.counting-on-addition.count-on-number-line-20",
+      "skill.counting-on-addition.count-on-equations-20"
+    ],
+    "phases": [
+      {
+        "label": "focus",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.ten-more-ten-less.find-ten-more-120",
+            "skill.ten-more-ten-less.find-ten-less-120"
+          ],
+          "difficultyWeights": { "easy": 0.35, "medium": 0.45, "hard": 0.2 }
+        }
+      },
+      {
+        "label": "spiral",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.counting-on-addition.count-on-number-line-20",
+            "skill.counting-on-addition.count-on-equations-20"
+          ],
+          "difficultyWeights": { "easy": 0.4, "medium": 0.4, "hard": 0.2 }
+        }
+      }
+    ],
+    "triggerRules": {
+      "onSkillProficiency": [
+        "skill.ten-more-ten-less.find-ten-more-120",
+        "skill.ten-more-ten-less.find-ten-less-120"
+      ],
+      "spacedInterval": { "initialDays": 4, "growthFactor": 1.6 },
+      "masteryFloor": 0.8,
+      "priorityWeight": 0.8
+    },
+    "successCriteria": {
+      "minItems": 16,
+      "minAccuracy": 0.9,
+      "maxMedianLatencySec": 4.0
+    }
+  },
+  {
+    "id": "drill.g2.fact-blaster",
+    "name": "Addition & Subtraction Fact Blaster",
+    "gradeBand": "2",
+    "ritRange": { "min": 168, "max": 188 },
+    "focusSkills": [
+      "skill.addition-fact-drills.fluent-addition-20",
+      "skill.subtraction-fact-drills.fluent-subtraction-20"
+    ],
+    "spiralSkills": [
+      "skill.addition-fact-drills.fluent-addition-10",
+      "skill.subtraction-fact-drills.fluent-subtraction-10",
+      "skill.fact-families-within-20.fact-family-word-problems"
+    ],
+    "phases": [
+      {
+        "label": "focus",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.addition-fact-drills.fluent-addition-20",
+            "skill.subtraction-fact-drills.fluent-subtraction-20"
+          ],
+          "difficultyWeights": { "easy": 0.3, "medium": 0.45, "hard": 0.25 }
+        }
+      },
+      {
+        "label": "spiral",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.addition-fact-drills.fluent-addition-10",
+            "skill.subtraction-fact-drills.fluent-subtraction-10",
+            "skill.fact-families-within-20.fact-family-word-problems"
+          ],
+          "difficultyWeights": { "easy": 0.35, "medium": 0.4, "hard": 0.25 }
+        }
+      }
+    ],
+    "triggerRules": {
+      "onSkillProficiency": [
+        "skill.addition-fact-drills.fluent-addition-20",
+        "skill.subtraction-fact-drills.fluent-subtraction-20"
+      ],
+      "spacedInterval": { "initialDays": 5, "growthFactor": 1.7 },
+      "masteryFloor": 0.82,
+      "priorityWeight": 0.9
+    },
+    "successCriteria": {
+      "minItems": 18,
+      "minAccuracy": 0.93,
+      "maxMedianLatencySec": 3.2
+    }
+  },
+  {
+    "id": "drill.g3.multiplication-kickoff",
+    "name": "Multiplication Kickoff",
+    "gradeBand": "2-3",
+    "ritRange": { "min": 182, "max": 200 },
+    "focusSkills": [
+      "skill.skip-counting-multiplication-facts.skip-count-by-factor",
+      "skill.multiplication-fact-strategies.use-double-and-half",
+      "skill.multiplication-fact-strategies.use-commutative-property"
+    ],
+    "spiralSkills": [
+      "skill.addition-fact-drills.fluent-addition-20",
+      "skill.subtraction-fact-drills.fluent-subtraction-20"
+    ],
+    "phases": [
+      {
+        "label": "focus",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.skip-counting-multiplication-facts.skip-count-by-factor",
+            "skill.multiplication-fact-strategies.use-double-and-half",
+            "skill.multiplication-fact-strategies.use-commutative-property"
+          ],
+          "difficultyWeights": { "easy": 0.35, "medium": 0.45, "hard": 0.2 }
+        }
+      },
+      {
+        "label": "spiral",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.addition-fact-drills.fluent-addition-20",
+            "skill.subtraction-fact-drills.fluent-subtraction-20"
+          ],
+          "difficultyWeights": { "easy": 0.3, "medium": 0.45, "hard": 0.25 }
+        }
+      }
+    ],
+    "triggerRules": {
+      "onSkillProficiency": [
+        "skill.skip-counting-multiplication-facts.skip-count-by-factor",
+        "skill.multiplication-fact-strategies.use-double-and-half"
+      ],
+      "spacedInterval": { "initialDays": 5, "growthFactor": 1.8 },
+      "masteryFloor": 0.8,
+      "priorityWeight": 0.85
+    },
+    "successCriteria": {
+      "minItems": 18,
+      "minAccuracy": 0.9,
+      "maxMedianLatencySec": 3.5
+    }
+  },
+  {
+    "id": "drill.g3_4.mixed-fact-challenge",
+    "name": "Mixed Fact Challenge",
+    "gradeBand": "3-4",
+    "ritRange": { "min": 195, "max": 210 },
+    "focusSkills": [
+      "skill.mixed-fact-drills.mixed-fact-fluency",
+      "skill.mixed-fact-drills.mixed-fact-strategy-monitor",
+      "skill.multiply-by-multiples-of-10.multiply-single-digit-by-10s"
+    ],
+    "spiralSkills": [
+      "skill.division-fact-strategies.divide-using-repeated-subtraction",
+      "skill.division-fact-strategies.divide-using-area-models"
+    ],
+    "phases": [
+      {
+        "label": "focus",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.mixed-fact-drills.mixed-fact-fluency",
+            "skill.mixed-fact-drills.mixed-fact-strategy-monitor",
+            "skill.multiply-by-multiples-of-10.multiply-single-digit-by-10s"
+          ],
+          "difficultyWeights": { "easy": 0.25, "medium": 0.5, "hard": 0.25 }
+        }
+      },
+      {
+        "label": "spiral",
+        "durationSeconds": 90,
+        "itemMix": {
+          "skillIds": [
+            "skill.division-fact-strategies.divide-using-repeated-subtraction",
+            "skill.division-fact-strategies.divide-using-area-models"
+          ],
+          "difficultyWeights": { "easy": 0.3, "medium": 0.45, "hard": 0.25 }
+        }
+      }
+    ],
+    "triggerRules": {
+      "onSkillProficiency": [
+        "skill.mixed-fact-drills.mixed-fact-fluency"
+      ],
+      "spacedInterval": { "initialDays": 6, "growthFactor": 1.9 },
+      "masteryFloor": 0.83,
+      "priorityWeight": 0.92
+    },
+    "successCriteria": {
+      "minItems": 20,
+      "minAccuracy": 0.94,
+      "maxMedianLatencySec": 3.0
+    }
+  }
+]

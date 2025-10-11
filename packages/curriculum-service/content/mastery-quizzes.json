@@ -1,0 +1,216 @@
+[
+  {
+    "id": "quiz.topic.counting-within-10",
+    "name": "Counting Within 10 Checkpoint",
+    "type": "topic",
+    "gradeBand": "K",
+    "ritRange": { "min": 138, "max": 152 },
+    "targetSkills": [
+      "skill.counting-within-10.count-sequence-to-10",
+      "skill.counting-within-10.count-scattered-sets-10",
+      "skill.counting-within-10.numeral-representation-10"
+    ],
+    "itemBlueprint": {
+      "totalItems": 5,
+      "mix": [
+        {
+          "category": "conceptual",
+          "count": 2,
+          "skillIds": [
+            "skill.counting-within-10.count-sequence-to-10"
+          ]
+        },
+        {
+          "category": "application",
+          "count": 2,
+          "skillIds": [
+            "skill.counting-within-10.count-scattered-sets-10"
+          ]
+        },
+        {
+          "category": "mental",
+          "count": 1,
+          "skillIds": [
+            "skill.one-more-one-less.find-one-more-10"
+          ]
+        }
+      ]
+    },
+    "triggerRules": {
+      "onTopicCompletion": "counting-within-10",
+      "requiredMasteryProbability": 0.8,
+      "spacedInterval": { "initialDays": 4, "growthFactor": 1.6 }
+    },
+    "successCriteria": {
+      "minAccuracy": 0.85,
+      "minConceptualCorrect": 2,
+      "autoRemediation": {
+        "ifConceptualMiss": ["skill.counting-within-10.count-sequence-to-10"],
+        "ifMentalMiss": ["drill.prek.successor-snap"]
+      }
+    }
+  },
+  {
+    "id": "quiz.topic.ten-more-ten-less",
+    "name": "Ten More / Ten Less Checkpoint",
+    "type": "topic",
+    "gradeBand": "1",
+    "ritRange": { "min": 160, "max": 176 },
+    "targetSkills": [
+      "skill.ten-more-ten-less.find-ten-more-120",
+      "skill.ten-more-ten-less.find-ten-less-120",
+      "skill.ten-more-ten-less.solve-word-problems-120"
+    ],
+    "itemBlueprint": {
+      "totalItems": 6,
+      "mix": [
+        {
+          "category": "conceptual",
+          "count": 2,
+          "skillIds": [
+            "skill.ten-more-ten-less.find-ten-more-120"
+          ]
+        },
+        {
+          "category": "mental",
+          "count": 2,
+          "skillIds": [
+            "skill.ten-more-ten-less.find-ten-less-120"
+          ]
+        },
+        {
+          "category": "application",
+          "count": 2,
+          "skillIds": [
+            "skill.ten-more-ten-less.solve-word-problems-120"
+          ]
+        }
+      ]
+    },
+    "triggerRules": {
+      "onTopicCompletion": "ten-more-ten-less",
+      "requiredMasteryProbability": 0.82,
+      "spacedInterval": { "initialDays": 5, "growthFactor": 1.65 }
+    },
+    "successCriteria": {
+      "minAccuracy": 0.88,
+      "minMentalCorrect": 2,
+      "autoRemediation": {
+        "ifMentalMiss": ["drill.g1.ten-ladder"],
+        "ifApplicationMiss": ["lesson.place-value-to-120.ten-more-application"]
+      }
+    }
+  },
+  {
+    "id": "quiz.unit.addition-subtraction-memorization",
+    "name": "Addition & Subtraction Unit Synthesis",
+    "type": "unit",
+    "gradeBand": "1-2",
+    "ritRange": { "min": 165, "max": 190 },
+    "targetSkills": [
+      "skill.addition-fact-drills.fluent-addition-10",
+      "skill.addition-fact-drills.fluent-addition-20",
+      "skill.subtraction-fact-drills.fluent-subtraction-10",
+      "skill.subtraction-fact-drills.fluent-subtraction-20",
+      "skill.fact-families-within-20.fact-family-word-problems"
+    ],
+    "itemBlueprint": {
+      "totalItems": 10,
+      "mix": [
+        {
+          "category": "conceptual",
+          "count": 3,
+          "skillIds": [
+            "skill.fact-families-within-20.fact-family-word-problems"
+          ]
+        },
+        {
+          "category": "mental",
+          "count": 4,
+          "skillIds": [
+            "skill.addition-fact-drills.fluent-addition-20",
+            "skill.subtraction-fact-drills.fluent-subtraction-20"
+          ]
+        },
+        {
+          "category": "application",
+          "count": 3,
+          "skillIds": [
+      "skill.dynamic-addition-within-100.add-word-problems-100",
+      "skill.dynamic-subtraction-within-100.subtraction-word-problems-100"
+          ]
+        }
+      ]
+    },
+    "triggerRules": {
+      "onUnitCompletion": "addition-subtraction-memorization",
+      "requiredTopicPasses": [
+        "addition-fact-drills",
+        "subtraction-fact-drills",
+        "fact-families-within-20"
+      ],
+      "spacedInterval": { "initialDays": 7, "growthFactor": 1.7 }
+    },
+    "successCriteria": {
+      "minAccuracy": 0.9,
+      "minMentalCorrect": 3,
+      "autoRemediation": {
+        "ifMentalMiss": ["drill.g2.fact-blaster"],
+        "ifApplicationMiss": [
+          "lesson.dynamic-addition-within-100.add-word-problems-100",
+          "lesson.dynamic-subtraction-within-100.model-two-digit-subtraction"
+        ]
+      }
+    }
+  },
+  {
+    "id": "quiz.spiral.primary-math-facts",
+    "name": "Primary Math Facts Spiral Review",
+    "type": "spiral",
+    "gradeBand": "2-3",
+    "ritRange": { "min": 180, "max": 205 },
+    "targetSkills": [
+      "skill.addition-fact-drills.fluent-addition-20",
+      "skill.subtraction-fact-drills.fluent-subtraction-20",
+      "skill.skip-counting-multiplication-facts.skip-count-by-factor",
+      "skill.multiplication-fact-strategies.use-double-and-half",
+      "skill.division-fact-strategies.divide-using-repeated-subtraction"
+    ],
+    "itemBlueprint": {
+      "totalItems": 8,
+      "mix": [
+        {
+          "category": "mental",
+          "count": 5,
+          "skillIds": [
+            "skill.addition-fact-drills.fluent-addition-20",
+            "skill.subtraction-fact-drills.fluent-subtraction-20",
+            "skill.skip-counting-multiplication-facts.skip-count-by-factor"
+          ]
+        },
+        {
+          "category": "application",
+          "count": 3,
+          "skillIds": [
+            "skill.multiplication-fact-strategies.use-double-and-half",
+            "skill.division-fact-strategies.divide-using-repeated-subtraction"
+          ]
+        }
+      ]
+    },
+    "triggerRules": {
+      "cadenceDays": 10,
+      "requiredMasteryProbability": 0.78,
+      "spacedInterval": { "initialDays": 8, "growthFactor": 1.8 },
+      "priorityWeight": 0.75
+    },
+    "successCriteria": {
+      "minAccuracy": 0.88,
+      "maxMedianLatencySec": 5.0,
+      "autoRemediation": {
+        "ifMentalMiss": ["drill.g3.multiplication-kickoff"],
+        "ifApplicationMiss": ["lesson.multiplication-fact-strategies.double-and-half"]
+      }
+    }
+  }
+]

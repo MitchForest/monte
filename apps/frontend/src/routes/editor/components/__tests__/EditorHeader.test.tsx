@@ -117,6 +117,7 @@ const createViewModel = (
       handleGuidedWorkspaceChange: vi.fn(),
       handlePracticeWorkspaceChange: vi.fn(),
       handleSegmentMaterialBankChange: vi.fn(),
+      handleSegmentTimelineUpdate: vi.fn(),
       handleAddTokenType: vi.fn(),
       handleUpdateTokenType: vi.fn(),
       handleRemoveTokenType: vi.fn(),

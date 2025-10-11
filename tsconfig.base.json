@@ -15,7 +15,11 @@
     "paths": {
       "@monte/backend/*": ["apps/backend/*"],
       "@monte/api/*": ["packages/api/*"],
-      "@monte/types/*": ["packages/types/*"]
+      "@monte/types/*": ["packages/types/*"],
+      "@monte/curriculum-service/*": ["packages/curriculum-service/*"],
+      "@monte/question-service/*": ["packages/question-service/*"],
+      "@monte/graph-service/*": ["packages/graph-service/*"],
+      "@monte/engine-service/*": ["packages/engine-service/*"]
     }
   }
 }

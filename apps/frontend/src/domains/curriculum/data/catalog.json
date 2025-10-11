@@ -10,27 +10,14 @@
         {
           "slug": "multiplication",
           "title": "Multiplication",
-          "overview": "Learners build multiplication fluency with Montessori golden beads and stamp game materials, moving from guided demonstrations to independent practice.",
+          "overview": "Curriculum authoring in progress.",
           "focusSkills": [
             "skill.multiply-3-digit-by-1-digit",
             "skill.multiply-4-digit-by-1-digit"
           ],
           "estimatedDurationMinutes": 40,
           "status": "active",
-          "lessons": [
-            {
-              "slug": "golden-bead-multiplication",
-              "documentId": "lesson-multiplication-golden-beads",
-              "file": "lesson-multiplication-golden-beads.json",
-              "publish": true
-            },
-            {
-              "slug": "stamp-game-multiplication",
-              "documentId": "lesson-multiplication-stamp-game",
-              "file": "lesson-multiplication-stamp-game.json",
-              "publish": true
-            }
-          ]
+          "lessons": []
         }
       ]
     }

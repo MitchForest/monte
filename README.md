@@ -11,6 +11,7 @@ The Monte workspace houses the lesson runtime, curriculum editor, and shared sch
 | `apps/frontend` | SolidJS + Vite lesson experience and curriculum editor. Domain-driven structure under `src/domains/` (e.g. `curriculum/`, `analytics/`, `design-system/`). |
 | `apps/backend` | Convex project exposing curriculum/auth mutations and scheduled jobs. Uses the Convex component system and shares schemas via workspace packages. |
 | `packages/types` | Single source of truth for shared Zod schemas, enums, and TypeScript types (emits ESM/CJS bundles with typings). |
+| `packages/curriculum-service` | Editable curriculum canon: units, topics, lesson plans, domain graphs, taxonomy, and media assets. |
 | `packages/api` | Thin wrapper around Convex codegen that exposes typed client helpers for the frontend and other consumers. |
 | `scripts/` | Workspace automation (e.g. `sync-convex-codegen.mjs` keeps Convex generated files in sync with `packages/api`). |
 | `.docs/plan.md` | Canonical roadmap for the ongoing refactor and stability workstreams. |
@@ -67,7 +68,7 @@ Workspace-level scripts (run from repo root):
 | Command | Purpose |
 | --- | --- |
 | `pnpm install` | Install dependencies across the workspace. |
-| `pnpm dev` | Start frontend and backend dev servers in parallel. |
+| `pnpm dev` | Start frontend and backend dev servers in parallel. (Avoid in CI/agent environments; prefer targeted dev commands.) |
 | `pnpm --filter @monte/frontend dev` | Launch the Solid app only (Vite on port 3000 by default). |
 | `pnpm --filter @monte/backend dev` | Run the Convex dev server (requires Convex login). |
 | `pnpm build` | Build all workspace packages. |
@@ -76,6 +77,8 @@ Workspace-level scripts (run from repo root):
 | `pnpm check:codegen` | Verify generated Convex bindings are in sync (fails if `sync:codegen` would change files). |
 | `pnpm typecheck` | Execute TypeScript checks across every package. |
 | `pnpm lint` | Run lint tasks (some packages print placeholders until lint rules are defined). |
+
+> **Agent note:** The combined `pnpm dev` command tends to hang in sandboxed environments. Launch the frontend and backend individually when running under an agent harness.
 
 Package-specific scripts:
 

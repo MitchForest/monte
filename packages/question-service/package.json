@@ -1,0 +1,27 @@
+{
+  "name": "@monte/question-service",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "questions"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"No lint tasks for @monte/question-service\""
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0"
+  }
+}

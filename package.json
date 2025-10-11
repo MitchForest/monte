@@ -5,8 +5,9 @@
   "packageManager": "pnpm@9.12.0",
   "scripts": {
     "build": "pnpm -r build",
-    "sync:codegen": "pnpm --filter @monte/backend exec convex codegen --typecheck disable && node scripts/sync-convex-codegen.mjs",
+    "sync:codegen": "CONVEX_TELEMETRY_DISABLED=1 pnpm --filter @monte/backend exec convex codegen --typecheck disable && node scripts/sync-convex-codegen.mjs",
     "build:shared": "pnpm sync:codegen && pnpm --filter @monte/types build && pnpm --filter @monte/api build",
+    "sync:curriculum": "node scripts/sync-curriculum.mjs",
     "dev": "pnpm -r --parallel dev",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",

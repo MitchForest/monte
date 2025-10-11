@@ -31,6 +31,9 @@ jobs:
       - name: Verify Convex codegen is in sync
         run: pnpm check:codegen
 
+      - name: Verify curriculum manifest is in sync
+        run: pnpm sync:curriculum --check --dry-run
+
       - name: Lint
         run: pnpm lint
 

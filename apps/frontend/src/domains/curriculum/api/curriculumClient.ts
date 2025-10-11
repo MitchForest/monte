@@ -1,6 +1,11 @@
 import { createCurriculumHttpClient } from '@monte/api';
-import type { CurriculumClient } from '@monte/api';
-import type { Id, UserRole } from '@monte/types';
+import type {
+  CurriculumClient,
+  CurriculumManifest,
+  CurriculumSyncSummary,
+  LessonAuthoringUpdate,
+} from '@monte/api';
+import type { Id } from '@monte/types';
 export type {
   CurriculumTree,
   CurriculumTreeLesson,
@@ -31,8 +36,6 @@ const createUnavailableCurriculumClient = (): CurriculumClient => {
     warn(method);
     return Promise.reject(new Error(missingUrlMessage));
   };
-
-  const defaultRole: UserRole = 'teacher';
 
   return {
     setAuthToken: () => warn('setAuthToken'),
@@ -94,20 +97,17 @@ const createUnavailableCurriculumClient = (): CurriculumClient => {
     async reorderLessons() {
       await reject('reorderLessons');
     },
+    async updateLessonAuthoring() {
+      return reject<LessonAuthoringUpdate>('updateLessonAuthoring');
+    },
     async listLessons() {
       return notReady('listLessons', []);
     },
-    async ensureUserProfile() {
-      return notReady('ensureUserProfile', defaultRole);
+    async syncManifest() {
+      return reject<CurriculumSyncSummary>('syncManifest');
     },
-    async getCurrentUserProfile() {
-      return notReady('getCurrentUserProfile', null);
-    },
-    async getCurrentUserRole() {
-      return notReady('getCurrentUserRole', null);
-    },
-    async updateUserRole() {
-      await reject('updateUserRole');
+    async exportManifest() {
+      return reject<CurriculumManifest>('exportManifest');
     },
   };
 };
@@ -151,11 +151,8 @@ export const {
   publishLesson,
   deleteLesson,
   reorderLessons,
+  updateLessonAuthoring,
   listLessons,
-  ensureUserProfile,
-  getCurrentUserProfile,
-  getCurrentUserRole,
-  updateUserRole,
 } = curriculumClient;
 
 export const fetchLessonDrafts = (topicId?: Id<'topics'>) => curriculumClient.listLessons(topicId);

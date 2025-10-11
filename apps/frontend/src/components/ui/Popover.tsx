@@ -22,8 +22,9 @@ const Content: Component<PopoverContentPropsExtended> = (props) => {
   );
 };
 
-export const Popover = Object.assign(KPopover, {
+export const Popover = {
+  ...KPopover,
   Content,
-});
+} as typeof KPopover;
 
 export default Popover;

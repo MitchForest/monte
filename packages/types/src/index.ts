@@ -4,13 +4,116 @@ export type Id<TableName extends string = string> = string & { __tableName: Tabl
 export const IdSchema = <TableName extends string = string>() =>
   z.string() as unknown as z.ZodType<Id<TableName>>;
 
-export const UserRoleSchema = z.enum(['admin', 'curriculum_writer', 'teacher', 'student']);
+export const UserRoleSchema = z.enum(['internal', 'admin', 'guide', 'guardian', 'student']);
 export type UserRole = z.infer<typeof UserRoleSchema>;
+
+export const OrganizationPlanKeySchema = z.enum([
+  'solo_monthly',
+  'solo_annual',
+  'family_monthly',
+  'family_annual',
+  'org_monthly',
+  'org_annual',
+  'org_highvolume_monthly',
+  'org_highvolume_annual',
+]);
+export type OrganizationPlanKey = z.infer<typeof OrganizationPlanKeySchema>;
+
+export const BillingCycleSchema = z.enum(['monthly', 'annual']);
+export type BillingCycle = z.infer<typeof BillingCycleSchema>;
+
+export const BillingAccountStatusSchema = z.enum(['trial', 'active', 'past_due', 'paused', 'canceled']);
+export type BillingAccountStatus = z.infer<typeof BillingAccountStatusSchema>;
+
+export const OrganizationLifecycleStatusSchema = z.enum(['active', 'inactive', 'archived']);
+export type OrganizationLifecycleStatus = z.infer<typeof OrganizationLifecycleStatusSchema>;
+
+export const OrganizationSchema = z.object({
+  name: z.string(),
+  slug: z.string(),
+  joinCode: z.string(),
+  planKey: OrganizationPlanKeySchema,
+  billingCycle: BillingCycleSchema,
+  lifecycleStatus: OrganizationLifecycleStatusSchema,
+  primaryAdminId: z.string(),
+  seatLimit: z.number().nullable().optional(),
+  seatsInUse: z.number().optional(),
+  metadata: z.record(z.unknown()).optional(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+export type Organization = z.infer<typeof OrganizationSchema>;
+
+export const OrgMembershipStatusSchema = z.enum(['pending', 'active', 'invited', 'suspended', 'revoked']);
+export type OrgMembershipStatus = z.infer<typeof OrgMembershipStatusSchema>;
+
+export const OrgMembershipSchema = z.object({
+  userId: z.string(),
+  orgId: z.string(),
+  role: UserRoleSchema,
+  status: OrgMembershipStatusSchema,
+  invitedByUserId: z.string().optional(),
+  inviteId: z.string().optional(),
+  relationships: z
+    .object({
+      guardianForStudentIds: z.array(z.string()).optional(),
+      guideForStudentIds: z.array(z.string()).optional(),
+      notes: z.string().optional(),
+    })
+    .partial()
+    .optional(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+export type OrgMembership = z.infer<typeof OrgMembershipSchema>;
+
+export const OrgInviteStatusSchema = z.enum(['pending', 'accepted', 'expired', 'revoked']);
+export type OrgInviteStatus = z.infer<typeof OrgInviteStatusSchema>;
+
+export const OrgInviteSchema = z.object({
+  orgId: z.string(),
+  email: z.string().email(),
+  role: z.enum(['admin', 'guide', 'guardian', 'student']),
+  token: z.string(),
+  status: OrgInviteStatusSchema,
+  createdByUserId: z.string(),
+  expiresAt: z.number(),
+  createdAt: z.number(),
+  acceptedAt: z.number().optional(),
+  redeemedByUserId: z.string().optional(),
+});
+export type OrgInvite = z.infer<typeof OrgInviteSchema>;
+
+export const BillingAccountSchema = z.object({
+  orgId: z.string(),
+  planKey: OrganizationPlanKeySchema,
+  billingCycle: BillingCycleSchema,
+  seatsIncluded: z.number(),
+  seatsInUse: z.number(),
+  basePriceCents: z.number(),
+  pricePerSeatCents: z.number(),
+  overageSeatPriceCents: z.number().optional(),
+  externalCustomerId: z.string().optional(),
+  externalSubscriptionId: z.string().optional(),
+  trialEndsAt: z.number().optional(),
+  status: BillingAccountStatusSchema,
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+export type BillingAccount = z.infer<typeof BillingAccountSchema>;
 
 export const UserProfileSchema = z.object({
   userId: z.string(),
-  role: UserRoleSchema,
-  organizationId: z.string().optional(),
+  accountRole: UserRoleSchema,
+  displayName: z.string().optional(),
+  activeOrgId: z.string().optional(),
+  impersonationState: z
+    .object({
+      active: z.boolean(),
+      actorUserId: z.string(),
+      startedAt: z.number(),
+    })
+    .optional(),
   preferences: z
     .object({
       theme: z.string(),
@@ -215,9 +318,104 @@ export const LessonMaterialInventorySchema = z
     tokenTypes: z.array(TokenTypeDefinitionSchema),
     banks: z.array(MaterialBankDefinitionSchema),
     defaultRules: InventoryRuleSetSchema.optional(),
+    sceneNodes: z
+      .array(
+        z
+          .object({
+            id: z.string(),
+            materialId: z.string(),
+            label: z.string().optional(),
+            transform: z
+              .object({
+                position: z.object({ x: z.number(), y: z.number() }),
+                rotation: z.number().optional(),
+                scale: z
+                  .object({
+                    x: z.number(),
+                    y: z.number(),
+                  })
+                  .optional(),
+                opacity: z.number().optional(),
+              })
+              .optional(),
+            metadata: z.record(z.unknown()).optional(),
+          })
+          .strict(),
+      )
+      .optional(),
   })
   .strict();
 export type LessonMaterialInventory = z.infer<typeof LessonMaterialInventorySchema>;
+
+export const TimelineTransformSchema = z
+  .object({
+    position: z.object({ x: z.number(), y: z.number() }),
+    rotation: z.number().optional(),
+    scale: z
+      .object({
+        x: z.number(),
+        y: z.number(),
+      })
+      .optional(),
+    opacity: z.number().optional(),
+  })
+  .strict();
+export type TimelineTransform = z.infer<typeof TimelineTransformSchema>;
+
+export const TimelineKeyframeSchema = z
+  .object({
+    timeMs: z.number(),
+    transform: TimelineTransformSchema,
+    easing: z.string().optional(),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+export type TimelineKeyframe = z.infer<typeof TimelineKeyframeSchema>;
+
+export const TimelineTrackSchema = z
+  .object({
+    nodeId: z.string(),
+    keyframes: z.array(TimelineKeyframeSchema),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+export type TimelineTrack = z.infer<typeof TimelineTrackSchema>;
+
+export const TimelineInteractionSchema = z
+  .object({
+    id: z.string(),
+    kind: z.enum(['drop-zone', 'input', 'custom']),
+    targetNodeId: z.string().optional(),
+    props: z.record(z.unknown()).optional(),
+  })
+  .strict();
+export type TimelineInteraction = z.infer<typeof TimelineInteractionSchema>;
+
+const SegmentStepBaseSchema = z
+  .object({
+    id: z.string(),
+    title: z.string().optional(),
+    caption: z.string().optional(),
+    actor: z.enum(['guide', 'student']),
+    durationMs: z.number(),
+    keyframes: z.array(TimelineTrackSchema),
+    interactions: z.array(TimelineInteractionSchema).optional(),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+
+export const SegmentStepSchema = SegmentStepBaseSchema;
+export type SegmentStep = z.infer<typeof SegmentStepSchema>;
+
+export const SegmentTimelineSchema = z
+  .object({
+    version: z.literal(1),
+    label: z.string().optional(),
+    steps: z.array(SegmentStepSchema),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+export type SegmentTimeline = z.infer<typeof SegmentTimelineSchema>;
 
 const PresentationActionDetailsSchema = z
   .object({
@@ -403,6 +601,7 @@ export const PresentationSegmentSchema = z
     script: PresentationScriptSchema.optional(),
     scenario: LessonScenarioBindingSchema.optional(),
     materialBankId: z.string().optional(),
+    timeline: SegmentTimelineSchema.optional(),
   })
   .strict();
 export type PresentationSegment = z.infer<typeof PresentationSegmentSchema>;
@@ -424,6 +623,7 @@ export const GuidedSegmentSchema = z
     ),
     scenario: LessonScenarioBindingSchema.optional(),
     materialBankId: z.string().optional(),
+    timeline: SegmentTimelineSchema.optional(),
   })
   .strict();
 export type GuidedSegment = z.infer<typeof GuidedSegmentSchema>;
@@ -465,6 +665,7 @@ export const PracticeSegmentSchema = z
     passCriteria: PracticePassCriteriaSchema,
     scenario: LessonScenarioBindingSchema.optional(),
     materialBankId: z.string().optional(),
+    timeline: SegmentTimelineSchema.optional(),
   })
   .strict();
 export type PracticeSegment = z.infer<typeof PracticeSegmentSchema>;
@@ -578,6 +779,20 @@ export type Unit = z.infer<typeof UnitSchema>;
 export const LessonStatusSchema = z.enum(['draft', 'published']);
 export type LessonStatus = z.infer<typeof LessonStatusSchema>;
 
+export const LessonAuthoringStatusSchema = z.enum([
+  'not_started',
+  'outline',
+  'presentation',
+  'guided',
+  'practice',
+  'qa',
+  'published',
+]);
+export type LessonAuthoringStatus = z.infer<typeof LessonAuthoringStatusSchema>;
+
+export const LessonGradeLevelSchema = z.enum(['kindergarten', 'grade1', 'grade2', 'grade3']);
+export type LessonGradeLevel = z.infer<typeof LessonGradeLevelSchema>;
+
 export const TopicStatusSchema = z.enum(['active', 'archived']);
 export type TopicStatus = z.infer<typeof TopicStatusSchema>;
 
@@ -593,6 +808,9 @@ export const CurriculumTreeLessonSchema = z
     title: z.string(),
     summary: z.string(),
     updatedAt: z.number(),
+    authoringStatus: LessonAuthoringStatusSchema.optional(),
+    assigneeId: z.string().optional(),
+    gradeLevels: z.array(LessonGradeLevelSchema).optional(),
   })
   .strict();
 export type CurriculumTreeLesson = z.infer<typeof CurriculumTreeLessonSchema>;
@@ -647,6 +865,144 @@ export const LessonDraftRecordSchema = z
     createdAt: z.number(),
     updatedAt: z.number(),
     metadata: EntityMetadataSchema.optional(),
+    authoringStatus: LessonAuthoringStatusSchema.optional(),
+    assigneeId: z.string().optional(),
+    authoringNotes: z.string().optional(),
+    gradeLevels: z.array(LessonGradeLevelSchema).optional(),
+    manifestHash: z.string().optional(),
+    manifestGeneratedAt: z.string().optional(),
+    manifestCommit: z.string().optional(),
   })
   .strict();
 export type LessonDraftRecord = z.infer<typeof LessonDraftRecordSchema>;
+
+const RitRangeSchema = z
+  .object({
+    min: z.number(),
+    max: z.number(),
+  })
+  .strict();
+
+const CurriculumSkillPracticeSchema = z
+  .object({
+    easy: z.array(z.string()).optional(),
+    medium: z.array(z.string()).optional(),
+    hard: z.array(z.string()).optional(),
+  })
+  .strict()
+  .optional();
+
+export const CurriculumSkillSchema = z
+  .object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string(),
+    domainId: z.string(),
+    unitId: z.string().optional(),
+    topicId: z.string().optional(),
+    ccss: z.array(z.string()).optional(),
+    ritBand: RitRangeSchema.optional(),
+    representations: z.array(z.string()).optional(),
+    practice: CurriculumSkillPracticeSchema,
+    mentalMathEligible: z.boolean().optional(),
+  })
+  .passthrough();
+export type CurriculumSkill = z.infer<typeof CurriculumSkillSchema>;
+
+export const CurriculumManifestUnitSchema = z
+  .object({
+    id: z.string(),
+    slug: z.string(),
+    title: z.string(),
+    summary: z.string().optional(),
+    domainId: z.string().optional(),
+    ritRange: RitRangeSchema.optional(),
+    primaryCcss: z.array(z.string()).optional(),
+    topicOrder: z.array(z.string()),
+  })
+  .strict();
+export type CurriculumManifestUnit = z.infer<typeof CurriculumManifestUnitSchema>;
+
+export const CurriculumManifestTopicSchema = z
+  .object({
+    id: z.string(),
+    slug: z.string(),
+    unitId: z.string(),
+    title: z.string(),
+    overview: z.string().optional(),
+    focusSkills: z.array(z.string()),
+    ritRange: RitRangeSchema.optional(),
+    ccssFocus: z.array(z.string()).optional(),
+    priority: z.number().optional(),
+    prerequisiteTopicIds: z.array(z.string()),
+  })
+  .strict();
+export type CurriculumManifestTopic = z.infer<typeof CurriculumManifestTopicSchema>;
+
+export const CurriculumManifestLessonSchema = z
+  .object({
+    id: z.string(),
+    slug: z.string(),
+    topicId: z.string(),
+    title: z.string(),
+    materialId: z.string().optional(),
+    gradeLevels: z.array(LessonGradeLevelSchema),
+    segments: z.array(
+      z
+        .object({
+          type: z.string(),
+          representation: z.string().optional(),
+        })
+        .strict(),
+    ),
+    prerequisiteLessonIds: z.array(z.string()),
+    skills: z.array(z.string()),
+    notes: z.string().optional(),
+  })
+  .strict();
+export type CurriculumManifestLesson = z.infer<typeof CurriculumManifestLessonSchema>;
+
+export const CurriculumManifestSchema = z
+  .object({
+    generatedAt: z.string(),
+    domains: z.array(z.record(z.unknown())),
+    units: z.array(CurriculumManifestUnitSchema),
+    topics: z.array(CurriculumManifestTopicSchema),
+    lessons: z.array(CurriculumManifestLessonSchema),
+  })
+  .strict();
+export type CurriculumManifest = z.infer<typeof CurriculumManifestSchema>;
+
+export const CurriculumSyncSummarySchema = z
+  .object({
+    manifestHash: z.string(),
+    manifestGeneratedAt: z.string(),
+    manifestCommit: z.string().optional(),
+    createdAt: z.number(),
+    updatedAt: z.number(),
+    units: z
+      .object({
+        created: z.number(),
+        updated: z.number(),
+        deleted: z.number(),
+      })
+      .strict(),
+    topics: z
+      .object({
+        created: z.number(),
+        updated: z.number(),
+        deleted: z.number(),
+      })
+      .strict(),
+    lessons: z
+      .object({
+        created: z.number(),
+        updated: z.number(),
+        deleted: z.number(),
+      })
+      .strict(),
+  })
+  .strict();
+export type CurriculumSyncSummary = z.infer<typeof CurriculumSyncSummarySchema>;
+
+export * as AuthAccess from './auth/access.js';

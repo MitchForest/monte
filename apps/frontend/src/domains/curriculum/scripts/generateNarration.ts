@@ -135,7 +135,7 @@ const buildVtt = (steps: string[], durationSeconds: number) => {
 const ensureDirectory = async (targetPath: string) => fs.mkdir(targetPath, { recursive: true });
 
 const getOutputTargets = (lessonId: string, segmentId: string) => {
-  const primaryDir = path.resolve(projectRoot, 'curriculum/assets/audio', lessonId);
+  const primaryDir = path.resolve(projectRoot, 'packages/curriculum-service/assets/audio', lessonId);
   const publicDir = path.resolve(projectRoot, 'apps/frontend/public/curriculum/assets/audio', lessonId);
 
   return [

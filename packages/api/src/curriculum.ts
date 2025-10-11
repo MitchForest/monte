@@ -8,14 +8,18 @@ import {
   LessonDocumentSchema,
   LessonDraftRecord,
   LessonDraftRecordSchema,
+  LessonAuthoringStatus,
+  LessonAuthoringStatusSchema,
+  LessonGradeLevel,
+  LessonGradeLevelSchema,
   CurriculumTree,
   CurriculumTreeSchema,
   CurriculumTreeUnit,
   CurriculumTreeUnitSchema,
-  UserProfile,
-  UserProfileSchema,
-  UserRole,
-  UserRoleSchema,
+  CurriculumManifest,
+  CurriculumManifestSchema,
+  CurriculumSyncSummary,
+  CurriculumSyncSummarySchema,
   EntityMetadata,
   EntityMetadataSchema,
 } from '@monte/types';
@@ -26,7 +30,12 @@ export type {
   CurriculumTreeTopic,
   CurriculumTreeLesson,
   LessonDraftRecord,
+  CurriculumManifest,
+  CurriculumSyncSummary,
+  LessonAuthoringStatus,
+  LessonGradeLevel,
 } from '@monte/types';
+export type { SyncManifestInput, UpdateLessonAuthoringInput, LessonAuthoringUpdate };
 
 const now = () => Date.now();
 
@@ -38,6 +47,141 @@ const pickScenarioBinding = (document: LessonDocument) => {
   }
   return document.meta?.scenario;
 };
+
+type SyncManifestInput = {
+  manifest: CurriculumManifest;
+  prune?: boolean;
+  manifestCommit?: string;
+  defaultStatus?: LessonAuthoringStatus;
+};
+
+type UpdateLessonAuthoringInput = {
+  lessonId: Id<'lessons'>;
+  authoringStatus?: LessonAuthoringStatus | null;
+  assigneeId?: string | null;
+  authoringNotes?: string | null;
+  gradeLevels?: LessonGradeLevel[] | null;
+};
+
+type LessonAuthoringUpdate = {
+  lessonId: Id<'lessons'>;
+  authoringStatus: LessonAuthoringStatus | null;
+  assigneeId: string | null;
+  authoringNotes: string | null;
+  gradeLevels: LessonGradeLevel[];
+  updatedAt: number;
+};
+
+const readEnvValue = (key: string): unknown => {
+  const metaEnv = (import.meta as unknown as { env?: Record<string, unknown> })?.env;
+  if (metaEnv && key in metaEnv) {
+    return metaEnv[key];
+  }
+  const nodeEnv = (globalThis as unknown as { process?: { env?: Record<string, unknown> } }).process?.env;
+  if (nodeEnv && key in nodeEnv) {
+    return nodeEnv[key];
+  }
+  return undefined;
+};
+
+const convexUrl = (() => {
+  const value: unknown = readEnvValue('VITE_CONVEX_URL') ?? readEnvValue('CONVEX_URL');
+  return typeof value === 'string' && value.length > 0 ? value : undefined;
+})();
+
+const missingUrlMessage =
+  'Curriculum client unavailable: set VITE_CONVEX_URL to enable live authoring. Falling back to local-only stubs.';
+
+const createUnavailableCurriculumClient = (): CurriculumClient => {
+  const warn = (method: string) => {
+    console.warn(`${missingUrlMessage} Called ${method}.`);
+  };
+
+  const notReady = <T>(method: string, fallback: T): Promise<T> => {
+    warn(method);
+    return Promise.resolve(fallback);
+  };
+
+  const reject = <T>(method: string): Promise<T> => {
+    warn(method);
+    return Promise.reject(new Error(missingUrlMessage));
+  };
+
+  return {
+    setAuthToken: () => warn('setAuthToken'),
+    clearAuthToken: () => warn('clearAuthToken'),
+    async fetchCurriculumTree() {
+      return notReady('fetchCurriculumTree', []);
+    },
+    async fetchUnitBySlug() {
+      return notReady('fetchUnitBySlug', undefined);
+    },
+    async fetchLessonBySlug() {
+      return notReady('fetchLessonBySlug', undefined);
+    },
+    async fetchLessonById() {
+      return notReady('fetchLessonById', undefined);
+    },
+    async createUnit() {
+      return reject('createUnit');
+    },
+    async updateUnit() {
+      await reject('updateUnit');
+    },
+    async deleteUnit() {
+      await reject('deleteUnit');
+    },
+    async reorderUnits() {
+      await reject('reorderUnits');
+    },
+    async createTopic() {
+      return reject('createTopic');
+    },
+    async updateTopic() {
+      await reject('updateTopic');
+    },
+    async deleteTopic() {
+      await reject('deleteTopic');
+    },
+    async moveTopic() {
+      await reject('moveTopic');
+    },
+    async reorderTopics() {
+      await reject('reorderTopics');
+    },
+    async createLesson() {
+      return reject('createLesson');
+    },
+    async saveLessonDraft() {
+      await reject('saveLessonDraft');
+    },
+    async publishLesson() {
+      await reject('publishLesson');
+    },
+    async deleteLesson() {
+      await reject('deleteLesson');
+    },
+    async moveLesson() {
+      await reject('moveLesson');
+    },
+    async reorderLessons() {
+      await reject('reorderLessons');
+    },
+    async updateLessonAuthoring() {
+      return reject<LessonAuthoringUpdate>('updateLessonAuthoring');
+    },
+    async listLessons() {
+      return notReady('listLessons', []);
+    },
+    async syncManifest() {
+      return reject('syncManifest');
+    },
+    async exportManifest() {
+      return reject('exportManifest');
+    },
+  };
+};
+
 
 export interface CurriculumClient {
   setAuthToken: (token?: string | null) => void;
@@ -100,11 +244,10 @@ export interface CurriculumClient {
     targetIndex: number;
   }) => Promise<void>;
   reorderLessons: (topicId: Id<'topics'>, lessonIds: Id<'lessons'>[]) => Promise<void>;
+  updateLessonAuthoring: (input: UpdateLessonAuthoringInput) => Promise<LessonAuthoringUpdate>;
   listLessons: (topicId?: Id<'topics'>) => Promise<LessonDraftRecord[]>;
-  ensureUserProfile: () => Promise<UserRole>;
-  getCurrentUserProfile: () => Promise<UserProfile | null>;
-  getCurrentUserRole: () => Promise<UserRole | null>;
-  updateUserRole: (targetUserId: string, role: UserRole) => Promise<void>;
+  syncManifest: (input: SyncManifestInput) => Promise<CurriculumSyncSummary>;
+  exportManifest: () => Promise<CurriculumManifest>;
 }
 
 type SaveLessonDraftArgs = typeof api.curriculum.saveLessonDraft._args;
@@ -123,13 +266,31 @@ const normalizeLessonDocument = (document: LessonDocument): SaveLessonDraftArgs[
   const baseline = now();
   const draftMeta = parsed.meta ?? {};
   const scenarioBinding = pickScenarioBinding(parsed);
+  const normalizeTimelineSegments = parsed.lesson.segments?.map((segment) => {
+    const timeline = segment.timeline ?? { version: 1, steps: [] };
+    const steps = (timeline.steps ?? []).map((step) => ({
+      ...step,
+      keyframes: step.keyframes ?? [],
+      interactions: step.interactions ?? [],
+    }));
+    return {
+      ...segment,
+      timeline: {
+        version: timeline.version ?? 1,
+        label: timeline.label,
+        metadata: timeline.metadata,
+        steps,
+      },
+    };
+  }) ?? [];
+
   return {
     ...parsed,
     lesson: {
       ...parsed.lesson,
       focusSkills: parsed.lesson.focusSkills ?? [],
       materials: parsed.lesson.materials ?? [],
-      segments: parsed.lesson.segments ?? [],
+      segments: normalizeTimelineSegments,
     },
     meta: {
       ...draftMeta,
@@ -151,6 +312,14 @@ const CreateUnitResultSchema = z.object({ unitId: IdSchema<'units'>() });
 const CreateTopicResultSchema = z.object({ topicId: IdSchema<'topics'>() });
 const CreateLessonResultSchema = z.object({ lessonId: IdSchema<'lessons'>() });
 const LessonDraftRecordListSchema = LessonDraftRecordSchema.array();
+const LessonAuthoringUpdateResultSchema = z.object({
+  lessonId: IdSchema<'lessons'>(),
+  authoringStatus: LessonAuthoringStatusSchema.nullable(),
+  assigneeId: z.string().nullable(),
+  authoringNotes: z.string().nullable(),
+  gradeLevels: z.array(LessonGradeLevelSchema),
+  updatedAt: z.number(),
+});
 
 export const createCurriculumClient = (httpClient: ConvexHttpClient): CurriculumClient => {
   const executeQuery = async <Schema extends z.ZodTypeAny>(
@@ -250,10 +419,15 @@ export const createCurriculumClient = (httpClient: ConvexHttpClient): Curriculum
       return await executeMutation(api.curriculum.createLesson, input, CreateLessonResultSchema);
     },
     async saveLessonDraft(lessonId, draft) {
-      await executeMutation(api.curriculum.saveLessonDraft, {
-        lessonId,
-        draft: normalizeLessonDocument(draft),
-      }, z.void());
+      const normalized = normalizeLessonDocument(draft);
+      await executeMutation(
+        api.curriculum.saveLessonDraft,
+        {
+          lessonId,
+          draft: normalized,
+        },
+        z.void(),
+      );
     },
     async publishLesson(lessonId) {
       await executeMutation(api.curriculum.publishLesson, { lessonId }, z.void());
@@ -267,6 +441,31 @@ export const createCurriculumClient = (httpClient: ConvexHttpClient): Curriculum
     async reorderLessons(topicId, lessonIds) {
       await executeMutation(api.curriculum.reorderLessons, { topicId, lessonIds }, z.void());
     },
+    async updateLessonAuthoring(input) {
+      const mapNullable = <T>(value: T | null | undefined) =>
+        value === undefined ? undefined : value;
+      const payload = {
+        lessonId: input.lessonId,
+        authoringStatus: mapNullable(input.authoringStatus),
+        assigneeId: mapNullable(input.assigneeId),
+        authoringNotes: mapNullable(input.authoringNotes),
+        gradeLevels: mapNullable(input.gradeLevels),
+      };
+      const result = await executeMutation(
+        api.curriculum.updateLessonAuthoring,
+        payload,
+        LessonAuthoringUpdateResultSchema,
+      );
+      const normalized: LessonAuthoringUpdate = {
+        lessonId: result.lessonId as Id<'lessons'>,
+        authoringStatus: result.authoringStatus as LessonAuthoringStatus | null,
+        assigneeId: result.assigneeId,
+        authoringNotes: result.authoringNotes,
+        gradeLevels: result.gradeLevels as LessonGradeLevel[],
+        updatedAt: result.updatedAt,
+      };
+      return normalized;
+    },
     async listLessons(topicId) {
       return await executeQuery(
         api.curriculum.listLessons,
@@ -274,20 +473,74 @@ export const createCurriculumClient = (httpClient: ConvexHttpClient): Curriculum
         LessonDraftRecordListSchema,
       );
     },
-    async ensureUserProfile() {
-      return await executeMutation(api.auth.ensureUserProfile, {}, UserRoleSchema);
+    async syncManifest(input) {
+      const manifest = CurriculumManifestSchema.parse(input.manifest);
+      const options = {
+        prune: input.prune ?? undefined,
+        manifestCommit: input.manifestCommit ?? undefined,
+        defaultStatus: input.defaultStatus ?? undefined,
+      };
+      const hasOptions = Object.values(options).some((value) => value !== undefined);
+      const payload = hasOptions ? { manifest, options } : { manifest };
+      return await executeMutation(
+        api.curriculum.syncManifest,
+        payload,
+        CurriculumSyncSummarySchema,
+      );
     },
-    async getCurrentUserProfile() {
-      return await executeQuery(api.auth.getCurrentUserProfile, {}, UserProfileSchema.nullable());
-    },
-    async getCurrentUserRole() {
-      return await executeQuery(api.auth.getCurrentUserRole, {}, UserRoleSchema.nullable());
-    },
-    async updateUserRole(targetUserId, role) {
-      await executeMutation(api.auth.updateUserRole, { targetUserId, role }, z.void());
+    async exportManifest() {
+      return await executeQuery(api.curriculum.exportManifest, {}, CurriculumManifestSchema);
     },
   };
 };
 
 export const createCurriculumHttpClient = (convexUrl: string) =>
   createCurriculumClient(new ConvexHttpClient(convexUrl));
+
+export const curriculumClient: CurriculumClient = convexUrl
+  ? createCurriculumHttpClient(convexUrl)
+  : createUnavailableCurriculumClient();
+
+if (!convexUrl) {
+  console.warn(missingUrlMessage);
+}
+
+export const isCurriculumApiAvailable = Boolean(convexUrl);
+
+let curriculumAuthReady = !isCurriculumApiAvailable;
+
+export const isCurriculumAuthReady = () => curriculumAuthReady;
+
+export const setCurriculumAuthToken = (token?: string | null) => {
+  curriculumClient.setAuthToken(token ?? null);
+  curriculumAuthReady = !isCurriculumApiAvailable || typeof token === 'string';
+};
+
+export const {
+  clearAuthToken,
+  fetchCurriculumTree,
+  fetchUnitBySlug,
+  fetchLessonBySlug,
+  fetchLessonById,
+  createUnit,
+  updateUnit,
+  deleteUnit,
+  reorderUnits,
+  createTopic,
+  updateTopic,
+  deleteTopic,
+  moveTopic,
+  reorderTopics,
+  createLesson,
+  saveLessonDraft,
+  publishLesson,
+  deleteLesson,
+  moveLesson,
+  reorderLessons,
+  updateLessonAuthoring,
+  listLessons,
+  syncManifest,
+  exportManifest,
+} = curriculumClient;
+
+export const fetchLessonDrafts = (topicId?: Id<'topics'>) => curriculumClient.listLessons(topicId);

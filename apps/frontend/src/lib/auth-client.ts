@@ -1,6 +1,8 @@
 import { createAuthClient } from 'better-auth/solid';
 import { convexClient, crossDomainClient } from '@convex-dev/better-auth/client/plugins';
-import { magicLinkClient } from 'better-auth/client/plugins';
+import { adminClient, magicLinkClient, organizationClient } from 'better-auth/client/plugins';
+import { createAccessControl } from 'better-auth/plugins/access';
+import { AuthAccess } from '@monte/types';
 
 type ResolvedBaseSettings = {
   baseURL?: string;
@@ -37,10 +39,78 @@ const rawBaseUrl =
 
 const { baseURL, basePath } = resolveBaseSettings(rawBaseUrl);
 
+const adminAccessControl = createAccessControl(AuthAccess.ADMIN_STATEMENTS);
+const adminRoles = {
+  internal: adminAccessControl.newRole({
+    user: Array.from(AuthAccess.ADMIN_ROLE_PERMISSIONS.internal.user),
+    session: Array.from(AuthAccess.ADMIN_ROLE_PERMISSIONS.internal.session),
+  }),
+  admin: adminAccessControl.newRole({
+    user: Array.from(AuthAccess.ADMIN_ROLE_PERMISSIONS.admin.user),
+    session: Array.from(AuthAccess.ADMIN_ROLE_PERMISSIONS.admin.session),
+  }),
+  guide: adminAccessControl.newRole({ user: [], session: [] }),
+  guardian: adminAccessControl.newRole({ user: [], session: [] }),
+  student: adminAccessControl.newRole({ user: [], session: [] }),
+};
+
+const organizationAccessControl = createAccessControl(AuthAccess.ORGANIZATION_STATEMENTS);
+const organizationRoles = {
+  owner: organizationAccessControl.newRole({
+    organization: Array.from(AuthAccess.ORGANIZATION_ROLE_PERMISSIONS.owner.organization),
+    member: Array.from(AuthAccess.ORGANIZATION_ROLE_PERMISSIONS.owner.member),
+    invitation: Array.from(AuthAccess.ORGANIZATION_ROLE_PERMISSIONS.owner.invitation),
+  }),
+  admin: organizationAccessControl.newRole({
+    organization: Array.from(AuthAccess.ORGANIZATION_ROLE_PERMISSIONS.admin.organization),
+    member: Array.from(AuthAccess.ORGANIZATION_ROLE_PERMISSIONS.admin.member),
+    invitation: Array.from(AuthAccess.ORGANIZATION_ROLE_PERMISSIONS.admin.invitation),
+  }),
+  member: organizationAccessControl.newRole({ organization: [], member: [], invitation: [] }),
+  guide: organizationAccessControl.newRole({ organization: [], member: [], invitation: [] }),
+  guardian: organizationAccessControl.newRole({ organization: [], member: [], invitation: [] }),
+  student: organizationAccessControl.newRole({ organization: [], member: [], invitation: [] }),
+};
+
+const adminClientPlugin = adminClient({
+  ac: adminAccessControl,
+  roles: adminRoles,
+  adminRoles: ['internal'],
+});
+
+const organizationClientPlugin = organizationClient({
+  ac: organizationAccessControl,
+  roles: organizationRoles,
+  schema: {
+    organization: {
+      additionalFields: {
+        joinCode: { type: 'string' },
+        planKey: { type: 'string' },
+        billingCycle: { type: 'string' },
+        seatLimit: { type: 'number' },
+        seatsInUse: { type: 'number' },
+        pricingTier: { type: 'string' },
+      },
+    },
+    member: {
+      additionalFields: {
+        status: { type: 'string' },
+        relationships: { type: 'json' },
+        invitedByUserId: { type: 'string' },
+      },
+    },
+    invitation: {
+      additionalFields: {
+        createdByUserId: { type: 'string' },
+      },
+    },
+  },
+});
+
 const clientOptions = {
   baseURL,
   basePath,
-  plugins: [convexClient(), crossDomainClient(), magicLinkClient()],
+  plugins: [convexClient(), crossDomainClient(), magicLinkClient(), adminClientPlugin, organizationClientPlugin],
 };
 
 type SessionQueryOptions = {

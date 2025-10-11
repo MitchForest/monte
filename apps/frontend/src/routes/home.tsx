@@ -160,9 +160,11 @@ const Home = () => {
             <Button onClick={handleContinue} icon={<span aria-hidden>&gt;</span>}>
               Continue learning
             </Button>
-            <Button variant="secondary" onClick={() => void navigate({ to: '/editor' })}>
-              Open lesson editor
-            </Button>
+            <Show when={auth.role() === 'internal'}>
+              <Button variant="secondary" onClick={() => void navigate({ to: '/editor' })}>
+                Open lesson editor
+              </Button>
+            </Show>
           </Card>
         </PageSection>
       </Show>

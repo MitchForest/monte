@@ -2,11 +2,17 @@ import { zodToConvex } from 'convex-helpers/server/zod';
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 
-import { EntityMetadataSchema, LessonDocumentSchema, UserRoleSchema } from '@monte/types';
+import {
+  EntityMetadataSchema,
+  LessonDocumentSchema,
+  LessonAuthoringStatusSchema,
+  LessonGradeLevelSchema,
+} from '@monte/types';
 
 export const lessonDocument = zodToConvex(LessonDocumentSchema);
-const userRole = zodToConvex(UserRoleSchema);
 const entityMetadata = zodToConvex(EntityMetadataSchema);
+const lessonAuthoringStatus = zodToConvex(LessonAuthoringStatusSchema);
+const lessonGradeLevel = zodToConvex(LessonGradeLevelSchema);
 
 export default defineSchema({
   units: defineTable({
@@ -51,30 +57,17 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
     publishedAt: v.optional(v.number()),
+    authoringStatus: v.optional(lessonAuthoringStatus),
+    assigneeId: v.optional(v.string()),
+    authoringNotes: v.optional(v.string()),
+    gradeLevels: v.optional(v.array(lessonGradeLevel)),
+    manifestHash: v.optional(v.string()),
+    manifestGeneratedAt: v.optional(v.string()),
+    manifestCommit: v.optional(v.string()),
   })
     .index('by_slug', ['slug'])
     .index('by_topic', ['topicId'])
     .index('by_topic_order', ['topicId', 'order']),
 
-  organizations: defineTable({
-    name: v.string(),
-    plan: v.union(v.literal('free'), v.literal('pro'), v.literal('enterprise')),
-    createdAt: v.number(),
-  }),
 
-  userProfiles: defineTable({
-    userId: v.string(),
-    role: userRole,
-    organizationId: v.optional(v.id('organizations')),
-    preferences: v.optional(
-      v.object({
-        theme: v.string(),
-        defaultView: v.string(),
-      }),
-    ),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-  })
-    .index('by_user_id', ['userId'])
-    .index('by_organization', ['organizationId']),
 });

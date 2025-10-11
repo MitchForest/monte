@@ -3,13 +3,36 @@ import { mutation, query } from '@monte/api/convex/_generated/server.js';
 import type { MutationCtx, QueryCtx } from '@monte/api/convex/_generated/server.js';
 import { v, type Infer } from 'convex/values';
 import { zodToConvex } from 'convex-helpers/server/zod';
-import { EntityMetadataSchema } from '@monte/types';
+import {
+  CurriculumManifestSchema,
+  CurriculumSyncSummarySchema,
+  EntityMetadataSchema,
+  LessonAuthoringStatusSchema,
+  LessonGradeLevelSchema,
+} from '@monte/types';
 
 import { lessonDocument as lessonDocumentSchema } from '../../schema.js';
 
 const metadataValue = zodToConvex(EntityMetadataSchema);
+const curriculumManifestValue = zodToConvex(CurriculumManifestSchema);
+const lessonAuthoringStatusValue = zodToConvex(LessonAuthoringStatusSchema);
+const lessonGradeLevelValue = zodToConvex(LessonGradeLevelSchema);
+const syncManifestOptionsValue = v.object({
+  prune: v.optional(v.boolean()),
+  manifestCommit: v.optional(v.string()),
+  defaultStatus: v.optional(lessonAuthoringStatusValue),
+});
 
 const now = () => Date.now();
+
+const fnv1a = (input: string): string => {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < input.length; index += 1) {
+    hash ^= input.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+};
 
 const slugify = (value: string) =>
   value
@@ -18,6 +41,31 @@ const slugify = (value: string) =>
     .replace(/[^a-z0-9\s-]/gi, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
+
+type LessonDocumentDraft = Infer<typeof lessonDocumentSchema>;
+
+const ensureTimelineForSegment = (segment: LessonDocumentDraft['lesson']['segments'][number]) => {
+  const timeline = segment.timeline ?? { version: 1, steps: [] };
+  const steps = timeline.steps?.map((step) => ({
+    ...step,
+    keyframes: step.keyframes ?? [],
+    interactions: step.interactions ?? [],
+  })) ?? [];
+  return {
+    ...segment,
+    timeline: {
+      version: timeline.version ?? 1,
+      label: timeline.label,
+      metadata: timeline.metadata,
+      steps,
+    },
+  };
+};
+
+const normalizeLessonTimelines = (draft: LessonDocumentDraft) => {
+  draft.lesson.segments = draft.lesson.segments.map((segment) => ensureTimelineForSegment(segment));
+  return draft;
+};
 
 async function ensureUniqueSlug(
   ctx: QueryCtx | MutationCtx,
@@ -90,8 +138,8 @@ function defaultLessonDocument(
   title: string,
 ): Infer<typeof lessonDocumentSchema> {
   const timestamp = now();
-  return {
-    version: '1.0',
+  const document = {
+    version: '1.0' as const,
     lesson: {
       id: slug,
       topicId,
@@ -108,6 +156,7 @@ function defaultLessonDocument(
       updatedAt: timestamp,
     },
   };
+  return normalizeLessonTimelines(document);
 }
 
 const assertInventoryConsistency = (draft: Infer<typeof lessonDocumentSchema>) => {
@@ -181,6 +230,9 @@ export const listCurriculumTree = query({
               title: lesson.draft.lesson.title,
               summary: lesson.draft.lesson.summary ?? '',
               updatedAt: lesson.updatedAt,
+              authoringStatus: lesson.authoringStatus ?? undefined,
+              assigneeId: lesson.assigneeId ?? undefined,
+              gradeLevels: lesson.gradeLevels ?? undefined,
             })),
           };
         }),
@@ -225,6 +277,9 @@ export const getUnitBySlug = query({
             title: lesson.draft.lesson.title,
             summary: lesson.draft.lesson.summary ?? '',
             updatedAt: lesson.updatedAt,
+            authoringStatus: lesson.authoringStatus ?? undefined,
+            assigneeId: lesson.assigneeId ?? undefined,
+            gradeLevels: lesson.gradeLevels ?? undefined,
           })),
         };
       }),
@@ -479,6 +534,13 @@ export const createLesson = mutation({
       createdAt: timestamp,
       updatedAt: timestamp,
       publishedAt: undefined,
+      authoringStatus: 'not_started',
+      assigneeId: undefined,
+      authoringNotes: undefined,
+      gradeLevels: [],
+      manifestHash: undefined,
+      manifestGeneratedAt: undefined,
+      manifestCommit: undefined,
     });
     return { lessonId };
   },
@@ -516,6 +578,7 @@ export const saveLessonDraft = mutation({
         updatedAt,
       },
     };
+    normalizeLessonTimelines(draft);
     assertInventoryConsistency(draft);
     await ctx.db.patch(args.lessonId, {
       draft,
@@ -589,6 +652,383 @@ export const reorderLessons = mutation({
     await Promise.all(
       args.lessonIds.map((lessonId, index) => ctx.db.patch(lessonId, { order: index, updatedAt: now() })),
     );
+  },
+});
+
+export const updateLessonAuthoring = mutation({
+  args: {
+    lessonId: v.id('lessons'),
+    authoringStatus: v.optional(v.union(lessonAuthoringStatusValue, v.null())),
+    assigneeId: v.optional(v.union(v.string(), v.null())),
+    authoringNotes: v.optional(v.union(v.string(), v.null())),
+    gradeLevels: v.optional(v.union(v.array(lessonGradeLevelValue), v.null())),
+  },
+  handler: async (ctx, args) => {
+    const lesson = await ctx.db.get(args.lessonId);
+    if (!lesson) throw new Error('Lesson not found');
+
+    const patch: Partial<Doc<'lessons'>> = {
+      updatedAt: now(),
+    };
+
+    if (args.authoringStatus !== undefined) {
+      patch.authoringStatus = args.authoringStatus ?? undefined;
+    }
+    if (args.assigneeId !== undefined) {
+      patch.assigneeId = args.assigneeId ?? undefined;
+    }
+    if (args.authoringNotes !== undefined) {
+      patch.authoringNotes = args.authoringNotes ?? undefined;
+    }
+    if (args.gradeLevels !== undefined) {
+      patch.gradeLevels = args.gradeLevels === null ? [] : args.gradeLevels;
+    }
+
+    await ctx.db.patch(args.lessonId, patch);
+
+    return {
+      lessonId: args.lessonId,
+      authoringStatus: patch.authoringStatus ?? lesson.authoringStatus ?? null,
+      assigneeId: patch.assigneeId ?? lesson.assigneeId ?? null,
+      authoringNotes: patch.authoringNotes ?? lesson.authoringNotes ?? null,
+      gradeLevels: patch.gradeLevels ?? lesson.gradeLevels ?? [],
+      updatedAt: patch.updatedAt ?? lesson.updatedAt,
+    };
+  },
+});
+
+export const syncManifest = mutation({
+  args: {
+    manifest: curriculumManifestValue,
+    options: v.optional(syncManifestOptionsValue),
+  },
+  handler: async (ctx, args) => {
+    const manifest = CurriculumManifestSchema.parse(args.manifest);
+    const prune = args.options?.prune ?? false;
+    const manifestCommit = args.options?.manifestCommit;
+    const defaultStatus = args.options?.defaultStatus ?? 'not_started';
+    const timestamp = now();
+    const manifestSerialized = JSON.stringify(manifest);
+    const manifestHash = fnv1a(manifestSerialized);
+
+    const summary = {
+      manifestHash,
+      manifestGeneratedAt: manifest.generatedAt,
+      manifestCommit,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+      units: { created: 0, updated: 0, deleted: 0 },
+      topics: { created: 0, updated: 0, deleted: 0 },
+      lessons: { created: 0, updated: 0, deleted: 0 },
+    };
+
+    const existingUnits = await ctx.db.query('units').collect();
+    const unitsBySlug = new Map(existingUnits.map((unit) => [unit.slug, unit]));
+    const touchedUnitIds = new Set<Id<'units'>>();
+
+    for (const [order, unit] of manifest.units.entries()) {
+      const existing = unitsBySlug.get(unit.slug);
+      if (existing) {
+        const patch: Partial<Doc<'units'>> = {
+          order,
+          updatedAt: timestamp,
+        };
+        if (existing.title !== unit.title) patch.title = unit.title;
+        if (unit.summary !== undefined && existing.summary !== unit.summary) {
+          patch.summary = unit.summary;
+        }
+        await ctx.db.patch(existing._id, patch);
+        touchedUnitIds.add(existing._id);
+        summary.units.updated += 1;
+      } else {
+        const unitId = await ctx.db.insert('units', {
+          slug: unit.slug,
+          title: unit.title,
+          summary: unit.summary,
+          coverImage: undefined,
+          order,
+          status: 'active',
+          metadata: undefined,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        });
+        touchedUnitIds.add(unitId);
+        summary.units.created += 1;
+      }
+    }
+
+    if (prune) {
+      for (const unit of existingUnits) {
+        if (!touchedUnitIds.has(unit._id)) {
+          const topicsToDelete = await ctx.db
+            .query('topics')
+            .withIndex('by_unit', (q) => q.eq('unitId', unit._id))
+            .collect();
+          for (const topic of topicsToDelete) {
+            const lessonsToDelete = await ctx.db
+              .query('lessons')
+              .withIndex('by_topic', (q) => q.eq('topicId', topic._id))
+              .collect();
+            summary.lessons.deleted += lessonsToDelete.length;
+            await Promise.all(lessonsToDelete.map((lesson) => ctx.db.delete(lesson._id)));
+            summary.topics.deleted += 1;
+            await ctx.db.delete(topic._id);
+          }
+          summary.units.deleted += 1;
+          await ctx.db.delete(unit._id);
+        }
+      }
+    }
+
+    const currentUnits = await ctx.db.query('units').collect();
+    const unitBySlug = new Map(currentUnits.map((unit) => [unit.slug, unit]));
+
+    const topicOrderMap = new Map<string, Map<string, number>>();
+    for (const unit of manifest.units) {
+      const orderMap = new Map<string, number>();
+      unit.topicOrder.forEach((topicSlug, index) => orderMap.set(topicSlug, index));
+      topicOrderMap.set(unit.slug, orderMap);
+    }
+
+    const existingTopics = await ctx.db.query('topics').collect();
+    const topicsBySlug = new Map(existingTopics.map((topic) => [topic.slug, topic]));
+    const touchedTopicIds = new Set<Id<'topics'>>();
+
+    for (const topic of manifest.topics) {
+      const unitDoc = unitBySlug.get(topic.unitId);
+      if (!unitDoc) continue;
+      const existing = topicsBySlug.get(topic.slug);
+      const desiredOrder = topicOrderMap.get(unitDoc.slug)?.get(topic.slug);
+      const order =
+        desiredOrder ??
+        existing?.order ??
+        (await nextOrder(ctx, 'topics', { field: 'unitId', value: unitDoc._id }));
+
+      if (existing) {
+        const patch: Partial<Doc<'topics'>> = {
+          unitId: unitDoc._id,
+          order,
+          updatedAt: timestamp,
+          focusSkills: topic.focusSkills,
+        };
+        if (topic.overview !== undefined && existing.overview !== topic.overview) {
+          patch.overview = topic.overview;
+        }
+        if (existing.title !== topic.title) {
+          patch.title = topic.title;
+        }
+        await ctx.db.patch(existing._id, patch);
+        touchedTopicIds.add(existing._id);
+        summary.topics.updated += 1;
+      } else {
+        const topicId = await ctx.db.insert('topics', {
+          unitId: unitDoc._id,
+          slug: topic.slug,
+          title: topic.title,
+          overview: topic.overview,
+          focusSkills: topic.focusSkills,
+          estimatedDurationMinutes: undefined,
+          order,
+          status: 'active',
+          metadata: undefined,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        });
+        touchedTopicIds.add(topicId);
+        summary.topics.created += 1;
+      }
+    }
+
+    if (prune) {
+      for (const topic of existingTopics) {
+        if (!touchedTopicIds.has(topic._id)) {
+          const lessonsToDelete = await ctx.db
+            .query('lessons')
+            .withIndex('by_topic', (q) => q.eq('topicId', topic._id))
+            .collect();
+          summary.lessons.deleted += lessonsToDelete.length;
+          await Promise.all(lessonsToDelete.map((lesson) => ctx.db.delete(lesson._id)));
+          summary.topics.deleted += 1;
+          await ctx.db.delete(topic._id);
+        }
+      }
+    }
+
+    const currentTopics = await ctx.db.query('topics').collect();
+    const topicBySlug = new Map(currentTopics.map((topic) => [topic.slug, topic]));
+
+    const lessonOrderByTopic = new Map<string, Map<string, number>>();
+    for (const lesson of manifest.lessons) {
+      const map = lessonOrderByTopic.get(lesson.topicId) ?? new Map<string, number>();
+      if (!map.has(lesson.slug)) {
+        map.set(lesson.slug, map.size);
+      }
+      lessonOrderByTopic.set(lesson.topicId, map);
+    }
+
+    const existingLessons = await ctx.db.query('lessons').collect();
+    const lessonsBySlug = new Map(existingLessons.map((lesson) => [lesson.slug, lesson]));
+    const touchedLessonIds = new Set<Id<'lessons'>>();
+
+    for (const lesson of manifest.lessons) {
+      const topicDoc = topicBySlug.get(lesson.topicId);
+      if (!topicDoc) continue;
+      const existing = lessonsBySlug.get(lesson.slug);
+      const orderMap = lessonOrderByTopic.get(lesson.topicId);
+      const desiredOrder = orderMap?.get(lesson.slug);
+      const order =
+        desiredOrder ??
+        existing?.order ??
+        (await nextOrder(ctx, 'lessons', { field: 'topicId', value: topicDoc._id }));
+      const gradeLevels = lesson.gradeLevels.length > 0 ? lesson.gradeLevels : [];
+
+      if (existing) {
+        const patch: Partial<Doc<'lessons'>> = {
+          topicId: topicDoc._id,
+          order,
+          updatedAt: timestamp,
+          gradeLevels,
+          manifestHash,
+          manifestGeneratedAt: manifest.generatedAt,
+          manifestCommit,
+        };
+        if (!existing.authoringStatus) {
+          patch.authoringStatus = defaultStatus;
+        }
+        if (lesson.notes && !existing.authoringNotes) {
+          patch.authoringNotes = lesson.notes;
+        }
+        await ctx.db.patch(existing._id, patch);
+        touchedLessonIds.add(existing._id);
+        summary.lessons.updated += 1;
+      } else {
+        const draft = defaultLessonDocument(lesson.slug, topicDoc._id, lesson.title);
+        draft.lesson.focusSkills = lesson.skills;
+        if (lesson.materialId) {
+          draft.lesson.primaryMaterialId = lesson.materialId;
+        }
+        const lessonId = await ctx.db.insert('lessons', {
+          topicId: topicDoc._id,
+          slug: lesson.slug,
+          order,
+          status: 'draft',
+          draft,
+          published: undefined,
+          authorId: undefined,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+          publishedAt: undefined,
+          authoringStatus: defaultStatus,
+          assigneeId: undefined,
+          authoringNotes: lesson.notes,
+          gradeLevels,
+          manifestHash,
+          manifestGeneratedAt: manifest.generatedAt,
+          manifestCommit,
+        });
+        touchedLessonIds.add(lessonId);
+        summary.lessons.created += 1;
+      }
+    }
+
+    if (prune) {
+      const allLessons = await ctx.db.query('lessons').collect();
+      for (const lesson of allLessons) {
+        if (!touchedLessonIds.has(lesson._id)) {
+          await ctx.db.delete(lesson._id);
+          summary.lessons.deleted += 1;
+        }
+      }
+    }
+
+    return CurriculumSyncSummarySchema.parse(summary);
+  },
+});
+
+export const exportManifest = query({
+  args: {},
+  handler: async (ctx) => {
+    const [units, topics, lessons] = await Promise.all([
+      ctx.db.query('units').collect(),
+      ctx.db.query('topics').collect(),
+      ctx.db.query('lessons').collect(),
+    ]);
+
+    const unitById = new Map(units.map((unit) => [unit._id, unit]));
+    const topicById = new Map(topics.map((topic) => [topic._id, topic]));
+    const topicSlugById = new Map(topics.map((topic) => [topic._id, topic.slug]));
+
+    const topicsByUnitId = new Map<Id<'units'>, Doc<'topics'>[]>();
+    for (const topic of topics) {
+      const list = topicsByUnitId.get(topic.unitId);
+      if (list) {
+        list.push(topic);
+      } else {
+        topicsByUnitId.set(topic.unitId, [topic]);
+      }
+    }
+
+    const unitsManifest = sortByOrder(units).map((unit) => ({
+      id: unit.slug,
+      slug: unit.slug,
+      title: unit.title,
+      summary: unit.summary ?? undefined,
+      domainId: undefined,
+      ritRange: undefined,
+      primaryCcss: undefined,
+      topicOrder: sortByOrder(topicsByUnitId.get(unit._id) ?? []).map((topic) => topic.slug),
+    }));
+
+    const topicsManifest = topics.map((topic) => {
+      const unit = unitById.get(topic.unitId);
+      const unitSlug = unit?.slug ?? topic.unitId;
+      return {
+        id: topic.slug,
+        slug: topic.slug,
+        unitId: unitSlug,
+        title: topic.title,
+        overview: topic.overview ?? undefined,
+        focusSkills: topic.focusSkills ?? [],
+        ritRange: undefined,
+        ccssFocus: topic.focusSkills ?? [],
+        priority: undefined,
+        prerequisiteTopicIds: [],
+      };
+    });
+
+    const lessonsManifest = lessons
+      .map((lesson) => {
+        const topicSlug = topicSlugById.get(lesson.topicId);
+        if (!topicSlug) return null;
+        const segments =
+          lesson.draft.lesson.segments?.map((segment: any) => ({
+            type: segment.type,
+            representation: (segment as { representation?: string }).representation,
+          })) ?? [];
+        return {
+          id: lesson.slug,
+          slug: lesson.slug,
+          topicId: topicSlug,
+          title: lesson.draft.lesson.title,
+          materialId: lesson.draft.lesson.primaryMaterialId ?? undefined,
+          gradeLevels: lesson.gradeLevels ?? [],
+          segments,
+          prerequisiteLessonIds: [],
+          skills: lesson.draft.lesson.focusSkills ?? [],
+          notes: lesson.authoringNotes ?? undefined,
+        };
+      })
+      .filter((lesson): lesson is NonNullable<typeof lesson> => lesson !== null);
+
+    const result = {
+      generatedAt: new Date().toISOString(),
+      domains: [],
+      units: unitsManifest,
+      topics: topicsManifest,
+      lessons: lessonsManifest,
+    };
+
+    return CurriculumManifestSchema.parse(result);
   },
 });
 

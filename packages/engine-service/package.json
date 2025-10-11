@@ -1,0 +1,31 @@
+{
+  "name": "@monte/engine-service",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"No lint tasks for @monte/engine-service\""
+  },
+  "dependencies": {
+    "@monte/types": "workspace:*",
+    "@monte/graph-service": "workspace:*",
+    "@monte/question-service": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.0"
+  }
+}

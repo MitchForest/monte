@@ -37,10 +37,11 @@ const Separator = (props: DropdownMenuSeparatorProps & { class?: string }) => {
   return <KDropdownMenu.Separator {...rest} class={cn(separatorClasses, className)} />;
 };
 
-export const DropdownMenu = Object.assign(KDropdownMenu, {
+export const DropdownMenu = {
+  ...KDropdownMenu,
   Content,
   Item,
   Separator,
-});
+} as typeof KDropdownMenu;
 
 export default DropdownMenu;

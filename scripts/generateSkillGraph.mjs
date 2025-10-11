@@ -11,7 +11,7 @@ const DOCS = [
 const numberPattern = /(\d{1,3}(?:,\d{3})*|\d+)/;
 
 async function main() {
-  const taxonomyConfigPath = path.join(ROOT, 'data/curriculum/taxonomy.config.json');
+  const taxonomyConfigPath = path.join(ROOT, 'packages/curriculum-service/content/taxonomy/taxonomy.config.json');
   const taxonomyConfig = JSON.parse(await fs.readFile(taxonomyConfigPath, 'utf8'));
   const taxonomy = prepareTaxonomy(taxonomyConfig);
 
@@ -25,7 +25,7 @@ async function main() {
 
   const { nodes, relationships } = buildGraph(rawItems, taxonomy);
 
-  const outDir = path.join(ROOT, 'data/curriculum');
+  const outDir = path.join(ROOT, 'packages/curriculum-service/content/taxonomy');
   await fs.mkdir(outDir, { recursive: true });
   await fs.writeFile(
     path.join(outDir, 'skills.json'),

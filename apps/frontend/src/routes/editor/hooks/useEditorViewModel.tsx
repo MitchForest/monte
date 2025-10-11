@@ -39,6 +39,7 @@ import type {
   GuidedStep,
   LessonDocument,
   LessonMaterialInventory,
+  SegmentTimeline,
   MaterialBankDefinition,
   PracticeQuestion,
   PresentationAction,
@@ -80,6 +81,7 @@ import {
 } from '../utils';
 import { createLessonDocumentStore } from '../state/lessonDocumentStore';
 import type { InventorySnapshotRegistration } from '../state/inventoryStore';
+import { ensureSegmentTimeline } from '../../../domains/curriculum/utils/timeline';
 
 type UnitNode = CurriculumTree[number];
 type TopicNode = UnitNode['topics'][number];
@@ -261,6 +263,7 @@ interface EditorActions {
   handleGuidedWorkspaceChange: (segmentId: string, workspace: 'golden-beads' | 'stamp-game') => void;
   handlePracticeWorkspaceChange: (segmentId: string, workspace: 'golden-beads' | 'stamp-game') => void;
   handleSegmentMaterialBankChange: (segmentId: string, bankId: string | undefined) => void;
+  handleSegmentTimelineUpdate: (segmentId: string, timeline: SegmentTimeline) => void;
   handleAddTokenType: () => void;
   handleUpdateTokenType: (
     tokenId: string,
@@ -1414,6 +1417,19 @@ export const useEditorViewModel = () => {
     });
   };
 
+  const handleSegmentTimelineUpdate = (segmentId: string, timeline: SegmentTimeline) => {
+    editor.applyUpdate((draft) => {
+      draft.lesson.segments = draft.lesson.segments.map((segment) => {
+        if (segment.id !== segmentId) return segment;
+        const normalized = ensureSegmentTimeline({ ...segment, timeline }).timeline;
+        return {
+          ...segment,
+          timeline: normalized,
+        };
+      });
+    });
+  };
+
   const currentLessonMeta = createMemo<LessonNode | undefined>(() =>
     lessons().find((lesson) => lesson._id === selectedLessonId()),
   );
@@ -1584,6 +1600,7 @@ export const useEditorViewModel = () => {
       handleGuidedWorkspaceChange,
       handlePracticeWorkspaceChange,
       handleSegmentMaterialBankChange,
+      handleSegmentTimelineUpdate,
       ...inventoryStore,
       selectSegment,
     },

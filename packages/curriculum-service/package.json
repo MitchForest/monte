@@ -1,0 +1,15 @@
+{
+  "name": "@monte/curriculum-service",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./content/*": "./content/*"
+  },
+  "files": [
+    "src",
+    "content",
+    "assets"
+  ]
+}

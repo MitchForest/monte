@@ -1,0 +1,3785 @@
+[
+  {
+    "id": "skill.counting-on-addition.count-on-objects-10",
+    "name": "Count On with Objects within 10",
+    "description": "Begin at a known addend and count on with manipulatives to find totals within ten.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "counting-on-addition",
+    "ccss": [
+      "K.OA.A.2",
+      "1.OA.C.5"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 170
+    },
+    "representations": [
+      "manipulatives",
+      "ten-frame",
+      "bead-stair"
+    ],
+    "practice": {
+      "easy": [
+        "k2.put-together-cubes-5"
+      ],
+      "medium": [
+        "k2.put-together-cubes-10"
+      ],
+      "hard": [
+        "k2.counting-on-ten-frame"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.counting-on-addition.count-on-number-line-20",
+    "name": "Count On with Number Lines within 20",
+    "description": "Use number lines to count on from the larger addend to solve addition within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "counting-on-addition",
+    "ccss": [
+      "1.OA.C.5"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 170
+    },
+    "representations": [
+      "number-line",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "k2.count-forward-number-line-10"
+      ],
+      "medium": [
+        "k2.count-forward-number-line-20"
+      ],
+      "hard": [
+        "k2.count-on-missing-addend-20"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.counting-on-addition.count-on-equations-20",
+    "name": "Solve Counting-On Equations within 20",
+    "description": "Write and solve addition equations that leverage counting-on strategies within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "counting-on-addition",
+    "ccss": [
+      "1.OA.C.5"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 170
+    },
+    "representations": [
+      "symbolic",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "k2.count-on-equations-10"
+      ],
+      "medium": [
+        "k2.count-on-equations-20"
+      ],
+      "hard": [
+        "k2.count-on-word-problems-20"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.make-ten-bridge.compose-ten-objects",
+    "name": "Compose Ten with Objects",
+    "description": "Rearrange addends using manipulatives to make ten before adding the remaining ones.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "make-ten-bridge",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 178
+    },
+    "representations": [
+      "manipulatives",
+      "ten-frame"
+    ],
+    "practice": {
+      "easy": [
+        "k2.make-ten-pairs"
+      ],
+      "medium": [
+        "k2.number-bonds-ten"
+      ],
+      "hard": [
+        "k2.ten-frame-complements"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.make-ten-bridge.make-ten-number-line",
+    "name": "Make Ten on Number Lines",
+    "description": "Use number line jumps to bridge to ten and complete addition within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "make-ten-bridge",
+    "ccss": [
+      "1.OA.C.6",
+      "2.OA.B.2"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 178
+    },
+    "representations": [
+      "number-line",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "k2.make-ten-number-line"
+      ],
+      "medium": [
+        "k2.bridge-ten-number-line"
+      ],
+      "hard": [
+        "k2.make-ten-word-problems"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.make-ten-bridge.decompose-addends-make-ten",
+    "name": "Decompose Addends to Make Ten",
+    "description": "Split addends and write equations that show making ten before combining remaining ones.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "make-ten-bridge",
+    "ccss": [
+      "2.OA.B.2"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 178
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.decompose-make-ten"
+      ],
+      "medium": [
+        "k2.make-ten-equations"
+      ],
+      "hard": [
+        "k2.make-ten-efficient"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.doubles-near-doubles.doubles-facts",
+    "name": "Recall Doubles Facts within 20",
+    "description": "Fluently recall addition doubles facts up to ten plus ten.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "doubles-near-doubles",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 159,
+      "max": 175
+    },
+    "representations": [
+      "symbolic",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "k2.doubles-fluency"
+      ],
+      "medium": [
+        "k2.doubles-with-models"
+      ],
+      "hard": [
+        "k2.doubles-word-problems"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.doubles-near-doubles.near-doubles-adjust",
+    "name": "Use Near Doubles to Add",
+    "description": "Adjust known doubles facts by one to solve near-double sums within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "doubles-near-doubles",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 159,
+      "max": 175
+    },
+    "representations": [
+      "strategy",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "k2.near-doubles-visual"
+      ],
+      "medium": [
+        "k2.near-doubles-strategy"
+      ],
+      "hard": [
+        "k2.near-doubles-word-problems"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.doubles-near-doubles.near-doubles-equations",
+    "name": "Represent Near Doubles with Equations",
+    "description": "Write equations that model doubling and adjusting to solve addition problems.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "doubles-near-doubles",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 159,
+      "max": 175
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.near-doubles-equations"
+      ],
+      "medium": [
+        "k2.near-doubles-missing-addend"
+      ],
+      "hard": [
+        "k2.near-doubles-explain"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.fact-families-within-20.build-fact-family",
+    "name": "Build Addition/Subtraction Fact Families",
+    "description": "Create fact families for addition and subtraction within twenty using models.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "fact-families-within-20",
+    "ccss": [
+      "1.OA.B.4",
+      "2.OA.B.2"
+    ],
+    "ritBand": {
+      "min": 162,
+      "max": 180
+    },
+    "representations": [
+      "manipulatives",
+      "triangle-fact",
+      "number-bond"
+    ],
+    "practice": {
+      "easy": [
+        "k2.build-fact-family-10"
+      ],
+      "medium": [
+        "k2.build-fact-family-20"
+      ],
+      "hard": [
+        "k2.fact-family-match"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.fact-families-within-20.complete-fact-family",
+    "name": "Complete Fact Families within 20",
+    "description": "Fill in missing equations in addition/subtraction fact families within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "fact-families-within-20",
+    "ccss": [
+      "1.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 162,
+      "max": 180
+    },
+    "representations": [
+      "symbolic",
+      "number-bond"
+    ],
+    "practice": {
+      "easy": [
+        "k2.complete-fact-family-10"
+      ],
+      "medium": [
+        "k2.complete-fact-family-20"
+      ],
+      "hard": [
+        "k2.fact-family-missing-number"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.addition-properties.commutative-addition-20",
+    "name": "Use Commutative Property to Add within 20",
+    "description": "Show that a + b = b + a with models and equations to solve sums efficiently.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "fact-families-within-20",
+    "ccss": [
+      "1.OA.B.3"
+    ],
+    "ritBand": {
+      "min": 158,
+      "max": 172
+    },
+    "representations": [
+      "manipulatives",
+      "number-bond",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.turn-around-facts"
+      ],
+      "medium": [
+        "k2.commutative-match"
+      ],
+      "hard": [
+        "k2.commutative-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.addition-properties.associative-add-3-20",
+    "name": "Group Addends to Add within 20",
+    "description": "Use the associative property to regroup addends and make ten or doubles when adding within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "fact-families-within-20",
+    "ccss": [
+      "1.OA.B.3"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 178
+    },
+    "representations": [
+      "number-bond",
+      "ten-frame",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.group-addends-visual"
+      ],
+      "medium": [
+        "k2.associative-make-ten"
+      ],
+      "hard": [
+        "k2.associative-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.add-3-numbers.within-20",
+    "name": "Add Three Numbers within 20",
+    "description": "Add three whole numbers within twenty using make-ten or doubles strategies.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "fact-families-within-20",
+    "ccss": [
+      "1.OA.A.2",
+      "1.OA.B.3"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 178
+    },
+    "representations": [
+      "ten-frame",
+      "number-bond",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.add-three-make-ten"
+      ],
+      "medium": [
+        "k2.add-three-doubles"
+      ],
+      "hard": [
+        "k2.add-three-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.unknown-number-eq.find-unknown-add-sub-20",
+    "name": "Find the Unknown Number in ± Equations",
+    "description": "Solve addition and subtraction equations to twenty with a symbol for the unknown in any position.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "fact-families-within-20",
+    "ccss": [
+      "1.OA.D.8"
+    ],
+    "ritBand": {
+      "min": 158,
+      "max": 175
+    },
+    "representations": [
+      "number-bond",
+      "bar-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.solve-unknown-addend"
+      ],
+      "medium": [
+        "k2.find-missing-number-20"
+      ],
+      "hard": [
+        "k2.unknown-equation-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.fact-families-within-20.fact-family-word-problems",
+    "name": "Apply Fact Families to Stories",
+    "description": "Use fact family relationships to solve addition and subtraction story problems.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "fact-families-within-20",
+    "ccss": [
+      "2.OA.B.2"
+    ],
+    "ritBand": {
+      "min": 162,
+      "max": 180
+    },
+    "representations": [
+      "story-context",
+      "symbolic",
+      "number-bond"
+    ],
+    "practice": {
+      "easy": [
+        "k2.fact-family-word-problems"
+      ],
+      "medium": [
+        "k2.fact-family-two-step"
+      ],
+      "hard": [
+        "k2.fact-family-reasoning"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-addition-within-100.model-two-digit-addition",
+    "name": "Model Two-Digit Addition with Regrouping",
+    "description": "Use base-ten blocks to add two-digit numbers including regrouping ten ones for a ten.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "dynamic-addition-within-100",
+    "ccss": [
+      "2.NBT.B.5"
+    ],
+    "ritBand": {
+      "min": 165,
+      "max": 182
+    },
+    "representations": [
+      "base-ten-blocks",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "k2.add-two-digit-models"
+      ],
+      "medium": [
+        "k2.add-two-digit-regroup-models"
+      ],
+      "hard": [
+        "25.add-2-digit-base-ten"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-addition-within-100.use-strategies-two-digit",
+    "name": "Use Place-Value Strategies for Two-Digit Addition",
+    "description": "Break apart tens and ones or use compensation to add within 100 efficiently.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "dynamic-addition-within-100",
+    "ccss": [
+      "2.NBT.B.5"
+    ],
+    "ritBand": {
+      "min": 165,
+      "max": 182
+    },
+    "representations": [
+      "strategy",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.add-two-digit-strategies"
+      ],
+      "medium": [
+        "25.add-two-digit-mental"
+      ],
+      "hard": [
+        "25.add-two-digit-choose-strategy"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-addition-within-100.add-word-problems-100",
+    "name": "Solve Two-Digit Addition Word Problems",
+    "description": "Apply place-value addition strategies to word problems within 100.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-foundations",
+    "topicId": "dynamic-addition-within-100",
+    "ccss": [
+      "2.OA.A.1",
+      "2.NBT.B.5"
+    ],
+    "ritBand": {
+      "min": 165,
+      "max": 182
+    },
+    "representations": [
+      "story-context",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.addition-word-problems-100"
+      ],
+      "medium": [
+        "25.addition-two-step-100"
+      ],
+      "hard": [
+        "25.addition-explain-100"
+      ]
+    }
+  },
+  {
+    "id": "skill.take-away-models.subtract-with-objects-10",
+    "name": "Subtract with Objects within 10",
+    "description": "Model subtraction by removing objects from a set within ten.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "take-away-models",
+    "ccss": [
+      "K.OA.A.1",
+      "1.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 170
+    },
+    "representations": [
+      "manipulatives",
+      "ten-frame"
+    ],
+    "practice": {
+      "easy": [
+        "k2.subtract-objects-5"
+      ],
+      "medium": [
+        "k2.subtract-objects-10"
+      ],
+      "hard": [
+        "k2.ten-frame-subtraction-10"
+      ]
+    }
+  },
+  {
+    "id": "skill.take-away-models.subtract-number-line-20",
+    "name": "Subtract on Number Lines within 20",
+    "description": "Use backward jumps on number lines to model subtraction within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "take-away-models",
+    "ccss": [
+      "1.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 170
+    },
+    "representations": [
+      "number-line",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "k2.subtraction-number-line-10"
+      ],
+      "medium": [
+        "k2.subtraction-number-line-20"
+      ],
+      "hard": [
+        "k2.subtract-count-back-20"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.take-away-models.subtract-equations-20",
+    "name": "Write Subtraction Equations within 20",
+    "description": "Represent take-away situations with subtraction equations and solve within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "take-away-models",
+    "ccss": [
+      "1.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 170
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.subtraction-equations-10"
+      ],
+      "medium": [
+        "k2.subtraction-equations-20"
+      ],
+      "hard": [
+        "k2.subtraction-word-equations-20"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.count-back-count-up.count-back-10",
+    "name": "Count Back within 10",
+    "description": "Count back by ones to subtract within ten using objects or number lines.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "count-back-count-up",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 152,
+      "max": 175
+    },
+    "representations": [
+      "manipulatives",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "k2.count-back-5"
+      ],
+      "medium": [
+        "k2.count-back-10"
+      ],
+      "hard": [
+        "k2.count-back-word-problems"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.count-back-count-up.count-up-find-difference",
+    "name": "Count Up to Find Differences",
+    "description": "Start from the smaller number and count up to find the difference within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "count-back-count-up",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 152,
+      "max": 175
+    },
+    "representations": [
+      "number-line",
+      "strategy",
+      "number-bond"
+    ],
+    "practice": {
+      "easy": [
+        "k2.count-up-difference-10"
+      ],
+      "medium": [
+        "k2.count-up-difference-20"
+      ],
+      "hard": [
+        "k2.count-up-bridge-ten"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.count-back-count-up.choose-counting-strategy",
+    "name": "Choose Count-Back or Count-Up Strategies",
+    "description": "Decide whether to count back or count up to solve subtraction situations efficiently.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "count-back-count-up",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 152,
+      "max": 175
+    },
+    "representations": [
+      "strategy",
+      "discussion"
+    ],
+    "practice": {
+      "easy": [
+        "k2.choose-counting-strategy"
+      ],
+      "medium": [
+        "k2.counting-strategy-compare"
+      ],
+      "hard": [
+        "k2.counting-strategy-word-problems"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.fact-families-subtraction.relate-addition-subtraction-models",
+    "name": "Relate Addition and Subtraction with Models",
+    "description": "Use inverse relationships to show how addition and subtraction undo each other.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "fact-families-subtraction",
+    "ccss": [
+      "1.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 154,
+      "max": 178
+    },
+    "representations": [
+      "manipulatives",
+      "triangle-fact"
+    ],
+    "practice": {
+      "easy": [
+        "k2.relate-add-sub-models"
+      ],
+      "medium": [
+        "k2.inverse-relationships-10"
+      ],
+      "hard": [
+        "k2.inverse-relationships-20"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.fact-families-subtraction.complete-subtraction-family",
+    "name": "Complete Subtraction Fact Families",
+    "description": "Fill in missing subtraction equations given a fact family within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "fact-families-subtraction",
+    "ccss": [
+      "1.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 154,
+      "max": 178
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.complete-subtraction-family-10"
+      ],
+      "medium": [
+        "k2.complete-subtraction-family-20"
+      ],
+      "hard": [
+        "k2.fact-family-missing-subtraction"
+      ]
+    }
+  },
+  {
+    "id": "skill.fact-families-subtraction.fact-family-reasoning",
+    "name": "Explain Fact Family Reasoning",
+    "description": "Justify subtraction solutions by referencing the related addition facts.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "fact-families-subtraction",
+    "ccss": [
+      "1.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 154,
+      "max": 178
+    },
+    "representations": [
+      "discussion",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.fact-family-explain"
+      ],
+      "medium": [
+        "k2.fact-family-justify"
+      ],
+      "hard": [
+        "k2.fact-family-open-response"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-subtraction-within-100.model-two-digit-subtraction",
+    "name": "Model Two-Digit Subtraction with Regrouping",
+    "description": "Use base-ten blocks to subtract within 100, regrouping tens into ones when needed.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "dynamic-subtraction-within-100",
+    "ccss": [
+      "2.NBT.B.7"
+    ],
+    "ritBand": {
+      "min": 165,
+      "max": 182
+    },
+    "representations": [
+      "base-ten-blocks",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "k2.subtract-two-digit-models"
+      ],
+      "medium": [
+        "k2.subtract-two-digit-regroup-models"
+      ],
+      "hard": [
+        "25.subtract-2-digit-base-ten"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-subtraction-within-100.use-place-value-strategies",
+    "name": "Use Place-Value Strategies for Subtraction within 100",
+    "description": "Decompose numbers into tens and ones or use compensation to subtract within 100.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "dynamic-subtraction-within-100",
+    "ccss": [
+      "2.NBT.B.5",
+      "2.NBT.B.7"
+    ],
+    "ritBand": {
+      "min": 165,
+      "max": 182
+    },
+    "representations": [
+      "strategy",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.subtract-two-digit-strategies"
+      ],
+      "medium": [
+        "25.subtract-two-digit-mental"
+      ],
+      "hard": [
+        "25.subtract-two-digit-choose-strategy"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-subtraction-within-100.subtraction-word-problems-100",
+    "name": "Solve Two-Digit Subtraction Word Problems",
+    "description": "Apply place-value subtraction strategies to story problems within 100.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "dynamic-subtraction-within-100",
+    "ccss": [
+      "2.NBT.B.7"
+    ],
+    "ritBand": {
+      "min": 165,
+      "max": 182
+    },
+    "representations": [
+      "story-context",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.subtraction-word-problems-100"
+      ],
+      "medium": [
+        "25.subtraction-two-step-100"
+      ],
+      "hard": [
+        "25.subtraction-explain-100"
+      ]
+    }
+  },
+  {
+    "id": "skill.addition-fact-drills.fluent-addition-10",
+    "name": "Build Fluency with Addition Facts to 10",
+    "description": "Practice rapid recall of single-digit addition facts up to sums of ten.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "addition-fact-drills",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 180
+    },
+    "representations": [
+      "timed-practice",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.addition-fact-drill-10"
+      ],
+      "medium": [
+        "k2.addition-fluency-mixed"
+      ],
+      "hard": [
+        "k2.addition-speed-drill"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.addition-fact-drills.fluent-addition-20",
+    "name": "Build Fluency with Addition Facts to 20",
+    "description": "Recall single-digit addition facts with sums up to twenty using games and drills.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "addition-fact-drills",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 180
+    },
+    "representations": [
+      "timed-practice",
+      "games"
+    ],
+    "practice": {
+      "easy": [
+        "k2.addition-fluency-20"
+      ],
+      "medium": [
+        "k2.addition-mixed-20"
+      ],
+      "hard": [
+        "k2.addition-flashcards-20"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.addition-fact-drills.addition-strategy-checks",
+    "name": "Monitor Addition Strategies for Fluency",
+    "description": "Self-check and adjust strategies when working toward addition fact fluency.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "addition-fact-drills",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 180
+    },
+    "representations": [
+      "metacognitive",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "k2.addition-strategy-check"
+      ],
+      "medium": [
+        "k2.addition-error-analysis"
+      ],
+      "hard": [
+        "k2.addition-strategy-reflection"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.subtraction-fact-drills.fluent-subtraction-10",
+    "name": "Build Fluency with Subtraction Facts to 10",
+    "description": "Practice rapid recall of subtraction facts with differences up to ten.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "subtraction-fact-drills",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 182
+    },
+    "representations": [
+      "timed-practice",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.subtraction-fact-drill-10"
+      ],
+      "medium": [
+        "k2.subtraction-fluency-mixed"
+      ],
+      "hard": [
+        "k2.subtraction-speed-drill"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.subtraction-fact-drills.fluent-subtraction-20",
+    "name": "Build Fluency with Subtraction Facts to 20",
+    "description": "Recall single-digit subtraction facts with minuends up to twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "subtraction-fact-drills",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 182
+    },
+    "representations": [
+      "timed-practice",
+      "games"
+    ],
+    "practice": {
+      "easy": [
+        "k2.subtraction-fluency-20"
+      ],
+      "medium": [
+        "k2.subtraction-mixed-20"
+      ],
+      "hard": [
+        "k2.subtraction-flashcards-20"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.subtraction-fact-drills.subtraction-strategy-checks",
+    "name": "Monitor Subtraction Strategies for Fluency",
+    "description": "Evaluate accuracy and adjust strategies while working toward subtraction fact fluency.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "subtraction-fact-drills",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 182
+    },
+    "representations": [
+      "metacognitive",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "k2.subtraction-strategy-check"
+      ],
+      "medium": [
+        "k2.subtraction-error-analysis"
+      ],
+      "hard": [
+        "k2.subtraction-strategy-reflection"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.even-odd-parity.identify-even-odd-models",
+    "name": "Identify Even and Odd Numbers with Models",
+    "description": "Use pairing and arrays to determine if numbers are even or odd within fifty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "even-odd-parity",
+    "ccss": [
+      "2.OA.C.3"
+    ],
+    "ritBand": {
+      "min": 168,
+      "max": 182
+    },
+    "representations": [
+      "manipulatives",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "k2.even-odd-pictures"
+      ],
+      "medium": [
+        "k2.even-odd-arrays"
+      ],
+      "hard": [
+        "k2.even-odd-interpret"
+      ]
+    }
+  },
+  {
+    "id": "skill.even-odd-parity.use-even-odd-rules",
+    "name": "Use Even/Odd Rules in Addition",
+    "description": "Predict whether sums are even or odd by analyzing addend parity.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "even-odd-parity",
+    "ccss": [
+      "2.OA.C.3"
+    ],
+    "ritBand": {
+      "min": 168,
+      "max": 182
+    },
+    "representations": [
+      "symbolic",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "k2.even-odd-addition"
+      ],
+      "medium": [
+        "k2.even-odd-patterns"
+      ],
+      "hard": [
+        "k2.even-odd-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.even-odd-parity.explain-even-odd-patterns",
+    "name": "Explain Even/Odd Patterns",
+    "description": "Use repeated reasoning to explain parity patterns in tables and charts.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "even-odd-parity",
+    "ccss": [
+      "2.OA.C.3"
+    ],
+    "ritBand": {
+      "min": 168,
+      "max": 182
+    },
+    "representations": [
+      "discussion",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "k2.even-odd-explain"
+      ],
+      "medium": [
+        "k2.even-odd-table"
+      ],
+      "hard": [
+        "25.even-odd-reason"
+      ]
+    }
+  },
+  {
+    "id": "skill.make-ten-fluency.fast-make-ten",
+    "name": "Quickly Recall Make-Ten Pairs",
+    "description": "Develop automatic recall of number pairs that sum to ten.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "make-ten-fluency",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 182
+    },
+    "representations": [
+      "timed-practice",
+      "ten-frame"
+    ],
+    "practice": {
+      "easy": [
+        "k2.make-ten-fluency"
+      ],
+      "medium": [
+        "k2.make-ten-speed"
+      ],
+      "hard": [
+        "k2.make-ten-card-game"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.make-ten-fluency.apply-make-ten-addition",
+    "name": "Apply Make-Ten to Solve Addition",
+    "description": "Use make-ten facts to compute sums within twenty efficiently.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "make-ten-fluency",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 182
+    },
+    "representations": [
+      "strategy",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.make-ten-application"
+      ],
+      "medium": [
+        "k2.make-ten-compute"
+      ],
+      "hard": [
+        "k2.make-ten-equation-choice"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.make-ten-fluency.use-make-ten-subtraction",
+    "name": "Use Make-Ten for Subtraction",
+    "description": "Transform subtraction problems using complementary make-ten facts.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "make-ten-fluency",
+    "ccss": [
+      "1.OA.C.6"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 182
+    },
+    "representations": [
+      "strategy",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.make-ten-subtraction"
+      ],
+      "medium": [
+        "k2.subtraction-make-ten"
+      ],
+      "hard": [
+        "k2.make-ten-subtraction-word"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.facts-within-20-application.solve-add-sub-within-20",
+    "name": "Solve Mixed Addition/Subtraction within 20",
+    "description": "Apply fact fluency to mixed addition and subtraction problems within twenty.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "facts-within-20-application",
+    "ccss": [
+      "1.OA.C.6",
+      "2.OA.B.2"
+    ],
+    "ritBand": {
+      "min": 162,
+      "max": 185
+    },
+    "representations": [
+      "symbolic",
+      "timed-practice"
+    ],
+    "practice": {
+      "easy": [
+        "k2.mixed-facts-20"
+      ],
+      "medium": [
+        "k2.mixed-facts-application"
+      ],
+      "hard": [
+        "k2.mixed-facts-word-problems"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.facts-within-20-application.choose-strategy-20",
+    "name": "Choose Efficient Strategies within 20",
+    "description": "Select from counting-on, make-ten, doubles, or fact recall to solve problems quickly.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "facts-within-20-application",
+    "ccss": [
+      "2.OA.B.2"
+    ],
+    "ritBand": {
+      "min": 162,
+      "max": 185
+    },
+    "representations": [
+      "strategy",
+      "discussion"
+    ],
+    "practice": {
+      "easy": [
+        "k2.choose-add-sub-strategy"
+      ],
+      "medium": [
+        "k2.strategy-match-add-sub"
+      ],
+      "hard": [
+        "k2.strategy-justify-20"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.facts-within-20-application.fluid-word-problems-20",
+    "name": "Apply Fact Fluency to Word Problems within 20",
+    "description": "Use fluent facts to solve and explain addition/subtraction story problems.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "addition-subtraction-memorization",
+    "topicId": "facts-within-20-application",
+    "ccss": [
+      "2.OA.B.2"
+    ],
+    "ritBand": {
+      "min": 162,
+      "max": 185
+    },
+    "representations": [
+      "story-context",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.word-problems-within-20"
+      ],
+      "medium": [
+        "k2.word-problems-mixed-20"
+      ],
+      "hard": [
+        "k2.word-problems-explain-20"
+      ]
+    }
+  },
+  {
+    "id": "skill.equal-groups-arrays.make-equal-groups",
+    "name": "Create Equal Groups with Objects",
+    "description": "Partition sets into equal groups and identify the number of groups and items.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "equal-groups-arrays",
+    "ccss": [
+      "2.OA.C.4",
+      "3.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 176,
+      "max": 188
+    },
+    "representations": [
+      "manipulatives",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.make-equal-groups"
+      ],
+      "medium": [
+        "25.build-arrays-equal-groups"
+      ],
+      "hard": [
+        "25.equal-groups-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.equal-groups-arrays.array-multiplication",
+    "name": "Model Multiplication with Arrays",
+    "description": "Use rectangular arrays to represent repeated addition situations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "equal-groups-arrays",
+    "ccss": [
+      "3.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 176,
+      "max": 188
+    },
+    "representations": [
+      "array",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "25.array-models-basic"
+      ],
+      "medium": [
+        "25.array-models-missing-factor"
+      ],
+      "hard": [
+        "25.array-models-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.equal-groups-arrays.relate-repeated-addition",
+    "name": "Relate Repeated Addition to Multiplication",
+    "description": "Write repeated addition and multiplication expressions for equal groups.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "equal-groups-arrays",
+    "ccss": [
+      "3.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 176,
+      "max": 188
+    },
+    "representations": [
+      "symbolic",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.repeated-addition-to-multiplication"
+      ],
+      "medium": [
+        "25.array-to-equation"
+      ],
+      "hard": [
+        "25.repeated-addition-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.static-multiplication.multiplication-sentences",
+    "name": "Write Multiplication Sentences for Arrays",
+    "description": "Translate equal groups and arrays into multiplication equations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "static-multiplication",
+    "ccss": [
+      "3.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 190
+    },
+    "representations": [
+      "array",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.write-multiplication-sentence"
+      ],
+      "medium": [
+        "25.write-equation-from-arrays"
+      ],
+      "hard": [
+        "25.multiplication-from-scenarios"
+      ]
+    }
+  },
+  {
+    "id": "skill.static-multiplication.multiplication-within-100",
+    "name": "Compute Multiplication within 100",
+    "description": "Use strategies such as skip-counting and arrays to multiply single-digit factors.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "static-multiplication",
+    "ccss": [
+      "3.OA.A.1",
+      "3.NBT.A.3"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 190
+    },
+    "representations": [
+      "strategy",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.multiply-single-digit-facts"
+      ],
+      "medium": [
+        "25.multiply-skip-count"
+      ],
+      "hard": [
+        "25.multiply-context-within-100"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.static-multiplication.explain-multiplication-models",
+    "name": "Explain Multiplication Models",
+    "description": "Describe how arrays, equal groups, and number lines represent multiplication situations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "static-multiplication",
+    "ccss": [
+      "3.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 190
+    },
+    "representations": [
+      "discussion",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "25.explain-multiplication-model"
+      ],
+      "medium": [
+        "25.compare-multiplication-models"
+      ],
+      "hard": [
+        "25.multiplication-justify-model"
+      ]
+    }
+  },
+  {
+    "id": "skill.unknown-factor-quotient.within-100",
+    "name": "Find Unknown Factors or Quotients",
+    "description": "Solve multiplication and division equations with an unknown number using arrays and fact families.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "static-multiplication",
+    "ccss": [
+      "3.OA.A.4",
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 186,
+      "max": 198
+    },
+    "representations": [
+      "array",
+      "area-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.unknown-factor-array"
+      ],
+      "medium": [
+        "25.fact-family-missing-factor"
+      ],
+      "hard": [
+        "25.unknown-factor-word"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.division-as-sharing.share-equally",
+    "name": "Share Sets Equally",
+    "description": "Divide a total into equal shares and interpret the quotient and remainder.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "division-as-sharing",
+    "ccss": [
+      "3.OA.A.2"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 190
+    },
+    "representations": [
+      "manipulatives",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.share-equally-objects"
+      ],
+      "medium": [
+        "25.share-equally-word-problems"
+      ],
+      "hard": [
+        "25.share-equally-remainders"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-as-sharing.write-division-equations",
+    "name": "Write Division Equations for Sharing",
+    "description": "Represent sharing situations with division equations and interpret unknowns.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "division-as-sharing",
+    "ccss": [
+      "3.OA.A.2"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 190
+    },
+    "representations": [
+      "symbolic",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.write-division-sentences"
+      ],
+      "medium": [
+        "25.write-division-from-models"
+      ],
+      "hard": [
+        "25.division-equations-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-as-sharing.relate-sharing-multiplication",
+    "name": "Relate Sharing to Multiplication",
+    "description": "Explain how division sharing situations connect to related multiplication facts.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "division-as-sharing",
+    "ccss": [
+      "3.OA.A.2"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 190
+    },
+    "representations": [
+      "discussion",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.relate-division-multiplication"
+      ],
+      "medium": [
+        "25.match-division-multiplication"
+      ],
+      "hard": [
+        "25.division-multiplication-reason"
+      ]
+    }
+  },
+  {
+    "id": "skill.skip-counting-multiplication-facts.skip-count-by-factor",
+    "name": "Skip Count by Factors",
+    "description": "Skip count by 2s, 3s, 4s, 5s, and 10s to support multiplication facts.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "skip-counting-multiplication-facts",
+    "ccss": [
+      "3.OA.B.5"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 192
+    },
+    "representations": [
+      "number-line",
+      "hundred-chart"
+    ],
+    "practice": {
+      "easy": [
+        "25.skip-count-by-2-5"
+      ],
+      "medium": [
+        "25.skip-count-by-3-4"
+      ],
+      "hard": [
+        "25.skip-count-start-any"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.skip-counting-multiplication-facts.skip-count-missing-multiples",
+    "name": "Find Missing Multiples in Skip-Counting Sequences",
+    "description": "Identify and fill missing numbers in skip-counting patterns for key factors.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "skip-counting-multiplication-facts",
+    "ccss": [
+      "3.OA.B.5",
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 192
+    },
+    "representations": [
+      "table",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.skip-count-missing-numbers"
+      ],
+      "medium": [
+        "25.multiples-complete-table"
+      ],
+      "hard": [
+        "25.skip-count-pattern-challenge"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.skip-counting-multiplication-facts.skip-count-word-problems",
+    "name": "Use Skip-Counting in Word Problems",
+    "description": "Apply skip-counting to solve real-world multiplication situations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "skip-counting-multiplication-facts",
+    "ccss": [
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 192
+    },
+    "representations": [
+      "story-context",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.skip-count-word-problems"
+      ],
+      "medium": [
+        "25.skip-count-compare-strategies"
+      ],
+      "hard": [
+        "25.skip-count-justify-solution"
+      ]
+    }
+  },
+  {
+    "id": "skill.multiply-by-multiples-of-10.decompose-multiple-of-10",
+    "name": "Decompose Multiples of 10 for Multiplication",
+    "description": "Break multiples of ten into tens and ones to prepare for multiplication.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "multiply-by-multiples-of-10",
+    "ccss": [
+      "3.NBT.A.3"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 200
+    },
+    "representations": [
+      "base-ten-blocks",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.decompose-multiples-of-10"
+      ],
+      "medium": [
+        "25.write-multiples-of-10"
+      ],
+      "hard": [
+        "25.decompose-10s-words"
+      ]
+    }
+  },
+  {
+    "id": "skill.multiply-by-multiples-of-10.multiply-single-digit-by-10s",
+    "name": "Multiply Single-Digit Numbers by Multiples of 10",
+    "description": "Use place-value patterns to multiply single-digit factors by multiples of ten.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "multiply-by-multiples-of-10",
+    "ccss": [
+      "3.NBT.A.3"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 200
+    },
+    "representations": [
+      "strategy",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.multiply-single-digit-by-10"
+      ],
+      "medium": [
+        "25.multiply-single-digit-10s-table"
+      ],
+      "hard": [
+        "25.multiply-single-digit-10s-word"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.multiply-by-multiples-of-10.use-distributive-10s",
+    "name": "Use the Distributive Property with Multiples of 10",
+    "description": "Break apart factors to multiply numbers like 6 × 30 using distributive reasoning.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-foundations",
+    "topicId": "multiply-by-multiples-of-10",
+    "ccss": [
+      "3.NBT.A.3"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 200
+    },
+    "representations": [
+      "area-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.distributive-multiples-of-10"
+      ],
+      "medium": [
+        "25.break-apart-multiples-of-10"
+      ],
+      "hard": [
+        "25.distributive-10s-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.multiplication-fact-strategies.use-commutative-property",
+    "name": "Use the Commutative Property for Multiplication Facts",
+    "description": "Apply the commutative property to derive unknown multiplication facts.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "multiplication-fact-strategies",
+    "ccss": [
+      "3.OA.B.5"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 198
+    },
+    "representations": [
+      "array",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.commutative-multiplication"
+      ],
+      "medium": [
+        "25.commutative-complete-table"
+      ],
+      "hard": [
+        "25.commutative-reasoning"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.multiplication-fact-strategies.use-double-and-half",
+    "name": "Use Doubling and Halving Strategies",
+    "description": "Leverage doubles and halving to compute multiplication facts efficiently.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "multiplication-fact-strategies",
+    "ccss": [
+      "3.OA.B.5"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 198
+    },
+    "representations": [
+      "strategy",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.double-and-half-multiplication"
+      ],
+      "medium": [
+        "25.strategy-multiplication-facts"
+      ],
+      "hard": [
+        "25.double-half-word-problems"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.multiplication-fact-strategies.use-area-models-facts",
+    "name": "Use Area Models for Multiplication Facts",
+    "description": "Interpret products using area models to reinforce fact strategies.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "multiplication-fact-strategies",
+    "ccss": [
+      "3.OA.B.5"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 198
+    },
+    "representations": [
+      "area-model",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "25.area-model-facts"
+      ],
+      "medium": [
+        "25.area-model-factor-missing"
+      ],
+      "hard": [
+        "25.area-model-compare-strategies"
+      ]
+    }
+  },
+  {
+    "id": "skill.multiplication-properties.identity-zero",
+    "name": "Use Identity and Zero Properties of Multiplication",
+    "description": "Explain and use 1×a=a and 0×a=0 to reason about multiplication facts.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "multiplication-fact-strategies",
+    "ccss": [
+      "3.OA.B.5"
+    ],
+    "ritBand": {
+      "min": 184,
+      "max": 196
+    },
+    "representations": [
+      "array",
+      "symbolic",
+      "discussion"
+    ],
+    "practice": {
+      "easy": [
+        "25.identity-property"
+      ],
+      "medium": [
+        "25.zero-property"
+      ],
+      "hard": [
+        "25.identity-zero-explain"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.division-fact-strategies.use-related-multiplication",
+    "name": "Use Related Multiplication Facts for Division",
+    "description": "Leverage known multiplication facts to determine quotients quickly.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "division-fact-strategies",
+    "ccss": [
+      "3.OA.C.7"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 198
+    },
+    "representations": [
+      "symbolic",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.related-facts-division"
+      ],
+      "medium": [
+        "25.related-facts-missing-factor"
+      ],
+      "hard": [
+        "25.related-facts-word-problems"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.division-fact-strategies.divide-using-repeated-subtraction",
+    "name": "Divide Using Repeated Subtraction",
+    "description": "Interpret division facts as repeated subtraction and verify quotients.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "division-fact-strategies",
+    "ccss": [
+      "3.OA.C.7"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 198
+    },
+    "representations": [
+      "number-line",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.repeated-subtraction-division"
+      ],
+      "medium": [
+        "25.repeated-subtraction-check"
+      ],
+      "hard": [
+        "25.repeated-subtraction-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-fact-strategies.divide-using-area-models",
+    "name": "Divide Using Area Models",
+    "description": "Partition arrays to interpret division facts and confirm related multiplication.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "division-fact-strategies",
+    "ccss": [
+      "3.OA.C.7"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 198
+    },
+    "representations": [
+      "array",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.area-model-division"
+      ],
+      "medium": [
+        "25.partition-array-division"
+      ],
+      "hard": [
+        "25.area-model-division-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.fact-families-multiplication-division.complete-family",
+    "name": "Complete Multiplication/Division Fact Families",
+    "description": "Fill in missing values in fact families connecting multiplication and division.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "fact-families-multiplication-division",
+    "ccss": [
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 200
+    },
+    "representations": [
+      "triangle-fact",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.multiplication-division-family"
+      ],
+      "medium": [
+        "25.fact-family-unknowns"
+      ],
+      "hard": [
+        "25.fact-family-context"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.fact-families-multiplication-division.generate-family",
+    "name": "Generate Fact Families from Models",
+    "description": "Use arrays and equal groups to produce related multiplication and division equations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "fact-families-multiplication-division",
+    "ccss": [
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 200
+    },
+    "representations": [
+      "array",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "25.generate-fact-family"
+      ],
+      "medium": [
+        "25.array-fact-family"
+      ],
+      "hard": [
+        "25.fact-family-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.fact-families-multiplication-division.apply-family-context",
+    "name": "Apply Fact Families in Context",
+    "description": "Solve story problems by leveraging known fact family relationships.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "fact-families-multiplication-division",
+    "ccss": [
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 182,
+      "max": 200
+    },
+    "representations": [
+      "story-context",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.fact-family-word-problems"
+      ],
+      "medium": [
+        "25.fact-family-two-step"
+      ],
+      "hard": [
+        "25.fact-family-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.mixed-fact-drills.mixed-fact-fluency",
+    "name": "Build Fluency with Mixed Multiplication and Division Facts",
+    "description": "Respond quickly to mixed multiplication and division facts within 10 × 10.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "mixed-fact-drills",
+    "ccss": [
+      "3.OA.C.7"
+    ],
+    "ritBand": {
+      "min": 184,
+      "max": 202
+    },
+    "representations": [
+      "timed-practice",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.mixed-facts-drill"
+      ],
+      "medium": [
+        "25.mixed-facts-random"
+      ],
+      "hard": [
+        "25.mixed-facts-speed"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.mixed-fact-drills.mixed-fact-strategy-monitor",
+    "name": "Monitor Strategies During Mixed Fact Practice",
+    "description": "Self-assess strategy use and accuracy for mixed multiplication/division drills.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "mixed-fact-drills",
+    "ccss": [
+      "3.OA.C.7"
+    ],
+    "ritBand": {
+      "min": 184,
+      "max": 202
+    },
+    "representations": [
+      "metacognitive",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.mixed-facts-check"
+      ],
+      "medium": [
+        "25.mixed-facts-error-analysis"
+      ],
+      "hard": [
+        "25.mixed-facts-reflection"
+      ]
+    }
+  },
+  {
+    "id": "skill.mixed-fact-drills.apply-mixed-facts-context",
+    "name": "Apply Mixed Facts to Story Problems",
+    "description": "Choose appropriate multiplication or division facts to solve context problems.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-memorization",
+    "topicId": "mixed-fact-drills",
+    "ccss": [
+      "3.OA.C.7"
+    ],
+    "ritBand": {
+      "min": 184,
+      "max": 202
+    },
+    "representations": [
+      "story-context",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.word-problems-mixed-facts"
+      ],
+      "medium": [
+        "25.word-problems-choose-operation"
+      ],
+      "hard": [
+        "25.word-problems-justify-operation"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-multiplication.model-multi-digit-multiplication",
+    "name": "Model Multi-Digit Multiplication with Area Models",
+    "description": "Use area models or base-ten blocks to multiply a two-digit number by a two-digit number.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "dynamic-multiplication",
+    "ccss": [
+      "4.NBT.B.5"
+    ],
+    "ritBand": {
+      "min": 188,
+      "max": 205
+    },
+    "representations": [
+      "area-model",
+      "base-ten-blocks"
+    ],
+    "practice": {
+      "easy": [
+        "25.area-model-2-digit"
+      ],
+      "medium": [
+        "25.area-model-decompose"
+      ],
+      "hard": [
+        "25.area-model-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-multiplication.partial-products-algorithm",
+    "name": "Use Partial Products for Multi-Digit Multiplication",
+    "description": "Decompose factors and record partial products to multiply within 1,000.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "dynamic-multiplication",
+    "ccss": [
+      "4.NBT.B.5"
+    ],
+    "ritBand": {
+      "min": 188,
+      "max": 205
+    },
+    "representations": [
+      "symbolic",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.partial-products-2-digit"
+      ],
+      "medium": [
+        "25.partial-products-3-digit"
+      ],
+      "hard": [
+        "25.partial-products-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.dynamic-multiplication.standard-algorithm-multiplication",
+    "name": "Apply the Standard Algorithm for Multiplication",
+    "description": "Multiply multi-digit numbers using the standard algorithm and explain regrouping.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "dynamic-multiplication",
+    "ccss": [
+      "4.NBT.B.5"
+    ],
+    "ritBand": {
+      "min": 188,
+      "max": 205
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.standard-algorithm-2-digit"
+      ],
+      "medium": [
+        "25.standard-algorithm-3-digit"
+      ],
+      "hard": [
+        "25.standard-algorithm-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.long-division.model-long-division",
+    "name": "Model Long Division with Base-Ten Blocks",
+    "description": "Partition base-ten blocks into equal groups to model division with two-digit divisors.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "long-division",
+    "ccss": [
+      "4.NBT.B.6"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 205
+    },
+    "representations": [
+      "base-ten-blocks",
+      "area-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.model-long-division"
+      ],
+      "medium": [
+        "25.divide-base-ten-blocks"
+      ],
+      "hard": [
+        "25.model-long-division-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.long-division.partial-quotients",
+    "name": "Use Partial Quotients for Long Division",
+    "description": "Apply partial quotient reasoning to divide by one- and two-digit divisors.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "long-division",
+    "ccss": [
+      "4.NBT.B.6"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 205
+    },
+    "representations": [
+      "symbolic",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.partial-quotients-basic"
+      ],
+      "medium": [
+        "25.partial-quotients-2-digit"
+      ],
+      "hard": [
+        "25.partial-quotients-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.long-division.standard-algorithm",
+    "name": "Apply the Standard Algorithm for Division",
+    "description": "Execute long division with remainders and interpret results in context.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "long-division",
+    "ccss": [
+      "4.NBT.B.6"
+    ],
+    "ritBand": {
+      "min": 190,
+      "max": 205
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.long-division-1-digit"
+      ],
+      "medium": [
+        "25.long-division-2-digit"
+      ],
+      "hard": [
+        "25.long-division-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.distributive-associative-strategies.distributive-over-addition",
+    "name": "Use the Distributive Property over Addition",
+    "description": "Break apart factors and apply distributive reasoning to simplify multiplication.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "distributive-associative-strategies",
+    "ccss": [
+      "3.OA.B.5"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 207
+    },
+    "representations": [
+      "area-model",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.distributive-property-basic"
+      ],
+      "medium": [
+        "25.distributive-property-expanded"
+      ],
+      "hard": [
+        "25.distributive-property-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.distributive-associative-strategies.associative-property",
+    "name": "Use the Associative Property to Reorder Factors",
+    "description": "Regroup factors to streamline multiplication and division calculations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "distributive-associative-strategies",
+    "ccss": [
+      "3.OA.B.5"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 207
+    },
+    "representations": [
+      "symbolic",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.associative-property-multiplication"
+      ],
+      "medium": [
+        "25.associative-property-apply"
+      ],
+      "hard": [
+        "25.associative-property-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.distributive-associative-strategies.factorization-strategies",
+    "name": "Factor Numbers to Support Multiplication and Division",
+    "description": "Decompose numbers into factors to simplify multi-step computations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "distributive-associative-strategies",
+    "ccss": [
+      "4.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 192,
+      "max": 207
+    },
+    "representations": [
+      "symbolic",
+      "prime-factor-tree"
+    ],
+    "practice": {
+      "easy": [
+        "25.factorization-basic"
+      ],
+      "medium": [
+        "25.factorization-problem-solving"
+      ],
+      "hard": [
+        "25.factorization-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.multi-step-word-problems.analyze-two-step-problems",
+    "name": "Analyze Two-Step Word Problems",
+    "description": "Identify operations and intermediate steps needed to solve multi-step problems.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "multi-step-word-problems",
+    "ccss": [
+      "4.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 194,
+      "max": 208
+    },
+    "representations": [
+      "story-context",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.two-step-word-problems"
+      ],
+      "medium": [
+        "25.two-step-problem-reason"
+      ],
+      "hard": [
+        "25.two-step-justify-solution"
+      ]
+    }
+  },
+  {
+    "id": "skill.multi-step-word-problems.write-equations-with-letter",
+    "name": "Write Equations with Letters for Word Problems",
+    "description": "Represent multi-step situations with equations that use symbols for unknowns.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "multi-step-word-problems",
+    "ccss": [
+      "4.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 194,
+      "max": 208
+    },
+    "representations": [
+      "symbolic",
+      "story-context"
+    ],
+    "practice": {
+      "easy": [
+        "25.write-equations-two-step"
+      ],
+      "medium": [
+        "25.write-equations-letter"
+      ],
+      "hard": [
+        "25.write-equations-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.multi-step-word-problems.evaluate-reasonableness",
+    "name": "Evaluate Reasonableness of Solutions",
+    "description": "Use estimation and inverse operations to check multi-step answers for reasonableness.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "multiplication-division-mastery",
+    "topicId": "multi-step-word-problems",
+    "ccss": [
+      "4.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 194,
+      "max": 208
+    },
+    "representations": [
+      "strategy",
+      "metacognitive"
+    ],
+    "practice": {
+      "easy": [
+        "25.estimate-multi-step"
+      ],
+      "medium": [
+        "25.check-reasonableness"
+      ],
+      "hard": [
+        "25.evaluate-solution-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-as-grouping.create-equal-groups",
+    "name": "Create Equal Groups to Model Division",
+    "description": "Form groups of a given size to determine the quotient and interpret remainders.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "division-as-grouping",
+    "ccss": [
+      "3.OA.A.2"
+    ],
+    "ritBand": {
+      "min": 176,
+      "max": 190
+    },
+    "representations": [
+      "manipulatives",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.create-equal-groups"
+      ],
+      "medium": [
+        "25.create-equal-groups-word"
+      ],
+      "hard": [
+        "25.create-groups-remainder"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-as-grouping.number-line-division",
+    "name": "Use Number Lines for Repeated Subtraction",
+    "description": "Interpret division as repeated jumps on number lines to find quotients.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "division-as-grouping",
+    "ccss": [
+      "3.OA.A.2"
+    ],
+    "ritBand": {
+      "min": 176,
+      "max": 190
+    },
+    "representations": [
+      "number-line",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.repeat-subtraction-number-line"
+      ],
+      "medium": [
+        "25.number-line-division-missing"
+      ],
+      "hard": [
+        "25.number-line-division-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-as-grouping.write-grouping-equations",
+    "name": "Write Division Equations for Grouping",
+    "description": "Express grouping scenarios with division equations and unknowns.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "division-as-grouping",
+    "ccss": [
+      "3.OA.A.2"
+    ],
+    "ritBand": {
+      "min": 176,
+      "max": 190
+    },
+    "representations": [
+      "symbolic",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.grouping-equations-basic"
+      ],
+      "medium": [
+        "25.grouping-equations-unknown"
+      ],
+      "hard": [
+        "25.grouping-equations-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.relate-division-multiplication.area-model-relate",
+    "name": "Relate Division to Multiplication with Area Models",
+    "description": "Use arrays and area models to show how division undoes multiplication.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "relate-division-multiplication",
+    "ccss": [
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 192
+    },
+    "representations": [
+      "area-model",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.area-model-related-facts"
+      ],
+      "medium": [
+        "25.match-division-to-multiplication"
+      ],
+      "hard": [
+        "25.area-model-reasoning"
+      ]
+    }
+  },
+  {
+    "id": "skill.relate-division-multiplication.fact-family-reason",
+    "name": "Explain Division/Multiplication Fact Relationships",
+    "description": "Use fact families to justify division answers using multiplication.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "relate-division-multiplication",
+    "ccss": [
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 192
+    },
+    "representations": [
+      "triangle-fact",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.fact-family-reason-division"
+      ],
+      "medium": [
+        "25.fact-family-missing-number-division"
+      ],
+      "hard": [
+        "25.fact-family-justify-division"
+      ]
+    }
+  },
+  {
+    "id": "skill.relate-division-multiplication.choose-related-strategy",
+    "name": "Choose Related Fact Strategies",
+    "description": "Decide which multiplication facts help solve a division problem efficiently.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "relate-division-multiplication",
+    "ccss": [
+      "3.OA.B.6"
+    ],
+    "ritBand": {
+      "min": 178,
+      "max": 192
+    },
+    "representations": [
+      "strategy",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.choose-related-division-strategy"
+      ],
+      "medium": [
+        "25.related-strategy-match"
+      ],
+      "hard": [
+        "25.related-strategy-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-word-problems.interpret-division-situations",
+    "name": "Interpret Division Situations",
+    "description": "Distinguish between equal sharing and grouping scenarios in word problems.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "division-word-problems",
+    "ccss": [
+      "3.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "story-context",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.identify-division-situations"
+      ],
+      "medium": [
+        "25.match-division-models"
+      ],
+      "hard": [
+        "25.interpret-division-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-word-problems.solve-division-word-problems",
+    "name": "Solve Division Word Problems",
+    "description": "Use multiplication or division strategies to solve real-world problems with unknowns.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "division-word-problems",
+    "ccss": [
+      "3.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "story-context",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.division-word-problems-basic"
+      ],
+      "medium": [
+        "25.division-word-problems-missing"
+      ],
+      "hard": [
+        "25.division-word-problems-two-step"
+      ]
+    }
+  },
+  {
+    "id": "skill.division-word-problems.explain-division-solutions",
+    "name": "Explain Division Solutions",
+    "description": "Communicate strategies, quotients, and remainders using words and equations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "division-foundations",
+    "topicId": "division-word-problems",
+    "ccss": [
+      "3.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 195
+    },
+    "representations": [
+      "discussion",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.explain-division-solution"
+      ],
+      "medium": [
+        "25.write-division-explanation"
+      ],
+      "hard": [
+        "25.evaluate-division-solution"
+      ]
+    }
+  },
+  {
+    "id": "skill.additive-word-problems.join-separate-problems",
+    "name": "Solve Join and Separate Word Problems",
+    "description": "Represent and solve addition/subtraction situations with unknown parts or totals.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "additive-word-problems",
+    "ccss": [
+      "1.OA.A.1",
+      "2.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 155,
+      "max": 185
+    },
+    "representations": [
+      "story-context",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "k2.join-separate-problems-10"
+      ],
+      "medium": [
+        "k2.join-separate-problems-20"
+      ],
+      "hard": [
+        "k2.join-separate-equations"
+      ]
+    }
+  },
+  {
+    "id": "skill.additive-word-problems.compare-problems",
+    "name": "Solve Compare Word Problems",
+    "description": "Use bar models or number lines to solve comparison situations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "additive-word-problems",
+    "ccss": [
+      "2.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 155,
+      "max": 185
+    },
+    "representations": [
+      "bar-model",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "k2.compare-word-problems"
+      ],
+      "medium": [
+        "k2.compare-bar-model"
+      ],
+      "hard": [
+        "k2.compare-two-step"
+      ]
+    }
+  },
+  {
+    "id": "skill.additive-word-problems.choose-additive-strategy",
+    "name": "Choose Strategies for Additive Problems",
+    "description": "Decide whether to add or subtract and select appropriate representations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "additive-word-problems",
+    "ccss": [
+      "2.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 155,
+      "max": 185
+    },
+    "representations": [
+      "strategy",
+      "discussion"
+    ],
+    "practice": {
+      "easy": [
+        "k2.choose-additive-strategy"
+      ],
+      "medium": [
+        "k2.analyze-additive-problems"
+      ],
+      "hard": [
+        "25.additive-strategy-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.comparison-word-problems.compare-unknowns",
+    "name": "Solve Comparison Word Problems with Unknowns",
+    "description": "Represent unknown start, change, or result in comparison situations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "comparison-word-problems",
+    "ccss": [
+      "2.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 190
+    },
+    "representations": [
+      "bar-model",
+      "equations"
+    ],
+    "practice": {
+      "easy": [
+        "k2.comparison-unknown-result"
+      ],
+      "medium": [
+        "k2.comparison-unknown-change"
+      ],
+      "hard": [
+        "25.comparison-unknown-start"
+      ]
+    }
+  },
+  {
+    "id": "skill.comparison-word-problems.compare-languages",
+    "name": "Interpret Language in Comparison Problems",
+    "description": "Analyze words like more, fewer, and difference to map comparison structures.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "comparison-word-problems",
+    "ccss": [
+      "2.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 190
+    },
+    "representations": [
+      "story-context",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-language-matching"
+      ],
+      "medium": [
+        "25.compare-structure-sort"
+      ],
+      "hard": [
+        "25.compare-language-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.comparison-word-problems.draw-models-comparison",
+    "name": "Draw Models for Comparison Situations",
+    "description": "Use tape diagrams or bar models to represent comparison problems.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "comparison-word-problems",
+    "ccss": [
+      "2.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 160,
+      "max": 190
+    },
+    "representations": [
+      "bar-model",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-draw-bar"
+      ],
+      "medium": [
+        "25.compare-tape-diagram"
+      ],
+      "hard": [
+        "25.compare-model-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.equal-groups-word-problems.interpret-equal-groups-context",
+    "name": "Interpret Equal Groups Word Problems",
+    "description": "Determine whether contexts require multiplication or division solutions.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "equal-groups-word-problems",
+    "ccss": [
+      "3.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 198
+    },
+    "representations": [
+      "story-context",
+      "strategy"
+    ],
+    "practice": {
+      "easy": [
+        "25.equal-groups-interpret"
+      ],
+      "medium": [
+        "25.equal-groups-classify"
+      ],
+      "hard": [
+        "25.equal-groups-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.equal-groups-word-problems.solve-equal-groups-multiplication",
+    "name": "Solve Equal Groups Problems with Multiplication",
+    "description": "Use multiplication strategies to solve equal groups problems within 100.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "equal-groups-word-problems",
+    "ccss": [
+      "3.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 198
+    },
+    "representations": [
+      "symbolic",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.equal-groups-multiply"
+      ],
+      "medium": [
+        "25.equal-groups-table"
+      ],
+      "hard": [
+        "25.equal-groups-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.equal-groups-word-problems.solve-equal-groups-division",
+    "name": "Solve Equal Groups Problems with Division",
+    "description": "Apply division strategies to equal groups problems including remainders.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "equal-groups-word-problems",
+    "ccss": [
+      "3.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 175,
+      "max": 198
+    },
+    "representations": [
+      "symbolic",
+      "array"
+    ],
+    "practice": {
+      "easy": [
+        "25.equal-groups-division"
+      ],
+      "medium": [
+        "25.equal-groups-division-remainder"
+      ],
+      "hard": [
+        "25.equal-groups-division-word"
+      ]
+    }
+  },
+  {
+    "id": "skill.two-step-word-problems.plan-two-step",
+    "name": "Plan Solution Steps for Two-Step Problems",
+    "description": "Sequence operations needed to solve two-step situations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "two-step-word-problems",
+    "ccss": [
+      "3.OA.D.8"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 200
+    },
+    "representations": [
+      "strategy",
+      "story-context"
+    ],
+    "practice": {
+      "easy": [
+        "25.plan-two-step-solution"
+      ],
+      "medium": [
+        "25.choose-operations-two-step"
+      ],
+      "hard": [
+        "25.plan-two-step-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.two-step-word-problems.solve-two-step",
+    "name": "Solve and Record Two-Step Problems",
+    "description": "Compute two-step solutions and represent each step with equations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "two-step-word-problems",
+    "ccss": [
+      "3.OA.D.8"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 200
+    },
+    "representations": [
+      "symbolic",
+      "story-context"
+    ],
+    "practice": {
+      "easy": [
+        "25.solve-two-step-problems"
+      ],
+      "medium": [
+        "25.solve-two-step-equations"
+      ],
+      "hard": [
+        "25.two-step-mixed-operations"
+      ]
+    }
+  },
+  {
+    "id": "skill.two-step-word-problems.check-two-step-solutions",
+    "name": "Check Two-Step Solutions",
+    "description": "Use estimation or inverse operations to verify multi-step answers.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "operations-word-problems",
+    "topicId": "two-step-word-problems",
+    "ccss": [
+      "3.OA.D.8"
+    ],
+    "ritBand": {
+      "min": 180,
+      "max": 200
+    },
+    "representations": [
+      "strategy",
+      "metacognitive"
+    ],
+    "practice": {
+      "easy": [
+        "25.check-two-step-answers"
+      ],
+      "medium": [
+        "25.estimate-two-step"
+      ],
+      "hard": [
+        "25.check-two-step-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.factors-and-multiples.find-factors",
+    "name": "Find Factors of Whole Numbers",
+    "description": "List all factor pairs for numbers up to 100 using arrays and division.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "factors-and-multiples",
+    "ccss": [
+      "4.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "array",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.find-factors"
+      ],
+      "medium": [
+        "25.factor-pairs-table"
+      ],
+      "hard": [
+        "25.find-factors-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.factors-and-multiples.identify-multiples",
+    "name": "Identify Multiples of Whole Numbers",
+    "description": "Use skip-counting and multiplication facts to determine multiples within 1,000.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "factors-and-multiples",
+    "ccss": [
+      "4.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "table",
+      "number-line"
+    ],
+    "practice": {
+      "easy": [
+        "25.identify-multiples"
+      ],
+      "medium": [
+        "25.multiples-compare"
+      ],
+      "hard": [
+        "25.multiples-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.factors-and-multiples.determine-prime-composite",
+    "name": "Determine if Numbers Are Prime or Composite",
+    "description": "Analyze factor sets to classify numbers as prime or composite.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "factors-and-multiples",
+    "ccss": [
+      "4.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "array",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.prime-composite-basic"
+      ],
+      "medium": [
+        "25.prime-composite-table"
+      ],
+      "hard": [
+        "25.prime-composite-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.patterns-and-rules.generate-pattern",
+    "name": "Generate Numerical Patterns",
+    "description": "Create patterns using rules involving addition or multiplication.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "patterns-and-rules",
+    "ccss": [
+      "4.OA.C.5"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "table",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "25.generate-patterns"
+      ],
+      "medium": [
+        "25.pattern-rule-table"
+      ],
+      "hard": [
+        "25.generate-pattern-mixed"
+      ]
+    }
+  },
+  {
+    "id": "skill.patterns-and-rules.describe-pattern-feature",
+    "name": "Describe Pattern Features",
+    "description": "Explain relationships between pattern terms using verbal descriptions and equations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "patterns-and-rules",
+    "ccss": [
+      "4.OA.C.5"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "discussion",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.describe-pattern"
+      ],
+      "medium": [
+        "25.pattern-feature-explain"
+      ],
+      "hard": [
+        "25.pattern-feature-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.patterns-and-rules.graph-patterns",
+    "name": "Graph Patterns on Coordinate Grids",
+    "description": "Plot pattern terms on coordinate axes to visualize growth.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "patterns-and-rules",
+    "ccss": [
+      "5.OA.B.3"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "coordinate-grid",
+      "visual"
+    ],
+    "practice": {
+      "easy": [
+        "25.graph-pattern-points"
+      ],
+      "medium": [
+        "25.graph-pattern-extend"
+      ],
+      "hard": [
+        "25.graph-pattern-interpret"
+      ]
+    }
+  },
+  {
+    "id": "skill.numerical-expressions.evaluate-parentheses",
+    "name": "Evaluate Expressions with Parentheses",
+    "description": "Apply order of operations with parentheses to compute numerical expressions.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "numerical-expressions",
+    "ccss": [
+      "5.OA.A.1"
+    ],
+    "ritBand": {
+      "min": 198,
+      "max": 210
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.evaluate-parentheses"
+      ],
+      "medium": [
+        "25.parentheses-multiple-steps"
+      ],
+      "hard": [
+        "25.parentheses-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.numerical-expressions.write-numerical-expression",
+    "name": "Write Numerical Expressions from Verbal Descriptions",
+    "description": "Translate words into numerical expressions using parentheses and multiple operations.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "numerical-expressions",
+    "ccss": [
+      "5.OA.A.2"
+    ],
+    "ritBand": {
+      "min": 198,
+      "max": 210
+    },
+    "representations": [
+      "symbolic",
+      "story-context"
+    ],
+    "practice": {
+      "easy": [
+        "25.write-expression-words"
+      ],
+      "medium": [
+        "25.write-expression-multi-step"
+      ],
+      "hard": [
+        "25.write-expression-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.numerical-expressions.compare-expressions",
+    "name": "Compare Numerical Expressions Without Evaluating",
+    "description": "Use structural reasoning to compare the value of expressions.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "numerical-expressions",
+    "ccss": [
+      "5.OA.A.2"
+    ],
+    "ritBand": {
+      "min": 198,
+      "max": 210
+    },
+    "representations": [
+      "discussion",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.compare-expression-structure"
+      ],
+      "medium": [
+        "25.expression-reasoning"
+      ],
+      "hard": [
+        "25.expression-justify-compare"
+      ]
+    }
+  },
+  {
+    "id": "skill.intro-equations-inequalities.write-equations-with-letters",
+    "name": "Write Equations with Letters for Unknowns",
+    "description": "Represent arithmetic relationships using letters and understand equality.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "intro-equations-inequalities",
+    "ccss": [
+      "3.OA.D.8",
+      "4.OA.A.3"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 215
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.write-equations-letter-unknown"
+      ],
+      "medium": [
+        "25.write-equations-balance"
+      ],
+      "hard": [
+        "25.write-equations-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.intro-equations-inequalities.solve-simple-equations",
+    "name": "Solve Simple Equations",
+    "description": "Use inverse operations to solve one-step equations with whole numbers.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "intro-equations-inequalities",
+    "ccss": [
+      "6.EE.B.5",
+      "6.EE.B.7"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 215
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.solve-one-step-equations"
+      ],
+      "medium": [
+        "25.solve-equations-balance"
+      ],
+      "hard": [
+        "25.solve-equations-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.intro-equations-inequalities.graph-inequalities",
+    "name": "Graph and Interpret Inequalities",
+    "description": "Represent solutions to inequalities on number lines and interpret them in context.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "intro-equations-inequalities",
+    "ccss": [
+      "6.EE.B.8"
+    ],
+    "ritBand": {
+      "min": 200,
+      "max": 215
+    },
+    "representations": [
+      "number-line",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.graph-inequalities"
+      ],
+      "medium": [
+        "25.interpret-inequalities"
+      ],
+      "hard": [
+        "25.inequalities-word-problems"
+      ]
+    }
+  },
+  {
+    "id": "skill.subtraction-as-unknown-addend.rewrite",
+    "name": "Rewrite Subtraction as Unknown-Addend",
+    "description": "Solve subtraction by writing an equivalent unknown-addend equation.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "subtraction-foundations",
+    "topicId": "count-back-count-up",
+    "ccss": [
+      "1.OA.B.4"
+    ],
+    "ritBand": {
+      "min": 158,
+      "max": 175
+    },
+    "representations": [
+      "number-bond",
+      "number-line",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "k2.rewrite-subtraction-unknown"
+      ],
+      "medium": [
+        "k2.count-up-find-addend"
+      ],
+      "hard": [
+        "k2.subtract-to-add-word"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.k-decompose.decompose-to-10-multiple-ways",
+    "name": "Decompose Numbers to 10",
+    "description": "Show numbers to ten as pairs in multiple ways using manipulatives and drawings.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "foundations-of-counting",
+    "topicId": "counting-within-10",
+    "ccss": [
+      "K.OA.A.3",
+      "K.OA.A.4"
+    ],
+    "ritBand": {
+      "min": 140,
+      "max": 155
+    },
+    "representations": [
+      "number-bond",
+      "ten-frame",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "k2.decompose-5-train"
+      ],
+      "medium": [
+        "k2.decompose-10-bonds"
+      ],
+      "hard": [
+        "k2.decompose-10-equations"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.k-fluency.add-sub-within-5",
+    "name": "Add and Subtract Fluently within 5",
+    "description": "Develop automaticity with addition and subtraction facts within five using bead stair, fingers, and ten-frames.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "foundations-of-counting",
+    "topicId": "count-story-problems-5",
+    "ccss": [
+      "K.OA.A.5"
+    ],
+    "ritBand": {
+      "min": 135,
+      "max": 150
+    },
+    "representations": [
+      "bead-stair",
+      "ten-frame",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "k2.fact-fluency-5"
+      ],
+      "medium": [
+        "k2.fact-flashcards-5"
+      ],
+      "hard": [
+        "k2.fact-tell-fingers"
+      ]
+    },
+    "mentalMathEligible": true
+  },
+  {
+    "id": "skill.arithmetic-patterns.tables-oa",
+    "name": "Identify Arithmetic Patterns in Tables",
+    "description": "Find and explain addition and multiplication patterns in tables and on the hundred chart.",
+    "domainId": "operations-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "patterns-and-rules",
+    "ccss": [
+      "3.OA.D.9"
+    ],
+    "ritBand": {
+      "min": 186,
+      "max": 198
+    },
+    "representations": [
+      "table",
+      "hundred-chart",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.patterns-addition-table"
+      ],
+      "medium": [
+        "25.patterns-multiplication-table"
+      ],
+      "hard": [
+        "25.patterns-explain-rule"
+      ]
+    }
+  }
+]

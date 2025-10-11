@@ -14,13 +14,22 @@ import {
 import { Button, Card } from '../../../components/ui';
 import { curriculumMaterials } from '../../../domains/curriculum/materials';
 import type { LessonSegment, PresentationSegmentType } from '../types';
+import type { SegmentTimeline } from '@monte/types';
 import { InventoryPanel } from './InventoryPanel';
 import { LessonInventoryProvider } from '../../../domains/curriculum/inventory/context';
 import { SegmentPreview } from './SegmentPreview';
+import { featureTimeline } from '../../../config/features';
+import { TimelineProvider } from '../../../domains/curriculum/timeline/context';
+import { createTimelineStore } from '../../../domains/curriculum/timeline/store';
+import TimelineEditor from '../../../domains/curriculum/timeline/TimelineEditor';
+import { ensureSegmentTimeline } from '../../../domains/curriculum/utils/timeline';
+
+const EMPTY_TIMELINE: SegmentTimeline = { version: 1, steps: [] };
 
 export const LessonWorkspace = () => {
   const { lessonDocument, materialInventory, selectedSegment } = useEditorComputed();
   const { scenarioKindOptions, representationOptions } = useEditorOptions();
+  const timelineStore = createTimelineStore();
   const {
     handleLessonMaterialChange,
     handleAddLessonMaterial,
@@ -55,6 +64,7 @@ export const LessonWorkspace = () => {
     handleSegmentMaterialBankChange,
     registerInventorySnapshot,
     selectSegment,
+    handleSegmentTimelineUpdate,
   } = useEditorActions();
   const { selectedSegmentId } = useEditorSelection();
 
@@ -146,6 +156,24 @@ export const LessonWorkspace = () => {
           />
         </div>
       </Card>
+
+      {featureTimeline && lessonDocument() && selectedSegment() && (() => {
+        const doc = lessonDocument();
+        const segment = selectedSegment();
+        if (!doc || !segment) return null;
+        const timeline = ensureSegmentTimeline(segment).timeline ?? EMPTY_TIMELINE;
+        return (
+          <TimelineProvider store={timelineStore}>
+            <TimelineEditor
+              lessonId={doc.lesson.id}
+              segmentId={segment.id}
+              inventory={doc.lesson.materialInventory}
+              timeline={timeline}
+              onApplyTimeline={(nextTimeline) => handleSegmentTimelineUpdate(segment.id, nextTimeline)}
+            />
+          </TimelineProvider>
+        );
+      })()}
 
       <Card variant="soft" class="space-y-4 p-5">
         <div class="flex items-center justify-between">

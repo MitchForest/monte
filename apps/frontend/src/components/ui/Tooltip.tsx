@@ -22,8 +22,9 @@ const Content: Component<TooltipContentPropsExtended> = (props) => {
   );
 };
 
-export const Tooltip = Object.assign(KTooltip, {
+export const Tooltip = {
+  ...KTooltip,
   Content,
-});
+} as typeof KTooltip;
 
 export default Tooltip;
