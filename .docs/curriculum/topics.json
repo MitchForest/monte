@@ -30,7 +30,7 @@
       "K.OA.A.3",
       "K.OA.A.4"
     ],
-    "priority": 2,
+    "priority": 3,
     "prerequisiteTopicIds": [
       "counting-within-5"
     ]
@@ -48,7 +48,7 @@
       "K.CC.C.6",
       "K.CC.C.7"
     ],
-    "priority": 3,
+    "priority": 4,
     "prerequisiteTopicIds": [
       "counting-within-5"
     ]
@@ -807,11 +807,16 @@
     },
     "ccssFocus": [
       "5.OA.A.1",
-      "5.OA.A.2"
+      "5.OA.A.2",
+      "6.EE.A.1",
+      "6.EE.A.2",
+      "6.EE.A.3",
+      "6.EE.A.4"
     ],
     "priority": 3,
     "prerequisiteTopicIds": [
       "distributive-associative-strategies",
+      "evaluate-numerical-expressions",
       "patterns-and-rules"
     ]
   },
@@ -921,7 +926,8 @@
     ],
     "priority": 1,
     "prerequisiteTopicIds": [
-      "compare-unit-fractions"
+      "compare-unit-fractions",
+      "unit-fractions-number-lines"
     ]
   },
   {
@@ -973,6 +979,7 @@
     ],
     "priority": 4,
     "prerequisiteTopicIds": [
+      "benchmark-fractions",
       "compare-unlike-fractions"
     ]
   },
@@ -1064,6 +1071,24 @@
     "priority": 1,
     "prerequisiteTopicIds": [
       "counting-within-10"
+    ]
+  },
+  {
+    "id": "classify-and-record-data",
+    "unitId": "measurement-foundations",
+    "name": "Classify and Record Data",
+    "description": "Sort objects by shared attributes and record category results on charts.",
+    "ritRange": {
+      "min": 150,
+      "max": 170
+    },
+    "ccssFocus": [
+      "K.MD.B.3"
+    ],
+    "priority": 2,
+    "prerequisiteTopicIds": [
+      "compare-length-weight-capacity",
+      "classify-and-record-data"
     ]
   },
   {
@@ -1787,6 +1812,7 @@
     ],
     "priority": 2,
     "prerequisiteTopicIds": [
+      "balance-contexts",
       "repeating-growing-patterns"
     ]
   },
@@ -1875,7 +1901,8 @@
     ],
     "priority": 1,
     "prerequisiteTopicIds": [
-      "numerical-expressions"
+      "numerical-expressions",
+      "pattern-rules-arithmetic-structure"
     ]
   },
   {
@@ -1888,11 +1915,14 @@
       "max": 212
     },
     "ccssFocus": [
-      "6.EE.A.1",
-      "6.EE.B.5"
+      "1.OA.D.8",
+      "6.EE.B.5",
+      "6.EE.B.6",
+      "6.EE.B.7"
     ],
     "priority": 2,
     "prerequisiteTopicIds": [
+      "evaluate-numerical-expressions",
       "intro-equations-inequalities",
       "multi-step-problem-solving"
     ]
@@ -1908,12 +1938,15 @@
     },
     "ccssFocus": [
       "5.G.A.1",
+      "5.G.A.2",
       "6.EE.C.9"
     ],
     "priority": 3,
     "prerequisiteTopicIds": [
       "coordinate-plane-graphing",
-      "input-output-tables"
+      "equations-with-variables",
+      "input-output-tables",
+      "two-patterns"
     ]
   },
   {
@@ -2490,7 +2523,8 @@
     "priority": 2,
     "prerequisiteTopicIds": [
       "add-subtract-like-denominator",
-      "benchmark-fractions"
+      "benchmark-fractions",
+      "generate-equivalent-fractions"
     ]
   },
   {
@@ -2509,7 +2543,8 @@
     ],
     "priority": 3,
     "prerequisiteTopicIds": [
-      "fractions-of-sets"
+      "fractions-of-sets",
+      "multiply-fractions-by-whole-numbers"
     ]
   },
   {
@@ -2527,6 +2562,24 @@
     "priority": 4,
     "prerequisiteTopicIds": [
       "fraction-multiplication"
+    ]
+  },
+  {
+    "id": "two-patterns",
+    "unitId": "patterns-algebraic-thinking",
+    "name": "Paired Patterns",
+    "description": "Generate and analyze two numerical patterns using given rules and corresponding terms.",
+    "ritRange": {
+      "min": 195,
+      "max": 212
+    },
+    "ccssFocus": [
+      "5.OA.B.3"
+    ],
+    "priority": 3,
+    "prerequisiteTopicIds": [
+      "input-output-tables",
+      "pattern-rules-arithmetic-structure"
     ]
   }
 ]

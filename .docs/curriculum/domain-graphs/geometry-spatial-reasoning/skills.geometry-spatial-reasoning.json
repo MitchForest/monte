@@ -92,6 +92,66 @@
     }
   },
   {
+    "id": "skill.shape-modeling.build-with-sticks",
+    "name": "Build Shapes with Sticks",
+    "description": "Use adjustable sticks to model common plane shapes and explain the attributes of each model.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "identify-2d-3d-shapes",
+    "ccss": [
+      "K.G.B.5"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 165
+    },
+    "representations": [
+      "stick-box",
+      "manipulatives"
+    ],
+    "practice": {
+      "easy": [
+        "k2.build-stick-triangle"
+      ],
+      "medium": [
+        "k2.build-stick-rectangles"
+      ],
+      "hard": [
+        "k2.build-stick-hexagon"
+      ]
+    }
+  },
+  {
+    "id": "skill.shape-modeling.draw-with-insets",
+    "name": "Draw Shapes with Insets",
+    "description": "Trace and draw plane shapes using metal insets, attending to sides and corners.",
+    "domainId": "geometry-spatial-reasoning",
+    "unitId": "shape-foundations",
+    "topicId": "compose-decompose-shapes",
+    "ccss": [
+      "K.G.B.5"
+    ],
+    "ritBand": {
+      "min": 155,
+      "max": 170
+    },
+    "representations": [
+      "metal-inset",
+      "drawing"
+    ],
+    "practice": {
+      "easy": [
+        "k2.trace-inset-circle"
+      ],
+      "medium": [
+        "k2.trace-inset-rectangles"
+      ],
+      "hard": [
+        "k2.draw-inset-composite"
+      ]
+    }
+  },
+  {
     "id": "skill.describe-positions.use-positional-words",
     "name": "Use Positional Words",
     "description": "Describe the position of objects using terms such as above, below, beside, and next to.",

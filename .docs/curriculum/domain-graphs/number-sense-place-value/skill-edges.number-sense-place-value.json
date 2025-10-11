@@ -259,6 +259,13 @@
     "rationale": "After counting quantities, learners link them to written numerals."
   },
   {
+    "id": "edge.classify-and-record-data.counting-foundation",
+    "sourceSkillId": "skill.counting-within-10.count-scattered-sets-10",
+    "targetSkillId": "skill.classify-and-record-data.sort-objects",
+    "type": "prereq_core",
+    "rationale": "Accurate counting of mixed sets supports verifying totals while sorting into categories."
+  },
+  {
     "id": "edge.counting-within-5.sequence-1",
     "sourceSkillId": "skill.counting-within-5.count-sequence-to-5",
     "targetSkillId": "skill.counting-within-5.match-objects-to-count",

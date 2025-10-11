@@ -6,92 +6,242 @@ import {
   onCleanup,
   onMount,
   useContext,
+  type Accessor,
 } from 'solid-js';
 import type { UserProfile, UserRole } from '@monte/types';
+import { toast } from 'solid-sonner';
 
-import { authClient, subscribeToSessionChanges, type AuthSessionPayload } from '../lib/auth-client';
-import { ensureUserProfile, getCurrentUserProfile, clearAuthToken } from '../domains/curriculum/api/curriculumClient';
+import {
+  authClient,
+  fetchConvexAuthToken,
+  getBetterAuthSession,
+  refreshBetterAuthSession,
+  type BetterAuthSession,
+} from '../lib/auth-client';
+import {
+  clearAuthToken,
+  ensureUserProfile,
+  getCurrentUserProfile,
+  setCurriculumAuthToken,
+} from '../domains/curriculum/api/curriculumClient';
 
-type AuthSession = AuthSessionPayload['session'] | null;
-type AuthUser = AuthSessionPayload['user'] | null;
+type AuthSession = BetterAuthSession['session'] | null;
+type AuthUser = BetterAuthSession['user'] | null;
 
 interface AuthContextValue {
-  user: () => AuthUser;
-  session: () => AuthSession;
-  role: () => UserRole | null;
-  profile: () => UserProfile | null;
-  loading: () => boolean;
-  isAuthenticated: () => boolean;
+  user: Accessor<AuthUser | null>;
+  session: Accessor<AuthSession>;
+  role: Accessor<UserRole | null>;
+  profile: Accessor<UserProfile | null>;
+  loading: Accessor<boolean>;
+  error: Accessor<string | null>;
+  isAuthenticated: Accessor<boolean>;
+  signIn: (email: string, name?: string) => Promise<void>;
+  signUp: (email: string, name: string, role?: UserRole) => Promise<void>;
   signOut: () => Promise<void>;
+  refresh: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue>();
 
+type PendingSignup = {
+  email: string;
+  name?: string;
+  role?: UserRole;
+};
+
+const PENDING_SIGNUP_KEY = 'montePendingSignup';
+
+const setPendingSignup = (payload: PendingSignup) => {
+  if (typeof window === 'undefined') return;
+  window.sessionStorage.setItem(PENDING_SIGNUP_KEY, JSON.stringify(payload));
+};
+
+const clearPendingSignup = () => {
+  if (typeof window === 'undefined') return;
+  window.sessionStorage.removeItem(PENDING_SIGNUP_KEY);
+};
+
 export const AuthProvider: ParentComponent = (props) => {
-  const [user, setUser] = createSignal<AuthUser>(null);
+  const [user, setUser] = createSignal<AuthUser | null>(null);
   const [session, setSession] = createSignal<AuthSession>(null);
   const [role, setRole] = createSignal<UserRole | null>(null);
   const [profile, setProfile] = createSignal<UserProfile | null>(null);
   const [loading, setLoading] = createSignal(true);
+  const [error, setError] = createSignal<string | null>(null);
+  let hydrating = false;
 
   const loadProfile = async () => {
     try {
       const ensuredRole = await ensureUserProfile();
       setRole(ensuredRole);
       const profileDoc = await getCurrentUserProfile();
+      setProfile(profileDoc ?? null);
       if (profileDoc) {
-        setProfile(profileDoc);
         setRole(profileDoc.role);
-      } else {
-        setProfile(null);
       }
-    } catch (error) {
-      console.error('Unable to load user profile', error);
+    } catch (err) {
+      console.error('Unable to load user profile', err);
       setProfile(null);
       setRole(null);
     }
   };
 
-  const isAuthPayload = (value: unknown): value is AuthSessionPayload => {
-    if (typeof value !== 'object' || value === null) return false;
-    const maybe = value as Partial<AuthSessionPayload>;
-    return typeof maybe.user === 'object' && maybe.user !== null && typeof maybe.session === 'object' && maybe.session !== null;
-  };
-
-  const applySession = async (sessionData: unknown) => {
-    if (isAuthPayload(sessionData)) {
-      const payload = sessionData;
-      setUser(payload.user);
-      setSession(payload.session);
-      await loadProfile();
-    } else {
+  const applySession = async (payload: BetterAuthSession | null) => {
+    if (!payload?.user) {
       setUser(null);
       setSession(null);
       setProfile(null);
       setRole(null);
+      setCurriculumAuthToken(null);
+      clearAuthToken();
+      clearPendingSignup();
+      setError(null);
+      return;
     }
-    setLoading(false);
+
+    setUser(payload.user);
+    setSession(payload.session);
+
+    const token = await fetchConvexAuthToken().catch((err) => {
+      console.warn('Unable to fetch Convex auth token', err);
+      return null;
+    });
+
+    if (token) {
+      setCurriculumAuthToken(token);
+    } else {
+      setCurriculumAuthToken(null);
+      clearAuthToken();
+    }
+
+    await loadProfile();
+    clearPendingSignup();
+    setError(null);
+  };
+
+  const hydrateFromSession = async (options?: { refresh?: boolean }) => {
+    if (hydrating) return;
+    hydrating = true;
+    setLoading(true);
+
+    try {
+      let sessionPayload: BetterAuthSession | null = null;
+      if (options?.refresh) {
+        sessionPayload = await refreshBetterAuthSession().catch((err) => {
+          console.warn('Session refresh failed', err);
+          return null;
+        });
+      }
+      sessionPayload = sessionPayload ?? (await getBetterAuthSession());
+      await applySession(sessionPayload);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unable to refresh session';
+      console.error('Auth hydration failed', err);
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      setRole(null);
+      setCurriculumAuthToken(null);
+      setError(message);
+      toast.error('Session refresh failed. Please sign in again.');
+      await authClient
+        .signOut()
+        .catch((signOutError) => console.warn('Better Auth sign out failed', signOutError));
+    } finally {
+      setLoading(false);
+      hydrating = false;
+    }
   };
 
   onMount(() => {
-    void authClient
-      .getSession()
-      .then((payload) => applySession(payload))
-      .catch((error: unknown) => {
-        console.error('Unable to initialize auth session', error);
-        setLoading(false);
+    void hydrateFromSession();
+
+    if (typeof window !== 'undefined') {
+      const handleFocus = () => void hydrateFromSession({ refresh: true });
+      const handleVisibility = () => {
+        if (!document.hidden) {
+          void hydrateFromSession({ refresh: true });
+        }
+      };
+
+      window.addEventListener('focus', handleFocus);
+      document.addEventListener('visibilitychange', handleVisibility);
+
+      onCleanup(() => {
+        window.removeEventListener('focus', handleFocus);
+        document.removeEventListener('visibilitychange', handleVisibility);
       });
-
-    const unsubscribe = subscribeToSessionChanges((sessionData) => {
-      void applySession(sessionData);
-    });
-
-    onCleanup(() => unsubscribe());
+    }
   });
 
+  const signIn = async (email: string, name?: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await authClient.signIn.magicLink({
+        email,
+        name,
+        callbackURL: '/editor',
+        newUserCallbackURL: '/editor',
+        errorCallbackURL: '/auth/sign-in',
+      });
+      const magicError = (result as { error?: { message?: string | null } | null }).error;
+      if (magicError) {
+        throw new Error(magicError.message ?? 'Unable to send magic link');
+      }
+      toast.success('Magic link sent! Check your email to continue.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unable to send magic link';
+      setError(message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const signUp = async (email: string, name: string, role: UserRole = 'teacher') => {
+    setLoading(true);
+    setError(null);
+    try {
+      setPendingSignup({ email, name, role });
+      const result = await authClient.signIn.magicLink({
+        email,
+        name,
+        callbackURL: '/editor',
+        newUserCallbackURL: '/editor',
+        errorCallbackURL: '/auth/sign-in',
+      });
+      const magicError = (result as { error?: { message?: string | null } | null }).error;
+      if (magicError) {
+        clearPendingSignup();
+        throw new Error(magicError.message ?? 'Unable to create account');
+      }
+      toast.success('Magic link sent! Check your email to finish signing up.');
+    } catch (err) {
+      clearPendingSignup();
+      const message = err instanceof Error ? err.message : 'Unable to create account';
+      setError(message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const signOut = async () => {
-    await authClient.signOut();
+    try {
+      await authClient.signOut();
+    } catch (err) {
+      console.warn('Better Auth sign out error', err);
+    }
+    setCurriculumAuthToken(null);
     clearAuthToken();
+    setUser(null);
+    setSession(null);
+    setProfile(null);
+    setRole(null);
+    setError(null);
+    toast.success('Signed out. See you soon!');
   };
 
   const context: AuthContextValue = {
@@ -100,8 +250,12 @@ export const AuthProvider: ParentComponent = (props) => {
     role,
     profile,
     loading,
+    error,
     isAuthenticated: createMemo(() => !!user()),
+    signIn,
+    signUp,
     signOut,
+    refresh: () => hydrateFromSession({ refresh: true }),
   };
 
   return <AuthContext.Provider value={context}>{props.children}</AuthContext.Provider>;

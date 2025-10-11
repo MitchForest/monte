@@ -1,14 +1,14 @@
 [
   {
     "id": "edge.add-subtract-decimals.sequence-1",
-    "sourceSkillId": "skill.add-subtract-decimals.align-place-value",
-    "targetSkillId": "skill.add-subtract-decimals.model-decimals",
+    "sourceSkillId": "skill.add-subtract-decimals.model-decimals",
+    "targetSkillId": "skill.add-subtract-decimals.align-place-value",
     "type": "prereq_core",
     "rationale": "Aligning place value supports modeling decimal operations concretely."
   },
   {
     "id": "edge.add-subtract-decimals.sequence-2",
-    "sourceSkillId": "skill.add-subtract-decimals.model-decimals",
+    "sourceSkillId": "skill.add-subtract-decimals.align-place-value",
     "targetSkillId": "skill.add-subtract-decimals.estimation",
     "type": "prereq_core",
     "rationale": "Modeling decimal operations supports estimating sums and differences."
@@ -143,15 +143,8 @@
     "id": "edge.fraction-decimal-operations.transition-2",
     "sourceSkillId": "skill.add-subtract-like-denominator.word-problems",
     "targetSkillId": "skill.multiply-fractions-by-whole-numbers.area-model",
-    "type": "prereq_core",
+    "type": "prereq_support",
     "rationale": "Applying like-denominator operations transitions into multiplying fractions by whole numbers."
-  },
-  {
-    "id": "edge.fraction-decimal-operations.transition-3",
-    "sourceSkillId": "skill.multiply-fractions-by-whole-numbers.explain-scaling",
-    "targetSkillId": "skill.fraction-decimal-conversion.tenths-hundredths",
-    "type": "prereq_core",
-    "rationale": "Understanding scaling sets up conversions between fractions and decimals."
   },
   {
     "id": "edge.fraction-decimal-operations.transition-4",
@@ -180,13 +173,6 @@
     "targetSkillId": "skill.compare-unlike-fractions.common-denominator",
     "type": "prereq_core",
     "rationale": "Generating equivalent fractions enables comparing fractions by common denominators."
-  },
-  {
-    "id": "edge.fraction-equivalence.transition-3",
-    "sourceSkillId": "skill.compare-unlike-fractions.cross-multiply",
-    "targetSkillId": "skill.benchmark-fractions.use-half-third-quarter",
-    "type": "prereq_strategy",
-    "rationale": "Comparing fractions numerically supports reasoning with benchmark fractions."
   },
   {
     "id": "edge.fraction-equivalence.transition-4",
@@ -252,6 +238,13 @@
     "rationale": "Visual evidence of equivalence supports symbolic generation using multiplication."
   },
   {
+    "id": "edge.like-word-to-unlike-common",
+    "sourceSkillId": "skill.add-subtract-like-denominator.word-problems",
+    "targetSkillId": "skill.add-subtract-unlike-denominators.build-common-units",
+    "type": "prereq_support",
+    "rationale": "Applying like-denominator strategies prepares learners for unlike denominators."
+  },
+  {
     "id": "edge.mixed-numbers-number-lines.sequence-1",
     "sourceSkillId": "skill.mixed-numbers-number-lines.place-mixed-number",
     "targetSkillId": "skill.mixed-numbers-number-lines.decompose-mixed-number",
@@ -285,6 +278,13 @@
     "targetSkillId": "skill.multiply-fractions-by-whole-numbers.explain-scaling",
     "type": "prereq_core",
     "rationale": "Equation fluency supports explaining fractional scaling."
+  },
+  {
+    "id": "edge.multiply-whole-to-fraction-area",
+    "sourceSkillId": "skill.multiply-fractions-by-whole-numbers.explain-scaling",
+    "targetSkillId": "skill.fraction-multiplication.area-model",
+    "type": "prereq_support",
+    "rationale": "Understanding scaling with whole numbers supports modeling multiplication of fractions."
   },
   {
     "id": "edge.partition-shapes.sequence-1",

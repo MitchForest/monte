@@ -77,6 +77,20 @@
     "rationale": "Comparison experience supports using descriptive measurement language."
   },
   {
+    "id": "edge.classify-and-record-data.sequence-1",
+    "sourceSkillId": "skill.compare-length-weight-capacity.identify-attributes",
+    "targetSkillId": "skill.classify-and-record-data.sort-objects",
+    "type": "prereq_core",
+    "rationale": "Learners identify measurable attributes before grouping items into labeled categories."
+  },
+  {
+    "id": "edge.classify-and-record-data.sequence-2",
+    "sourceSkillId": "skill.classify-and-record-data.sort-objects",
+    "targetSkillId": "skill.classify-and-record-data.record-with-charts",
+    "type": "prereq_core",
+    "rationale": "Sorting objects precedes counting each category and recording the data."
+  },
+  {
     "id": "edge.conversions-to-volume",
     "sourceSkillId": "skill.measurement-conversions.grade5",
     "targetSkillId": "skill.volume-rectangular-prisms.find-volume",

@@ -1,0 +1,1781 @@
+[
+  {
+    "id": "lesson.g3.rounding.bead-ladder",
+    "topicId": "rounding-to-nearest-10-100",
+    "name": "Round with Bead Ladders",
+    "materialId": "golden-beads-lite",
+    "skills": [
+      "skill.rounding-to-nearest-10-100.round-to-10",
+      "skill.rounding-to-nearest-10-100.round-to-100"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.rounding.bead-ladder"
+    ],
+    "notes": "Bundle golden beads into tens and hundreds, then decide which benchmark the number is nearest to."
+  },
+  {
+    "id": "lesson.g3.rounding.mental-strategies",
+    "topicId": "rounding-to-nearest-10-100",
+    "name": "Mental Rounding Strategies",
+    "materialId": "hundred-board",
+    "skills": [
+      "skill.rounding-to-nearest-10-100.round-to-10",
+      "skill.rounding-to-nearest-10-100.round-to-100"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.rounding.bead-ladder"
+    ],
+    "notes": "Use hundred-board highlight strips to practice rounding without manipulatives before recording equations."
+  },
+  {
+    "id": "lesson.g3.rounding.open-number-line",
+    "topicId": "rounding-number-lines",
+    "name": "Rounding on Open Number Lines",
+    "materialId": "number-line",
+    "skills": [
+      "skill.rounding-number-lines.identify-benchmarks",
+      "skill.rounding-number-lines.round-with-explanation"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.rounding.number-line"
+    ],
+    "notes": "Place numbers on an open line, mark benchmarks, and justify rounding choices aloud."
+  },
+  {
+    "id": "lesson.g3.rounding.context-problems",
+    "topicId": "rounding-number-lines",
+    "name": "Rounding in Context",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.rounding-number-lines.apply-rounding-word-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.rounding.open-number-line"
+    ],
+    "notes": "Model real-world problems that require rounding and record the reasoning with bar models."
+  },
+  {
+    "id": "lesson.g3.estimation.strategy-workshop",
+    "topicId": "estimate-sums-differences",
+    "name": "Estimation Strategy Workshop",
+    "materialId": "number-line",
+    "skills": [
+      "skill.estimate-sums-differences.round-before-add",
+      "skill.estimate-sums-differences.number-line-jumps",
+      "skill.estimate-sums-differences.choose-strategy"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.estimation.strategy-lab"
+    ],
+    "notes": "Compare rounding, front-end, and number-line jumps to decide which estimation strategy is most efficient."
+  },
+  {
+    "id": "lesson.g3.estimation.real-world",
+    "topicId": "estimate-sums-differences",
+    "name": "Estimate in Real-World Contexts",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.estimate-sums-differences.choose-strategy"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.estimation.strategy-workshop"
+    ],
+    "notes": "Use bar models to plan estimates for multi-step scenarios, then check reasonableness against exact answers."
+  },
+  {
+    "id": "lesson.g3.addition.checkerboard-1000",
+    "topicId": "dynamic-addition-within-1000",
+    "name": "Checkerboard Addition within 1,000",
+    "materialId": "stamp-game-lite",
+    "skills": [
+      "skill.dynamic-addition-within-1000.add-ones-tens",
+      "skill.dynamic-addition-within-1000.add-multiple-terms"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.addition.1000"
+    ],
+    "notes": "Use the checkerboard or stamp game to add multiple three-digit numbers with regrouping."
+  },
+  {
+    "id": "lesson.g3.addition.strategy-journal",
+    "topicId": "dynamic-addition-within-1000",
+    "name": "Addition Strategy Journal",
+    "materialId": "measurement-log",
+    "skills": [
+      "skill.dynamic-addition-within-1000.explain-strategies"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.addition.checkerboard-1000"
+    ],
+    "notes": "Record and critique different addition strategies for the same three-digit problems."
+  },
+  {
+    "id": "lesson.g3.subtraction.exchange-1000",
+    "topicId": "dynamic-subtraction-within-1000",
+    "name": "Three-Digit Subtraction Exchanges",
+    "materialId": "stamp-game-lite",
+    "skills": [
+      "skill.dynamic-subtraction-within-1000.subtract-ones-tens",
+      "skill.dynamic-subtraction-within-1000.subtract-multiple-regroup"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.subtraction.1000"
+    ],
+    "notes": "Model regrouping across hundreds, tens, and ones while subtracting within 1,000."
+  },
+  {
+    "id": "lesson.g3.subtraction.contexts-1000",
+    "topicId": "dynamic-subtraction-within-1000",
+    "name": "Subtraction Contexts within 1,000",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.dynamic-subtraction-within-1000.solve-word-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.subtraction.exchange-1000"
+    ],
+    "notes": "Use bar models and recorded equations to solve multi-step subtraction problems within 1,000."
+  },
+  {
+    "id": "lesson.g3.place-value.analysis",
+    "topicId": "place-value-word-problems",
+    "name": "Analyze Place-Value Situations",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.place-value-word-problems.solve-contexts",
+      "skill.place-value-word-problems.explain-strategies"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.place-value.word-problems"
+    ],
+    "notes": "Interpret place-value puzzles with bar models and justify the strategy used."
+  },
+  {
+    "id": "lesson.g3.place-value.multi-step",
+    "topicId": "place-value-word-problems",
+    "name": "Multi-Step Place-Value Challenges",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.place-value-word-problems.multi-step-contexts"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.place-value.analysis"
+    ],
+    "notes": "Tackle multi-step problems that intertwine comparisons, rounding, and operations on three-digit numbers."
+  },
+  {
+    "id": "lesson.g3.equal-groups.analysis",
+    "topicId": "equal-groups-word-problems",
+    "name": "Analyze Equal-Group Stories",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.equal-groups-word-problems.interpret-equal-groups-context",
+      "skill.equal-groups-word-problems.solve-equal-groups-multiplication"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.division.word-problems"
+    ],
+    "notes": "Represent equal-group stories with bar models and determine when multiplication applies."
+  },
+  {
+    "id": "lesson.g3.equal-groups.division",
+    "topicId": "equal-groups-word-problems",
+    "name": "Equal Groups and Division",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.equal-groups-word-problems.solve-equal-groups-division"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.equal-groups.analysis"
+    ],
+    "notes": "Decide whether to divide to find group size or number of groups and justify the choice."
+  },
+  {
+    "id": "lesson.g3.two-step.plan",
+    "topicId": "two-step-word-problems",
+    "name": "Plan Two-Step Solutions",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.two-step-word-problems.plan-two-step",
+      "skill.two-step-word-problems.solve-two-step"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.word-problems.two-step"
+    ],
+    "notes": "Sequence operations for two-step contexts and record each equation clearly."
+  },
+  {
+    "id": "lesson.g3.two-step.check",
+    "topicId": "two-step-word-problems",
+    "name": "Check Two-Step Answers",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.two-step-word-problems.check-two-step-solutions"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.two-step.plan"
+    ],
+    "notes": "Use inverse operations and estimation to verify two-step solutions."
+  },
+  {
+    "id": "lesson.g3.division.grouping-mats",
+    "topicId": "division-as-grouping",
+    "name": "Division Grouping Mats",
+    "materialId": "sorting-trays",
+    "skills": [
+      "skill.division-as-grouping.create-equal-groups",
+      "skill.division-as-grouping.write-grouping-equations"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.division.grouping-trays"
+    ],
+    "notes": "Arrange bead bars into equal groups and express the action as a division equation."
+  },
+  {
+    "id": "lesson.g3.division.number-line",
+    "topicId": "division-as-grouping",
+    "name": "Repeated Subtraction on Number Lines",
+    "materialId": "number-line",
+    "skills": [
+      "skill.division-as-grouping.number-line-division"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.division.grouping-mats"
+    ],
+    "notes": "Translate equal groups into repeated subtraction jumps on an open number line."
+  },
+  {
+    "id": "lesson.g3.division.sharing-context",
+    "topicId": "division-as-sharing",
+    "name": "Share Sets Equally",
+    "materialId": "sorting-trays",
+    "skills": [
+      "skill.division-as-sharing.share-equally",
+      "skill.division-as-sharing.write-division-equations",
+      "skill.division-as-sharing.relate-sharing-multiplication"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.division.sharing"
+    ],
+    "notes": "Share counters equally, record the division equation, and relate it to the inverse multiplication fact."
+  },
+  {
+    "id": "lesson.g3.division.related-facts",
+    "topicId": "relate-division-multiplication",
+    "name": "Related Multiplication and Division Facts",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.relate-division-multiplication.area-model-relate",
+      "skill.relate-division-multiplication.fact-family-reason",
+      "skill.relate-division-multiplication.choose-related-strategy"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.division.relate-multiplication"
+    ],
+    "notes": "Use area models and bead arrays to highlight how multiplication and division facts are connected."
+  },
+  {
+    "id": "lesson.g3.division.story-analysis",
+    "topicId": "division-word-problems",
+    "name": "Division Story Analysis",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.division-word-problems.interpret-division-situations",
+      "skill.division-word-problems.solve-division-word-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.division.related-facts"
+    ],
+    "notes": "Decode division scenarios, build models, and solve for unknown group size or number of groups."
+  },
+  {
+    "id": "lesson.g3.division.explain-solutions",
+    "topicId": "division-word-problems",
+    "name": "Explain Division Solutions",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.division-word-problems.explain-division-solutions"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.division.story-analysis"
+    ],
+    "notes": "Construct written explanations that justify the chosen operation and interpretation of the quotient."
+  },
+  {
+    "id": "lesson.g3.multiplication.strategy-lab",
+    "topicId": "multiplication-fact-strategies",
+    "name": "Multiplication Strategy Lab",
+    "materialId": "fact-family-board",
+    "skills": [
+      "skill.multiplication-fact-strategies.use-commutative-property",
+      "skill.multiplication-fact-strategies.use-double-and-half"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.multiplication.fact-strategies"
+    ],
+    "notes": "Apply commutative and doubling strategies to tough facts using bead stair representations."
+  },
+  {
+    "id": "lesson.g3.multiplication.area-lab",
+    "topicId": "multiplication-fact-strategies",
+    "name": "Area Strategies for Facts",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.multiplication-fact-strategies.use-area-models-facts",
+      "skill.multiplication-properties.identity-zero"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.multiplication.strategy-lab"
+    ],
+    "notes": "Create area models to visualize multiplication facts and explore identity/zero cases."
+  },
+  {
+    "id": "lesson.g3.multiplication.distributive-advanced",
+    "topicId": "distributive-associative-strategies",
+    "name": "Distributive & Associative Reasoning",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.distributive-associative-strategies.distributive-over-addition",
+      "skill.distributive-associative-strategies.associative-property",
+      "skill.distributive-associative-strategies.factorization-strategies"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.multiplication.distributive"
+    ],
+    "notes": "Cut and rearrange arrays to justify distributive and associative strategies for large facts."
+  },
+  {
+    "id": "lesson.g3.fact-families.application",
+    "topicId": "fact-families-multiplication-division",
+    "name": "Apply Multiplication/Division Fact Families",
+    "materialId": "fact-family-board",
+    "skills": [
+      "skill.fact-families-multiplication-division.complete-family",
+      "skill.fact-families-multiplication-division.generate-family",
+      "skill.fact-families-multiplication-division.apply-family-context"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.fact-families.multiplication-division"
+    ],
+    "notes": "Build triangle-board families and apply them to real-life multiplicative situations."
+  },
+  {
+    "id": "lesson.g3.division.fact-strategies",
+    "topicId": "division-fact-strategies",
+    "name": "Advanced Division Fact Strategies",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.division-fact-strategies.use-related-multiplication",
+      "skill.division-fact-strategies.divide-using-repeated-subtraction",
+      "skill.division-fact-strategies.divide-using-area-models"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.division.fact-strategies"
+    ],
+    "notes": "Compare strategies for dividing within 100 and reflect on which method fits different fact families."
+  },
+  {
+    "id": "lesson.g3.fact-drill.mixed-challenge",
+    "topicId": "mixed-fact-drills",
+    "name": "Mixed Fact Challenge Studio",
+    "materialId": "fact-drill-board",
+    "skills": [
+      "skill.mixed-fact-drills.mixed-fact-fluency",
+      "skill.mixed-fact-drills.mixed-fact-strategy-monitor",
+      "skill.mixed-fact-drills.apply-mixed-facts-context"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.fact-drill.mixed"
+    ],
+    "notes": "Rotate through timed practice, strategy reflection, and story problems to solidify fact fluency."
+  },
+  {
+    "id": "lesson.g3.static-multiplication.partial-products",
+    "topicId": "static-multiplication",
+    "name": "Partial Products with Arrays",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.static-multiplication.multiplication-sentences",
+      "skill.static-multiplication.multiplication-within-100"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.multiplication.static-arrays"
+    ],
+    "notes": "Split arrays into partial products to compute multiplication within 100."
+  },
+  {
+    "id": "lesson.g3.static-multiplication.unknown-factor",
+    "topicId": "static-multiplication",
+    "name": "Unknown Factors and Quotients",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.static-multiplication.explain-multiplication-models",
+      "skill.unknown-factor-quotient.within-100"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.static-multiplication.partial-products"
+    ],
+    "notes": "Use inverse reasoning to find missing factors or quotients from array and area models."
+  },
+  {
+    "id": "lesson.g3.skip-count.factor-tracks",
+    "topicId": "skip-counting-multiplication-facts",
+    "name": "Factor Tracks Skip Counting",
+    "materialId": "number-line",
+    "skills": [
+      "skill.skip-counting-multiplication-facts.skip-count-by-factor"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.multiplication.skip-count"
+    ],
+    "notes": "Lay factor tracks on an open number line to solidify skip-counting sequences."
+  },
+  {
+    "id": "lesson.g3.skip-count.missing-multiples",
+    "topicId": "skip-counting-multiplication-facts",
+    "name": "Complete Skip-Counting Patterns",
+    "materialId": "hundred-board",
+    "skills": [
+      "skill.skip-counting-multiplication-facts.skip-count-missing-multiples"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.skip-count.factor-tracks"
+    ],
+    "notes": "Fill in missing multiples on the hundred board and explain the pattern."
+  },
+  {
+    "id": "lesson.g3.skip-count.word-problems",
+    "topicId": "skip-counting-multiplication-facts",
+    "name": "Skip Counting Word Problems",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.skip-counting-multiplication-facts.skip-count-word-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.skip-count.missing-multiples"
+    ],
+    "notes": "Apply skip-counting to solve multiplicative comparison and equal-group contexts."
+  },
+  {
+    "id": "lesson.g3.multiplication.multiples-of-10",
+    "topicId": "multiply-by-multiples-of-10",
+    "name": "Multiply by Multiples of Ten",
+    "materialId": "place-value-cards",
+    "skills": [
+      "skill.multiply-by-multiples-of-10.decompose-multiple-of-10",
+      "skill.multiply-by-multiples-of-10.multiply-single-digit-by-10s",
+      "skill.multiply-by-multiples-of-10.use-distributive-10s"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.multiplication.multiples-of-10"
+    ],
+    "notes": "Use place-value cards and bead bars to multiply single-digit numbers by multiples of ten."
+  },
+  {
+    "id": "lesson.g3.patterns.input-output",
+    "topicId": "patterns-and-rules",
+    "name": "Input-Output Machine Patterns",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.arithmetic-patterns.tables-oa"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.patterns.hundred-chart"
+    ],
+    "notes": "Program function machines and hundred-chart tables to identify arithmetic patterns."
+  },
+  {
+    "id": "lesson.g3.patterns.generalize",
+    "topicId": "patterns-and-rules",
+    "name": "Generalize Arithmetic Rules",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.pattern-rules-arithmetic-structure.analyze-arithmetic-patterns",
+      "skill.pattern-rules-arithmetic-structure.generalize-pattern-rule"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.patterns.input-output"
+    ],
+    "notes": "Explain how multiplication properties create patterns across rows and columns."
+  },
+  {
+    "id": "lesson.g3.equations.balance-advanced",
+    "topicId": "intro-equations-inequalities",
+    "name": "Balance Equations with Unknowns",
+    "materialId": "balance-scale",
+    "skills": [
+      "skill.intro-equations-inequalities.write-equations-with-letters",
+      "skill.intro-equations-inequalities.solve-simple-equations"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.equations.balance-board"
+    ],
+    "notes": "Use the balance scale to solve for unknowns represented by letters."
+  },
+  {
+    "id": "lesson.g3.inequalities.graph",
+    "topicId": "intro-equations-inequalities",
+    "name": "Graph and Interpret Inequalities",
+    "materialId": "number-line",
+    "skills": [
+      "skill.intro-equations-inequalities.graph-inequalities"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.equations.balance-advanced"
+    ],
+    "notes": "Plot inequality solutions on a number line and explain the meaning in context."
+  },
+  {
+    "id": "lesson.g3.partition.mosaic",
+    "topicId": "partition-shapes-equal-parts",
+    "name": "Partition Shape Mosaics",
+    "materialId": "area-partition-board",
+    "skills": [
+      "skill.partition-shapes-equal-parts.partition-shapes",
+      "skill.partition-shapes-equal-parts.identify-equal-parts"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "area-model"
+      },
+      {
+        "type": "guided",
+        "representation": "area-model"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.partition.equal-parts"
+    ],
+    "notes": "Partition polygons into equal shares and verify equality by overlaying fraction insets."
+  },
+  {
+    "id": "lesson.g3.partition.unit-fractions",
+    "topicId": "partition-shapes-equal-parts",
+    "name": "Name Unit Fractions",
+    "materialId": "shape-sketch-board",
+    "skills": [
+      "skill.partition-shapes-equal-parts.name-unit-fractions"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.partition.mosaic"
+    ],
+    "notes": "Label shaded regions with correct unit fraction names and explain the numerator/denominator roles."
+  },
+  {
+    "id": "lesson.g3.fractions.number-line-build",
+    "topicId": "unit-fractions-number-lines",
+    "name": "Build Fraction Number Lines",
+    "materialId": "number-line",
+    "skills": [
+      "skill.unit-fractions-number-lines.locate-unit-fraction",
+      "skill.unit-fractions-number-lines.generate-fraction-symbols"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.fractions.number-line"
+    ],
+    "notes": "Partition bead-linked number lines into equal jumps and label each unit fraction."
+  },
+  {
+    "id": "lesson.g3.fractions.number-line-compare",
+    "topicId": "unit-fractions-number-lines",
+    "name": "Compare Fractions on Number Lines",
+    "materialId": "number-line",
+    "skills": [
+      "skill.unit-fractions-number-lines.compare-unit-fraction-location",
+      "skill.unit-fractions-number-lines.place-nonunit-fractions",
+      "skill.unit-fractions-number-lines.whole-as-fractions"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.fractions.number-line-build"
+    ],
+    "notes": "Place non-unit fractions and show how whole numbers align with fractional equivalents."
+  },
+  {
+    "id": "lesson.g3.fractions.sets-division",
+    "topicId": "fractions-of-sets",
+    "name": "Fractions of Sets Lab",
+    "materialId": "sorting-trays",
+    "skills": [
+      "skill.fractions-of-sets.model-fractions-of-sets",
+      "skill.fractions-of-sets.calculate-fraction-set"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.fractions.sets"
+    ],
+    "notes": "Share skittles into equal groups to compute fractions of sets and record supporting equations."
+  },
+  {
+    "id": "lesson.g3.fractions.sets-interpret",
+    "topicId": "fractions-of-sets",
+    "name": "Interpret Fractions as Division",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.fractions-of-sets.explain-fraction-set",
+      "skill.fractions-as-division.interpret"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.fractions.sets-division"
+    ],
+    "notes": "Connect fractional set problems to division expressions and explain the quotient meaning."
+  },
+  {
+    "id": "lesson.g3.fractions.compare-insets",
+    "topicId": "compare-unit-fractions",
+    "name": "Compare Fractions with Insets",
+    "materialId": "area-partition-board",
+    "skills": [
+      "skill.compare-unit-fractions.reason-unit-fraction-size"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "area-model"
+      },
+      {
+        "type": "guided",
+        "representation": "area-model"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.partition.unit-fractions"
+    ],
+    "notes": "Overlay fraction insets to reason about the size of different unit fractions."
+  },
+  {
+    "id": "lesson.g3.fractions.compare-symbolic",
+    "topicId": "compare-unit-fractions",
+    "name": "Compare Fractions with Same Numerators or Denominators",
+    "materialId": "number-line",
+    "skills": [
+      "skill.compare-unit-fractions.compare-same-numerator",
+      "skill.compare-unit-fractions.compare-same-denominator"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.fractions.compare-insets"
+    ],
+    "notes": "Plot fractions on a number line to justify comparisons with like numerators or denominators."
+  },
+  {
+    "id": "lesson.g3.fractions.equivalence-area",
+    "topicId": "generate-equivalent-fractions",
+    "name": "Equivalent Fractions with Area Models",
+    "materialId": "area-partition-board",
+    "skills": [
+      "skill.generate-equivalent-fractions.area-model-equivalence"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "area-model"
+      },
+      {
+        "type": "guided",
+        "representation": "area-model"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.fractions.equivalence"
+    ],
+    "notes": "Shade equivalent regions to demonstrate how fractions can represent the same amount."
+  },
+  {
+    "id": "lesson.g3.fractions.equivalence-strategies",
+    "topicId": "generate-equivalent-fractions",
+    "name": "Generate Equivalent Fractions Strategically",
+    "materialId": "number-line",
+    "skills": [
+      "skill.generate-equivalent-fractions.number-line-equivalence",
+      "skill.generate-equivalent-fractions.multiply-denominator"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.fractions.equivalence-area"
+    ],
+    "notes": "Scale numerators and denominators to generate equivalent fractions and position them on aligned number lines."
+  },
+  {
+    "id": "lesson.g3.geometry.triangle-box",
+    "topicId": "triangles-quadrilaterals",
+    "name": "Triangle Classification Box",
+    "materialId": "constructive-triangles",
+    "skills": [
+      "skill.triangles-quadrilaterals.classify-triangles",
+      "skill.triangles-quadrilaterals.right-triangle-recognition"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g1.classify-shapes.compare"
+    ],
+    "notes": "Sort triangles by side and angle properties using constructive triangles."
+  },
+  {
+    "id": "lesson.g3.geometry.quadrilateral-hierarchy",
+    "topicId": "triangles-quadrilaterals",
+    "name": "Quadrilateral Hierarchy",
+    "materialId": "shape-sorting-mat",
+    "skills": [
+      "skill.triangles-quadrilaterals.classify-quadrilaterals"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.geometry.triangle-box"
+    ],
+    "notes": "Organize quadrilaterals by properties and discuss relationships among categories."
+  },
+  {
+    "id": "lesson.g3.area.tile-lab",
+    "topicId": "area-and-perimeter-rectangles",
+    "name": "Tile Lab for Area",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.area-and-perimeter-rectangles.tile-and-count",
+      "skill.area-of-rectangles-triangles.area-rectangles"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.area.square-tiles"
+    ],
+    "notes": "Cover rectangles with unit squares and connect the area to multiplication equations."
+  },
+  {
+    "id": "lesson.g3.area.rectilinear-design",
+    "topicId": "area-and-perimeter-rectangles",
+    "name": "Rectilinear Area Designs",
+    "materialId": "pattern-board",
+    "skills": [
+      "skill.area-and-perimeter-rectangles.rectilinear-decompose",
+      "skill.area-of-rectangles-triangles.rectilinear-decompose",
+      "skill.area-of-rectangles-triangles.area-triangles"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.area.tile-lab"
+    ],
+    "notes": "Break complex floor plans into rectangles and right triangles to compute total area."
+  },
+  {
+    "id": "lesson.g3.perimeter.exploration",
+    "topicId": "area-and-perimeter-rectangles",
+    "name": "Perimeter Exploration",
+    "materialId": "shape-sketch-board",
+    "skills": [
+      "skill.perimeter.rectangles-polygons",
+      "skill.area-and-perimeter-rectangles.use-formulas"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.perimeter.walk"
+    ],
+    "notes": "Measure polygon sides with digital strips and apply perimeter formulas."
+  },
+  {
+    "id": "lesson.g3.data.line-plot-fractions",
+    "topicId": "line-plots-fractions",
+    "name": "Fraction Line Plot Project",
+    "materialId": "measurement-log",
+    "skills": [
+      "skill.line-plots-fractions.create-line-plot-halves",
+      "skill.line-plots-fractions.create-line-plot-fractions"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.data.line-plot-fractions"
+    ],
+    "notes": "Collect fractional measurement data and plot it on a line graph with halves and fourths."
+  },
+  {
+    "id": "lesson.g3.data.line-plot-analysis",
+    "topicId": "line-plots-fractions",
+    "name": "Interpret Fraction Line Plots",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.line-plots-fractions.solve-line-plot-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "symbolic"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.data.line-plot-fractions"
+    ],
+    "notes": "Solve comparison and difference questions based on fractional line plots."
+  },
+  {
+    "id": "lesson.g3.measure.mass-compare",
+    "topicId": "mass-and-liquid-volume",
+    "name": "Compare Object Masses",
+    "materialId": "balance-scale",
+    "skills": [
+      "skill.mass-and-liquid-volume.measure-mass"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.measure.mass"
+    ],
+    "notes": "Measure and compare masses using gram weights and record differences."
+  },
+  {
+    "id": "lesson.g3.measure.volume-mix",
+    "topicId": "mass-and-liquid-volume",
+    "name": "Mix and Measure Volume",
+    "materialId": "measuring-pitchers",
+    "skills": [
+      "skill.mass-and-liquid-volume.measure-volume"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.measure.volume"
+    ],
+    "notes": "Combine and compare liquid volumes using Montessori pitchers and graduated cylinders."
+  },
+  {
+    "id": "lesson.g3.measure.mass-volume-problems",
+    "topicId": "mass-and-liquid-volume",
+    "name": "Mass and Volume Problem Solving",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.mass-and-liquid-volume.solve-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.measure.volume-mix"
+    ],
+    "notes": "Use bar models to tackle multi-step scenarios involving mass and liquid volume."
+  },
+  {
+    "id": "lesson.g3.data.scaled-graphs-project",
+    "topicId": "scaled-bar-graphs",
+    "name": "Scaled Graph Project",
+    "materialId": "picture-chart-board",
+    "skills": [
+      "skill.scaled-bar-graphs.create-scaled-bar-graph",
+      "skill.scaled-bar-graphs.solve-bar-graph-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.data.scaled-bar-graphs"
+    ],
+    "notes": "Collect data, choose a scale, build the bar graph, and answer comparison questions."
+  },
+  {
+    "id": "lesson.g3.data.interpret-representations",
+    "topicId": "interpret-data-word-problems",
+    "name": "Interpret Multiple Data Representations",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.interpret-data-word-problems.choose-representation",
+      "skill.interpret-data-word-problems.solve-graph-problems"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.data.scaled-graphs-project"
+    ],
+    "notes": "Select the best graph for a situation and solve associated word problems."
+  },
+  {
+    "id": "lesson.g3.time.elapsed-timeline",
+    "topicId": "elapsed-time-minute",
+    "name": "Elapsed Time Timeline",
+    "materialId": "analog-clock",
+    "skills": [
+      "skill.elapsed-time-minute.calculate-elapsed"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.time.elapsed"
+    ],
+    "notes": "Use clock faces and timelines to compute elapsed time to the nearest minute."
+  },
+  {
+    "id": "lesson.g3.time.start-end",
+    "topicId": "elapsed-time-minute",
+    "name": "Start and End Time Challenges",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.elapsed-time-minute.solve-start-end"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g3.time.elapsed-timeline"
+    ],
+    "notes": "Find missing start or end times for events spanning up to several hours."
+  },
+  {
+    "id": "lesson.g3.time-money.multi-step",
+    "topicId": "time-money-word-problems",
+    "name": "Time and Money Multi-Step Problems",
+    "materialId": "bar-model-board",
+    "skills": [
+      "skill.time-money-word-problems.select-operation",
+      "skill.time-money-word-problems.solve-multi-step"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.money.word-problems"
+    ],
+    "notes": "Blend elapsed time and coin counting within multi-step bar-model scenarios."
+  },
+  {
+    "id": "lesson.g3.multi-step.case-study",
+    "topicId": "multi-step-problem-solving",
+    "name": "Multi-Step Case Studies",
+    "materialId": "strategy-board",
+    "skills": [
+      "skill.multi-step-problem-solving.plan-strategy",
+      "skill.multi-step-problem-solving.write-equations",
+      "skill.multi-step-problem-solving.explain-solution"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "story-context"
+      },
+      {
+        "type": "guided",
+        "representation": "story-context"
+      },
+      {
+        "type": "independent",
+        "representation": "symbolic"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.g2.multi-step.plan"
+    ],
+    "notes": "Analyze rich problems, plan sequences of operations, and justify each step."
+  }
+]

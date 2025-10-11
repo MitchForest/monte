@@ -90,6 +90,66 @@
     }
   },
   {
+    "id": "skill.classify-and-record-data.sort-objects",
+    "name": "Sort Objects by Attribute",
+    "description": "Classify up to four object types into labeled categories using observed attributes.",
+    "domainId": "measurement-data",
+    "unitId": "measurement-foundations",
+    "topicId": "classify-and-record-data",
+    "ccss": [
+      "K.MD.B.3"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 170
+    },
+    "representations": [
+      "sorting-tray",
+      "discussion"
+    ],
+    "practice": {
+      "easy": [
+        "k2.sort-objects-3"
+      ],
+      "medium": [
+        "k2.sort-objects-4"
+      ],
+      "hard": [
+        "k2.sort-attribute-explain"
+      ]
+    }
+  },
+  {
+    "id": "skill.classify-and-record-data.record-with-charts",
+    "name": "Record Categories with Picture Charts",
+    "description": "Count items within each category and represent results using simple picture charts and tallies.",
+    "domainId": "measurement-data",
+    "unitId": "measurement-foundations",
+    "topicId": "classify-and-record-data",
+    "ccss": [
+      "K.MD.B.3"
+    ],
+    "ritBand": {
+      "min": 150,
+      "max": 170
+    },
+    "representations": [
+      "pictograph",
+      "tally-chart"
+    ],
+    "practice": {
+      "easy": [
+        "k2.picture-graph-3"
+      ],
+      "medium": [
+        "k2.picture-graph-4"
+      ],
+      "hard": [
+        "k2.tally-chart-explain"
+      ]
+    }
+  },
+  {
     "id": "skill.choose-measurement-tools.match-tool-to-attribute",
     "name": "Match Tools to Measurement Attributes",
     "description": "Select appropriate tools for measuring length, weight, capacity, and temperature.",

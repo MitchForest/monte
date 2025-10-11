@@ -464,7 +464,7 @@
     "prerequisiteLessonIds": [
       "lesson.k.count-to-20.bead-chain-walk"
     ],
-    "notes": "Fill rows on the digital hundred board and highlight counting-by-ten patterns."
+    "notes": "Fill rows on the digital hundred board and highlight counting-by-ten patterns; offered after bead-chain mastery as a bridge into Grade 1 skip-counting goals."
   },
   {
     "id": "lesson.k.count-to-20.backward-chain",
@@ -687,6 +687,60 @@
     "notes": "Fill pitchers to matching lines and describe which holds more or less."
   },
   {
+    "id": "lesson.k.classify-data.sorting-trays",
+    "topicId": "classify-and-record-data",
+    "name": "Sorting Trays Classification",
+    "materialId": "sorting-trays",
+    "skills": [
+      "skill.classify-and-record-data.sort-objects"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "concrete"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.compare-measure.pouring-pitchers"
+    ],
+    "notes": "Use digital sorting trays and labels to group objects by shared attributes, checking totals with built-in control of error."
+  },
+  {
+    "id": "lesson.k.classify-data.picture-chart",
+    "topicId": "classify-and-record-data",
+    "name": "Picture Chart Records",
+    "materialId": "picture-chart-board",
+    "skills": [
+      "skill.classify-and-record-data.record-with-charts"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "representational"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.classify-data.sorting-trays"
+    ],
+    "notes": "Transfer sorted sets into a digital pictograph with auto-tally supports, then interpret and explain the recorded data."
+  },
+  {
     "id": "lesson.k.shapes.geometry-cabinet",
     "topicId": "identify-2d-3d-shapes",
     "name": "Name Plane Shapes with the Geometry Cabinet",
@@ -767,6 +821,60 @@
       "lesson.k.shapes.geometry-cabinet"
     ],
     "notes": "Reveal solids from a mystery bag and match them to face cards."
+  },
+  {
+    "id": "lesson.k.shapes.stick-box-modeling",
+    "topicId": "identify-2d-3d-shapes",
+    "name": "Stick Box Shape Modeling",
+    "materialId": "stick-box",
+    "skills": [
+      "skill.shape-modeling.build-with-sticks"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "concrete"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.shapes.geometric-solids"
+    ],
+    "notes": "Use digital stick box pieces to construct teacher-called shapes, focusing on side lengths and vertices."
+  },
+  {
+    "id": "lesson.k.shapes.metal-inset-drawing",
+    "topicId": "compose-decompose-shapes",
+    "name": "Metal Inset Shape Drawings",
+    "materialId": "metal-inset-tray",
+    "skills": [
+      "skill.shape-modeling.draw-with-insets"
+    ],
+    "segments": [
+      {
+        "type": "presentation",
+        "representation": "concrete"
+      },
+      {
+        "type": "guided",
+        "representation": "representational"
+      },
+      {
+        "type": "independent",
+        "representation": "representational"
+      }
+    ],
+    "prerequisiteLessonIds": [
+      "lesson.k.shapes.stick-box-modeling"
+    ],
+    "notes": "Trace digital metal insets, then freehand the shape outline and label attributes for a shape journal."
   },
   {
     "id": "lesson.k.positions.position-mat",
@@ -984,7 +1092,7 @@
     "prerequisiteLessonIds": [
       "lesson.k.counting-on.addition-strip-board"
     ],
-    "notes": "Hop forward from the larger addend and record the matching addition equation."
+    "notes": "Hop forward from the larger addend and record the matching addition equation; positioned as the first Grade 1 counting-on bridge once strip-board work is fluent."
   },
   {
     "id": "lesson.k.take-away.golden-beads",
@@ -1065,6 +1173,6 @@
     "prerequisiteLessonIds": [
       "lesson.k.take-away.number-line"
     ],
-    "notes": "Use digit tiles to build subtraction equations that match modeled situations."
+    "notes": "Use digit tiles to build subtraction equations that match modeled situations; unlocks Grade 1 equation recording once concrete take-away is solid."
   }
 ]

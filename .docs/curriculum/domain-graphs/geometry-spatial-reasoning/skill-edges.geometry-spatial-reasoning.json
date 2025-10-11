@@ -119,6 +119,27 @@
     "rationale": "Recognizing solids supports matching them to their 2D faces."
   },
   {
+    "id": "edge.shape-modeling.sticks-prereq",
+    "sourceSkillId": "skill.identify-2d-3d-shapes.name-2d-shapes",
+    "targetSkillId": "skill.shape-modeling.build-with-sticks",
+    "type": "prereq_core",
+    "rationale": "Learners name plane shapes before constructing them with stick box materials."
+  },
+  {
+    "id": "edge.shape-modeling.sticks-to-drawing",
+    "sourceSkillId": "skill.shape-modeling.build-with-sticks",
+    "targetSkillId": "skill.shape-modeling.draw-with-insets",
+    "type": "prereq_core",
+    "rationale": "Building shapes concretely sets the stage for tracing and drawing them with metal insets."
+  },
+  {
+    "id": "edge.shape-modeling.support-compose",
+    "sourceSkillId": "skill.shape-modeling.draw-with-insets",
+    "targetSkillId": "skill.compose-decompose-shapes.compose-using-shapes",
+    "type": "prereq_support",
+    "rationale": "Drawing precise shapes reinforces the spatial reasoning needed to compose new figures."
+  },
+  {
     "id": "edge.lines-angles.sequence-1",
     "sourceSkillId": "skill.lines-angles.identify-lines",
     "targetSkillId": "skill.lines-angles.classify-angles",

@@ -25,6 +25,8 @@
 ## 3. Domain → Unit → Topic Scaffold
 The scaffold below draws from Montessori sequences (`.docs/reference/montessori.md`), MAP RIT band breakdowns (`k-2.md`, `2-5.md`), and CCSS mappings (`skill-to-CCSS.md`, `standards.md`). Topics list representative skill goals; detailed skill clusters appear in Section 4.
 
+**Grade labels are organizational.** Lesson files such as `kindergarten.json` and `grade1.json` simply group authoring artifacts; the adaptive pathway is driven by RIT bands, skill edges, and CCSS tags. Learners may visit Kindergarten lessons while working through Grade 1 or Grade 2 objectives whenever the knowledge graph schedules a prerequisite or review experience.
+
 ### Domain: Number Sense & Place Value
 - **Unit: Foundations of Counting** (RIT <145; CCSS K.CC.A-B, K.OA.A)  
   - Topics: Counting within 5, Counting within 10 (scattered/structured), Compare quantities by matching, One more/one less, Count stories within 5, Count to 20 and by tens to 100.

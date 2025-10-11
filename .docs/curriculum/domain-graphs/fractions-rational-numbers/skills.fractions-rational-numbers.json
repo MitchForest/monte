@@ -278,8 +278,8 @@
       "4.NF.B.4"
     ],
     "ritBand": {
-      "min": 180,
-      "max": 195
+      "min": 198,
+      "max": 212
     },
     "representations": [
       "set-model",
@@ -668,8 +668,8 @@
       "5.NF.A.2"
     ],
     "ritBand": {
-      "min": 192,
-      "max": 207
+      "min": 198,
+      "max": 212
     },
     "representations": [
       "number-line",
@@ -1120,7 +1120,7 @@
       "5.NBT.B.7"
     ],
     "ritBand": {
-      "min": 202,
+      "min": 198,
       "max": 212
     },
     "representations": [
@@ -1301,8 +1301,8 @@
       "4.NF.C.7"
     ],
     "ritBand": {
-      "min": 202,
-      "max": 212
+      "min": 198,
+      "max": 210
     },
     "representations": [
       "number-line",

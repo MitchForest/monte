@@ -1,36 +1,34 @@
-import { createSignal, Show } from 'solid-js';
+import { createEffect, createSignal, Show } from 'solid-js';
 import { useNavigate } from '@tanstack/solid-router';
 
-import { authClient } from '../../lib/auth-client';
 import { Button, Card, Input } from '../../components/ui';
+import { useAuth } from '../../providers/AuthProvider';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const [email, setEmail] = createSignal('');
-  const [password, setPassword] = createSignal('');
   const [name, setName] = createSignal('');
   const [loading, setLoading] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
+  const [success, setSuccess] = createSignal<string | null>(null);
+
+  createEffect(() => {
+    if (auth.isAuthenticated()) {
+      void navigate({ to: '/editor' });
+    }
+  });
 
   const handleSubmit = async (event: Event) => {
     event.preventDefault();
     setLoading(true);
     setError(null);
+    setSuccess(null);
 
     try {
-      const result = await authClient.signUp.email({
-        email: email(),
-        password: password(),
-        name: name(),
-        callbackURL: '/editor',
-      });
-
-      if (result.error) {
-        setError(result.error.message ?? 'Unable to create account');
-      } else {
-        void navigate({ to: '/editor' });
-      }
+      await auth.signUp(email().trim(), name().trim());
+      setSuccess('Magic link sent! Check your email to finish setting up your account.');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unable to create account');
     } finally {
@@ -43,12 +41,22 @@ const SignUpPage = () => {
       <Card variant="soft" class="w-full max-w-md space-y-6 p-6">
         <header class="space-y-1 text-center">
           <h1 class="text-2xl font-semibold text-[color:var(--color-heading)]">Create an account</h1>
-          <p class="text-sm text-[color:var(--color-text-muted)]">Join the curriculum workspace.</p>
+          <p class="text-sm text-[color:var(--color-text-muted)]">
+            We’ll email you a secure link to get started.
+          </p>
         </header>
 
         <Show when={error()}>
           {(message) => (
             <div class="rounded-md border border-[rgba(239,68,68,0.3)] bg-[rgba(239,68,68,0.08)] px-3 py-2 text-sm text-[rgba(239,68,68,0.9)]">
+              {message()}
+            </div>
+          )}
+        </Show>
+
+        <Show when={success()}>
+          {(message) => (
+            <div class="rounded-md border border-[rgba(34,197,94,0.3)] bg-[rgba(34,197,94,0.12)] px-3 py-2 text-sm text-[rgba(22,163,74,0.9)]">
               {message()}
             </div>
           )}
@@ -80,19 +88,8 @@ const SignUpPage = () => {
             size="md"
           />
 
-          <Input
-            label="Password"
-            type="password"
-            value={password()}
-            onValueChange={setPassword}
-            required
-            autocomplete="new-password"
-            minLength={8}
-            size="md"
-          />
-
           <Button type="submit" class="w-full" disabled={loading()}>
-            {loading() ? 'Creating account…' : 'Create account'}
+            {loading() ? 'Sending link…' : 'Email me a magic link'}
           </Button>
         </form>
 

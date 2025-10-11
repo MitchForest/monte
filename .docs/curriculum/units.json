@@ -336,10 +336,10 @@
       "6.EE.A"
     ],
     "topicOrder": [
-      "factors-and-multiples",
-      "patterns-and-rules",
       "numerical-expressions",
-      "intro-equations-inequalities"
+      "equations-with-variables",
+      "intro-inequalities",
+      "coordinate-relationships"
     ]
   },
   {
@@ -418,10 +418,12 @@
     },
     "primaryCcss": [
       "K.MD.A",
+      "K.MD.B",
       "1.MD.A"
     ],
     "topicOrder": [
       "compare-length-weight-capacity",
+      "classify-and-record-data",
       "choose-measurement-tools",
       "order-objects-by-attribute"
     ]

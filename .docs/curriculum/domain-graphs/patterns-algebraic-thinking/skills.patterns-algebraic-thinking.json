@@ -27,7 +27,8 @@
       "hard": [
         "k2.pattern-reason"
       ]
-    }
+    },
+    "type": "foundational"
   },
   {
     "id": "skill.repeating-growing-patterns.extend-growing-patterns",
@@ -37,7 +38,7 @@
     "unitId": "early-patterns",
     "topicId": "repeating-growing-patterns",
     "ccss": [
-      "1.OA.B.3"
+      "K.OA.A.2"
     ],
     "ritBand": {
       "min": 150,
@@ -57,7 +58,8 @@
       "hard": [
         "k2.growing-pattern-context"
       ]
-    }
+    },
+    "type": "foundational"
   },
   {
     "id": "skill.repeating-growing-patterns.create-patterns",
@@ -67,7 +69,7 @@
     "unitId": "early-patterns",
     "topicId": "repeating-growing-patterns",
     "ccss": [
-      "1.OA.B.3"
+      "K.OA.A.2"
     ],
     "ritBand": {
       "min": 150,
@@ -87,7 +89,8 @@
       "hard": [
         "k2.pattern-design-challenge"
       ]
-    }
+    },
+    "type": "foundational"
   },
   {
     "id": "skill.unknown-addend-problems.represent-unknown-addend",
@@ -97,7 +100,9 @@
     "unitId": "early-patterns",
     "topicId": "unknown-addend-problems",
     "ccss": [
-      "1.OA.A.1"
+      "1.OA.A.1",
+      "1.OA.B.4",
+      "1.OA.D.8"
     ],
     "ritBand": {
       "min": 155,
@@ -217,7 +222,8 @@
     "unitId": "early-patterns",
     "topicId": "balance-contexts",
     "ccss": [
-      "1.OA.D.7"
+      "1.OA.D.7",
+      "1.OA.D.8"
     ],
     "ritBand": {
       "min": 158,
@@ -392,6 +398,66 @@
     }
   },
   {
+    "id": "skill.two-patterns.generate-from-rules",
+    "name": "Generate Two Patterns from Rules",
+    "description": "Generate pairs of numerical patterns given rules and record them in tables.",
+    "domainId": "patterns-algebraic-thinking",
+    "unitId": "patterns-algebraic-thinking",
+    "topicId": "two-patterns",
+    "ccss": [
+      "5.OA.B.3"
+    ],
+    "ritBand": {
+      "min": 195,
+      "max": 210
+    },
+    "representations": [
+      "table"
+    ],
+    "practice": {
+      "easy": [
+        "25.two-patterns-generate"
+      ],
+      "medium": [
+        "25.two-patterns-table"
+      ],
+      "hard": [
+        "25.two-patterns-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.two-patterns.graph-correspondence",
+    "name": "Graph Corresponding Terms",
+    "description": "Relate corresponding terms of two patterns, form ordered pairs, and graph them in the first quadrant.",
+    "domainId": "patterns-algebraic-thinking",
+    "unitId": "patterns-algebraic-thinking",
+    "topicId": "two-patterns",
+    "ccss": [
+      "5.OA.B.3",
+      "5.G.A.2"
+    ],
+    "ritBand": {
+      "min": 198,
+      "max": 212
+    },
+    "representations": [
+      "table",
+      "coordinate-plane"
+    ],
+    "practice": {
+      "easy": [
+        "25.two-patterns-ordered-pairs"
+      ],
+      "medium": [
+        "25.two-patterns-graph"
+      ],
+      "hard": [
+        "25.two-patterns-relationship"
+      ]
+    }
+  },
+  {
     "id": "skill.pattern-rules-arithmetic-structure.analyze-arithmetic-patterns",
     "name": "Analyze Arithmetic Patterns",
     "description": "Explain patterns like even+even or odd+odd using properties of operations.",
@@ -481,6 +547,35 @@
     }
   },
   {
+    "id": "skill.exponents.evaluate-whole-number",
+    "name": "Evaluate Expressions with Exponents",
+    "description": "Evaluate numerical expressions that include whole-number exponents.",
+    "domainId": "patterns-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "numerical-expressions",
+    "ccss": [
+      "6.EE.A.1"
+    ],
+    "ritBand": {
+      "min": 205,
+      "max": 218
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.evaluate-exponents"
+      ],
+      "medium": [
+        "25.exponent-order-of-operations"
+      ],
+      "hard": [
+        "25.exponent-word-problem"
+      ]
+    }
+  },
+  {
     "id": "skill.evaluate-numerical-expressions.write-from-words",
     "name": "Write Expressions from Verbal Descriptions",
     "description": "Translate multi-step verbal phrases into numerical expressions with parentheses.",
@@ -511,6 +606,94 @@
     }
   },
   {
+    "id": "skill.expressions.variables.write-read-evaluate",
+    "name": "Write and Evaluate Variable Expressions",
+    "description": "Write, read, and evaluate expressions in which letters stand for numbers.",
+    "domainId": "patterns-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "numerical-expressions",
+    "ccss": [
+      "6.EE.A.2"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 215
+    },
+    "representations": [
+      "symbolic",
+      "table"
+    ],
+    "practice": {
+      "easy": [
+        "25.write-variable-expression"
+      ],
+      "medium": [
+        "25.evaluate-variable-expression"
+      ],
+      "hard": [
+        "25.expression-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.expressions.equivalent-using-properties",
+    "name": "Generate Equivalent Expressions",
+    "description": "Use the properties of operations to generate and justify equivalent expressions.",
+    "domainId": "patterns-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "numerical-expressions",
+    "ccss": [
+      "6.EE.A.3"
+    ],
+    "ritBand": {
+      "min": 205,
+      "max": 218
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.equivalent-expression-properties"
+      ],
+      "medium": [
+        "25.equivalent-expression-combine"
+      ],
+      "hard": [
+        "25.equivalent-expression-context"
+      ]
+    }
+  },
+  {
+    "id": "skill.expressions.identify-equivalence",
+    "name": "Identify Equivalent Expressions",
+    "description": "Determine whether two expressions are equivalent and explain the reasoning.",
+    "domainId": "patterns-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "numerical-expressions",
+    "ccss": [
+      "6.EE.A.4"
+    ],
+    "ritBand": {
+      "min": 205,
+      "max": 218
+    },
+    "representations": [
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.identify-equivalent-expression"
+      ],
+      "medium": [
+        "25.equivalent-expression-justify"
+      ],
+      "hard": [
+        "25.equivalent-expression-counterexample"
+      ]
+    }
+  },
+  {
     "id": "skill.equations-with-variables.solve-one-step",
     "name": "Solve One-Step Equations",
     "description": "Solve addition, subtraction, multiplication, and division equations with one variable.",
@@ -518,8 +701,8 @@
     "unitId": "pre-algebra-foundations",
     "topicId": "equations-with-variables",
     "ccss": [
-      "6.EE.A.1",
-      "6.EE.B.5"
+      "6.EE.B.5",
+      "6.EE.B.7"
     ],
     "ritBand": {
       "min": 200,
@@ -572,14 +755,45 @@
     }
   },
   {
+    "id": "skill.equations-with-variables.write-from-context",
+    "name": "Write One-Step Equations from Context",
+    "description": "Use variables to represent numbers and write one-step equations for real-world problems.",
+    "domainId": "patterns-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "equations-with-variables",
+    "ccss": [
+      "6.EE.B.6"
+    ],
+    "ritBand": {
+      "min": 202,
+      "max": 215
+    },
+    "representations": [
+      "equation",
+      "bar-model"
+    ],
+    "practice": {
+      "easy": [
+        "25.write-equation-context"
+      ],
+      "medium": [
+        "25.write-equation-variable"
+      ],
+      "hard": [
+        "25.write-equation-two-step-context"
+      ]
+    }
+  },
+  {
     "id": "skill.coordinate-relationships.graph-proportional-points",
     "name": "Graph Coordinate Relationships",
-    "description": "Plot ordered pairs from tables and describe relationships between variables.",
+    "description": "Plot ordered pairs from tables in the first quadrant and describe the relationship between quantities.",
     "domainId": "patterns-algebraic-thinking",
     "unitId": "pre-algebra-foundations",
     "topicId": "coordinate-relationships",
     "ccss": [
       "5.G.A.1",
+      "5.G.A.2",
       "6.EE.C.9"
     ],
     "ritBand": {
@@ -659,6 +873,36 @@
       ],
       "hard": [
         "25.write-inequality-justify"
+      ]
+    }
+  },
+  {
+    "id": "skill.intro-inequalities.solve-and-graph",
+    "name": "Solve and Graph One-Step Inequalities",
+    "description": "Solve one-step inequalities and graph solution sets on number lines.",
+    "domainId": "patterns-algebraic-thinking",
+    "unitId": "expressions-early-algebra",
+    "topicId": "intro-inequalities",
+    "ccss": [
+      "6.EE.B.8"
+    ],
+    "ritBand": {
+      "min": 204,
+      "max": 216
+    },
+    "representations": [
+      "number-line",
+      "symbolic"
+    ],
+    "practice": {
+      "easy": [
+        "25.solve-inequality-model"
+      ],
+      "medium": [
+        "25.solve-inequality-graph"
+      ],
+      "hard": [
+        "25.inequality-word-problem"
       ]
     }
   },
