@@ -11,5 +11,8 @@
     "src",
     "content",
     "assets"
-  ]
+  ],
+  "dependencies": {
+    "@monte/lesson-service": "workspace:*"
+  }
 }

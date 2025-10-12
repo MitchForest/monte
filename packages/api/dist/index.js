@@ -20,6 +20,7 @@ import {
   CurriculumSyncSummarySchema,
   EntityMetadataSchema
 } from "@monte/types";
+import { assertInventoryConsistency, normalizeLessonDocumentTimelines } from "@monte/lesson-service";
 var now = () => Date.now();
 var pickScenarioBinding = (document) => {
   for (const segment of document.lesson.segments) {
@@ -144,31 +145,15 @@ var normalizeLessonDocument = (document) => {
   const baseline = now();
   const draftMeta = parsed.meta ?? {};
   const scenarioBinding = pickScenarioBinding(parsed);
-  const normalizeTimelineSegments = parsed.lesson.segments?.map((segment) => {
-    const timeline = segment.timeline ?? { version: 1, steps: [] };
-    const steps = (timeline.steps ?? []).map((step) => ({
-      ...step,
-      keyframes: step.keyframes ?? [],
-      interactions: step.interactions ?? []
-    }));
-    return {
-      ...segment,
-      timeline: {
-        version: timeline.version ?? 1,
-        label: timeline.label,
-        metadata: timeline.metadata,
-        steps
-      }
-    };
-  }) ?? [];
-  return {
-    ...parsed,
-    lesson: {
-      ...parsed.lesson,
-      focusSkills: parsed.lesson.focusSkills ?? [],
-      materials: parsed.lesson.materials ?? [],
-      segments: normalizeTimelineSegments
-    },
+  const normalized = normalizeLessonDocumentTimelines(parsed);
+  const lesson = {
+    ...normalized.lesson,
+    focusSkills: normalized.lesson.focusSkills ?? [],
+    materials: normalized.lesson.materials ?? []
+  };
+  const result = {
+    ...normalized,
+    lesson,
     meta: {
       ...draftMeta,
       createdAt: normalizeTimestamp(draftMeta.createdAt, baseline),
@@ -181,6 +166,8 @@ var normalizeLessonDocument = (document) => {
       } : void 0
     }
   };
+  assertInventoryConsistency(result);
+  return result;
 };
 var CreateUnitResultSchema = z.object({ unitId: IdSchema() });
 var CreateTopicResultSchema = z.object({ topicId: IdSchema() });

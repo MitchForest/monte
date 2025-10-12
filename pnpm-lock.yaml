@@ -19,6 +19,9 @@ importers:
       '@monte/api':
         specifier: workspace:*
         version: link:../../packages/api
+      '@monte/lesson-service':
+        specifier: workspace:*
+        version: link:../../packages/lesson-service
       '@monte/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -56,6 +59,9 @@ importers:
       '@monte/curriculum-service':
         specifier: workspace:*
         version: link:../../packages/curriculum-service
+      '@monte/lesson-service':
+        specifier: workspace:*
+        version: link:../../packages/lesson-service
       '@monte/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -156,6 +162,9 @@ importers:
 
   packages/api:
     dependencies:
+      '@monte/lesson-service':
+        specifier: workspace:*
+        version: link:../lesson-service
       '@monte/types':
         specifier: workspace:*
         version: link:../types
@@ -170,7 +179,11 @@ importers:
         specifier: ^8.5.0
         version: 8.5.0(jiti@2.6.1)(postcss@8.5.6)(tsx@4.20.6)(typescript@5.9.3)
 
-  packages/curriculum-service: {}
+  packages/curriculum-service:
+    dependencies:
+      '@monte/lesson-service':
+        specifier: workspace:*
+        version: link:../lesson-service
 
   packages/engine-service:
     dependencies:
@@ -192,6 +205,19 @@ importers:
         version: 8.5.0(jiti@2.6.1)(postcss@8.5.6)(tsx@4.20.6)(typescript@5.9.3)
 
   packages/graph-service:
+    dependencies:
+      '@monte/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
+      '@types/node':
+        specifier: ^20.17.10
+        version: 20.19.19
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(jiti@2.6.1)(postcss@8.5.6)(tsx@4.20.6)(typescript@5.9.3)
+
+  packages/lesson-service:
     dependencies:
       '@monte/types':
         specifier: workspace:*

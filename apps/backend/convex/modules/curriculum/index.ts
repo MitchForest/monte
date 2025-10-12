@@ -10,6 +10,10 @@ import {
   LessonAuthoringStatusSchema,
   LessonGradeLevelSchema,
 } from '@monte/types';
+import {
+  assertInventoryConsistency,
+  normalizeLessonDocumentTimelines,
+} from '@monte/lesson-service';
 
 import { lessonDocument as lessonDocumentSchema } from '../../schema.js';
 
@@ -43,29 +47,6 @@ const slugify = (value: string) =>
     .replace(/-+/g, '-');
 
 type LessonDocumentDraft = Infer<typeof lessonDocumentSchema>;
-
-const ensureTimelineForSegment = (segment: LessonDocumentDraft['lesson']['segments'][number]) => {
-  const timeline = segment.timeline ?? { version: 1, steps: [] };
-  const steps = timeline.steps?.map((step) => ({
-    ...step,
-    keyframes: step.keyframes ?? [],
-    interactions: step.interactions ?? [],
-  })) ?? [];
-  return {
-    ...segment,
-    timeline: {
-      version: timeline.version ?? 1,
-      label: timeline.label,
-      metadata: timeline.metadata,
-      steps,
-    },
-  };
-};
-
-const normalizeLessonTimelines = (draft: LessonDocumentDraft) => {
-  draft.lesson.segments = draft.lesson.segments.map((segment) => ensureTimelineForSegment(segment));
-  return draft;
-};
 
 async function ensureUniqueSlug(
   ctx: QueryCtx | MutationCtx,
@@ -156,36 +137,8 @@ function defaultLessonDocument(
       updatedAt: timestamp,
     },
   };
-  return normalizeLessonTimelines(document);
+  return normalizeLessonDocumentTimelines(document);
 }
-
-const assertInventoryConsistency = (draft: Infer<typeof lessonDocumentSchema>) => {
-  const inventory = draft.lesson.materialInventory;
-  if (!inventory) return;
-  const tokenTypeIds = new Set(inventory.tokenTypes.map((token) => token.id));
-  const segmentIds = new Set(draft.lesson.segments.map((segment) => segment.id));
-
-  for (const bank of inventory.banks) {
-    const acceptedIds = bank.accepts.length > 0 ? bank.accepts : Array.from(tokenTypeIds);
-    for (const tokenId of acceptedIds) {
-      if (!tokenTypeIds.has(tokenId)) {
-        throw new Error(`Bank ${bank.id} references unknown token type ${tokenId}`);
-      }
-    }
-    if (bank.scope === 'segment') {
-      if (!bank.segmentId || !segmentIds.has(bank.segmentId)) {
-        throw new Error(`Bank ${bank.id} references unknown segment ${bank.segmentId ?? '(missing)'}`);
-      }
-    }
-  }
-
-  const bankIds = new Set(inventory.banks.map((bank) => bank.id));
-  for (const segment of draft.lesson.segments) {
-    if (segment.materialBankId && !bankIds.has(segment.materialBankId)) {
-      throw new Error(`Segment ${segment.id} references missing bank ${segment.materialBankId}`);
-    }
-  }
-};
 
 const mapSegmentsForManifest = (
   segments: LessonDocumentDraft['lesson']['segments'],
@@ -586,7 +539,7 @@ export const saveLessonDraft = mutation({
         updatedAt,
       },
     };
-    normalizeLessonTimelines(draft);
+    normalizeLessonDocumentTimelines(draft);
     assertInventoryConsistency(draft);
     await ctx.db.patch(args.lessonId, {
       draft,

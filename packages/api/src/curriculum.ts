@@ -23,6 +23,7 @@ import {
   EntityMetadata,
   EntityMetadataSchema,
 } from '@monte/types';
+import { assertInventoryConsistency, normalizeLessonDocumentTimelines } from '@monte/lesson-service';
 
 export type {
   CurriculumTree,
@@ -266,32 +267,15 @@ const normalizeLessonDocument = (document: LessonDocument): SaveLessonDraftArgs[
   const baseline = now();
   const draftMeta = parsed.meta ?? {};
   const scenarioBinding = pickScenarioBinding(parsed);
-  const normalizeTimelineSegments = parsed.lesson.segments?.map((segment) => {
-    const timeline = segment.timeline ?? { version: 1, steps: [] };
-    const steps = (timeline.steps ?? []).map((step) => ({
-      ...step,
-      keyframes: step.keyframes ?? [],
-      interactions: step.interactions ?? [],
-    }));
-    return {
-      ...segment,
-      timeline: {
-        version: timeline.version ?? 1,
-        label: timeline.label,
-        metadata: timeline.metadata,
-        steps,
-      },
-    };
-  }) ?? [];
-
-  return {
-    ...parsed,
-    lesson: {
-      ...parsed.lesson,
-      focusSkills: parsed.lesson.focusSkills ?? [],
-      materials: parsed.lesson.materials ?? [],
-      segments: normalizeTimelineSegments,
-    },
+  const normalized = normalizeLessonDocumentTimelines(parsed);
+  const lesson = {
+    ...normalized.lesson,
+    focusSkills: normalized.lesson.focusSkills ?? [],
+    materials: normalized.lesson.materials ?? [],
+  };
+  const result: LessonDocument = {
+    ...normalized,
+    lesson,
     meta: {
       ...draftMeta,
       createdAt: normalizeTimestamp(draftMeta.createdAt, baseline),
@@ -306,6 +290,8 @@ const normalizeLessonDocument = (document: LessonDocument): SaveLessonDraftArgs[
         : undefined,
     },
   };
+  assertInventoryConsistency(result);
+  return result;
 };
 
 const CreateUnitResultSchema = z.object({ unitId: IdSchema<'units'>() });

@@ -1,5 +1,5 @@
 {
-  "name": "@monte/api",
+  "name": "@monte/lesson-service",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -13,24 +13,18 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
-    },
-    "./convex/_generated/*": {
-      "import": "./convex/_generated/*",
-      "default": "./convex/_generated/*"
     }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc --emitDeclarationOnly",
     "typecheck": "tsc --noEmit",
-    "lint": "echo \"No lint tasks for @monte/api\""
+    "lint": "echo \"No lint tasks for @monte/lesson-service\""
   },
   "dependencies": {
-    "@monte/lesson-service": "workspace:*",
-    "@monte/types": "workspace:*",
-    "convex": "^1.27.5",
-    "zod": "^3.25.76"
+    "@monte/types": "workspace:*"
   },
   "devDependencies": {
+    "@types/node": "^20.17.10",
     "tsup": "^8.5.0"
   }
 }

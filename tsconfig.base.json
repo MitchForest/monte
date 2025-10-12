@@ -19,6 +19,8 @@
       "@monte/types/*": ["packages/types/*"],
       "@monte/curriculum-service": ["packages/curriculum-service/src/index.ts"],
       "@monte/curriculum-service/*": ["packages/curriculum-service/*"],
+      "@monte/lesson-service": ["packages/lesson-service/src/index.ts"],
+      "@monte/lesson-service/*": ["packages/lesson-service/*"],
       "@monte/question-service/*": ["packages/question-service/*"],
       "@monte/graph-service/*": ["packages/graph-service/*"],
       "@monte/engine-service/*": ["packages/engine-service/*"]

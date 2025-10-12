@@ -18,6 +18,7 @@
     "@kobalte/core": "^0.13.11",
     "@monte/api": "workspace:*",
     "@monte/curriculum-service": "workspace:*",
+    "@monte/lesson-service": "workspace:*",
     "@monte/types": "workspace:*",
     "@tanstack/router-devtools": "^1.77.0",
     "@tanstack/solid-form": "^0.25.0",

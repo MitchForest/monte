@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "types": ["node"]
+  },
+  "files": ["src/index.ts", "src/timeline.ts", "src/inventory.ts"]
+}

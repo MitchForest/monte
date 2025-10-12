@@ -20,4 +20,5 @@ Store secrets through Convex env tooling and avoid checking `.env` files into th
 
 RULES:
 - Auth Schema Updates (local install): cd apps/backend/convex/betterAuth, npx @better-auth/cli generate -y, pnpm sync:codegen, npx convex dev --once
+- Get user explicit approval before any database/schema changes
 - Use kobalte, tailwind, class variance authority for components

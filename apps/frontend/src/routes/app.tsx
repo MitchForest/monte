@@ -1,4 +1,4 @@
-import { For, Match, Show, Switch, createMemo, createResource } from 'solid-js';
+import { For, Match, Show, Switch, createMemo, createResource, type Accessor } from 'solid-js';
 import { useNavigate } from '@tanstack/solid-router';
 
 import { Button, Card } from '../components/ui';
@@ -96,13 +96,9 @@ const OrganizationDetails = () => {
   );
 
   const overviewError = () => {
-    const candidate: unknown = overview.error;
-    if (typeof candidate === 'function') {
-      const accessor: () => unknown = candidate;
-      const value: unknown = accessor();
-      return value instanceof Error ? value : undefined;
-    }
-    return undefined;
+    const accessor = overview.error as Accessor<unknown> | undefined;
+    const value = accessor?.();
+    return value instanceof Error ? value : undefined;
   };
 
   return (
