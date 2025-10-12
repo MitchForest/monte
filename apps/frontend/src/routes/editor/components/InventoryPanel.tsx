@@ -5,7 +5,7 @@ import { beadPlaceOptions, workspaceOptions } from '../constants';
 import { curriculumMaterials } from '../../../domains/curriculum/materials';
 import { Button, Card } from '../../../components/ui';
 import type { TokenTypeDefinition } from '@monte/types';
-import { resolveBankQuantity } from '../../../domains/curriculum/utils/inventory';
+import { resolveBankQuantity } from '@monte/lesson-service';
 
 const visualKindOptions = [
   { value: 'bead', label: 'Bead' },

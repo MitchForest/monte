@@ -1,0 +1,2 @@
+export { assertInventoryConsistency, buildRuntimeState, detectInventoryConsistencyIssues, deriveAcceptedTokenIds, createEmptyInventory, createDefaultMaterialBank, createDefaultTokenType, createMaterialBank, createTokenType, removeTokenFromBank, resolveBankQuantity, type ConsistencyIssue, type InventoryDelta, type RuntimeInventoryState, } from './inventory.js';
+//# sourceMappingURL=index.d.ts.map

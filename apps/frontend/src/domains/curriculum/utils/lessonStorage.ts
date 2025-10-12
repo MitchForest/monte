@@ -1,4 +1,5 @@
 import type { LessonDocument } from '@monte/types';
+import { deserializeLessonDocument, serializeLessonDocument } from '@monte/lesson-service';
 
 const STORAGE_PREFIX = 'monte:lesson-doc:';
 
@@ -9,7 +10,12 @@ export const readStoredLessonDocument = (lessonId: string): LessonDocument | und
   try {
     const raw = window.localStorage.getItem(getLessonStorageKey(lessonId));
     if (!raw) return undefined;
-    return JSON.parse(raw) as LessonDocument;
+    const parsed = deserializeLessonDocument(raw);
+    if (!parsed) {
+      console.warn('Failed to validate stored lesson document');
+      return undefined;
+    }
+    return parsed;
   } catch (error) {
     console.warn('Failed to parse stored lesson document', error);
     return undefined;
@@ -19,7 +25,10 @@ export const readStoredLessonDocument = (lessonId: string): LessonDocument | und
 export const writeStoredLessonDocument = (document: LessonDocument) => {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(getLessonStorageKey(document.lesson.id), JSON.stringify(document));
+    window.localStorage.setItem(
+      getLessonStorageKey(document.lesson.id),
+      serializeLessonDocument(document),
+    );
   } catch (error) {
     console.error('Failed to persist lesson document', error);
     throw error;

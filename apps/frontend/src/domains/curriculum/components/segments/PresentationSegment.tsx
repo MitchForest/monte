@@ -2,7 +2,7 @@ import { For, Show, batch, createEffect, createMemo, createSignal, onCleanup, on
 import { createStore, produce } from 'solid-js/store';
 import { Motion } from 'solid-motionone';
 
-import type { PlayerStatus } from '../../machines/lessonPlayer';
+import type { PlayerStatus } from '@monte/lesson-service';
 import type { DemoEventRecorder } from '../../analytics/events';
 import type { LessonSegment, PresentationAction, PresentationScript } from '@monte/types';
 import { Card } from '../../../../components/ui';

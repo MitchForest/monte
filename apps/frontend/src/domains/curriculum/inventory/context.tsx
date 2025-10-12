@@ -8,7 +8,7 @@ import type {
   TokenTypeDefinition,
   WorkspaceKind,
 } from '@monte/types';
-import { createEmptyInventory } from '../utils/inventory';
+import { createEmptyInventory } from '@monte/lesson-service';
 import {
   buildRuntimeState,
   detectInventoryConsistencyIssues,
@@ -37,7 +37,7 @@ interface LessonInventoryContextValue {
   verifyConsistency: () => void;
 }
 
-const EMPTY_INVENTORY = createEmptyInventory();
+const EMPTY_INVENTORY: LessonMaterialInventory = createEmptyInventory();
 
 const LessonInventoryContext = createContext<LessonInventoryContextValue>();
 

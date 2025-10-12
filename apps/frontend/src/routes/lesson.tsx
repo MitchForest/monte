@@ -7,15 +7,14 @@ import {
   createMemo,
   createResource,
   createSignal,
-  onCleanup,
   onMount,
 } from 'solid-js';
 import { useNavigate, useParams } from '@tanstack/solid-router';
-import { createActor, type ActorRefFrom } from 'xstate';
 
 import { safeBuildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
 import { useProgress } from '../domains/curriculum/state/progress';
-import { createLessonPlayerMachine, type PlayerEvent, type PlayerStatus } from '../domains/curriculum/machines/lessonPlayer';
+import { useLessonPlayer } from '../domains/curriculum/state/lessonPlayer';
+import { type PlayerEvent, type PlayerStatus } from '@monte/lesson-service';
 import type {
   GuidedEvaluatorId,
   GuidedStep,
@@ -37,7 +36,7 @@ import {
   generateStampGameScenario,
   type GoldenBeadScenario,
   type StampGameScenario,
-} from '../domains/curriculum/scenarios/multiplication';
+} from '@monte/lesson-service';
 import { CurriculumAccessNotice, type CurriculumAvailabilityStatus } from '../components/CurriculumAccessNotice';
 import { resolveNarrationAssets } from '../domains/curriculum/utils/assets';
 import {
@@ -293,7 +292,7 @@ const Lesson = () => {
   const auth = useAuth();
   type Availability = 'ready' | CurriculumAvailabilityStatus;
   const availability = createMemo<Availability>(() => {
-    if (!isCurriculumApiAvailable) return 'offline';
+    if (!isCurriculumApiAvailable()) return 'offline';
     if (auth.loading()) return 'loading';
     if (!isCurriculumAuthReady()) return 'offline';
     if (!auth.isAuthenticated()) return 'unauthorized';
@@ -356,12 +355,8 @@ const Lesson = () => {
     return map;
   });
 
-  type LessonMachine = ReturnType<typeof createLessonPlayerMachine>;
-  type LessonActor = ActorRefFrom<LessonMachine>;
-  type LessonSnapshot = ReturnType<LessonActor['getSnapshot']>;
-
-  const [playerState, setPlayerState] = createSignal<LessonSnapshot | null>(null);
-  const [service, setService] = createSignal<LessonActor | null>(null);
+  const lessonPlayer = useLessonPlayer(() => segments().length);
+  const playerState = createMemo(() => lessonPlayer.state());
   const currentScenario = createMemo<LessonScenario>(() => {
     const document = lessonDocument();
     if (!document) return undefined;
@@ -378,26 +373,7 @@ const Lesson = () => {
   const [totalActions, setTotalActions] = createSignal(0);
   const [actionJumpToIndex, setActionJumpToIndex] = createSignal<number | undefined>(undefined);
 
-  createEffect(() => {
-    const lessonValue = lesson();
-    if (!lessonValue) return;
-
-    const machine = createLessonPlayerMachine(lessonValue.segments.length);
-    const actor = createActor(machine);
-
-    setPlayerState(actor.getSnapshot());
-    const subscription = actor.subscribe((state) => setPlayerState(state));
-    actor.start();
-    setPlayerState(actor.getSnapshot());
-    setService(actor);
-
-    onCleanup(() => {
-      subscription.unsubscribe();
-      actor.stop();
-    });
-  });
-
-  const send = (event: PlayerEvent) => service()?.send(event);
+  const send = (event: PlayerEvent) => lessonPlayer.send(event);
 
   const activeIndex = createMemo(() => {
     const contextIndex = playerState()?.context.index ?? 0;
@@ -405,7 +381,7 @@ const Lesson = () => {
   });
 
   const activeSegment = createMemo(() => segments()[activeIndex()] ?? segments()[0]);
-  const status = createMemo<PlayerStatus>(() => playerState()?.context.status ?? 'idle');
+  const status = createMemo<PlayerStatus>(() => lessonPlayer.status());
   const isPlaying = createMemo(() => status() === 'playing');
   const activeSegmentType = createMemo(() => activeSegment()?.type ?? 'presentation');
 

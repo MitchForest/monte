@@ -24,6 +24,11 @@ type LessonAuthoringUpdate = {
     gradeLevels: LessonGradeLevel[];
     updatedAt: number;
 };
+type CurriculumClientManager = CurriculumClient & {
+    client: CurriculumClient;
+    isApiAvailable: () => boolean;
+    isAuthReady: () => boolean;
+};
 interface CurriculumClient {
     setAuthToken: (token?: string | null) => void;
     clearAuthToken: () => void;
@@ -101,8 +106,12 @@ interface CurriculumClient {
     exportManifest: () => Promise<CurriculumManifest>;
 }
 declare const createCurriculumClient: (httpClient: ConvexHttpClient) => CurriculumClient;
+declare const createCurriculumClientManager: (client: CurriculumClient, { apiAvailable }?: {
+    apiAvailable?: boolean;
+}) => CurriculumClientManager;
 declare const createCurriculumHttpClient: (convexUrl: string) => CurriculumClient;
-declare const curriculumClient: CurriculumClient;
+declare const createBrowserCurriculumClientManager: () => CurriculumClientManager;
+declare const curriculumClientManager: CurriculumClientManager;
 declare const isCurriculumApiAvailable: boolean;
 declare const isCurriculumAuthReady: () => boolean;
 declare const setCurriculumAuthToken: (token?: string | null) => void;
@@ -1334,4 +1343,7 @@ declare const parseAuthMemberOrNull: (input: unknown) => AuthMember | null;
 declare const parseAuthInvitationList: (input: unknown) => AuthInvitation[];
 declare const parseOrganizationOverview: (input: unknown) => OrganizationOverview;
 
-export { type CurriculumClient, type LessonAuthoringUpdate, type SyncManifestInput, type UpdateLessonAuthoringInput, clearAuthToken, createCurriculumClient, createCurriculumHttpClient, createLesson, createTopic, createUnit, curriculumClient, deleteLesson, deleteTopic, deleteUnit, exportManifest, fetchCurriculumTree, fetchLessonById, fetchLessonBySlug, fetchLessonDrafts, fetchUnitBySlug, isCurriculumApiAvailable, isCurriculumAuthReady, listLessons, moveLesson, moveTopic, parseAuthInvitationList, parseAuthMember, parseAuthMemberOrNull, parseAuthOrganization, parseAuthOrganizationList, parseOrganizationOverview, publishLesson, reorderLessons, reorderTopics, reorderUnits, saveLessonDraft, setCurriculumAuthToken, syncManifest, updateLessonAuthoring, updateTopic, updateUnit };
+declare const readEnvString: (key: string) => string | undefined;
+declare const requireEnvString: (key: string) => string;
+
+export { type CurriculumClient, type CurriculumClientManager, type LessonAuthoringUpdate, type SyncManifestInput, type UpdateLessonAuthoringInput, clearAuthToken, createBrowserCurriculumClientManager, createCurriculumClient, createCurriculumClientManager, createCurriculumHttpClient, createLesson, createTopic, createUnit, curriculumClientManager, deleteLesson, deleteTopic, deleteUnit, exportManifest, fetchCurriculumTree, fetchLessonById, fetchLessonBySlug, fetchLessonDrafts, fetchUnitBySlug, isCurriculumApiAvailable, isCurriculumAuthReady, listLessons, moveLesson, moveTopic, parseAuthInvitationList, parseAuthMember, parseAuthMemberOrNull, parseAuthOrganization, parseAuthOrganizationList, parseOrganizationOverview, publishLesson, readEnvString, reorderLessons, reorderTopics, reorderUnits, requireEnvString, saveLessonDraft, setCurriculumAuthToken, syncManifest, updateLessonAuthoring, updateTopic, updateUnit };

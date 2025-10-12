@@ -9,7 +9,7 @@ import type {
   TokenTypeDefinition,
   WorkspaceKind,
 } from '@monte/types';
-import type { GoldenBeadScenario, StampGameScenario } from '../../scenarios/multiplication';
+import type { GoldenBeadScenario, StampGameScenario } from '@monte/lesson-service';
 import { Button, Card } from '../../../../components/ui';
 import { LessonCanvas, useViewportObserver } from '../../canvas';
 import type { DemoEventRecorder } from '../../analytics/events';

@@ -8,9 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "validate:lessons": "tsx src/curriculum/scripts/validate-lessons.ts",
-    "curriculum:tts": "tsx src/curriculum/scripts/generateNarration.ts",
-    "curriculum:seed": "tsx src/curriculum/scripts/seedCurriculum.ts",
+    "validate:lessons": "tsx ../../scripts/curriculum/validate-lessons.ts",
+    "curriculum:tts": "tsx ../../scripts/curriculum/generateNarration.ts",
+    "curriculum:seed": "tsx ../../scripts/curriculum/seedCurriculum.ts",
     "lint": "eslint \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {

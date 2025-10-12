@@ -9,7 +9,7 @@ import {
   type Setter,
 } from 'solid-js';
 import type { SetStoreFunction } from 'solid-js/store';
-import { createEditorFormsStore } from '../state/formsStore';
+import { createEditorFormsStore } from '../../../domains/curriculum/editor/formsStore';
 
 import type { Id } from '@monte/types';
 import {
@@ -32,7 +32,7 @@ import {
   type LessonDraftRecord,
 } from '../../../domains/curriculum/api/curriculumClient';
 import { curriculumMaterials } from '../../../domains/curriculum/materials';
-import type { LessonEditor } from '../../../domains/curriculum/state/lessonEditor';
+import type { LessonEditor } from '@monte/lesson-service';
 import { toast } from 'solid-sonner';
 import type {
   GuidedEvaluatorId,
@@ -65,7 +65,7 @@ import type {
   LessonSegment,
   TopicFormState,
   UnitFormState,
-} from '../types';
+} from '../../../domains/curriculum/editor/types';
 import {
   clone,
   createPresentationAction,
@@ -79,8 +79,8 @@ import {
   slugify,
   validateLessonDocument,
 } from '../utils';
-import { createLessonDocumentStore } from '../state/lessonDocumentStore';
-import type { InventorySnapshotRegistration } from '../state/inventoryStore';
+import { createLessonDocumentStore } from '../../../domains/curriculum/editor/lessonDocumentStore';
+import type { InventorySnapshotRegistration } from '../../../domains/curriculum/editor/inventoryStore';
 import { ensureSegmentTimeline } from '../../../domains/curriculum/utils/timeline';
 
 type UnitNode = CurriculumTree[number];
@@ -99,7 +99,7 @@ interface CurriculumSelection {
 }
 
 import { createConfirmController, type ConfirmController } from '../state/confirmController';
-import { createSelectionStore } from '../state/selectionStore';
+import { createSelectionStore } from '../../../domains/curriculum/editor/selectionStore';
 
 interface EditorForms {
   unit: {

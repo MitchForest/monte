@@ -18,7 +18,41 @@ Commits follow the existing short, imperative style (`git log` shows entries lik
 ## Security & Configuration Tips
 Store secrets through Convex env tooling and avoid checking `.env` files into the repo. Frontend expects Convex deployment IDs in `.env.local`; backend reads secrets from `convex env set`. Regenerate API keys immediately if they leak, and document any new configuration knobs in `.docs/plan.md` for future agents.
 
+### Convex Data Hygiene (last verified: 2025-03-XX)
+- Runtime tables: `units`, `topics`, `lessons`.
+- Better Auth tables managed via plugins: `user`, `session`, `account`, `verification`, `organization`, `member`, `invitation`, `jwks` (plus Stripe adapters when enabled).
+- No legacy `organizations`/`orgMemberships`/`billing` tables should remain in Convex — delete them immediately if discovered.
+- Better Auth plugins in use: magic link, admin, organization, Stripe. Keep configuration changes documented alongside schema updates.
+
+---- DON'T DELETE BELOW THIS LINE (authored by user)----
+
 RULES:
 - Auth Schema Updates (local install): cd apps/backend/convex/betterAuth, npx @better-auth/cli generate -y, pnpm sync:codegen, npx convex dev --once
 - Get user explicit approval before any database/schema changes
 - Use kobalte, tailwind, class variance authority for components
+
+
+PRINCIPLES:
+- Simplicity First, Always
+We optimize for clarity, not cleverness. The best system is the simplest one that accomplishes the goal cleanly.
+
+- Question complexity, don’t perpetuate it.
+When you see technical debt, awkward abstractions, or tangled logic, pause before adding more. Ask: “Is this the simplest way to achieve the goal?”
+
+- Favor deletion over addition.
+If a feature, abstraction, or layer can be removed without breaking the product’s promise — remove it. Every extra piece of code is a maintenance cost.
+
+- Resist “cargo cult” engineering.
+Don’t copy patterns or introduce frameworks without understanding why they’re needed. Build from first principles and adapt to our actual use case.
+
+- Prefer explicitness to cleverness.
+Code should be easy to reason about for any future reader. If something requires multiple mental hops to follow, it’s too complex.
+
+- Spot and call out over-engineering.
+It’s everyone’s job to raise a hand when something feels more complicated than it needs to be — even if it “works.” Silent acceptance is how technical debt spirals.
+
+- Conventions over invention.
+Follow established patterns and architecture guidelines unless there’s a clear, articulated reason to deviate. Shared conventions reduce friction and cognitive load.
+
+- Mental models over magic.
+Each module should have a simple conceptual model (“this thing does one job”). If it’s hard to explain, it’s probably hard to maintain.

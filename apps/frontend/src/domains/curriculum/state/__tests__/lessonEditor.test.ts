@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { LessonDocument, LessonMaterialInventory } from '@monte/types';
 
-import { createLessonEditor } from '../lessonEditor';
+import { createLessonEditor } from '@monte/lesson-service';
 
 const buildInventory = (): LessonMaterialInventory => ({
   version: 1,

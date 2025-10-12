@@ -1,4 +1,4 @@
-// src/index.ts
+// src/runtime/service.ts
 import { promises as fs } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -29,7 +29,7 @@ var SkillQuestionBankSchema = z.object({
 var DIFFICULTY_FALLBACK = "medium";
 var QUESTIONS_DIR = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../questions"
+  "../../questions"
 );
 var bankCache = /* @__PURE__ */ new Map();
 async function loadQuestionBank(skillId) {
@@ -116,9 +116,7 @@ var questionService = {
     return;
   }
 };
-var index_default = questionService;
 export {
-  index_default as default,
   questionService
 };
 //# sourceMappingURL=index.js.map

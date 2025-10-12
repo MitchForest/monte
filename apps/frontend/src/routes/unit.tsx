@@ -79,7 +79,7 @@ const Unit = () => {
   const auth = useAuth();
   type Availability = 'ready' | CurriculumAvailabilityStatus;
   const availability = createMemo<Availability>(() => {
-    if (!isCurriculumApiAvailable) return 'offline';
+    if (!isCurriculumApiAvailable()) return 'offline';
     if (auth.loading()) return 'loading';
     if (!isCurriculumAuthReady()) return 'offline';
     if (!auth.isAuthenticated()) return 'unauthorized';

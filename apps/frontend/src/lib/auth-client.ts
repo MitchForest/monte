@@ -1,6 +1,7 @@
 import { createAuthClient } from 'better-auth/solid';
 import { convexClient } from '@convex-dev/better-auth/client/plugins';
 import { adminClient, magicLinkClient, organizationClient } from 'better-auth/client/plugins';
+import { readEnvString } from '@monte/api';
 
 type ResolvedBaseSettings = {
   baseURL?: string;
@@ -32,29 +33,7 @@ const resolveBaseSettings = (raw?: string): ResolvedBaseSettings => {
   }
 };
 
-const readEnvValue = (key: string): string | undefined => {
-  const meta =
-    typeof import.meta !== 'undefined' && typeof (import.meta as { env?: unknown }).env === 'object'
-      ? ((import.meta as { env?: Record<string, unknown> }).env ?? undefined)
-      : undefined;
-  const metaCandidate = meta?.[key];
-  if (typeof metaCandidate === 'string' && metaCandidate.length > 0) {
-    return metaCandidate;
-  }
-
-  const nodeEnv =
-    typeof globalThis === 'object' && 'process' in globalThis
-      ? (globalThis as { process?: { env?: Record<string, unknown> } }).process?.env
-      : undefined;
-  const nodeCandidate = nodeEnv?.[key];
-  if (typeof nodeCandidate === 'string' && nodeCandidate.length > 0) {
-    return nodeCandidate;
-  }
-
-  return undefined;
-};
-
-const rawBaseUrl = readEnvValue('VITE_CONVEX_SITE_URL') ?? readEnvValue('VITE_CONVEX_URL');
+const rawBaseUrl = readEnvString('VITE_CONVEX_SITE_URL') ?? readEnvString('VITE_CONVEX_URL');
 
 const { baseURL, basePath } = resolveBaseSettings(rawBaseUrl);
 

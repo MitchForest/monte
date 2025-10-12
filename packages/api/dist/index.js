@@ -21,6 +21,38 @@ import {
   EntityMetadataSchema
 } from "@monte/types";
 import { assertInventoryConsistency, normalizeLessonDocumentTimelines } from "@monte/lesson-service";
+
+// src/env.ts
+var readMetaEnvValue = (key) => {
+  if (typeof import.meta !== "undefined" && typeof import.meta.env === "object") {
+    const env = import.meta.env;
+    const candidate = env?.[key];
+    if (typeof candidate === "string" && candidate.length > 0) {
+      return candidate;
+    }
+  }
+  return void 0;
+};
+var readNodeEnvValue = (key) => {
+  if (typeof globalThis === "object" && "process" in globalThis) {
+    const env = globalThis.process?.env;
+    const candidate = env?.[key];
+    if (typeof candidate === "string" && candidate.length > 0) {
+      return candidate;
+    }
+  }
+  return void 0;
+};
+var readEnvString = (key) => readMetaEnvValue(key) ?? readNodeEnvValue(key);
+var requireEnvString = (key) => {
+  const value = readEnvString(key);
+  if (typeof value === "string" && value.length > 0) {
+    return value;
+  }
+  throw new Error(`Missing required environment variable: ${key}`);
+};
+
+// src/curriculum.ts
 var now = () => Date.now();
 var pickScenarioBinding = (document) => {
   for (const segment of document.lesson.segments) {
@@ -30,19 +62,8 @@ var pickScenarioBinding = (document) => {
   }
   return document.meta?.scenario;
 };
-var readEnvValue = (key) => {
-  const metaEnv = import.meta?.env;
-  if (metaEnv && key in metaEnv) {
-    return metaEnv[key];
-  }
-  const nodeEnv = globalThis.process?.env;
-  if (nodeEnv && key in nodeEnv) {
-    return nodeEnv[key];
-  }
-  return void 0;
-};
 var convexUrl = (() => {
-  const value = readEnvValue("VITE_CONVEX_URL") ?? readEnvValue("CONVEX_URL");
+  const value = readEnvString("VITE_CONVEX_URL") ?? readEnvString("CONVEX_URL");
   return typeof value === "string" && value.length > 0 ? value : void 0;
 })();
 var missingUrlMessage = "Curriculum client unavailable: set VITE_CONVEX_URL to enable live authoring. Falling back to local-only stubs.";
@@ -341,20 +362,51 @@ var createCurriculumClient = (httpClient) => {
     }
   };
 };
+var createCurriculumClientManager = (client, { apiAvailable = true } = {}) => {
+  let authReady = !apiAvailable;
+  const managedClient = {
+    ...client,
+    setAuthToken(token) {
+      client.setAuthToken(token ?? null);
+      authReady = !apiAvailable || typeof token === "string";
+    },
+    clearAuthToken() {
+      client.clearAuthToken();
+      authReady = !apiAvailable;
+    }
+  };
+  return {
+    ...managedClient,
+    client: managedClient,
+    isApiAvailable: () => apiAvailable,
+    isAuthReady: () => authReady
+  };
+};
 var createCurriculumHttpClient = (convexUrl2) => createCurriculumClient(new ConvexHttpClient(convexUrl2));
-var curriculumClient = convexUrl ? createCurriculumHttpClient(convexUrl) : createUnavailableCurriculumClient();
+var createBrowserCurriculumClientManager = () => {
+  if (!convexUrl) {
+    return createCurriculumClientManager(createUnavailableCurriculumClient(), {
+      apiAvailable: false
+    });
+  }
+  return createCurriculumClientManager(createCurriculumHttpClient(convexUrl), {
+    apiAvailable: true
+  });
+};
+var defaultCurriculumClientManager = createBrowserCurriculumClientManager();
 if (!convexUrl) {
   console.warn(missingUrlMessage);
 }
-var isCurriculumApiAvailable = Boolean(convexUrl);
-var curriculumAuthReady = !isCurriculumApiAvailable;
-var isCurriculumAuthReady = () => curriculumAuthReady;
+var curriculumClientManager = defaultCurriculumClientManager;
+var isCurriculumApiAvailable = curriculumClientManager.isApiAvailable();
+var isCurriculumAuthReady = () => curriculumClientManager.isAuthReady();
 var setCurriculumAuthToken = (token) => {
-  curriculumClient.setAuthToken(token ?? null);
-  curriculumAuthReady = !isCurriculumApiAvailable || typeof token === "string";
+  curriculumClientManager.setAuthToken(token ?? null);
+};
+var clearAuthToken = () => {
+  curriculumClientManager.clearAuthToken();
 };
 var {
-  clearAuthToken,
   fetchCurriculumTree,
   fetchUnitBySlug,
   fetchLessonBySlug,
@@ -378,8 +430,8 @@ var {
   listLessons,
   syncManifest,
   exportManifest
-} = curriculumClient;
-var fetchLessonDrafts = (topicId) => curriculumClient.listLessons(topicId);
+} = curriculumClientManager;
+var fetchLessonDrafts = (topicId) => curriculumClientManager.listLessons(topicId);
 
 // src/auth.ts
 import { z as z2 } from "zod";
@@ -400,12 +452,14 @@ var parseAuthInvitationList = (input) => AuthInvitationListSchema.parse(input);
 var parseOrganizationOverview = (input) => OrganizationOverviewSchema.parse(input);
 export {
   clearAuthToken,
+  createBrowserCurriculumClientManager,
   createCurriculumClient,
+  createCurriculumClientManager,
   createCurriculumHttpClient,
   createLesson,
   createTopic,
   createUnit,
-  curriculumClient,
+  curriculumClientManager,
   deleteLesson,
   deleteTopic,
   deleteUnit,
@@ -427,9 +481,11 @@ export {
   parseAuthOrganizationList,
   parseOrganizationOverview,
   publishLesson,
+  readEnvString,
   reorderLessons,
   reorderTopics,
   reorderUnits,
+  requireEnvString,
   saveLessonDraft,
   setCurriculumAuthToken,
   syncManifest,

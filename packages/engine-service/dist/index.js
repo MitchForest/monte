@@ -1,4 +1,4 @@
-// src/index.ts
+// src/runtime/service.ts
 import { questionService } from "@monte/question-service";
 import graphService from "@monte/graph-service";
 var engineService = {
@@ -8,9 +8,7 @@ var engineService = {
     return null;
   }
 };
-var index_default = engineService;
 export {
-  index_default as default,
   engineService
 };
 //# sourceMappingURL=index.js.map

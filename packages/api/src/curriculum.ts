@@ -24,6 +24,7 @@ import {
   EntityMetadataSchema,
 } from '@monte/types';
 import { assertInventoryConsistency, normalizeLessonDocumentTimelines } from '@monte/lesson-service';
+import { readEnvString } from './env.js';
 
 export type {
   CurriculumTree,
@@ -73,20 +74,14 @@ type LessonAuthoringUpdate = {
   updatedAt: number;
 };
 
-const readEnvValue = (key: string): unknown => {
-  const metaEnv = (import.meta as unknown as { env?: Record<string, unknown> })?.env;
-  if (metaEnv && key in metaEnv) {
-    return metaEnv[key];
-  }
-  const nodeEnv = (globalThis as unknown as { process?: { env?: Record<string, unknown> } }).process?.env;
-  if (nodeEnv && key in nodeEnv) {
-    return nodeEnv[key];
-  }
-  return undefined;
+export type CurriculumClientManager = CurriculumClient & {
+  client: CurriculumClient;
+  isApiAvailable: () => boolean;
+  isAuthReady: () => boolean;
 };
 
 const convexUrl = (() => {
-  const value: unknown = readEnvValue('VITE_CONVEX_URL') ?? readEnvValue('CONVEX_URL');
+  const value = readEnvString('VITE_CONVEX_URL') ?? readEnvString('CONVEX_URL');
   return typeof value === 'string' && value.length > 0 ? value : undefined;
 })();
 
@@ -480,30 +475,67 @@ export const createCurriculumClient = (httpClient: ConvexHttpClient): Curriculum
   };
 };
 
+export const createCurriculumClientManager = (
+  client: CurriculumClient,
+  { apiAvailable = true }: { apiAvailable?: boolean } = {},
+): CurriculumClientManager => {
+  let authReady = !apiAvailable;
+
+  const managedClient: CurriculumClient = {
+    ...client,
+    setAuthToken(token) {
+      client.setAuthToken(token ?? null);
+      authReady = !apiAvailable || typeof token === 'string';
+    },
+    clearAuthToken() {
+      client.clearAuthToken();
+      authReady = !apiAvailable;
+    },
+  };
+
+  return {
+    ...managedClient,
+    client: managedClient,
+    isApiAvailable: () => apiAvailable,
+    isAuthReady: () => authReady,
+  };
+};
+
 export const createCurriculumHttpClient = (convexUrl: string) =>
   createCurriculumClient(new ConvexHttpClient(convexUrl));
 
-export const curriculumClient: CurriculumClient = convexUrl
-  ? createCurriculumHttpClient(convexUrl)
-  : createUnavailableCurriculumClient();
+export const createBrowserCurriculumClientManager = (): CurriculumClientManager => {
+  if (!convexUrl) {
+    return createCurriculumClientManager(createUnavailableCurriculumClient(), {
+      apiAvailable: false,
+    });
+  }
+  return createCurriculumClientManager(createCurriculumHttpClient(convexUrl), {
+    apiAvailable: true,
+  });
+};
+
+const defaultCurriculumClientManager = createBrowserCurriculumClientManager();
 
 if (!convexUrl) {
   console.warn(missingUrlMessage);
 }
 
-export const isCurriculumApiAvailable = Boolean(convexUrl);
+export const curriculumClientManager = defaultCurriculumClientManager;
 
-let curriculumAuthReady = !isCurriculumApiAvailable;
+export const isCurriculumApiAvailable = curriculumClientManager.isApiAvailable();
 
-export const isCurriculumAuthReady = () => curriculumAuthReady;
+export const isCurriculumAuthReady = () => curriculumClientManager.isAuthReady();
 
 export const setCurriculumAuthToken = (token?: string | null) => {
-  curriculumClient.setAuthToken(token ?? null);
-  curriculumAuthReady = !isCurriculumApiAvailable || typeof token === 'string';
+  curriculumClientManager.setAuthToken(token ?? null);
+};
+
+export const clearAuthToken = () => {
+  curriculumClientManager.clearAuthToken();
 };
 
 export const {
-  clearAuthToken,
   fetchCurriculumTree,
   fetchUnitBySlug,
   fetchLessonBySlug,
@@ -527,6 +559,7 @@ export const {
   listLessons,
   syncManifest,
   exportManifest,
-} = curriculumClient;
+} = curriculumClientManager;
 
-export const fetchLessonDrafts = (topicId?: Id<'topics'>) => curriculumClient.listLessons(topicId);
+export const fetchLessonDrafts = (topicId?: Id<'topics'>) =>
+  curriculumClientManager.listLessons(topicId);

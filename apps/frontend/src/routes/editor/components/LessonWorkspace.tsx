@@ -13,7 +13,7 @@ import {
 } from './lessonEditors';
 import { Button, Card } from '../../../components/ui';
 import { curriculumMaterials } from '../../../domains/curriculum/materials';
-import type { LessonSegment, PresentationSegmentType } from '../types';
+import type { LessonSegment, PresentationSegmentType } from '../../../domains/curriculum/editor/types';
 import type { SegmentTimeline } from '@monte/types';
 import { InventoryPanel } from './InventoryPanel';
 import { LessonInventoryProvider } from '../../../domains/curriculum/inventory/context';

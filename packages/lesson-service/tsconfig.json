@@ -5,8 +5,25 @@
     "rootDir": "./src",
     "declaration": true,
     "declarationMap": true,
-    "composite": true,
-    "types": ["node"]
+    "types": ["node", "vitest/globals"]
   },
-  "files": ["src/index.ts", "src/timeline.ts", "src/inventory.ts"]
+  "files": [
+    "src/index.ts",
+    "src/runtime/index.ts",
+    "src/runtime/lesson/index.ts",
+    "src/runtime/lesson/timeline.ts",
+    "src/runtime/lesson/player.ts",
+    "src/runtime/lesson/factories.ts",
+    "src/runtime/inventory/index.ts",
+    "src/runtime/inventory/inventory.ts",
+    "src/runtime/editor/index.ts",
+    "src/runtime/editor/lessonEditor.ts",
+    "src/runtime/materials/index.ts",
+    "src/runtime/materials/registry.ts",
+    "src/runtime/materials/goldenBeads.ts",
+    "src/runtime/storage/lessonDocument.ts",
+    "src/runtime/storage/progress.ts",
+    "src/runtime/scenarios/multiplication.ts",
+    "src/contracts/index.ts"
+  ]
 }

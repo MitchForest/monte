@@ -16,7 +16,7 @@ const EditorRoute = () => {
   const navigate = useNavigate();
 
   const availability = createMemo<Availability>(() => {
-    if (!isCurriculumApiAvailable) return 'offline';
+    if (!isCurriculumApiAvailable()) return 'offline';
     if (auth.loading()) return 'loading';
     if (!isCurriculumAuthReady()) return 'offline';
     if (!auth.isAuthenticated()) return 'unauthorized';

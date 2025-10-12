@@ -1,4 +1,4 @@
-// src/index.ts
+// src/runtime/service.ts
 var graphService = {
   async getCanonicalGraph() {
     return {};
@@ -7,9 +7,7 @@ var graphService = {
     return {};
   }
 };
-var index_default = graphService;
 export {
-  index_default as default,
   graphService
 };
 //# sourceMappingURL=index.js.map

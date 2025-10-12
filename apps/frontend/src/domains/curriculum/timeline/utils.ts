@@ -1,4 +1,4 @@
-import { buildGoldenBeadScene, GOLDEN_BEADS_MATERIAL_ID } from '@monte/curriculum-service';
+import { buildGoldenBeadScene, GOLDEN_BEADS_MATERIAL_ID } from '@monte/lesson-service';
 import type {
   LessonDocument,
   LessonMaterialInventory,

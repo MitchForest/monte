@@ -17,17 +17,21 @@ const AUTHORING_STATUS_VALUES = new Set([
   'published',
 ]);
 
-let cachedCreateCurriculumHttpClient = null;
-const loadCurriculumHttpClientFactory = async () => {
-  if (cachedCreateCurriculumHttpClient) return cachedCreateCurriculumHttpClient;
+let cachedCurriculumFactories = null;
+const loadCurriculumClientFactories = async () => {
+  if (cachedCurriculumFactories) return cachedCurriculumFactories;
   try {
     const module = await import('../packages/api/dist/index.js');
-    const factory = module.createCurriculumHttpClient;
-    if (typeof factory !== 'function') {
-      throw new Error('createCurriculumHttpClient export not found.');
+    const httpFactory = module.createCurriculumHttpClient;
+    const managerFactory = module.createCurriculumClientManager;
+    if (typeof httpFactory !== 'function' || typeof managerFactory !== 'function') {
+      throw new Error('Unable to load curriculum client factories from @monte/api.');
     }
-    cachedCreateCurriculumHttpClient = factory;
-    return cachedCreateCurriculumHttpClient;
+    cachedCurriculumFactories = {
+      createCurriculumHttpClient: httpFactory,
+      createCurriculumClientManager: managerFactory,
+    };
+    return cachedCurriculumFactories;
   } catch (error) {
     throw new Error(
       'Unable to load curriculum API helpers. Run `pnpm --filter @monte/api build` and try again.',
@@ -270,9 +274,12 @@ const main = async () => {
 
   logManifestSummary(manifest);
 
-  let client;
+  let clientManager;
   if (push || exportRemote) {
-    const createCurriculumHttpClient = await loadCurriculumHttpClientFactory();
+    const {
+      createCurriculumHttpClient,
+      createCurriculumClientManager,
+    } = await loadCurriculumClientFactories();
     const convexUrl =
       process.env.CONVEX_URL ?? process.env.NEXT_PUBLIC_CONVEX_URL ?? '';
     if (!convexUrl) {
@@ -280,14 +287,14 @@ const main = async () => {
         'Missing Convex URL. Set CONVEX_URL or NEXT_PUBLIC_CONVEX_URL when using --push or --export.',
       );
     }
-    client = createCurriculumHttpClient(convexUrl);
+    clientManager = createCurriculumClientManager(createCurriculumHttpClient(convexUrl));
     const authToken =
       process.env.CONVEX_AUTH_TOKEN ??
       process.env.MONTE_CONVEX_TOKEN ??
       process.env.CONVEX_DEPLOYMENT_TOKEN ??
       null;
     if (authToken) {
-      client.setAuthToken(authToken);
+      clientManager.setAuthToken(authToken);
     } else if (!dryRun) {
       console.warn('⚠️  No Convex auth token provided; requests may fail. Set CONVEX_AUTH_TOKEN.');
     }
@@ -296,8 +303,8 @@ const main = async () => {
   if (push) {
     if (dryRun) {
       console.log('ℹ️  Would push manifest to Convex (omit --dry-run to execute).');
-    } else if (client) {
-      const summary = await client.syncManifest({
+    } else if (clientManager) {
+      const summary = await clientManager.syncManifest({
         manifest,
         prune,
         manifestCommit: commitRef,
@@ -314,8 +321,8 @@ const main = async () => {
         'packages/curriculum-service/content/manifest.convex.json',
       );
       console.log(`ℹ️  Would export Convex manifest to ${remotePath}`);
-    } else if (client) {
-      const remoteManifest = await client.exportManifest();
+    } else if (clientManager) {
+      const remoteManifest = await clientManager.exportManifest();
       const remotePath = path.resolve(
         process.cwd(),
         'packages/curriculum-service/content/manifest.convex.json',

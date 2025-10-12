@@ -18,13 +18,18 @@
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly",
     "typecheck": "tsc --noEmit",
-    "lint": "echo \"No lint tasks for @monte/lesson-service\""
+    "lint": "echo \"No lint tasks for @monte/lesson-service\"",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@monte/types": "workspace:*"
+    "@monte/types": "workspace:*",
+    "solid-js": "^1.9.9",
+    "xstate": "^5.14.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^20.17.10",
-    "tsup": "^8.5.0"
+    "tsup": "^8.5.0",
+    "vitest": "^1.6.0"
   }
 }

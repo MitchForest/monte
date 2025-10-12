@@ -15,7 +15,7 @@ import type {
   GuidedStepWithEvaluator,
   LessonSegment,
   PresentationSegmentType,
-} from '../types';
+} from '../../../domains/curriculum/editor/types';
 import type {
   GuidedEvaluatorId,
   PracticeQuestion,
