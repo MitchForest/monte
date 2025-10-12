@@ -24,6 +24,7 @@
     "@monte/types": "workspace:*"
   },
   "devDependencies": {
+    "@types/node": "^20.17.10",
     "tsup": "^8.5.0"
   }
 }

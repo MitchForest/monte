@@ -11,12 +11,14 @@
     "lint": "echo \"No lint tasks for @monte/backend\""
   },
   "dependencies": {
-    "@convex-dev/better-auth": "^0.9.1",
+    "@better-auth/stripe": "^1.3.27",
+    "@convex-dev/better-auth": "^0.9.3",
     "@monte/api": "workspace:*",
     "@monte/types": "workspace:*",
     "better-auth": "^1.3.27",
     "convex": "^1.27.5",
-    "convex-helpers": "^0.1.104"
+    "convex-helpers": "^0.1.104",
+    "stripe": "^18.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.17.10",

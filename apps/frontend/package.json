@@ -14,9 +14,10 @@
     "lint": "eslint \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
-    "@convex-dev/better-auth": "^0.9.1",
+    "@convex-dev/better-auth": "^0.9.3",
     "@kobalte/core": "^0.13.11",
     "@monte/api": "workspace:*",
+    "@monte/curriculum-service": "workspace:*",
     "@monte/types": "workspace:*",
     "@tanstack/router-devtools": "^1.77.0",
     "@tanstack/solid-form": "^0.25.0",

@@ -17,3 +17,7 @@ Commits follow the existing short, imperative style (`git log` shows entries lik
 
 ## Security & Configuration Tips
 Store secrets through Convex env tooling and avoid checking `.env` files into the repo. Frontend expects Convex deployment IDs in `.env.local`; backend reads secrets from `convex env set`. Regenerate API keys immediately if they leak, and document any new configuration knobs in `.docs/plan.md` for future agents.
+
+RULES:
+- Auth Schema Updates (local install): cd apps/backend/convex/betterAuth, npx @better-auth/cli generate -y, pnpm sync:codegen, npx convex dev --once
+- Use kobalte, tailwind, class variance authority for components

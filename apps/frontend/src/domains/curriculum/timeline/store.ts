@@ -208,8 +208,12 @@ export const createTimelineStore = () => {
 
   const selectedNodes = createMemo(() => state.selectedNodeIds.map((id) => state.sceneNodes[id]).filter(Boolean));
 
+  const sceneNodeList = createMemo(() => Object.values(state.sceneNodes));
+
   return {
     state,
+    sceneNodes: sceneNodeList,
+    getNode: (nodeId: string) => state.sceneNodes[nodeId],
     load,
     setCurrentStep,
     addStep,

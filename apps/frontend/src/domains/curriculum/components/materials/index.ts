@@ -11,6 +11,7 @@ export {
   GoldenBeadHundred,
   GoldenBeadThousand,
 } from './GoldenBead';
+export { GoldenBeadTray } from './GoldenBeadTray';
 export { StampTile } from './StampTile';
 export { YellowRibbon } from './YellowRibbon';
 export { PaperNote } from './PaperNote';

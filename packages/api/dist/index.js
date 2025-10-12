@@ -393,6 +393,24 @@ var {
   exportManifest
 } = curriculumClient;
 var fetchLessonDrafts = (topicId) => curriculumClient.listLessons(topicId);
+
+// src/auth.ts
+import { z as z2 } from "zod";
+import {
+  AuthInvitationSchema,
+  AuthMemberSchema,
+  AuthOrganizationSchema,
+  OrganizationOverviewSchema
+} from "@monte/types";
+var AuthOrganizationListSchema = z2.array(AuthOrganizationSchema);
+var AuthMemberNullableSchema = z2.union([AuthMemberSchema, z2.null()]);
+var AuthInvitationListSchema = z2.array(AuthInvitationSchema);
+var parseAuthOrganization = (input) => AuthOrganizationSchema.parse(input);
+var parseAuthOrganizationList = (input) => AuthOrganizationListSchema.parse(input);
+var parseAuthMember = (input) => AuthMemberSchema.parse(input);
+var parseAuthMemberOrNull = (input) => AuthMemberNullableSchema.parse(input);
+var parseAuthInvitationList = (input) => AuthInvitationListSchema.parse(input);
+var parseOrganizationOverview = (input) => OrganizationOverviewSchema.parse(input);
 export {
   clearAuthToken,
   createCurriculumClient,
@@ -415,6 +433,12 @@ export {
   listLessons,
   moveLesson,
   moveTopic,
+  parseAuthInvitationList,
+  parseAuthMember,
+  parseAuthMemberOrNull,
+  parseAuthOrganization,
+  parseAuthOrganizationList,
+  parseOrganizationOverview,
   publishLesson,
   reorderLessons,
   reorderTopics,

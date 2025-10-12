@@ -1,10 +1,23 @@
-import type { GoldenBeadManifest } from './goldenBeads.js';
-import { goldenBeadManifest } from './goldenBeads.js';
+import type { LessonMaterialInventory } from '@monte/types';
 
-export type ManipulativeManifest = GoldenBeadManifest;
+import { GOLDEN_BEADS_MATERIAL_ID, buildGoldenBeadScene } from './goldenBeads.js';
 
-const registry = new Map<string, ManipulativeManifest>();
-registry.set(goldenBeadManifest.id, goldenBeadManifest);
+export type ManipulativeSceneNode = NonNullable<LessonMaterialInventory['sceneNodes']>[number];
 
-export const getManipulativeManifest = (id: string) => registry.get(id);
-export const listManipulativeManifests = () => Array.from(registry.values());
+export interface ManipulativeDefinition {
+  id: string;
+  buildScene: () => ManipulativeSceneNode[];
+}
+
+const registry = new Map<string, ManipulativeDefinition>();
+registry.set(GOLDEN_BEADS_MATERIAL_ID, {
+  id: GOLDEN_BEADS_MATERIAL_ID,
+  buildScene: buildGoldenBeadScene,
+});
+
+export const getManipulativeDefinition = (id: string) => registry.get(id);
+export const listManipulativeDefinitions = () => Array.from(registry.values());
+
+// Backwards-compatible aliases while downstream code migrates to the new API.
+export const getManipulativeManifest = getManipulativeDefinition;
+export const listManipulativeManifests = listManipulativeDefinitions;

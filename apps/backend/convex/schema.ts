@@ -68,6 +68,4 @@ export default defineSchema({
     .index('by_slug', ['slug'])
     .index('by_topic', ['topicId'])
     .index('by_topic_order', ['topicId', 'order']),
-
-
 });

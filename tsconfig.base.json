@@ -14,8 +14,10 @@
     "skipLibCheck": true,
     "paths": {
       "@monte/backend/*": ["apps/backend/*"],
+      "@monte/types": ["packages/types/dist/index.d.ts"],
       "@monte/api/*": ["packages/api/*"],
       "@monte/types/*": ["packages/types/*"],
+      "@monte/curriculum-service": ["packages/curriculum-service/src/index.ts"],
       "@monte/curriculum-service/*": ["packages/curriculum-service/*"],
       "@monte/question-service/*": ["packages/question-service/*"],
       "@monte/graph-service/*": ["packages/graph-service/*"],

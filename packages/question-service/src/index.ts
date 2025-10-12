@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { z } from 'zod';
 
 export type QuestionContext = 'lesson' | 'drill' | 'quiz';
 
@@ -8,7 +9,7 @@ export interface GenerateOptions {
   skillIds: string[];
   context: QuestionContext;
   phase?: 'presentation' | 'guided' | 'independent';
-  mode?: 'mental-math' | 'mastery';
+  mode?: 'mental-math' | 'mastery' | 'fluency';
   limit?: number;
   shuffle?: boolean;
 }
@@ -21,33 +22,48 @@ export interface QuestionItem {
   metadata?: Record<string, unknown>;
 }
 
-type BaseQuestionItem = {
-  prompt: string;
-  answer: string | number;
-  difficulty?: 'easy' | 'medium' | 'hard';
-  metadata?: Record<string, unknown>;
-};
+const BaseQuestionItemSchema = z
+  .object({
+    prompt: z.string(),
+    answer: z.union([z.string(), z.number()]),
+    difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+type BaseQuestionItem = z.infer<typeof BaseQuestionItemSchema>;
 
-type LessonBuckets = {
-  presentation?: BaseQuestionItem[];
-  guided?: BaseQuestionItem[];
-  independent?: BaseQuestionItem[];
-};
+const LessonBucketsSchema = z
+  .object({
+    presentation: z.array(BaseQuestionItemSchema).optional(),
+    guided: z.array(BaseQuestionItemSchema).optional(),
+    independent: z.array(BaseQuestionItemSchema).optional(),
+  })
+  .strict();
+type LessonBuckets = z.infer<typeof LessonBucketsSchema>;
 
-type DrillBuckets = {
-  mentalMath?: BaseQuestionItem[];
-};
+const DrillBucketsSchema = z
+  .object({
+    mentalMath: z.array(BaseQuestionItemSchema).optional(),
+  })
+  .strict();
+type DrillBuckets = z.infer<typeof DrillBucketsSchema>;
 
-type QuizBuckets = {
-  mastery?: BaseQuestionItem[];
-  fluency?: BaseQuestionItem[];
-};
+const QuizBucketsSchema = z
+  .object({
+    mastery: z.array(BaseQuestionItemSchema).optional(),
+    fluency: z.array(BaseQuestionItemSchema).optional(),
+  })
+  .strict();
+type QuizBuckets = z.infer<typeof QuizBucketsSchema>;
 
-type SkillQuestionBank = {
-  lesson?: LessonBuckets;
-  drill?: DrillBuckets;
-  quiz?: QuizBuckets;
-};
+const SkillQuestionBankSchema = z
+  .object({
+    lesson: LessonBucketsSchema.optional(),
+    drill: DrillBucketsSchema.optional(),
+    quiz: QuizBucketsSchema.optional(),
+  })
+  .strict();
+type SkillQuestionBank = z.infer<typeof SkillQuestionBankSchema>;
 
 const DIFFICULTY_FALLBACK: QuestionItem['difficulty'] = 'medium';
 const QUESTIONS_DIR = path.resolve(
@@ -65,11 +81,16 @@ async function loadQuestionBank(skillId: string): Promise<SkillQuestionBank | nu
   const filePath = path.join(QUESTIONS_DIR, `${skillId}.json`);
   try {
     const raw = await fs.readFile(filePath, 'utf-8');
-    const parsed = JSON.parse(raw) as SkillQuestionBank;
+    const parsed = SkillQuestionBankSchema.parse(JSON.parse(raw));
     bankCache.set(skillId, parsed);
     return parsed;
   } catch (error: unknown) {
-    // File missing or invalid JSON—cache null to avoid repeated IO.
+    if ((error as NodeJS.ErrnoException)?.code !== 'ENOENT') {
+      console.warn(
+        `[question-service] Failed to load question bank for skill ${skillId}`,
+        error,
+      );
+    }
     bankCache.set(skillId, null);
     return null;
   }

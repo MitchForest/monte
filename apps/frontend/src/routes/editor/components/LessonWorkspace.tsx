@@ -1,4 +1,4 @@
-import { For, Show } from 'solid-js';
+import { For, Show, createEffect } from 'solid-js';
 
 import {
   useEditorActions,
@@ -18,10 +18,11 @@ import type { SegmentTimeline } from '@monte/types';
 import { InventoryPanel } from './InventoryPanel';
 import { LessonInventoryProvider } from '../../../domains/curriculum/inventory/context';
 import { SegmentPreview } from './SegmentPreview';
-import { featureTimeline } from '../../../config/features';
 import { TimelineProvider } from '../../../domains/curriculum/timeline/context';
 import { createTimelineStore } from '../../../domains/curriculum/timeline/store';
 import TimelineEditor from '../../../domains/curriculum/timeline/TimelineEditor';
+import TimelineCanvas from '../../../domains/curriculum/timeline/TimelineCanvas';
+import { mapInventoryNodes } from '../../../domains/curriculum/timeline/utils';
 import { ensureSegmentTimeline } from '../../../domains/curriculum/utils/timeline';
 
 const EMPTY_TIMELINE: SegmentTimeline = { version: 1, steps: [] };
@@ -67,6 +68,17 @@ export const LessonWorkspace = () => {
     handleSegmentTimelineUpdate,
   } = useEditorActions();
   const { selectedSegmentId } = useEditorSelection();
+  createEffect(() => {
+    const doc = lessonDocument();
+    const segment = selectedSegment();
+    if (!doc || !segment) return;
+    timelineStore.load({
+      lessonId: doc.lesson.id,
+      segmentId: segment.id,
+      nodes: mapInventoryNodes({ document: doc, segment }),
+      timeline: ensureSegmentTimeline(segment).timeline ?? EMPTY_TIMELINE,
+    });
+  });
 
   return (
     <section class="space-y-4">
@@ -157,17 +169,17 @@ export const LessonWorkspace = () => {
         </div>
       </Card>
 
-      {featureTimeline && lessonDocument() && selectedSegment() && (() => {
+      {lessonDocument() && selectedSegment() && (() => {
         const doc = lessonDocument();
         const segment = selectedSegment();
         if (!doc || !segment) return null;
         const timeline = ensureSegmentTimeline(segment).timeline ?? EMPTY_TIMELINE;
         return (
           <TimelineProvider store={timelineStore}>
+            <TimelineCanvas />
             <TimelineEditor
               lessonId={doc.lesson.id}
               segmentId={segment.id}
-              inventory={doc.lesson.materialInventory}
               timeline={timeline}
               onApplyTimeline={(nextTimeline) => handleSegmentTimelineUpdate(segment.id, nextTimeline)}
             />

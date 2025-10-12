@@ -1,6 +1,6 @@
 import { ConvexHttpClient } from 'convex/browser';
 import { z } from 'zod';
-import { CurriculumManifest, LessonAuthoringStatus, Id, LessonGradeLevel, CurriculumTree, CurriculumTreeUnit, LessonDraftRecord, EntityMetadata, LessonDocument, CurriculumSyncSummary } from '@monte/types';
+import { CurriculumManifest, LessonAuthoringStatus, Id, LessonGradeLevel, CurriculumTree, CurriculumTreeUnit, LessonDraftRecord, EntityMetadata, LessonDocument, CurriculumSyncSummary, AuthOrganization, AuthMember, AuthInvitation, OrganizationOverview } from '@monte/types';
 export { CurriculumManifest, CurriculumSyncSummary, CurriculumTree, CurriculumTreeLesson, CurriculumTreeTopic, CurriculumTreeUnit, LessonAuthoringStatus, LessonDraftRecord, LessonGradeLevel } from '@monte/types';
 
 type SyncManifestInput = {
@@ -183,12 +183,12 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
     status: "draft" | "published";
     slug: string;
     createdAt: number;
-    updatedAt: number;
     title: string;
     order: number;
     topicId: string & {
         __tableName: "topics";
     };
+    updatedAt: number;
     draft: {
         lesson: {
             id: string;
@@ -230,9 +230,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         text: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -243,9 +243,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         card: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -257,9 +257,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         tray: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -269,9 +269,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         count: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -284,9 +284,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         remainder: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -297,9 +297,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         totalCount: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -311,9 +311,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         groupsOfTen: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -325,9 +325,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         groupsOfTen: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -338,9 +338,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         place: "unit" | "ten" | "hundred" | "thousand";
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -350,9 +350,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         order: ("unit" | "ten" | "hundred" | "thousand")[];
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -362,9 +362,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         id: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -374,9 +374,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         target: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -389,9 +389,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         rows: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -401,9 +401,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         id: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -442,8 +442,8 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         title?: string | undefined;
                         caption?: string | undefined;
                         interactions?: {
-                            kind: "custom" | "drop-zone" | "input";
                             id: string;
+                            kind: "custom" | "drop-zone" | "input";
                             props?: Record<string, unknown> | undefined;
                             targetNodeId?: string | undefined;
                         }[] | undefined;
@@ -465,9 +465,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                     evaluatorId: "golden-beads-build-base" | "golden-beads-duplicate" | "golden-beads-exchange-units" | "golden-beads-exchange-tens" | "golden-beads-exchange-hundreds" | "golden-beads-stack-result" | "stamp-game-build" | "stamp-game-repeat-columns" | "stamp-game-exchange" | "stamp-game-read-result";
                     authoring?: {
                         metadata?: Record<string, unknown> | undefined;
-                        notes?: string | undefined;
                         label?: string | undefined;
                         description?: string | undefined;
+                        notes?: string | undefined;
                         tags?: string[] | undefined;
                     } | undefined;
                     durationMs?: number | undefined;
@@ -519,8 +519,8 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         title?: string | undefined;
                         caption?: string | undefined;
                         interactions?: {
-                            kind: "custom" | "drop-zone" | "input";
                             id: string;
+                            kind: "custom" | "drop-zone" | "input";
                             props?: Record<string, unknown> | undefined;
                             targetNodeId?: string | undefined;
                         }[] | undefined;
@@ -548,9 +548,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                     difficulty: "easy" | "medium" | "hard";
                     authoring?: {
                         metadata?: Record<string, unknown> | undefined;
-                        notes?: string | undefined;
                         label?: string | undefined;
                         description?: string | undefined;
+                        notes?: string | undefined;
                         tags?: string[] | undefined;
                     } | undefined;
                 }[];
@@ -600,8 +600,8 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         title?: string | undefined;
                         caption?: string | undefined;
                         interactions?: {
-                            kind: "custom" | "drop-zone" | "input";
                             id: string;
+                            kind: "custom" | "drop-zone" | "input";
                             props?: Record<string, unknown> | undefined;
                             targetNodeId?: string | undefined;
                         }[] | undefined;
@@ -615,8 +615,8 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
             materialInventory?: {
                 version: 1;
                 tokenTypes: {
-                    label: string;
                     id: string;
+                    label: string;
                     materialId: string;
                     workspace: "golden-beads" | "stamp-game";
                     visual: {
@@ -637,15 +637,15 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                     quantityPerToken?: number | undefined;
                     authoring?: {
                         metadata?: Record<string, unknown> | undefined;
-                        notes?: string | undefined;
                         label?: string | undefined;
                         description?: string | undefined;
+                        notes?: string | undefined;
                         tags?: string[] | undefined;
                     } | undefined;
                 }[];
                 banks: {
-                    label: string;
                     id: string;
+                    label: string;
                     materialId: string;
                     scope: "lesson" | "segment";
                     accepts: string[];
@@ -708,6 +708,7 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
         };
         version: "1.0";
         meta?: {
+            createdAt?: string | number | undefined;
             metadata?: z.objectOutputType<{
                 source: z.ZodOptional<z.ZodString>;
                 tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -729,8 +730,6 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                     snapshot?: Record<string, unknown> | undefined;
                 }>>;
             }, z.ZodUnknown, "strip"> | undefined;
-            createdAt?: string | number | undefined;
-            updatedAt?: string | number | undefined;
             notes?: string | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
@@ -738,6 +737,7 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            updatedAt?: string | number | undefined;
             author?: string | undefined;
         } | undefined;
     };
@@ -807,9 +807,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         text: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -820,9 +820,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         card: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -834,9 +834,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         tray: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -846,9 +846,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         count: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -861,9 +861,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         remainder: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -874,9 +874,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         totalCount: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -888,9 +888,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         groupsOfTen: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -902,9 +902,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         groupsOfTen: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -915,9 +915,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         place: "unit" | "ten" | "hundred" | "thousand";
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -927,9 +927,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         order: ("unit" | "ten" | "hundred" | "thousand")[];
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -939,9 +939,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         id: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -951,9 +951,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         target: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -966,9 +966,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         rows: number;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -978,9 +978,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         id: string;
                         authoring?: {
                             metadata?: Record<string, unknown> | undefined;
-                            notes?: string | undefined;
                             label?: string | undefined;
                             description?: string | undefined;
+                            notes?: string | undefined;
                             tags?: string[] | undefined;
                         } | undefined;
                         durationMs?: number | undefined;
@@ -1019,8 +1019,8 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         title?: string | undefined;
                         caption?: string | undefined;
                         interactions?: {
-                            kind: "custom" | "drop-zone" | "input";
                             id: string;
+                            kind: "custom" | "drop-zone" | "input";
                             props?: Record<string, unknown> | undefined;
                             targetNodeId?: string | undefined;
                         }[] | undefined;
@@ -1042,9 +1042,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                     evaluatorId: "golden-beads-build-base" | "golden-beads-duplicate" | "golden-beads-exchange-units" | "golden-beads-exchange-tens" | "golden-beads-exchange-hundreds" | "golden-beads-stack-result" | "stamp-game-build" | "stamp-game-repeat-columns" | "stamp-game-exchange" | "stamp-game-read-result";
                     authoring?: {
                         metadata?: Record<string, unknown> | undefined;
-                        notes?: string | undefined;
                         label?: string | undefined;
                         description?: string | undefined;
+                        notes?: string | undefined;
                         tags?: string[] | undefined;
                     } | undefined;
                     durationMs?: number | undefined;
@@ -1096,8 +1096,8 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         title?: string | undefined;
                         caption?: string | undefined;
                         interactions?: {
-                            kind: "custom" | "drop-zone" | "input";
                             id: string;
+                            kind: "custom" | "drop-zone" | "input";
                             props?: Record<string, unknown> | undefined;
                             targetNodeId?: string | undefined;
                         }[] | undefined;
@@ -1125,9 +1125,9 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                     difficulty: "easy" | "medium" | "hard";
                     authoring?: {
                         metadata?: Record<string, unknown> | undefined;
-                        notes?: string | undefined;
                         label?: string | undefined;
                         description?: string | undefined;
+                        notes?: string | undefined;
                         tags?: string[] | undefined;
                     } | undefined;
                 }[];
@@ -1177,8 +1177,8 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                         title?: string | undefined;
                         caption?: string | undefined;
                         interactions?: {
-                            kind: "custom" | "drop-zone" | "input";
                             id: string;
+                            kind: "custom" | "drop-zone" | "input";
                             props?: Record<string, unknown> | undefined;
                             targetNodeId?: string | undefined;
                         }[] | undefined;
@@ -1192,8 +1192,8 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
             materialInventory?: {
                 version: 1;
                 tokenTypes: {
-                    label: string;
                     id: string;
+                    label: string;
                     materialId: string;
                     workspace: "golden-beads" | "stamp-game";
                     visual: {
@@ -1214,15 +1214,15 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                     quantityPerToken?: number | undefined;
                     authoring?: {
                         metadata?: Record<string, unknown> | undefined;
-                        notes?: string | undefined;
                         label?: string | undefined;
                         description?: string | undefined;
+                        notes?: string | undefined;
                         tags?: string[] | undefined;
                     } | undefined;
                 }[];
                 banks: {
-                    label: string;
                     id: string;
+                    label: string;
                     materialId: string;
                     scope: "lesson" | "segment";
                     accepts: string[];
@@ -1285,6 +1285,7 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
         };
         version: "1.0";
         meta?: {
+            createdAt?: string | number | undefined;
             metadata?: z.objectOutputType<{
                 source: z.ZodOptional<z.ZodString>;
                 tags: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -1306,8 +1307,6 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                     snapshot?: Record<string, unknown> | undefined;
                 }>>;
             }, z.ZodUnknown, "strip"> | undefined;
-            createdAt?: string | number | undefined;
-            updatedAt?: string | number | undefined;
             notes?: string | undefined;
             scenario?: {
                 kind: "golden-beads" | "stamp-game";
@@ -1315,16 +1314,24 @@ declare const fetchLessonDrafts: (topicId?: Id<"topics">) => Promise<{
                 notes?: string | undefined;
                 snapshot?: Record<string, unknown> | undefined;
             } | undefined;
+            updatedAt?: string | number | undefined;
             author?: string | undefined;
         } | undefined;
     } | undefined;
     authoringStatus?: "presentation" | "guided" | "practice" | "published" | "not_started" | "outline" | "qa" | undefined;
     assigneeId?: string | undefined;
-    gradeLevels?: ("kindergarten" | "grade1" | "grade2" | "grade3")[] | undefined;
     authoringNotes?: string | undefined;
+    gradeLevels?: ("kindergarten" | "grade1" | "grade2" | "grade3")[] | undefined;
     manifestHash?: string | undefined;
     manifestGeneratedAt?: string | undefined;
     manifestCommit?: string | undefined;
 }[]>;
 
-export { type CurriculumClient, type LessonAuthoringUpdate, type SyncManifestInput, type UpdateLessonAuthoringInput, clearAuthToken, createCurriculumClient, createCurriculumHttpClient, createLesson, createTopic, createUnit, curriculumClient, deleteLesson, deleteTopic, deleteUnit, exportManifest, fetchCurriculumTree, fetchLessonById, fetchLessonBySlug, fetchLessonDrafts, fetchUnitBySlug, isCurriculumApiAvailable, isCurriculumAuthReady, listLessons, moveLesson, moveTopic, publishLesson, reorderLessons, reorderTopics, reorderUnits, saveLessonDraft, setCurriculumAuthToken, syncManifest, updateLessonAuthoring, updateTopic, updateUnit };
+declare const parseAuthOrganization: (input: unknown) => AuthOrganization;
+declare const parseAuthOrganizationList: (input: unknown) => AuthOrganization[];
+declare const parseAuthMember: (input: unknown) => AuthMember;
+declare const parseAuthMemberOrNull: (input: unknown) => AuthMember | null;
+declare const parseAuthInvitationList: (input: unknown) => AuthInvitation[];
+declare const parseOrganizationOverview: (input: unknown) => OrganizationOverview;
+
+export { type CurriculumClient, type LessonAuthoringUpdate, type SyncManifestInput, type UpdateLessonAuthoringInput, clearAuthToken, createCurriculumClient, createCurriculumHttpClient, createLesson, createTopic, createUnit, curriculumClient, deleteLesson, deleteTopic, deleteUnit, exportManifest, fetchCurriculumTree, fetchLessonById, fetchLessonBySlug, fetchLessonDrafts, fetchUnitBySlug, isCurriculumApiAvailable, isCurriculumAuthReady, listLessons, moveLesson, moveTopic, parseAuthInvitationList, parseAuthMember, parseAuthMemberOrNull, parseAuthOrganization, parseAuthOrganizationList, parseOrganizationOverview, publishLesson, reorderLessons, reorderTopics, reorderUnits, saveLessonDraft, setCurriculumAuthToken, syncManifest, updateLessonAuthoring, updateTopic, updateUnit };

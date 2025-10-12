@@ -1,56 +1,23 @@
-import { For, Show, createEffect, createMemo } from 'solid-js';
+import { For, Show, createMemo } from 'solid-js';
 import type { Component } from 'solid-js';
 
-import type { LessonMaterialInventory, SegmentTimeline } from '@monte/types';
+import type { SegmentTimeline } from '@monte/types';
 
 import { Button, Card } from '../../../components/ui';
 import { useTimelineStore } from './context';
-import type { SceneNodeState } from './types';
 
 interface TimelineEditorProps {
   lessonId: string;
   segmentId: string;
-  inventory: LessonMaterialInventory | undefined;
   timeline: SegmentTimeline;
   onApplyTimeline: (timeline: SegmentTimeline) => void;
 }
 
-const mapInventoryNodes = (inventory: LessonMaterialInventory | undefined): SceneNodeState[] =>
-  (inventory?.sceneNodes ?? []).map((node) => ({
-    id: node.id,
-    materialId: node.materialId,
-    label: node.label,
-    transform: node.transform ?? {
-      position: { x: 0, y: 0 },
-      rotation: 0,
-      scale: { x: 1, y: 1 },
-      opacity: 1,
-    },
-    metadata: node.metadata,
-  }));
-
 export const TimelineEditor: Component<TimelineEditorProps> = (props) => {
   const timelineStore = useTimelineStore();
 
-  createEffect(() => {
-    const lessonId = props.lessonId;
-    const segmentId = props.segmentId;
-    if (
-      timelineStore.state.lessonId === lessonId &&
-      timelineStore.state.segmentId === segmentId
-    ) {
-      return;
-    }
-    timelineStore.load({
-      lessonId,
-      segmentId,
-      nodes: mapInventoryNodes(props.inventory),
-      timeline: props.timeline ?? { version: 1, steps: [] },
-    });
-  });
-
   const steps = createMemo(() => timelineStore.state.steps);
-  const nodes = createMemo(() => Object.values(timelineStore.state.sceneNodes));
+  const nodes = timelineStore.sceneNodes;
   const selectedIds = () => timelineStore.state.selectedNodeIds;
 
   return (
@@ -62,12 +29,6 @@ export const TimelineEditor: Component<TimelineEditorProps> = (props) => {
           onClick={() => {
             const serialized = timelineStore.serialize();
             props.onApplyTimeline(serialized);
-            timelineStore.load({
-              lessonId: props.lessonId,
-              segmentId: props.segmentId,
-              nodes: mapInventoryNodes(props.inventory),
-              timeline: serialized,
-            });
           }}
           disabled={!timelineStore.state.isDirty}
         >

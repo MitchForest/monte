@@ -38,7 +38,7 @@ const editorRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/editor',
   component: () => (
-    <RoleGuard allowedRoles={['internal']}>
+    <RoleGuard allowedRoles={['admin']}>
       <EditorRoute />
     </RoleGuard>
   ),

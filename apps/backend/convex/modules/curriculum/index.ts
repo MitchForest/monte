@@ -187,6 +187,14 @@ const assertInventoryConsistency = (draft: Infer<typeof lessonDocumentSchema>) =
   }
 };
 
+const mapSegmentsForManifest = (
+  segments: LessonDocumentDraft['lesson']['segments'],
+): Array<{ type: string; representation?: string }> =>
+  segments.map((segment) => ({
+    type: segment.type,
+    representation: segment.representation ?? undefined,
+  }));
+
 export const listCurriculumTree = query({
   args: {},
   handler: async (ctx) => {
@@ -1000,11 +1008,9 @@ export const exportManifest = query({
       .map((lesson) => {
         const topicSlug = topicSlugById.get(lesson.topicId);
         if (!topicSlug) return null;
-        const segments =
-          lesson.draft.lesson.segments?.map((segment: any) => ({
-            type: segment.type,
-            representation: (segment as { representation?: string }).representation,
-          })) ?? [];
+        const segments = lesson.draft.lesson.segments
+          ? mapSegmentsForManifest(lesson.draft.lesson.segments)
+          : [];
         return {
           id: lesson.slug,
           slug: lesson.slug,
