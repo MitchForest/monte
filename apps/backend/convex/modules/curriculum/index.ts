@@ -151,86 +151,39 @@ const mapSegmentsForManifest = (
 export const listCurriculumTree = query({
   args: {},
   handler: async (ctx) => {
-    const units = await ctx.db.query('units').collect();
-    const topics = await ctx.db.query('topics').collect();
-    const lessons = await ctx.db.query('lessons').collect();
+    const units = await ctx.db.query('units').withIndex('by_order').collect();
 
-    const topicsByUnit = new Map<Id<'units'>, Doc<'topics'>[]>();
-    for (const topic of topics) {
-      const existing = topicsByUnit.get(topic.unitId);
-      if (existing) {
-        existing.push(topic);
-      } else {
-        topicsByUnit.set(topic.unitId, [topic]);
+    const topicsForUnit = async (unitId: Id<'units'>) => {
+      const cursor = ctx.db
+        .query('topics')
+        .withIndex('by_unit_order', (q) => q.eq('unitId', unitId));
+      const results: Doc<'topics'>[] = [];
+      for await (const topic of cursor) {
+        results.push(topic);
       }
-    }
+      return results;
+    };
 
-    const lessonsByTopic = new Map<Id<'topics'>, Doc<'lessons'>[]>();
-    for (const lesson of lessons) {
-      const existing = lessonsByTopic.get(lesson.topicId);
-      if (existing) {
-        existing.push(lesson);
-      } else {
-        lessonsByTopic.set(lesson.topicId, [lesson]);
+    const lessonsForTopic = async (topicId: Id<'topics'>) => {
+      const cursor = ctx.db
+        .query('lessons')
+        .withIndex('by_topic_order', (q) => q.eq('topicId', topicId));
+      const results: Doc<'lessons'>[] = [];
+      for await (const lesson of cursor) {
+        results.push(lesson);
       }
-    }
+      return results;
+    };
 
-    return sortByOrder(units).map((unit) => {
-      const topicsForUnit = topicsByUnit.get(unit._id) ?? [];
-      return {
-        ...unit,
-        topics: sortByOrder(topicsForUnit).map((topic) => {
-          const lessonsForTopic = lessonsByTopic.get(topic._id) ?? [];
-          return {
-            ...topic,
-            lessons: sortByOrder(lessonsForTopic).map((lesson) => ({
-              _id: lesson._id,
-              slug: lesson.slug,
-              order: lesson.order,
-              status: lesson.status,
-              title: lesson.draft.lesson.title,
-              summary: lesson.draft.lesson.summary ?? '',
-              updatedAt: lesson.updatedAt,
-              authoringStatus: lesson.authoringStatus ?? undefined,
-              assigneeId: lesson.assigneeId ?? undefined,
-              gradeLevels: lesson.gradeLevels ?? undefined,
-            })),
-          };
-        }),
-      };
-    });
-  },
-});
-
-export const getUnitBySlug = query({
-  args: { slug: v.string() },
-  handler: async (ctx, args) => {
-    const unit = await ctx.db
-      .query('units')
-      .withIndex('by_slug', (q) => q.eq('slug', args.slug))
-      .first();
-    if (!unit) return undefined;
-    const topics = await ctx.db
-      .query('topics')
-      .withIndex('by_unit', (q) => q.eq('unitId', unit._id))
-      .collect();
-    const lessons = await ctx.db.query('lessons').collect();
-    const lessonsByTopic = new Map<Id<'topics'>, Doc<'lessons'>[]>();
-    for (const lesson of lessons) {
-      const existing = lessonsByTopic.get(lesson.topicId);
-      if (existing) {
-        existing.push(lesson);
-      } else {
-        lessonsByTopic.set(lesson.topicId, [lesson]);
-      }
-    }
-    return {
-      ...unit,
-      topics: sortByOrder(topics).map((topic) => {
-        const lessonsForTopic = lessonsByTopic.get(topic._id) ?? [];
-        return {
+    const tree = [];
+    for (const unit of units) {
+      const topics = await topicsForUnit(unit._id);
+      const topicsWithLessons = [];
+      for (const topic of topics) {
+        const lessons = await lessonsForTopic(topic._id);
+        topicsWithLessons.push({
           ...topic,
-          lessons: sortByOrder(lessonsForTopic).map((lesson) => ({
+          lessons: lessons.map((lesson) => ({
             _id: lesson._id,
             slug: lesson.slug,
             order: lesson.order,
@@ -242,8 +195,76 @@ export const getUnitBySlug = query({
             assigneeId: lesson.assigneeId ?? undefined,
             gradeLevels: lesson.gradeLevels ?? undefined,
           })),
-        };
-      }),
+        });
+      }
+      tree.push({
+        ...unit,
+        topics: topicsWithLessons,
+      });
+    }
+
+    return tree;
+  },
+});
+
+export const getUnitBySlug = query({
+  args: { slug: v.string() },
+  handler: async (ctx, args) => {
+    const unit = await ctx.db
+      .query('units')
+      .withIndex('by_slug', (q) => q.eq('slug', args.slug))
+      .first();
+    if (!unit) return undefined;
+    const topics: Doc<'topics'>[] = [];
+    for await (const topic of ctx.db
+      .query('topics')
+      .withIndex('by_unit_order', (q) => q.eq('unitId', unit._id))) {
+      topics.push(topic);
+    }
+
+    const topicsWithLessons = [] as Array<Doc<'topics'> & {
+      lessons: Array<{
+        _id: Id<'lessons'>;
+        slug: string;
+        order: number;
+        status: 'draft' | 'published';
+        title: string;
+        summary: string;
+        updatedAt: number;
+        authoringStatus?: Doc<'lessons'>['authoringStatus'];
+        assigneeId?: string;
+        gradeLevels?: Doc<'lessons'>['gradeLevels'];
+      }>;
+    }>;
+
+    for (const topic of topics) {
+      const lessons: Doc<'lessons'>[] = [];
+      for await (const lesson of ctx.db
+        .query('lessons')
+        .withIndex('by_topic_order', (q) => q.eq('topicId', topic._id))) {
+        lessons.push(lesson);
+      }
+
+      topicsWithLessons.push({
+        ...topic,
+        lessons: lessons.map((lesson) => ({
+          _id: lesson._id,
+          slug: lesson.slug,
+          order: lesson.order,
+          status: lesson.status,
+          title: lesson.draft.lesson.title,
+          summary: lesson.draft.lesson.summary ?? '',
+          updatedAt: lesson.updatedAt,
+          authoringStatus: lesson.authoringStatus ?? undefined,
+          assigneeId: lesson.assigneeId ?? undefined,
+          gradeLevels: lesson.gradeLevels ?? undefined,
+        })),
+      });
+    }
+
+    return {
+      ...unit,
+      topics: topicsWithLessons,
     };
   },
 });

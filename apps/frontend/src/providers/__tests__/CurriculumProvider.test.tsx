@@ -1,34 +1,16 @@
 import { render } from '@solidjs/testing-library';
-import { describe, expect, it, vi } from 'vitest';
-
-const registerSpy = vi.fn();
-const unregisterSpy = vi.fn();
-
-const mockManager = { mock: true } as unknown;
-
-vi.mock('@monte/api', () => ({
-  createBrowserCurriculumClientManager: vi.fn(() => mockManager),
-}));
-
-vi.mock('../../domains/curriculum/api/curriculumClient', () => ({
-  registerCurriculumClientManager: registerSpy,
-  unregisterCurriculumClientManager: unregisterSpy,
-}));
+import { describe, expect, it } from 'vitest';
 
 import { CurriculumProvider } from '../CurriculumProvider';
 
 describe('CurriculumProvider', () => {
-  it('registers and unregisters the curriculum client manager', () => {
-    const { unmount } = render(() => (
+  it('renders children without side effects', () => {
+    const result = render(() => (
       <CurriculumProvider>
-        <div>child</div>
+        <div data-testid="child" />
       </CurriculumProvider>
     ));
 
-    expect(registerSpy).toHaveBeenCalledWith(mockManager);
-
-    unmount();
-
-    expect(unregisterSpy).toHaveBeenCalledWith(mockManager);
+    expect(result.getByTestId('child')).toBeInTheDocument();
   });
 });

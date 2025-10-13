@@ -9,10 +9,7 @@ import {
   getBetterAuthSession,
   refreshBetterAuthSession,
 } from '../../../lib/auth-client';
-import {
-  clearAuthToken,
-  setCurriculumAuthToken,
-} from '../../curriculum/api/curriculumClient';
+import { clearAuthToken, setCurriculumAuthToken } from '@monte/api';
 import {
   getActiveMember,
   listOrganizations,

@@ -14,20 +14,50 @@
     "skipLibCheck": true,
     "paths": {
       "@monte/backend/*": ["apps/backend/*"],
-      "@monte/types": ["packages/types/dist/index.d.ts"],
+      "@monte/types": ["packages/types/dist/index.d.ts", "packages/types/src/index.ts"],
       "@monte/api": ["packages/api/src/index.ts"],
       "@monte/api/*": ["packages/api/*"],
-      "@monte/types/*": ["packages/types/*"],
-      "@monte/curriculum-service": ["packages/curriculum-service/src/index.ts"],
-      "@monte/curriculum-service/*": ["packages/curriculum-service/*"],
-      "@monte/lesson-service": ["packages/lesson-service/src/index.ts"],
-      "@monte/lesson-service/*": ["packages/lesson-service/*"],
-      "@monte/question-service": ["packages/question-service/src/index.ts"],
-      "@monte/question-service/*": ["packages/question-service/*"],
-      "@monte/graph-service": ["packages/graph-service/src/index.ts"],
-      "@monte/graph-service/*": ["packages/graph-service/*"],
-      "@monte/engine-service": ["packages/engine-service/src/index.ts"],
-      "@monte/engine-service/*": ["packages/engine-service/*"]
+      "@monte/types/*": ["packages/types/dist/*", "packages/types/src/*"],
+      "@monte/curriculum-service": [
+        "packages/curriculum-service/dist/index.d.ts",
+        "packages/curriculum-service/src/index.ts"
+      ],
+      "@monte/curriculum-service/*": [
+        "packages/curriculum-service/dist/*",
+        "packages/curriculum-service/src/*"
+      ],
+      "@monte/lesson-service": [
+        "packages/lesson-service/dist/index.d.ts",
+        "packages/lesson-service/src/index.ts"
+      ],
+      "@monte/lesson-service/*": [
+        "packages/lesson-service/dist/*",
+        "packages/lesson-service/src/*"
+      ],
+      "@monte/question-service": [
+        "packages/question-service/dist/index.d.ts",
+        "packages/question-service/src/index.ts"
+      ],
+      "@monte/question-service/*": [
+        "packages/question-service/dist/*",
+        "packages/question-service/src/*"
+      ],
+      "@monte/graph-service": [
+        "packages/graph-service/dist/index.d.ts",
+        "packages/graph-service/src/index.ts"
+      ],
+      "@monte/graph-service/*": [
+        "packages/graph-service/dist/*",
+        "packages/graph-service/src/*"
+      ],
+      "@monte/engine-service": [
+        "packages/engine-service/dist/index.d.ts",
+        "packages/engine-service/src/index.ts"
+      ],
+      "@monte/engine-service/*": [
+        "packages/engine-service/dist/*",
+        "packages/engine-service/src/*"
+      ]
     }
   }
 }

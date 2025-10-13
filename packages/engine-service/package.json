@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "build": "tsup && tsc --emitDeclarationOnly",
+    "build": "tsup",
     "typecheck": "tsc --noEmit",
     "lint": "echo \"No lint tasks for @monte/engine-service\""
   },

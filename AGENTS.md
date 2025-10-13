@@ -28,8 +28,10 @@ Store secrets through Convex env tooling and avoid checking `.env` files into th
 
 RULES:
 - Auth Schema Updates (local install): cd apps/backend/convex/betterAuth, npx @better-auth/cli generate -y, pnpm sync:codegen, npx convex dev --once
+- In 99.9% of the time, use Better Auth defaults (tables, schemas, apis, hooks, naming conventions, orgs/users/roles/permissions, etc). There must be a very good reason to stray from this and explicit user approval. We use better auth names but internally our mapping is as follows. Org = Household or school. Owner = first to signup for a new org. Admin = others invited in (could be parents/guardians for household OR teachers for school). Members = students.
 - Get user explicit approval before any database/schema changes
 - Use kobalte, tailwind, class variance authority for components
+- If we need to modularize domains, do so as follows: view → viewmodel → state → actions.
 
 
 PRINCIPLES:

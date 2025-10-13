@@ -46,7 +46,7 @@ import {
   isCurriculumApiAvailable,
   type LessonDraftRecord,
   type CurriculumTreeUnit,
-} from '../domains/curriculum/api/curriculumClient';
+} from '@monte/api';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -292,7 +292,7 @@ const Lesson = () => {
   const auth = useAuth();
   type Availability = 'ready' | CurriculumAvailabilityStatus;
   const availability = createMemo<Availability>(() => {
-    if (!isCurriculumApiAvailable()) return 'offline';
+    if (!isCurriculumApiAvailable) return 'offline';
     if (auth.loading()) return 'loading';
     if (!isCurriculumAuthReady()) return 'offline';
     if (!auth.isAuthenticated()) return 'unauthorized';

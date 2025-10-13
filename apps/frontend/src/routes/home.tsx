@@ -6,11 +6,12 @@ import {
   isCurriculumApiAvailable,
   isCurriculumAuthReady,
   listLessons,
-} from '../domains/curriculum/api/curriculumClient';
+  type CurriculumTree,
+  type LessonDraftRecord,
+} from '@monte/api';
 import { safeBuildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
 import { getLessonTaskStatus, useProgress } from '../domains/curriculum/state/progress';
-import type { CurriculumTree, Lesson, LessonTask } from '@monte/types';
-import type { LessonDraftRecord } from '../domains/curriculum/api/curriculumClient';
+import type { Lesson, LessonTask } from '@monte/types';
 import { Button, Card, Chip, PageSection } from '../components/ui';
 import { useAuth } from '../providers/AuthProvider';
 import { CurriculumAccessNotice, type CurriculumAvailabilityStatus } from '../components/CurriculumAccessNotice';
@@ -21,7 +22,7 @@ const Home = () => {
   const auth = useAuth();
   type Availability = 'ready' | CurriculumAvailabilityStatus;
   const availability = createMemo<Availability>(() => {
-    if (!isCurriculumApiAvailable()) return 'offline';
+    if (!isCurriculumApiAvailable) return 'offline';
     if (auth.loading()) return 'loading';
     if (!isCurriculumAuthReady()) return 'offline';
     if (!auth.isAuthenticated()) return 'unauthorized';

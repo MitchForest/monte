@@ -1,17 +1,3 @@
-import { onCleanup, type ParentComponent } from 'solid-js';
-import { createBrowserCurriculumClientManager } from '@monte/api';
+import type { ParentComponent } from 'solid-js';
 
-import {
-  registerCurriculumClientManager,
-  unregisterCurriculumClientManager,
-} from '../domains/curriculum/api/curriculumClient';
-
-export const CurriculumProvider: ParentComponent = (props) => {
-  const manager = createBrowserCurriculumClientManager();
-
-  registerCurriculumClientManager(manager);
-
-  onCleanup(() => unregisterCurriculumClientManager(manager));
-
-  return props.children;
-};
+export const CurriculumProvider: ParentComponent = (props) => props.children;

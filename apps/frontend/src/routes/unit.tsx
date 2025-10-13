@@ -8,7 +8,7 @@ import {
   listLessons,
   type CurriculumTreeUnit,
   type LessonDraftRecord,
-} from '../domains/curriculum/api/curriculumClient';
+} from '@monte/api';
 import { curriculumMaterials } from '../domains/curriculum/materials';
 import { getLessonTaskStatus, useProgress } from '../domains/curriculum/state/progress';
 import { safeBuildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
@@ -79,7 +79,7 @@ const Unit = () => {
   const auth = useAuth();
   type Availability = 'ready' | CurriculumAvailabilityStatus;
   const availability = createMemo<Availability>(() => {
-    if (!isCurriculumApiAvailable()) return 'offline';
+    if (!isCurriculumApiAvailable) return 'offline';
     if (auth.loading()) return 'loading';
     if (!isCurriculumAuthReady()) return 'offline';
     if (!auth.isAuthenticated()) return 'unauthorized';

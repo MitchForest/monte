@@ -1,10 +1,7 @@
 import { Show, createMemo } from 'solid-js';
 import { useNavigate } from '@tanstack/solid-router';
 
-import {
-  isCurriculumApiAvailable,
-  isCurriculumAuthReady,
-} from '../domains/curriculum/api/curriculumClient';
+import { isCurriculumApiAvailable, isCurriculumAuthReady } from '@monte/api';
 import { useAuth } from '../providers/AuthProvider';
 import { CurriculumAccessNotice, type CurriculumAvailabilityStatus } from '../components/CurriculumAccessNotice';
 import { EditorPage } from './editor/EditorPage';
@@ -16,7 +13,7 @@ const EditorRoute = () => {
   const navigate = useNavigate();
 
   const availability = createMemo<Availability>(() => {
-    if (!isCurriculumApiAvailable()) return 'offline';
+    if (!isCurriculumApiAvailable) return 'offline';
     if (auth.loading()) return 'loading';
     if (!isCurriculumAuthReady()) return 'offline';
     if (!auth.isAuthenticated()) return 'unauthorized';

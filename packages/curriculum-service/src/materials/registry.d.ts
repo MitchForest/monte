@@ -1,0 +1,2 @@
+export { getManipulativeDefinition, listManipulativeDefinitions, getManipulativeManifest, listManipulativeManifests, type ManipulativeDefinition, type ManipulativeSceneNode, } from '@monte/lesson-service';
+//# sourceMappingURL=registry.d.ts.map
