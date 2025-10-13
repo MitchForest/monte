@@ -315,6 +315,12 @@ const CreateUnitResultSchema = z.object({ unitId: IdSchema<'units'>() });
 const CreateTopicResultSchema = z.object({ topicId: IdSchema<'topics'>() });
 const CreateLessonResultSchema = z.object({ lessonId: IdSchema<'lessons'>() });
 const LessonDraftRecordListSchema = LessonDraftRecordSchema.array();
+
+const CurriculumTreePageSchema = z.object({
+  tree: CurriculumTreeSchema,
+  cursor: z.string().nullable(),
+  isDone: z.boolean(),
+});
 const LessonAuthoringUpdateResultSchema = z.object({
   lessonId: IdSchema<'lessons'>(),
   authoringStatus: LessonAuthoringStatusSchema.nullable(),
@@ -349,7 +355,23 @@ export const createCurriculumClient = (httpClient: ConvexHttpClient): Curriculum
     setAuthToken,
     clearAuthToken: () => httpClient.clearAuth(),
     async fetchCurriculumTree() {
-      return await executeQuery(api.curriculum.listCurriculumTree, {}, CurriculumTreeSchema);
+      let cursor: string | null = null;
+      const tree: CurriculumTree = [];
+      do {
+        const requestArgs: { cursor?: string | null } = cursor ? { cursor } : {};
+        const page = await executeQuery(
+          api.curriculum.listCurriculumTree,
+          requestArgs,
+          CurriculumTreePageSchema,
+        );
+        tree.push(...page.tree);
+        if (page.isDone || page.cursor === null) {
+          cursor = null;
+        } else {
+          cursor = page.cursor;
+        }
+      } while (cursor);
+      return tree;
     },
     async fetchUnitBySlug(slug) {
       const result = await executeQuery(

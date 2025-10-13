@@ -1,12 +1,14 @@
 import { Show, createEffect, createSignal } from 'solid-js';
-import { useNavigate } from '@tanstack/solid-router';
+import { useLocation, useNavigate } from '@tanstack/solid-router';
 
 import { Button, Card, Input } from '../../components/ui';
 import { useAuth } from '../../providers/AuthProvider';
+import { setPendingInvitationId } from '../../domains/auth/pendingInvitation';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
   const auth = useAuth();
+  const location = useLocation();
 
   const [email, setEmail] = createSignal('');
   const [name, setName] = createSignal('');
@@ -15,6 +17,11 @@ const SignUpPage = () => {
   const [success, setSuccess] = createSignal<string | null>(null);
 
   createEffect(() => {
+    const params = new URLSearchParams(location().search ?? '');
+    const invitationId = params.get('invitationId');
+    if (typeof invitationId === 'string' && invitationId.trim().length > 0) {
+      setPendingInvitationId(invitationId.trim());
+    }
     if (auth.isAuthenticated()) {
       void navigate({ to: '/app' });
     }

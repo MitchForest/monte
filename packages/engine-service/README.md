@@ -10,7 +10,7 @@ The engine service will orchestrate personalized learning for Monte. It consumes
 
 | Task                                   | Description                                                                                   | Status  |
 | -------------------------------------- | --------------------------------------------------------------------------------------------- | ------- |
-| Task selection                         | Given a student state, choose the next best activity (lesson, drill, quiz, review, diagnostic). | TODO – stubbed `selectNextTask` returns `null`. |
+| Task selection                         | Given a student state, choose the next best activity (lesson, drill, quiz, review, diagnostic). | Prototype returning status-rich results (disabled/no-graph/no-questions/success). |
 | Spaced repetition & retention tracking | Maintain scheduling signals (e.g., forgetting curves, streaks) that feed into task ranking.   | Future work (will leverage FSRS libraries). |
 | Progress gating                        | Ensure prerequisites are satisfied and lessons unlock in a coherent order.                    | Future |
 | Feedback ingestion                     | Record outcomes from every question/task so the student model stays up to date.               | Future |

@@ -1,7 +1,7 @@
 import { Select as KSelect } from '@kobalte/core';
 import { cva, type VariantProps } from 'class-variance-authority';
 import type { JSX } from 'solid-js';
-import { For, Show, splitProps } from 'solid-js';
+import { Show, createMemo, splitProps } from 'solid-js';
 
 import { cn } from '../../lib/cn';
 
@@ -53,9 +53,25 @@ const contentStyles = cva(
 );
 
 const listboxStyles = cva('max-h-72 overflow-y-auto rounded-lg');
-
-const itemClasses =
-  'flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[color:var(--color-text)] transition hover:bg-[rgba(233,245,251,0.65)] focus-visible:outline-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[selected]:bg-[rgba(233,245,251,0.85)] data-[selected]:text-[color:var(--color-heading)] data-[selected]:shadow-[inset_0_0_0_1px_rgba(64,157,233,0.4)]';
+const itemWrapper = cva(
+  [
+    'flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[color:var(--color-text)] transition',
+    'hover:bg-[rgba(233,245,251,0.65)] focus-visible:outline-none',
+    'data-[selected]:bg-[rgba(233,245,251,0.85)] data-[selected]:text-[color:var(--color-heading)]',
+    'data-[selected]:shadow-[inset_0_0_0_1px_rgba(64,157,233,0.4)]',
+  ].join(' '),
+  {
+    variants: {
+      state: {
+        default: '',
+        disabled: 'cursor-not-allowed opacity-50',
+      },
+    },
+    defaultVariants: {
+      state: 'default',
+    },
+  },
+);
 
 const indicatorStyles = cva('text-[color:var(--color-accent-green)]');
 
@@ -127,32 +143,36 @@ export const Select = <T extends string = string>(props: SelectProps<T>) => {
     'trailingIcon',
   ]);
 
-  type GenericComponent = (props: Record<string, unknown>) => JSX.Element;
-  const SelectRoot = KSelect.Root as unknown as GenericComponent;
-  const SelectLabel = KSelect.Label as unknown as GenericComponent;
-  const SelectDescription = KSelect.Description as unknown as GenericComponent;
-  const SelectErrorMessage = KSelect.ErrorMessage as unknown as GenericComponent;
-  const SelectTrigger = KSelect.Trigger as unknown as GenericComponent;
-  const SelectValue = KSelect.Value as unknown as GenericComponent;
-  const SelectPortal = KSelect.Portal as unknown as GenericComponent;
-  const SelectContent = KSelect.Content as unknown as GenericComponent;
-  const SelectListbox = KSelect.Listbox as unknown as GenericComponent;
-  const SelectItem = KSelect.Item as unknown as GenericComponent;
-  const SelectItemLabel = KSelect.ItemLabel as unknown as GenericComponent;
-  const SelectItemIndicator = KSelect.ItemIndicator as unknown as GenericComponent;
+  const optionList = createMemo(() => local.options ?? []);
+
+  const resolveSelectedOption = createMemo(() => {
+    if (local.value === undefined) return undefined;
+    if (local.value === null) return null;
+    return optionList().find((option) => option.value === local.value) ?? null;
+  });
+
+  const resolveDefaultOption = createMemo(() => {
+    if (local.defaultValue === undefined) return undefined;
+    return optionList().find((option) => option.value === local.defaultValue);
+  });
 
   const validationState = () => (local.errorMessage ? 'invalid' : undefined);
   const placeholderContent =
     typeof local.placeholder === 'string' ? <span>{local.placeholder}</span> : local.placeholder;
 
-  const handleChange = (next: T | null) => {
-    local.onValueChange?.(next);
+  const handleChange = (next: SelectOption<T> | null) => {
+    local.onValueChange?.(next?.value ?? null);
   };
 
+  const getOptionTextValue = (option: SelectOption<T>) =>
+    typeof option.label === 'string' ? option.label : option.value;
+
+  const hasOptions = () => optionList().length > 0;
+
   return (
-    <SelectRoot
-      value={local.value ?? null}
-      defaultValue={local.defaultValue}
+    <KSelect.Root
+      value={resolveSelectedOption()}
+      defaultValue={resolveDefaultOption()}
       onChange={handleChange}
       disabled={local.disabled}
       required={local.required}
@@ -160,15 +180,41 @@ export const Select = <T extends string = string>(props: SelectProps<T>) => {
       id={local.id}
       placeholder={placeholderContent}
       validationState={validationState()}
+      options={optionList()}
+      optionValue={(option) => option.value}
+      optionTextValue={getOptionTextValue}
+      optionDisabled={(option) => option.disabled ?? false}
+      itemComponent={(itemProps) => {
+        const option = itemProps.item.rawValue as SelectOption<T>;
+        const disabled = option?.disabled ?? false;
+
+        return (
+          <KSelect.Item
+            item={itemProps.item}
+            class={cn(itemWrapper({ state: disabled ? 'disabled' : 'default' }), local.itemClass)}
+          >
+            <div class="flex flex-col">
+              <KSelect.ItemLabel>{option?.label}</KSelect.ItemLabel>
+              <Show when={option?.description}>
+                <span class="text-xs font-normal text-[color:rgba(12,42,101,0.55)]">
+                  {option?.description}
+                </span>
+              </Show>
+            </div>
+            <KSelect.ItemIndicator class={indicatorStyles()}>✓</KSelect.ItemIndicator>
+          </KSelect.Item>
+        );
+      }}
       class={cn(selectWrapper({ size: local.size }), local.class)}
     >
+      <KSelect.HiddenSelect />
       <Show when={local.label}>
-        <SelectLabel class="text-xs font-semibold uppercase tracking-wide text-[color:rgba(12,42,101,0.65)]">
+        <KSelect.Label class="text-xs font-semibold uppercase tracking-wide text-[color:rgba(12,42,101,0.65)]">
           {local.label}
-        </SelectLabel>
+        </KSelect.Label>
       </Show>
 
-      <SelectTrigger
+      <KSelect.Trigger
         class={cn(
           triggerStyles({
             size: local.size,
@@ -180,60 +226,47 @@ export const Select = <T extends string = string>(props: SelectProps<T>) => {
       >
         <div class="flex w-full items-center gap-2">
           <Show when={local.leadingIcon}>{local.leadingIcon}</Show>
-          <SelectValue class="flex-1 truncate text-left" />
+          <KSelect.Value<SelectOption<T>> class="flex-1 truncate text-left">
+            {(state) => {
+              const option = state.selectedOption() as SelectOption<T> | undefined;
+              return option?.label ?? null;
+            }}
+          </KSelect.Value>
         </div>
         <Show when={local.trailingIcon} fallback={<span aria-hidden>▾</span>}>
           {local.trailingIcon}
         </Show>
-      </SelectTrigger>
+      </KSelect.Trigger>
 
-      <SelectPortal>
-        <SelectContent class={cn(contentStyles(), local.contentClass)}>
-          <SelectListbox class={cn(listboxStyles(), local.listboxClass)}>
-            <Show when={local.options?.length}>
-              <For each={local.options}>
-                {(option) => (
-                  <SelectItem
-                    value={option.value}
-                    disabled={option.disabled}
-                    class={cn(itemClasses, local.itemClass)}
-                  >
-                    <div class="flex flex-col">
-                      <SelectItemLabel>{option.label}</SelectItemLabel>
-                      <Show when={option.description}>
-                        <span class="text-xs font-normal text-[color:rgba(12,42,101,0.55)]">
-                          {option.description}
-                        </span>
-                      </Show>
-                    </div>
-                    <SelectItemIndicator class={indicatorStyles()}>✓</SelectItemIndicator>
-                  </SelectItem>
-                )}
-              </For>
-            </Show>
-            <Show when={!local.options || local.options.length === 0}>
+      <KSelect.Portal>
+        <KSelect.Content class={cn(contentStyles(), local.contentClass)}>
+          <Show
+            when={hasOptions()}
+            fallback={
               <div class="px-3 py-2 text-sm text-[color:rgba(12,42,101,0.55)]">No options available</div>
-            </Show>
-          </SelectListbox>
-        </SelectContent>
-      </SelectPortal>
+            }
+          >
+            <KSelect.Listbox class={cn(listboxStyles(), local.listboxClass)} />
+          </Show>
+        </KSelect.Content>
+      </KSelect.Portal>
 
       <Show when={local.description}>
         {(content) => (
-          <SelectDescription class={messageText({ tone: 'muted' })}>
+          <KSelect.Description class={messageText({ tone: 'muted' })}>
             {content()}
-          </SelectDescription>
+          </KSelect.Description>
         )}
       </Show>
 
       <Show when={local.errorMessage}>
         {(message) => (
-          <SelectErrorMessage class={messageText({ tone: 'error' })}>
+          <KSelect.ErrorMessage class={messageText({ tone: 'error' })}>
             {message()}
-          </SelectErrorMessage>
+          </KSelect.ErrorMessage>
         )}
       </Show>
-    </SelectRoot>
+    </KSelect.Root>
   );
 };
 

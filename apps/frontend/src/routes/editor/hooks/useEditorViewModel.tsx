@@ -55,6 +55,7 @@ interface CurriculumSelection {
   selectedLessonId: Accessor<Id<'lessons'> | undefined>;
   setSelectedLessonId: Setter<Id<'lessons'> | undefined>;
   selectedSegmentId: Accessor<string | undefined>;
+  setSelectedSegmentId: (segmentId: string | undefined) => void;
   selectSegment: (segmentId: string | undefined) => void;
   units: Accessor<UnitNode[]>;
   currentUnit: Accessor<UnitNode | undefined>;

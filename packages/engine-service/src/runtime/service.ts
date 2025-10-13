@@ -15,7 +15,7 @@ export interface TaskPayload {
 }
 
 export interface EngineService {
-  selectNextTask(request: TaskRequest): Promise<TaskPayload | null>;
+  selectNextTask(request: TaskRequest): Promise<TaskSelectionResult>;
 }
 
 const readEnv = (key: string): string | undefined => {
@@ -63,6 +63,12 @@ const resolveTaskKind = (preferredKinds?: TaskKind[]): TaskKind => {
 
 export const isEngineServiceEnabled = () => ENGINE_SERVICE_ENABLED;
 
+export type TaskSelectionResult =
+  | { status: 'disabled'; reason: string }
+  | { status: 'no-graph'; reason: string }
+  | { status: 'no-questions'; reason: string; skillIds: string[] }
+  | { status: 'ok'; payload: TaskPayload };
+
 type SkillGraphRecord = Record<string, { prerequisites?: string[]; dependents?: string[] }>;
 
 type GraphServiceApi = {
@@ -73,14 +79,20 @@ type GraphServiceApi = {
 export const engineService: EngineService = {
   async selectNextTask(request) {
     if (!ensureEnabled()) {
-      return null;
+      return {
+        status: 'disabled',
+        reason: 'Engine service is disabled. Set ENGINE_SERVICE_ENABLED=true to enable task selection.',
+      };
     }
 
     const canonicalGraph = await (graphService as unknown as GraphServiceApi).getCanonicalGraph();
     const skillIds = Object.keys(canonicalGraph);
     if (skillIds.length === 0) {
       console.warn('[engine-service] No skills available in canonical graph.');
-      return null;
+      return {
+        status: 'no-graph',
+        reason: 'Canonical skill graph is empty. Ensure curriculum-domain graphs are configured.',
+      };
     }
 
     const selection = chooseSkillIds(skillIds, Math.max(1, ENGINE_SERVICE_QUESTION_LIMIT));
@@ -103,14 +115,21 @@ export const engineService: EngineService = {
         '[engine-service] No questions available for selected skills:',
         selection.join(', '),
       );
-      return null;
+      return {
+        status: 'no-questions',
+        reason: 'Question service returned no items for the selected skills.',
+        skillIds: selection,
+      };
     }
 
     return {
-      kind,
-      skillIds: selection,
-      questions,
-    } satisfies TaskPayload;
+      status: 'ok',
+      payload: {
+        kind,
+        skillIds: selection,
+        questions,
+      },
+    };
   },
 };
 

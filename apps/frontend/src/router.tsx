@@ -10,6 +10,7 @@ const LessonRoute = lazy(() => import('./routes/lesson'));
 const EditorRoute = lazy(() => import('./routes/editor'));
 const SignInRoute = lazy(() => import('./routes/auth/sign-in'));
 const SignUpRoute = lazy(() => import('./routes/auth/sign-up'));
+const AcceptInvitationRoute = lazy(() => import('./routes/auth/accept-invitation'));
 const AppPortalRoute = lazy(() => import('./routes/app'));
 
 const rootRoute = new RootRoute({
@@ -38,7 +39,7 @@ const editorRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/editor',
   component: () => (
-    <RoleGuard allowedRoles={['admin']}>
+    <RoleGuard allowedRoles={['admin', 'owner']}>
       <EditorRoute />
     </RoleGuard>
   ),
@@ -62,6 +63,12 @@ const signUpRoute = new Route({
   component: () => <SignUpRoute />,
 });
 
+const acceptInvitationRoute = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/auth/invitations/accept',
+  component: () => <AcceptInvitationRoute />,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   unitRoute,
@@ -70,6 +77,7 @@ const routeTree = rootRoute.addChildren([
   appRoute,
   signInRoute,
   signUpRoute,
+  acceptInvitationRoute,
 ]);
 
 export const router = new Router({

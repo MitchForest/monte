@@ -6,7 +6,6 @@ import {
   useContext,
   type Accessor,
 } from 'solid-js';
-import type { UserRole } from '@monte/types';
 
 import {
   createAuthStore,
@@ -14,11 +13,13 @@ import {
   type AuthUser,
 } from '../domains/auth/state/authStore';
 import type { AuthMember, AuthOrganization } from '../domains/auth/organizationClient';
+import type { OrganizationRole, UserRole } from '../domains/auth/types';
 
 interface AuthContextValue {
   user: Accessor<AuthUser | null>;
   session: Accessor<AuthSession>;
   role: Accessor<UserRole | null>;
+  membershipRole: Accessor<OrganizationRole | null>;
   organizations: Accessor<AuthOrganization[]>;
   activeOrganization: Accessor<AuthOrganization | null>;
   activeMembership: Accessor<AuthMember | null>;
@@ -46,6 +47,7 @@ export const AuthProvider: ParentComponent = (props) => {
     user: store.state.user,
     session: store.state.session,
     role: store.state.role,
+    membershipRole: store.state.membershipRole,
     organizations: store.state.organizations,
     activeOrganization: store.state.activeOrganization,
     activeMembership: store.state.activeMembership,

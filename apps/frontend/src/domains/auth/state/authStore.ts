@@ -1,7 +1,6 @@
 import { createMemo, createSignal } from 'solid-js';
 import { toast } from 'solid-sonner';
 
-import type { UserRole } from '@monte/types';
 import type { BetterAuthSession } from '../../../lib/auth-client';
 import {
   authClient,
@@ -11,12 +10,16 @@ import {
 } from '../../../lib/auth-client';
 import { clearAuthToken, setCurriculumAuthToken } from '@monte/api';
 import {
+  createOrganization,
   getActiveMember,
   listOrganizations,
   setActiveOrganization as setOrganizationActive,
   type AuthMember,
   type AuthOrganization,
 } from '../organizationClient';
+import { popPendingInvitationId } from '../pendingInvitation';
+import { isOrganizationRole, isUserRole } from '../types';
+import type { OrganizationRole, UserRole } from '../types';
 
 export type AuthSession = BetterAuthSession['session'] | null;
 export type AuthUser = BetterAuthSession['user'] | null;
@@ -27,17 +30,32 @@ const extractImpersonator = (session: AuthSession): string | null => {
   return typeof candidate === 'string' && candidate.trim().length > 0 ? candidate : null;
 };
 
-const normalizeRole = (raw: unknown): UserRole | null => {
+const normalizeUserRole = (raw: unknown): UserRole | null => {
   if (typeof raw !== 'string') return null;
   const trimmed = raw.trim();
-  return trimmed === 'admin' || trimmed === 'user' ? trimmed : null;
+  return isUserRole(trimmed) ? trimmed : null;
 };
+
+const normalizeMembershipRole = (raw: unknown): OrganizationRole | null => {
+  if (typeof raw !== 'string') return null;
+  const trimmed = raw.trim();
+  return isOrganizationRole(trimmed) ? trimmed : null;
+};
+
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
 
 export interface AuthStore {
   state: {
     user: () => AuthUser | null;
     session: () => AuthSession;
     role: () => UserRole | null;
+    membershipRole: () => OrganizationRole | null;
     organizations: () => AuthOrganization[];
     activeOrganization: () => AuthOrganization | null;
     activeMembership: () => AuthMember | null;
@@ -66,9 +84,43 @@ export const createAuthStore = (): AuthStore => {
   const [role, setRole] = createSignal<UserRole | null>(null);
   const [organizations, setOrganizations] = createSignal<AuthOrganization[]>([]);
   const [activeMembership, setActiveMembership] = createSignal<AuthMember | null>(null);
+  const [membershipRole, setMembershipRole] = createSignal<OrganizationRole | null>(null);
   const [impersonatedBy, setImpersonatedBy] = createSignal<string | null>(null);
   const [loading, setLoading] = createSignal(true);
   const [error, setError] = createSignal<string | null>(null);
+  let provisioningOrganization = false;
+
+  const provisionDefaultOrganization = async () => {
+    if (provisioningOrganization) return;
+    provisioningOrganization = true;
+    try {
+      const currentUser = user();
+      const baseName = (currentUser?.name && currentUser.name.trim()) || currentUser?.email?.split('@')[0] || 'Household';
+      const organizationName = baseName.toLowerCase().includes('household')
+        ? baseName
+        : `${baseName}'s Household`;
+      const organizationSlug = slugify(organizationName);
+
+      const created = await createOrganization({
+        name: organizationName,
+        slug: organizationSlug,
+        metadata: {
+          category: 'household',
+          provisionedAt: new Date().toISOString(),
+        },
+        keepCurrentActiveOrganization: false,
+      });
+
+      await setOrganizationActive({
+        organizationId: created.id,
+        organizationSlug: created.slug,
+      });
+    } catch (err) {
+      console.warn('Unable to provision default organization', err);
+    } finally {
+      provisioningOrganization = false;
+    }
+  };
 
   const activeOrganization = createMemo(() => {
     const membership = activeMembership();
@@ -85,12 +137,14 @@ export const createAuthStore = (): AuthStore => {
     setRole(null);
     setOrganizations([]);
     setActiveMembership(null);
+    setMembershipRole(null);
     setImpersonatedBy(null);
     setCurriculumAuthToken(null);
     clearAuthToken();
   };
 
-  const hydrateOrganizations = async () => {
+  const hydrateOrganizations = async (options?: { allowProvision?: boolean }) => {
+    const allowProvision = options?.allowProvision ?? true;
     try {
       const [orgs, membership] = await Promise.all([
         listOrganizations().catch((err) => {
@@ -104,10 +158,17 @@ export const createAuthStore = (): AuthStore => {
       ]);
       setOrganizations(orgs);
       setActiveMembership(membership);
+      setMembershipRole(normalizeMembershipRole(membership?.role));
+
+      if (allowProvision && orgs.length === 0 && !membership) {
+        await provisionDefaultOrganization();
+        await hydrateOrganizations({ allowProvision: false });
+      }
     } catch (err) {
       console.warn('Unable to hydrate organization state', err);
       setOrganizations([]);
       setActiveMembership(null);
+      setMembershipRole(null);
     }
   };
 
@@ -120,7 +181,7 @@ export const createAuthStore = (): AuthStore => {
 
     setUser(payload.user);
     setSession(payload.session);
-    setRole(normalizeRole(payload.user.role));
+    setRole(normalizeUserRole(payload.user.role));
     setImpersonatedBy(extractImpersonator(payload.session));
 
     try {
@@ -137,6 +198,30 @@ export const createAuthStore = (): AuthStore => {
 
     await hydrateOrganizations();
     setError(null);
+
+    const pendingInvitationId = popPendingInvitationId();
+    if (pendingInvitationId) {
+      try {
+        const result = await authClient.$fetch('/organization/accept-invitation', {
+          method: 'POST',
+          body: {
+            invitationId: pendingInvitationId,
+            keepCurrentActiveOrganization: false,
+          },
+          throw: false,
+        });
+        if (result?.error) {
+          throw new Error(result.error.message ?? 'Unable to accept the invitation');
+        }
+        await hydrateOrganizations();
+        toast.success('Invitation accepted! You now have access to the organization.');
+      } catch (invitationError) {
+        const invitationMessage =
+          invitationError instanceof Error ? invitationError.message : 'Unable to accept invitation automatically';
+        console.warn('Pending invitation acceptance failed', invitationError);
+        toast.error(invitationMessage);
+      }
+    }
   };
 
   const hydrateFromSession = async (options?: { refresh?: boolean }) => {
@@ -214,7 +299,15 @@ export const createAuthStore = (): AuthStore => {
   };
 
   const setActiveOrganization = async (organizationId?: string | null) => {
-    await setOrganizationActive(organizationId ?? null);
+    const organization =
+      organizationId !== null && typeof organizationId === 'string'
+        ? organizations().find((item) => item.id === organizationId) ?? null
+        : null;
+
+    await setOrganizationActive({
+      organizationId: organization ? organization.id : null,
+      organizationSlug: organization ? organization.slug : null,
+    });
     await hydrateOrganizations();
   };
 
@@ -244,6 +337,7 @@ export const createAuthStore = (): AuthStore => {
       user,
       session,
       role,
+      membershipRole,
       organizations,
       activeOrganization,
       activeMembership,

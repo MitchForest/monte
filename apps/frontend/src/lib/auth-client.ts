@@ -1,6 +1,12 @@
 import { createAuthClient } from 'better-auth/solid';
 import { convexClient } from '@convex-dev/better-auth/client/plugins';
-import { adminClient, magicLinkClient, organizationClient } from 'better-auth/client/plugins';
+import {
+  adminClient,
+  jwtClient,
+  magicLinkClient,
+  oneTimeTokenClient,
+  organizationClient,
+} from 'better-auth/client/plugins';
 import { readEnvString } from '@monte/api';
 
 type ResolvedBaseSettings = {
@@ -45,72 +51,12 @@ const clientOptions = {
     magicLinkClient(),
     adminClient(),
     organizationClient(),
+    jwtClient(),
+    oneTimeTokenClient(),
   ],
 };
 
-type SessionQueryOptions = {
-  disableCookieCache?: boolean;
-  disableRefresh?: boolean;
-};
-
-type SessionApi = {
-  getSession: (args?: { query?: SessionQueryOptions }) => Promise<{
-    data: BetterAuthSession | null;
-    error: { message?: string | null } | null;
-  }>;
-};
-
-type ConvexApi = {
-  convex: {
-    token: () => Promise<ConvexTokenResponse>;
-  };
-};
-
-type RawAuthClient = ReturnType<typeof createAuthClient<typeof clientOptions>>;
-
-const hasSessionApi = (value: RawAuthClient): value is RawAuthClient & SessionApi => {
-  const candidate = value as Partial<SessionApi>;
-  return typeof candidate.getSession === 'function';
-};
-
-const hasConvexApi = (value: RawAuthClient): value is RawAuthClient & ConvexApi => {
-  const candidate = value as Partial<ConvexApi>;
-  return typeof candidate.convex?.token === 'function';
-};
-
-type MagicLinkApi = {
-  signIn: {
-    magicLink: (args: unknown) => Promise<{ error?: { message?: string | null } | null }>;
-  };
-  magicLink: {
-    verify: (args: unknown) => Promise<{ error?: { message?: string | null } | null }>;
-  };
-};
-
-const hasMagicLinkApi = (value: RawAuthClient): value is RawAuthClient & MagicLinkApi => {
-  const candidate = value as Partial<MagicLinkApi>;
-  return (
-    typeof candidate.signIn?.magicLink === 'function' &&
-    typeof candidate.magicLink?.verify === 'function'
-  );
-};
-
-const ensureAuthClientCapabilities = (
-  client: RawAuthClient,
-): RawAuthClient & SessionApi & ConvexApi & MagicLinkApi => {
-  if (!hasSessionApi(client)) {
-    throw new Error('Better Auth client missing session helpers');
-  }
-  if (!hasConvexApi(client)) {
-    throw new Error('Better Auth client missing convex token helper');
-  }
-  if (!hasMagicLinkApi(client)) {
-    throw new Error('Better Auth client missing magic link helpers');
-  }
-  return client;
-};
-
-export const authClient = ensureAuthClientCapabilities(createAuthClient(clientOptions));
+export const authClient = createAuthClient(clientOptions);
 
 export type AuthClient = typeof authClient;
 
@@ -127,27 +73,28 @@ export type BetterAuthSession = {
   };
 };
 
-type ConvexTokenResponse = {
-  data?: {
-    token?: string | null;
-  } | null;
+type SessionQueryOptions = {
+  disableCookieCache?: boolean;
+  disableRefresh?: boolean;
 };
 
-type SessionFetchResult = Awaited<ReturnType<SessionApi['getSession']>>;
-
-const unwrapSessionResponse = (response: SessionFetchResult): BetterAuthSession | null => {
-  if (response.error) {
+const unwrapSessionResponse = (response: unknown): BetterAuthSession | null => {
+  if (!response || typeof response !== 'object') {
     return null;
   }
-  const payload = response.data;
-  if (!payload) {
+  const candidate = response as { data?: unknown; error?: { message?: string | null } | null };
+  if (candidate.error) {
+    return null;
+  }
+  const payload = candidate.data ?? null;
+  if (payload === null || typeof payload === 'undefined') {
     return null;
   }
   if (typeof (payload as { data?: unknown }).data !== 'undefined') {
-    const inner = (payload as { data?: unknown; error?: unknown }).data;
-    return (inner ?? null) as BetterAuthSession | null;
+    const nested = (payload as { data?: unknown }).data;
+    return (nested ?? null) as BetterAuthSession | null;
   }
-  return payload as unknown as BetterAuthSession | null;
+  return payload as BetterAuthSession;
 };
 
 export const getBetterAuthSession = async (
@@ -155,22 +102,6 @@ export const getBetterAuthSession = async (
 ): Promise<BetterAuthSession | null> => {
   const response = await authClient.getSession(query ? { query } : undefined);
   return unwrapSessionResponse(response);
-};
-
-type ConvexTokenResult = Awaited<ReturnType<(typeof authClient)['convex']['token']>>;
-
-const extractConvexToken = (result: ConvexTokenResult): string | null => {
-  if (!result?.data) return null;
-  const wrapped = result.data as ConvexTokenResponse;
-  return wrapped?.data?.token ?? (result.data as unknown as { token?: string })?.token ?? null;
-};
-
-export const fetchConvexAuthToken = async (): Promise<string | null> => {
-  const result = await authClient.convex.token();
-  if (result.error) {
-    throw new Error(result.error.message ?? 'Failed to fetch Convex auth token');
-  }
-  return extractConvexToken(result);
 };
 
 export const refreshBetterAuthSession = async (): Promise<BetterAuthSession | null> => {
@@ -188,4 +119,26 @@ export const refreshBetterAuthSession = async (): Promise<BetterAuthSession | nu
     }
     throw error;
   }
+};
+
+export const fetchConvexAuthToken = async (): Promise<string | null> => {
+  const result = await authClient.$fetch<{ token?: string; data?: { token?: string | null } | null }>(
+    '/convex/token',
+    {
+      method: 'GET',
+      throw: false,
+    },
+  );
+
+  if (result?.error) {
+    throw new Error(result.error.message ?? 'Failed to fetch Convex auth token');
+  }
+
+  const direct = result.data?.token ?? null;
+  if (typeof direct === 'string') {
+    return direct;
+  }
+
+  const nested = result.data?.data?.token;
+  return typeof nested === 'string' ? nested : null;
 };

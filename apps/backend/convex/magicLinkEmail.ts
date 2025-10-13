@@ -1,11 +1,29 @@
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
-const DEFAULT_FROM_ADDRESS = 'Monte Magic Links <login@monte.school>';
+const DEFAULT_FROM_ADDRESS = 'Monte Notifications <login@monte.school>';
 const MAX_CAPTURED_LINKS = 20;
 
 type MagicLinkPayload = {
   email: string;
   url: string;
   token: string;
+};
+
+export type ResendEmailMessage = {
+  to: string[];
+  subject: string;
+  text: string;
+  html: string;
+  from?: string;
+  tags?: Array<{ name: string; value: string }>;
+};
+
+type InvitationEmailPayload = {
+  email: string;
+  invitationUrl: string;
+  organizationName: string;
+  role: string;
+  inviterName?: string | null;
+  inviterEmail?: string | null;
 };
 
 type CapturedMagicLink = MagicLinkPayload & {
@@ -50,16 +68,26 @@ const escapeHtml = (value: string): string =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 
-const createEmailContent = ({ email, url }: MagicLinkPayload) => {
+const createResendMessage = (message: ResendEmailMessage): ResendEmailMessage => ({
+  from: message.from ?? getResendFromAddress(),
+  ...message,
+});
+
+const createMagicLinkMessage = ({ email, url }: MagicLinkPayload): ResendEmailMessage => {
   const safeUrl = escapeHtml(url);
-  const text = `Sign in to Monte by clicking the link below (valid for 5 minutes):\n\n${url}\n\nIf you did not request this email you can ignore it.`;
+  const text = [
+    'Sign in to Monte by clicking the link below (valid for 5 minutes):',
+    '',
+    url,
+    '',
+    'If you did not request this email you can ignore it.',
+  ].join('\n');
   const html = [
     '<p>Sign in to Monte by clicking the link below (valid for 5 minutes):</p>',
     `<p><a href="${safeUrl}">${safeUrl}</a></p>`,
     '<p>If you did not request this email you can safely ignore it.</p>',
   ].join('');
-  return {
-    from: getResendFromAddress(),
+  return createResendMessage({
     to: [email],
     subject: 'Your Monte sign-in link',
     text,
@@ -67,10 +95,47 @@ const createEmailContent = ({ email, url }: MagicLinkPayload) => {
     tags: [
       { name: 'category', value: 'magic-link' },
     ],
-  };
+  });
 };
 
-const sendViaResend = async (payload: MagicLinkPayload) => {
+const createInvitationMessage = ({
+  email,
+  invitationUrl,
+  organizationName,
+  role,
+  inviterName,
+  inviterEmail,
+}: InvitationEmailPayload): ResendEmailMessage => {
+  const safeUrl = escapeHtml(invitationUrl);
+  const friendlyRole = role === 'owner' ? 'owner' : role === 'admin' ? 'admin' : 'member';
+  const inviterDisplay = inviterName ?? inviterEmail ?? 'Someone from Monte';
+  const text = [
+    `${inviterDisplay} invited you to join ${organizationName} on Monte as a ${friendlyRole}.`,
+    '',
+    'Click the link below to accept and get started:',
+    '',
+    invitationUrl,
+    '',
+    'If you weren’t expecting this invite you can safely ignore it.',
+  ].join('\n');
+  const html = [
+    `<p>${escapeHtml(inviterDisplay)} invited you to join <strong>${escapeHtml(organizationName)}</strong> on Monte as a <strong>${escapeHtml(friendlyRole)}</strong>.</p>`,
+    `<p><a href="${safeUrl}" style="display:inline-block;padding:10px 16px;border-radius:9999px;background:#0C2A65;color:#FFFFFF;text-decoration:none;font-weight:600;">Accept invitation</a></p>`,
+    `<p>Or copy this link: <a href="${safeUrl}">${safeUrl}</a></p>`,
+    '<p>If you weren’t expecting this invite you can safely ignore it.</p>',
+  ].join('');
+  return createResendMessage({
+    to: [email],
+    subject: `You're invited to ${organizationName} on Monte`,
+    text,
+    html,
+    tags: [
+      { name: 'category', value: 'organization-invite' },
+    ],
+  });
+};
+
+const sendViaResend = async (message: ResendEmailMessage) => {
   const apiKey = getResendApiKey();
   if (!apiKey) {
     throw new Error('Resend API key not configured');
@@ -82,7 +147,7 @@ const sendViaResend = async (payload: MagicLinkPayload) => {
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(createEmailContent(payload)),
+    body: JSON.stringify(createResendMessage(message)),
   };
 
   const response = await fetch(RESEND_ENDPOINT, requestInit);
@@ -110,8 +175,9 @@ const captureMagicLink = (payload: MagicLinkPayload) => {
 export const sendMagicLinkEmail = async (payload: MagicLinkPayload) => {
   captureMagicLink(payload);
 
+  const message = createMagicLinkMessage(payload);
   try {
-    await sendViaResend(payload);
+    await sendViaResend(message);
     return;
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error);
@@ -124,4 +190,20 @@ export const sendMagicLinkEmail = async (payload: MagicLinkPayload) => {
     email: payload.email,
     url: payload.url,
   });
+};
+
+export const sendOrganizationInvitationEmail = async (payload: InvitationEmailPayload) => {
+  try {
+    await sendViaResend(createInvitationMessage(payload));
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error);
+    if (reason !== 'Resend API key not configured') {
+      console.warn('[organization-invite] Failed to send via Resend', reason);
+    }
+    console.info('[organization-invite] Invitation ready (Resend unavailable)', {
+      email: payload.email,
+      invitationUrl: payload.invitationUrl,
+      role: payload.role,
+    });
+  }
 };

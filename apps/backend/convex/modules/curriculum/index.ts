@@ -16,6 +16,7 @@ import {
 } from '@monte/lesson-service';
 
 import { lessonDocument as lessonDocumentSchema } from '../../schema.js';
+import { requireMembershipRole } from '../../utils/authRoles.js';
 
 const metadataValue = zodToConvex(EntityMetadataSchema);
 const curriculumManifestValue = zodToConvex(CurriculumManifestSchema);
@@ -26,6 +27,12 @@ const syncManifestOptionsValue = v.object({
   manifestCommit: v.optional(v.string()),
   defaultStatus: v.optional(lessonAuthoringStatusValue),
 });
+
+const ensureMemberAccess = (ctx: QueryCtx | MutationCtx) =>
+  requireMembershipRole(ctx, ['owner', 'admin', 'member']);
+
+const ensureEditorAccess = (ctx: QueryCtx | MutationCtx) =>
+  requireMembershipRole(ctx, ['owner', 'admin']);
 
 const now = () => Date.now();
 
@@ -76,37 +83,42 @@ async function nextOrder(
   filter?: { field: 'unitId' | 'topicId'; value: Id<'units'> | Id<'topics'> },
 ) {
   if (table === 'units') {
-    const existing = await ctx.db.query('units').collect();
-    if (existing.length === 0) return 0;
-    return Math.max(...existing.map((item) => item.order)) + 1;
+    const { page } = await ctx.db
+      .query('units')
+      .withIndex('by_order')
+      .order('desc')
+      .paginate({ numItems: 1, cursor: null });
+    const last = page[0];
+    if (!last) return 0;
+    return last.order + 1;
   }
 
   if (table === 'topics') {
     if (filter?.field === 'unitId') {
-      const topics = await ctx.db
+      const { page } = await ctx.db
         .query('topics')
-        .withIndex('by_unit', (q) => q.eq('unitId', filter.value as Id<'units'>))
-        .collect();
-      if (topics.length === 0) return 0;
-      return Math.max(...topics.map((item) => item.order)) + 1;
+        .withIndex('by_unit_order', (q) => q.eq('unitId', filter.value as Id<'units'>))
+        .order('desc')
+        .paginate({ numItems: 1, cursor: null });
+      const last = page[0];
+      if (!last) return 0;
+      return last.order + 1;
     }
-    const topics = await ctx.db.query('topics').collect();
-    if (topics.length === 0) return 0;
-    return Math.max(...topics.map((item) => item.order)) + 1;
+    throw new Error('nextOrder for topics requires unitId filter');
   }
 
   if (filter?.field === 'topicId') {
-    const lessons = await ctx.db
+    const { page } = await ctx.db
       .query('lessons')
-      .withIndex('by_topic', (q) => q.eq('topicId', filter.value as Id<'topics'>))
-      .collect();
-    if (lessons.length === 0) return 0;
-    return Math.max(...lessons.map((item) => item.order)) + 1;
+      .withIndex('by_topic_order', (q) => q.eq('topicId', filter.value as Id<'topics'>))
+      .order('desc')
+      .paginate({ numItems: 1, cursor: null });
+    const last = page[0];
+    if (!last) return 0;
+    return last.order + 1;
   }
 
-  const lessons = await ctx.db.query('lessons').collect();
-  if (lessons.length === 0) return 0;
-  return Math.max(...lessons.map((item) => item.order)) + 1;
+  throw new Error('nextOrder for lessons requires topicId filter');
 }
 
 function sortByOrder<T extends { order: number }>(items: readonly T[]): T[] {
@@ -148,35 +160,45 @@ const mapSegmentsForManifest = (
     representation: segment.representation ?? undefined,
   }));
 
+const DEFAULT_TREE_PAGE_SIZE = 25;
+
 export const listCurriculumTree = query({
-  args: {},
-  handler: async (ctx) => {
-    const units = await ctx.db.query('units').withIndex('by_order').collect();
+  args: {
+    cursor: v.optional(v.string()),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    await ensureMemberAccess(ctx);
+    const limit = Math.min(Math.max(args.limit ?? DEFAULT_TREE_PAGE_SIZE, 1), 100);
+    const { page: unitPage, continueCursor, isDone } = await ctx.db
+      .query('units')
+      .withIndex('by_order')
+      .paginate({ numItems: limit, cursor: args.cursor ?? null });
 
     const topicsForUnit = async (unitId: Id<'units'>) => {
-      const cursor = ctx.db
+      const topics: Doc<'topics'>[] = [];
+      const query = ctx.db
         .query('topics')
         .withIndex('by_unit_order', (q) => q.eq('unitId', unitId));
-      const results: Doc<'topics'>[] = [];
-      for await (const topic of cursor) {
-        results.push(topic);
+      for await (const topic of query) {
+        topics.push(topic);
       }
-      return results;
+      return topics;
     };
 
     const lessonsForTopic = async (topicId: Id<'topics'>) => {
-      const cursor = ctx.db
+      const lessons: Doc<'lessons'>[] = [];
+      const query = ctx.db
         .query('lessons')
         .withIndex('by_topic_order', (q) => q.eq('topicId', topicId));
-      const results: Doc<'lessons'>[] = [];
-      for await (const lesson of cursor) {
-        results.push(lesson);
+      for await (const lesson of query) {
+        lessons.push(lesson);
       }
-      return results;
+      return lessons;
     };
 
     const tree = [];
-    for (const unit of units) {
+    for (const unit of unitPage) {
       const topics = await topicsForUnit(unit._id);
       const topicsWithLessons = [];
       for (const topic of topics) {
@@ -203,13 +225,18 @@ export const listCurriculumTree = query({
       });
     }
 
-    return tree;
+    return {
+      tree,
+      cursor: isDone ? null : continueCursor,
+      isDone,
+    };
   },
 });
 
 export const getUnitBySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
+    await ensureMemberAccess(ctx);
     const unit = await ctx.db
       .query('units')
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
@@ -272,6 +299,7 @@ export const getUnitBySlug = query({
 export const getLessonBySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
+    await ensureMemberAccess(ctx);
     const lesson = await ctx.db
       .query('lessons')
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
@@ -284,6 +312,7 @@ export const getLessonBySlug = query({
 export const getLessonById = query({
   args: { lessonId: v.id('lessons') },
   handler: async (ctx, args) => {
+    await ensureMemberAccess(ctx);
     return await ctx.db.get(args.lessonId);
   },
 });
@@ -297,6 +326,7 @@ export const createUnit = mutation({
     metadata: v.optional(metadataValue),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const slugBase = slugify(args.slug ?? args.title);
     const slug = await ensureUniqueSlug(ctx, 'units', slugBase);
     const order = await nextOrder(ctx, 'units');
@@ -327,6 +357,7 @@ export const updateUnit = mutation({
     status: v.optional(v.union(v.literal('active'), v.literal('archived'))),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const unit = await ctx.db.get(args.unitId);
     if (!unit) throw new Error('Unit not found');
     let slug = unit.slug;
@@ -364,6 +395,7 @@ async function deleteLessonsForTopic(ctx: MutationCtx, topicId: Id<'topics'>) {
 export const deleteUnit = mutation({
   args: { unitId: v.id('units') },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     await deleteTopicsForUnit(ctx, args.unitId);
     await ctx.db.delete(args.unitId);
   },
@@ -372,6 +404,7 @@ export const deleteUnit = mutation({
 export const reorderUnits = mutation({
   args: { unitIds: v.array(v.id('units')) },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     await Promise.all(
       args.unitIds.map((unitId, index) => ctx.db.patch(unitId, { order: index, updatedAt: now() })),
     );
@@ -389,6 +422,7 @@ export const createTopic = mutation({
     metadata: v.optional(metadataValue),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const unit = await ctx.db.get(args.unitId);
     if (!unit) throw new Error('Unit not found');
     const slugBase = slugify(args.slug ?? args.title);
@@ -424,6 +458,7 @@ export const updateTopic = mutation({
     status: v.optional(v.union(v.literal('active'), v.literal('archived'))),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const topic = await ctx.db.get(args.topicId);
     if (!topic) throw new Error('Topic not found');
     let slug = topic.slug;
@@ -447,6 +482,7 @@ export const updateTopic = mutation({
 export const deleteTopic = mutation({
   args: { topicId: v.id('topics') },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     await deleteLessonsForTopic(ctx, args.topicId);
     await ctx.db.delete(args.topicId);
   },
@@ -459,6 +495,7 @@ export const moveTopic = mutation({
     targetIndex: v.number(),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const topic = await ctx.db.get(args.topicId);
     if (!topic) throw new Error('Topic not found');
     const topicsInTarget = await ctx.db
@@ -484,6 +521,7 @@ export const reorderTopics = mutation({
     topicIds: v.array(v.id('topics')),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const existing = await ctx.db
       .query('topics')
       .withIndex('by_unit', (q) => q.eq('unitId', args.unitId))
@@ -501,6 +539,7 @@ export const reorderTopics = mutation({
 export const createLesson = mutation({
   args: { topicId: v.id('topics'), title: v.string(), slug: v.optional(v.string()) },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const topic = await ctx.db.get(args.topicId);
     if (!topic) throw new Error('Topic not found');
     const slugBase = slugify(args.slug ?? args.title);
@@ -534,6 +573,7 @@ export const saveLessonDraft = mutation({
     draft: lessonDocumentSchema,
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const lesson = await ctx.db.get(args.lessonId);
     if (!lesson) throw new Error('Lesson not found');
     const sanitizeTimestamp = (value: unknown, fallback: number) => {
@@ -573,6 +613,7 @@ export const saveLessonDraft = mutation({
 export const publishLesson = mutation({
   args: { lessonId: v.id('lessons') },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const lesson = await ctx.db.get(args.lessonId);
     if (!lesson) throw new Error('Lesson not found');
     await ctx.db.patch(args.lessonId, {
@@ -587,6 +628,7 @@ export const publishLesson = mutation({
 export const deleteLesson = mutation({
   args: { lessonId: v.id('lessons') },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     await ctx.db.delete(args.lessonId);
   },
 });
@@ -598,6 +640,7 @@ export const moveLesson = mutation({
     targetIndex: v.number(),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const lesson = await ctx.db.get(args.lessonId);
     if (!lesson) throw new Error('Lesson not found');
     const lessonsInTarget = await ctx.db
@@ -623,6 +666,7 @@ export const reorderLessons = mutation({
     lessonIds: v.array(v.id('lessons')),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const existing = await ctx.db
       .query('lessons')
       .withIndex('by_topic', (q) => q.eq('topicId', args.topicId))
@@ -646,6 +690,7 @@ export const updateLessonAuthoring = mutation({
     gradeLevels: v.optional(v.union(v.array(lessonGradeLevelValue), v.null())),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const lesson = await ctx.db.get(args.lessonId);
     if (!lesson) throw new Error('Lesson not found');
 
@@ -685,6 +730,7 @@ export const syncManifest = mutation({
     options: v.optional(syncManifestOptionsValue),
   },
   handler: async (ctx, args) => {
+    await ensureEditorAccess(ctx);
     const manifest = CurriculumManifestSchema.parse(args.manifest);
     const prune = args.options?.prune ?? false;
     const manifestCommit = args.options?.manifestCommit;
@@ -930,6 +976,7 @@ export const syncManifest = mutation({
 export const exportManifest = query({
   args: {},
   handler: async (ctx) => {
+    await ensureMemberAccess(ctx);
     const [units, topics, lessons] = await Promise.all([
       ctx.db.query('units').collect(),
       ctx.db.query('topics').collect(),
@@ -1015,6 +1062,7 @@ export const exportManifest = query({
 export const listLessons = query({
   args: { topicId: v.optional(v.id('topics')) },
   handler: async (ctx, args) => {
+    await ensureMemberAccess(ctx);
     const topicId = args.topicId;
     const lessons = topicId
       ? await ctx.db.query('lessons').withIndex('by_topic', (qb) => qb.eq('topicId', topicId)).collect()

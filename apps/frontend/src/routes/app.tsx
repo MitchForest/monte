@@ -89,7 +89,7 @@ const OrganizationDetails = () => {
 
   const [overview] = createResource<OrganizationOverviewResult | undefined, string | undefined>(
     () => activeOrg()?.id,
-    async (organizationId) => {
+    async (organizationId: string | undefined) => {
       if (!organizationId) return undefined;
       return await getOrganizationOverview(organizationId);
     },
@@ -204,7 +204,8 @@ const Dashboard = () => {
           <span class="font-medium text-[color:var(--color-heading)]">
             {auth.user()?.email ?? auth.user()?.id ?? 'Unknown user'}
           </span>
-          {auth.role() ? ` · Role: ${auth.role()}` : ''}
+          {auth.role() ? ` · Account role: ${auth.role()}` : ''}
+          {auth.membershipRole() ? ` · Organization role: ${auth.membershipRole()}` : ''}
         </p>
       </section>
 

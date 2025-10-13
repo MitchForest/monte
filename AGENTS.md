@@ -32,6 +32,7 @@ RULES:
 - Get user explicit approval before any database/schema changes
 - Use kobalte, tailwind, class variance authority for components
 - If we need to modularize domains, do so as follows: view → viewmodel → state → actions.
+- ZERO backwards-compatibility, legacy shims, etc. This is another phrase for LAZY code and technical debt and we have ZERO tolerance for it.
 
 
 PRINCIPLES:

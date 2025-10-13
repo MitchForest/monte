@@ -63,18 +63,8 @@ export const RadioGroup = <T extends string = string>(props: RadioGroupProps<T>)
     props.onChange?.(next as T);
   };
 
-  type GenericComponent = (props: Record<string, unknown>) => JSX.Element;
-  const RadioGroupRoot = KRadioGroup.Root as unknown as GenericComponent;
-  const RadioGroupItem = KRadioGroup.Item as unknown as GenericComponent;
-  const RadioGroupItemControl = KRadioGroup.ItemControl as unknown as GenericComponent;
-  const RadioGroupItemIndicator = KRadioGroup.ItemIndicator as unknown as GenericComponent;
-  const RadioGroupItemLabel = KRadioGroup.ItemLabel as unknown as GenericComponent;
-  const RadioGroupLabel = KRadioGroup.Label as unknown as GenericComponent;
-  const RadioGroupDescription = KRadioGroup.Description as unknown as GenericComponent;
-  const RadioGroupErrorMessage = KRadioGroup.ErrorMessage as unknown as GenericComponent;
-
   return (
-    <RadioGroupRoot
+    <KRadioGroup.Root
       value={props.value}
       defaultValue={props.defaultValue}
       onChange={handleChange}
@@ -84,49 +74,49 @@ export const RadioGroup = <T extends string = string>(props: RadioGroupProps<T>)
       class={cn(groupWrapper(), props.class)}
     >
       <Show when={props.label}>
-        <RadioGroupLabel class={groupLabel()}>{props.label}</RadioGroupLabel>
+        <KRadioGroup.Label class={groupLabel()}>{props.label}</KRadioGroup.Label>
       </Show>
       <Show when={props.description}>
         {(content) => (
-          <RadioGroupDescription class={groupDescription()}>
+          <KRadioGroup.Description class={groupDescription()}>
             {content()}
-          </RadioGroupDescription>
+          </KRadioGroup.Description>
         )}
       </Show>
 
       <div class="flex flex-col gap-2">
         <For each={props.options}>
           {(option) => (
-            <RadioGroupItem
+            <KRadioGroup.Item
               value={option.value}
               disabled={option.disabled}
               class={itemWrapper({ state: option.disabled ? 'disabled' : 'default' })}
             >
               <KRadioGroup.ItemInput />
-              <RadioGroupItemControl class={indicatorStyles()}>
-                <RadioGroupItemIndicator>
+              <KRadioGroup.ItemControl class={indicatorStyles()}>
+                <KRadioGroup.ItemIndicator>
                   <span class={dotStyles()} />
-                </RadioGroupItemIndicator>
-              </RadioGroupItemControl>
+                </KRadioGroup.ItemIndicator>
+              </KRadioGroup.ItemControl>
               <div class="flex flex-col">
-                <RadioGroupItemLabel class={itemLabel()}>{option.label}</RadioGroupItemLabel>
+                <KRadioGroup.ItemLabel class={itemLabel()}>{option.label}</KRadioGroup.ItemLabel>
                 <Show when={option.description}>
                   <span class={itemDescription()}>{option.description}</span>
                 </Show>
               </div>
-            </RadioGroupItem>
+            </KRadioGroup.Item>
           )}
         </For>
       </div>
 
       <Show when={props.errorMessage}>
         {(message) => (
-          <RadioGroupErrorMessage class={groupError()}>
+          <KRadioGroup.ErrorMessage class={groupError()}>
             {message()}
-          </RadioGroupErrorMessage>
+          </KRadioGroup.ErrorMessage>
         )}
       </Show>
-    </RadioGroupRoot>
+    </KRadioGroup.Root>
   );
 };
 

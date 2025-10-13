@@ -2,13 +2,15 @@ import type { JSX } from 'solid-js';
 import { Show, type ParentComponent } from 'solid-js';
 import { useNavigate } from '@tanstack/solid-router';
 
-import type { UserRole } from '@monte/types';
+import type { OrganizationRole, UserRole } from '../domains/auth/types';
 
 import { Button, Card } from '../components/ui';
 import { useAuth } from '../providers/AuthProvider';
 
+type AllowedRole = UserRole | OrganizationRole;
+
 interface RoleGuardProps {
-  allowedRoles: UserRole[];
+  allowedRoles: AllowedRole[];
   fallback?: JSX.Element;
 }
 
@@ -39,7 +41,13 @@ export const RoleGuard: ParentComponent<RoleGuardProps> = (props) => {
       fallback={<div class="flex justify-center p-6 text-sm text-[color:var(--color-text-muted)]">Checking permissions…</div>}
     >
       <Show
-        when={auth.isAuthenticated() && auth.role() !== null && props.allowedRoles.includes(auth.role()!)}
+        when={(() => {
+          if (!auth.isAuthenticated()) return false;
+          const userRole = auth.role();
+          const orgRole = auth.membershipRole();
+          if (!props.allowedRoles.length) return true;
+          return props.allowedRoles.some((role) => role === userRole || role === orgRole);
+        })()}
         fallback={props.fallback ?? <DefaultFallback />}
       >
         {props.children}
