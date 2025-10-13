@@ -21,6 +21,7 @@
     "lint": "echo \"No lint tasks for @monte/graph-service\""
   },
   "dependencies": {
+    "@monte/curriculum-service": "workspace:*",
     "@monte/types": "workspace:*"
   },
   "devDependencies": {

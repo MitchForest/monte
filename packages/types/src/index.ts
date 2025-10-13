@@ -1,2 +1,2 @@
-export * from './core/index.js';
-export * from './curriculum/index.js';
+export * from './shared/index.js';
+export * from './domains/curriculum/index.js';

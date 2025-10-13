@@ -1,28 +1,34 @@
-# Repository Guidelines
+# Overview
+- Monte is a pnpm monorepo with SolidJS frontend, Convex backend, and shared packages for types and API clients.
+- We optimize for radical simplicity: domain-first organization, no legacy shims, and single-source exports.
+- Only root-level `README.md` files per app/package; no auxiliary docs scattered elsewhere.
 
-## Project Structure & Module Organization
- The workspace is a pnpm monorepo. UI and curriculum tooling live in `apps/frontend` (SolidJS + Vite), backend Convex functions are in `apps/backend`, and shared contracts ship from `packages/types` (Zod schemas) and `packages/api` (Convex client wrappers). Automation scripts sit under `scripts/`, while editable curriculum content now lives in `packages/curriculum-service`. Generated Convex bindings sync into `packages/api/convex/_generated`; never edit those files manually.
+# Commands
+- `pnpm build`: compile every workspace package.
+- `pnpm build:shared`: run Convex codegen then rebuild shared packages.
+- `pnpm sync:codegen`: regenerate Convex bindings after schema/auth updates.
+- `pnpm --filter @monte/frontend dev`: start the frontend in isolation.
+- `pnpm --filter @monte/backend dev`: start the Convex backend locally.
+- `pnpm typecheck`, `pnpm lint`: keep TS and linting clean before commits.
 
-## Build, Test, and Development Commands
-Run `pnpm install` once. Skip `pnpm dev` in agent environments—the combined launcher is flaky under automation. Instead, start targets individually via `pnpm --filter @monte/frontend dev` or `pnpm --filter @monte/backend dev`. `pnpm build` compiles every package, while `pnpm build:shared` runs Convex codegen before rebuilding `@monte/types` and `@monte/api`. After schema changes, run `pnpm sync:codegen`. Keep TypeScript and lint checks green with `pnpm typecheck` and `pnpm lint`. Curriculum scripts such as `pnpm --filter @monte/frontend validate:lessons` help verify lesson content.
+# Frontend (apps/frontend)
+- Feature-first layout: each domain owns `pages/`, `components/`, `state/`, `api/`, `utils/`, optional `types/`.
+- Stick to SolidJS, Tailwind, Kobalte patterns already established; no duplicate docs inside subfolders.
 
-## Coding Style & Naming Conventions
-Code is TypeScript-first with ESM modules. Use 2-space indentation and respect ESLint (`eslint` + `eslint-plugin-solid`) and Tailwind defaults. Solid components and Convex functions use PascalCase, shared helpers stay camelCase, and Zod schemas live in `@monte/types` with descriptive names (`LessonDocumentSchema`). Prefer exhaustive type narrowing over `any` and keep domain logic under `apps/frontend/src/domains/*`.
+# Backend (apps/backend)
+- Convex code lives under `convex/` with a `core/` spine (auth, config, generated assets, shared utils) and `domains/<feature>/` folders containing `queries.ts`, `mutations.ts`, `services.ts`, `index.ts`.
+- `schema/` holds `tables.ts` + `index.ts`; HTTP routes are composed in `routes/http.ts`; `convex/index.ts` re-exports domains.
+- Delete dead modules instead of hiding them; keep helpers with their domains unless truly cross-cutting.
 
-## Testing Guidelines
- Frontend unit tests use Vitest and `@solidjs/testing-library`; colocate specs as `*.test.ts(x)` beside the code they cover. Run them via `pnpm --filter @monte/frontend vitest`. Back-end Convex logic relies on type guarantees; add integration checks by exercising generated clients in Vitest where practical. Maintain coverage around new features and update fixtures in `packages/curriculum-service` when tests depend on lesson content.
+# Package: @monte/types (packages/types)
+- `shared/` (or `core/`) hosts primitives like `ids.ts`, enums, metadata helpers.
+- `domains/<feature>/` mirrors backend naming; each domain groups related Zod schemas (e.g., `lesson/`, `manifest/`) with a barrel `index.ts`.
+- Root `index.ts` re-exports shared primitives and domain barrels—no extra files at the top level.
 
-## Commit & Pull Request Guidelines
-Commits follow the existing short, imperative style (`git log` shows entries like `complete app shell`). Limit each commit to a single concern, especially when touching shared schemas. PRs should include a concise summary, linked issue or doc reference, screenshots or screen recordings for UI work, and call out schema or generated file changes. Confirm `pnpm build`, `pnpm typecheck`, relevant tests, and `pnpm sync:codegen` ran before requesting review.
-
-## Security & Configuration Tips
-Store secrets through Convex env tooling and avoid checking `.env` files into the repo. Frontend expects Convex deployment IDs in `.env.local`; backend reads secrets from `convex env set`. Regenerate API keys immediately if they leak, and document any new configuration knobs in `.docs/plan.md` for future agents.
-
-### Convex Data Hygiene (last verified: 2025-03-XX)
-- Runtime tables: `units`, `topics`, `lessons`.
-- Better Auth tables managed via plugins: `user`, `session`, `account`, `verification`, `organization`, `member`, `invitation`, `jwks` (plus Stripe adapters when enabled).
-- No legacy `organizations`/`orgMemberships`/`billing` tables should remain in Convex — delete them immediately if discovered.
-- Better Auth plugins in use: magic link, admin, organization, Stripe. Keep configuration changes documented alongside schema updates.
+# Package: @monte/api (packages/api)
+- `core/` contains Convex HTTP client setup and shared types.
+- `domains/<feature>/` matches backend domains, with `client.ts` (Convex wrappers), optional `services/transformers`, and `index.ts` assembling the public surface.
+- Remove fallbacks or stubs that don’t deliver value; offline behavior lives alongside its domain implementation.
 
 ---- DON'T DELETE BELOW THIS LINE (authored by user)----
 

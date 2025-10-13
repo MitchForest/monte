@@ -1,1 +1,1 @@
-export * from './modules/curriculum/index.js';
+export * from './domains/curriculum/index.js';

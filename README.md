@@ -1,112 +1,67 @@
 # Monte Platform Monorepo
 
-The Monte workspace houses the lesson runtime, curriculum editor, and shared schema libraries that power the platform. It is organised as a pnpm monorepo with clear boundaries between runtime apps, Convex backend functions, and the shared packages that provide type-safe contracts.
+Monte runs as a pnpm workspace with clear seams between frontend features, Convex backend domains, and the shared packages that keep the two in lockstep. The goal is radical simplicity: one obvious place for every concern, no compatibility shims, and documentation that matches the codebase.
 
 ---
 
-## Repository Layout
+## Workspace layout
 
-| Path | Description |
+| Path | Purpose |
 | --- | --- |
-| `apps/frontend` | SolidJS + Vite lesson experience and curriculum editor. Domain-driven structure under `src/domains/` (e.g. `curriculum/`, `analytics/`, `design-system/`). |
-| `apps/backend` | Convex project exposing curriculum/auth mutations and scheduled jobs. Uses the Convex component system and shares schemas via workspace packages. |
-| `packages/types` | Single source of truth for shared Zod schemas, enums, and TypeScript types (emits ESM/CJS bundles with typings). |
-| `packages/curriculum-service` | Editable curriculum canon: units, topics, lesson plans, domain graphs, taxonomy, and media assets. |
-| `packages/api` | Thin wrapper around Convex codegen that exposes typed client helpers for the frontend and other consumers. |
-| `scripts/` | Workspace automation (e.g. `sync-convex-codegen.mjs` keeps Convex generated files in sync with `packages/api`). |
-| `.docs/plan.md` | Canonical roadmap for the ongoing refactor and stability workstreams. |
+| `apps/frontend` | SolidJS app organised by `src/app`, `src/features`, and `src/shared`. Each feature folder maps to a user-facing flow. |
+| `apps/backend` | Convex project structured as `convex/core`, `convex/domains/<domain>`, `convex/routes`, `convex/schema`. Auth lives in `core/`; production logic lives in domains. |
+| `packages/types` | Source of truth for shared Zod schemas. Files live beneath `src/shared` (primitives) and `src/domains/<domain>`. |
+| `packages/api` | Typed Convex client helpers grouped under `src/domains/<domain>` with supporting `src/core` and `src/shared` utilities. |
+| `packages/*-service` | Content and runtime helpers (curriculum, lesson, graph, question, engine services). Each owns its own README describing current responsibilities. |
+| `scripts/` | Workspace automation such as `sync-convex-codegen.mjs`. |
+
+`apps/frontend`, `apps/backend`, `packages/types`, and `packages/api` intentionally share the same domain names so contracts line up: user-facing “features” in the frontend, “domains” everywhere else. Cross-cutting helpers stay in `app/`, `core/`, or `shared/` directories.
 
 ---
 
-## Application Boundaries & Data Flow
+## How data flows
 
-1. **Shared Schemas (`@monte/types`)**  
-   - Defines Zod validators for curriculum entities (`LessonDocument`, `LessonMaterialInventory`, etc.).  
-   - Both frontend and backend import from here; no app should redefine schemas locally.
-
-2. **Backend (`@monte/backend`)**  
-   - Convex functions and HTTP routes live under `apps/backend/convex`.  
-   - Generates client bindings via `convex codegen`; the generated output is synchronised into `packages/api/convex/_generated`.  
-   - Authentication integrates Better Auth via `@convex-dev/better-auth` (component registered in `convex.config.ts`).
-
-3. **Shared API (`@monte/api`)**  
-   - Re-exports Convex codegen outputs alongside higher-level helpers (request/response parsing through Zod).  
-   - Frontend interacts with Convex exclusively through these helpers—avoid direct `convex.query` / `convex.mutation` calls in apps.
-
-4. **Frontend (`@monte/frontend`)**  
-   - SolidJS app split into presentation (`routes/lesson.tsx`), editor (`routes/editor`), and shared domain logic (`src/domains/curriculum`).  
-   - Inventory state is managed via `LessonInventoryProvider`, consuming `LessonMaterialInventory` from authored lessons.  
-   - Drag/drop logic, LessonCanvas, and analytics all sit inside domain modules to keep UI shells thin.
+1. **@monte/types** – publishes Zod schemas and TypeScript types used by both backend and frontend. Modules export plain functions and schemas; no app-specific logic lives here.
+2. **@monte/backend** – implements Convex queries/mutations per domain and exposes HTTP routes. Generated bindings land in `apps/backend/convex/_generated` before being synced to `packages/api`.
+3. **@monte/api** – wraps Convex bindings with ergonomic helpers. Consumers import from `@monte/api` instead of touching generated files directly.
+4. **@monte/frontend** – imports shared helpers and types, wiring them into Solid features. Every page is delivered via a feature barrel that the router consumes.
 
 ---
 
-## Primary Libraries & Frameworks
+## Conventions
 
-| Package | Key Dependencies | Notes |
-| --- | --- | --- |
-| `apps/frontend` | `solid-js`, `vite`, `@tanstack/solid-router`, `@tanstack/solid-form`, `@tanstack/solid-table`, `tailwindcss` v4, `class-variance-authority`, `tailwind-merge`, `xstate` | Vite handles bundling; Tailwind is configured via Vite plugin. Use TanStack Router for navigation and route loaders. |
-| `apps/backend` | `convex`, `@convex-dev/better-auth`, `better-auth`, `convex-helpers` | Convex dev server drives local backend; Better Auth provides session/role management. |
-| `packages/types` | `zod`, `convex` type helpers | Build outputs live in `dist/`; update schemas here before touching frontend/backends. |
-| `packages/api` | `convex`, `zod`, `@monte/types` | Wraps generated Convex client; all consumers should import from this package. |
+- **One path per concern.** UI logic lives in `features/*`; backend logic lives in `convex/domains/*`; shared typing lives in `packages/types/src/domains/*`.
+- **No shims.** When names or paths change, update all consumers instead of keeping compatibility layers.
+- **Codegen discipline.** Any backend change that touches schema or functions must be followed by `pnpm sync:codegen` so `packages/api` stays current.
+- **Documentation parity.** Each app or package keeps a single README at its root describing structure and commands. Planning docs live in `.docs/` and are pruned as milestones complete.
 
 ---
 
-## Conventions & Best Practices
+## Handy commands
 
-- **Type Safety First**: Always add or update Zod schemas in `@monte/types` and consume them via `@monte/api`. Avoid `as` casts in application code—prefer parsing through shared validators.
-- **Inventory Source of Truth**: Lesson inventory mutations must flow through `LessonInventoryProvider` (runtime) and `lessonEditor.applyInventoryUpdate` (editor). Never mutate counts directly on components.
-- **Domain-Oriented Frontend**: House shared business logic under `apps/frontend/src/domains/*`. UI components outside `domains/` should remain presentational.
-- **Convex Interaction**: After editing Convex schema or functions, run `pnpm sync:codegen` to regenerate bindings and copy them into `packages/api`.
-- **Documentation Updates**: When architecture or schema decisions change, refresh `.docs/plan.md` alongside relevant README sections.
+Run these from the repository root:
 
----
-
-## Scripts & Tooling
-
-Workspace-level scripts (run from repo root):
-
-| Command | Purpose |
+| Command | Description |
 | --- | --- |
-| `pnpm install` | Install dependencies across the workspace. |
-| `pnpm dev` | Start frontend and backend dev servers in parallel. (Avoid in CI/agent environments; prefer targeted dev commands.) |
-| `pnpm --filter @monte/frontend dev` | Launch the Solid app only (Vite on port 3000 by default). |
-| `pnpm --filter @monte/backend dev` | Run the Convex dev server (requires Convex login). |
-| `pnpm build` | Build all workspace packages. |
-| `pnpm build:shared` | Run Convex codegen, then rebuild `@monte/types` and `@monte/api`. |
-| `pnpm sync:codegen` | Regenerate Convex client bindings and synchronise them into `packages/api`. |
-| `pnpm check:codegen` | Verify generated Convex bindings are in sync (fails if `sync:codegen` would change files). |
-| `pnpm typecheck` | Execute TypeScript checks across every package. |
-| `pnpm lint` | Run lint tasks (some packages print placeholders until lint rules are defined). |
+| `pnpm install` | Install workspace dependencies. |
+| `pnpm --filter @monte/frontend dev` | Start the Solid dev server. |
+| `pnpm --filter @monte/backend dev` | Start the Convex dev server. |
+| `pnpm sync:codegen` | Regenerate Convex bindings and sync them into `packages/api`. |
+| `pnpm build:shared` | Run codegen, then rebuild `@monte/types` and `@monte/api`. |
+| `pnpm build` | Build every package/app in dependency order. |
+| `pnpm typecheck` | Run TypeScript across the workspace. |
+| `pnpm lint` | Execute lint scripts for all packages. |
 
-> **Agent note:** The combined `pnpm dev` command tends to hang in sandboxed environments. Launch the frontend and backend individually when running under an agent harness.
-
-Package-specific scripts:
-
-- `@monte/frontend`: `pnpm --filter @monte/frontend build`, `typecheck`, `lint`, plus curriculum scripts such as `validate-lessons`, `curriculum:seed`, and `curriculum:tts`.
-- `@monte/backend`: `pnpm --filter @monte/backend deploy` for Convex deployments.
-- `@monte/types` / `@monte/api`: `build` (tsup) and `typecheck`.
+When working under the Codex CLI, prefer running the targeted `dev` commands separately rather than `pnpm dev`, which spawns multiple processes.
 
 ---
 
-## Environment & Setup Notes
+## Getting started
 
-1. **Prerequisites**: Node 20+, pnpm 9+, Convex CLI authenticated (`npx convex dev` will prompt if needed).  
-2. **Env Files**: Frontend expects Convex deployment variables (`CONVEX_DEPLOYMENT`, `NEXT_PUBLIC_CONVEX_URL`, `NEXT_PUBLIC_CONVEX_SITE_URL`, etc.). Backend secrets (Better Auth keys) are configured through `convex env`.  
-3. **Running Locally**: In one terminal run `pnpm --filter @monte/backend dev`; in another run `pnpm --filter @monte/frontend dev`. Alternatively use `pnpm dev` to start both.  
-4. **After Schema Changes**: Run `pnpm sync:codegen` and commit the updated generated files in `packages/api/convex/_generated`.  
-5. **Testing**: Vitest/Playwright suites are still being expanded—refer to `.docs/plan.md` for current priorities.
+1. Install prerequisites: Node 20+, pnpm 9+, Convex CLI (`npm install -g convex`).  
+2. Clone the repo, run `pnpm install`, then log in to Convex (`npx convex dev`) so local development has credentials.  
+3. Spin up servers with the targeted `dev` commands above.  
+4. After editing backend schemas, run `pnpm sync:codegen` and commit the generated changes.  
+5. Before opening a PR, run `pnpm lint`, `pnpm typecheck`, and `pnpm build`.
 
----
-
-## Contribution Checklist
-
-1. Read `.docs/plan.md` to align with the current milestone.  
-2. Update shared schemas in `@monte/types` before touching frontend/backend usage.  
-3. Run `pnpm build:shared` and relevant app builds to make sure generated artifacts stay in sync.  
-4. Add or update tests for new functionality (Vitest for units, Playwright for smoke once available).  
-5. Update this README or the canonical docs when altering architecture, conventions, or tooling.  
-6. Keep commits scoped to a single concern; avoid mixing schema updates with unrelated UI changes.
-
----
-
-For deeper context or upcoming work, consult `.docs/plan.md` and the domain-specific documentation within `apps/frontend/src/domains/`. When in doubt, prefer asking questions in documentation form so future contributors inherit the rationale. Happy building!
+Keep commits scoped to one concern and update the relevant README or plan document when architecture changes. The foundation should stay understandable at a glance—optimise for clarity over cleverness.*** End Patch

@@ -1,30 +1,46 @@
 # @monte/frontend
 
-Minimal SolidJS + Vite entry point. Routing, forms, tables, and Tailwind are installed; pages stay empty until we ship real features.
+SolidJS + Vite app organised around user-facing features. Every page, provider, and piece of state lives inside the feature it belongs to; shared surface area stays in `app/` or `shared/`.
 
-## Scripts
+## Directory map
 
-```bash
-pnpm --filter @monte/frontend dev
-pnpm --filter @monte/frontend build
-pnpm --filter @monte/frontend preview
-pnpm --filter @monte/frontend typecheck
+```
+src/
+  app/         # Root layout, router config, top-level providers, globals
+  features/    # One folder per user-facing feature (auth, lesson-player, editor, …)
+  shared/      # Cross-feature UI, utilities, and ambient types
 ```
 
-## Notes
+Each feature uses the same internal structure:
 
-- Tailwind v4 styles live in `src/globals.css`.
-- Routes are declared in `src/router.tsx`; add pages under `src/routes`.
-- TanStack Form/Table utilities are available for when data wiring starts.
-- The lesson editor uses the live Convex deployment. API helpers in `domains/curriculum/api/curriculumClient.ts` talk to the shared client manager directly—no extra provider wrapping is required.
-
-### Curriculum content seeding
-
-Authoring JSON lives under `src/curriculum/data/`. When you update those files or the catalog metadata, re-run the seed script to push the content into Convex:
-
-```bash
-CONVEX_URL=https://<your-convex-deployment>.convex.cloud \
-pnpm --filter @monte/frontend curriculum:seed
+```
+features/<feature>/
+  pages/        # Route-level components (lazy loaded by the router)
+  components/   # Feature-specific UI pieces
+  state/        # Stores, hooks, and view-models
+  api/          # Calls into @monte/api or other services
+  utils/        # Helpers scoped to the feature
+  types/        # Optional; only when the types are feature-specific
 ```
 
-This script is idempotent: it upserts units/topics/lessons and reorders them to match the catalog. Re-run it any time you change the static JSON source of truth.
+The router lives at `src/app/router.tsx` and lazy-loads pages from feature barrels. No legacy `routes/` directory or re-export shims remain.
+
+## Commands
+
+```bash
+pnpm --filter @monte/frontend dev       # Vite dev server
+pnpm --filter @monte/frontend build     # Production build
+pnpm --filter @monte/frontend preview   # Preview the built output
+pnpm --filter @monte/frontend typecheck # TypeScript only
+```
+
+Run `pnpm lint` from the repo root before pushing changes.
+
+## Conventions
+
+- Import shared types and clients from `@monte/types` / `@monte/api` rather than duplicating schemas locally.
+- Keep cross-cutting utilities in `src/shared/lib` and design tokens/components in `src/shared/ui`.
+- When a feature requires new shared primitives, add them to `shared` and update the relevant README or plan doc.
+- Remove dead code immediately; do not leave compatibility exports in place.
+
+For milestone tracking and cleanup tasks, see `.docs/reorg-refactor.md`.*** End Patch

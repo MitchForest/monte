@@ -206,6 +206,9 @@ importers:
 
   packages/graph-service:
     dependencies:
+      '@monte/curriculum-service':
+        specifier: workspace:*
+        version: link:../curriculum-service
       '@monte/types':
         specifier: workspace:*
         version: link:../types
