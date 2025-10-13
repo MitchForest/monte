@@ -1,8 +1,14 @@
 export {
   normalizeLessonDocumentTimelines,
   normalizeSegmentTimeline,
+  normalizeTimeline,
+  normalizeTimelineStep,
+  normalizeTimelineTransform,
   normalizeLessonDocumentTimelines as ensureLessonDocumentTimelines,
   normalizeSegmentTimeline as ensureSegmentTimeline,
+  normalizeTimeline as ensureTimeline,
+  normalizeTimelineStep as ensureTimelineStep,
+  normalizeTimelineTransform as ensureTimelineTransform,
 } from './timeline.js';
 export {
   createLessonPlayerMachine,

@@ -257,8 +257,30 @@ const normalizeTimestamp = (value: unknown, fallback: number) => {
   return fallback;
 };
 
+const formatIssuePath = (path: (string | number)[]) => {
+  if (path.length === 0) return 'document';
+  let result = '';
+  for (const segment of path) {
+    if (typeof segment === 'number') {
+      result += `[${segment}]`;
+    } else {
+      result += result.length === 0 ? segment : `.${segment}`;
+    }
+  }
+  return result;
+};
+
+const formatLessonValidationIssues = (issues: z.ZodIssue[]) =>
+  issues.map((issue) => `${formatIssuePath(issue.path)}: ${issue.message}`);
+
 const normalizeLessonDocument = (document: LessonDocument): SaveLessonDraftArgs['draft'] => {
-  const parsed = LessonDocumentSchema.parse(document);
+  const parsedResult = LessonDocumentSchema.safeParse(document);
+  if (!parsedResult.success) {
+    const details = formatLessonValidationIssues(parsedResult.error.issues);
+    const message = ['Lesson data invalid. Please review the following issues:', ...details].join('\n');
+    throw new Error(message);
+  }
+  const parsed = parsedResult.data;
   const baseline = now();
   const draftMeta = parsed.meta ?? {};
   const scenarioBinding = pickScenarioBinding(parsed);

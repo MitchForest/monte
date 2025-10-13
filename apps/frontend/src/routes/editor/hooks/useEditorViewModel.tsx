@@ -2,7 +2,6 @@ import {
   createContext,
   createEffect,
   createMemo,
-  createResource,
   useContext,
   type Accessor,
   type ParentComponent,
@@ -19,8 +18,6 @@ import {
   deleteLesson,
   deleteTopic,
   deleteUnit,
-  fetchCurriculumTree,
-  fetchLessonById,
   publishLesson,
   reorderLessons,
   reorderTopics,
@@ -67,7 +64,6 @@ import type {
   UnitFormState,
 } from '../../../domains/curriculum/editor/types';
 import {
-  clone,
   createPresentationAction,
   createSegment,
   defaultGuidedStep,
@@ -82,6 +78,7 @@ import {
 import { createLessonDocumentStore } from '../../../domains/curriculum/editor/lessonDocumentStore';
 import type { InventorySnapshotRegistration } from '../../../domains/curriculum/editor/inventoryStore';
 import { ensureSegmentTimeline } from '../../../domains/curriculum/utils/timeline';
+import { createEditorDataStore } from '../../../domains/curriculum/editor/dataStore';
 
 type UnitNode = CurriculumTree[number];
 type TopicNode = UnitNode['topics'][number];
@@ -307,8 +304,16 @@ export const useEditorViewModel = () => {
     selectedSegment,
     inventory: inventoryStore,
   } = documentStore;
-  const [curriculumTree, { mutate: mutateCurriculumTree, refetch: refetchTree }] =
-    createResource<CurriculumTree | undefined>(fetchCurriculumTree);
+  const {
+    curriculumTree,
+    setCurriculumTree,
+    updateCurriculumTree,
+    refetchTree,
+    lessonRecord,
+    refetchLessonRecord,
+    refreshLessonAndTree: refreshLessonAndTreeFromStore,
+    bindSelectedLessonId,
+  } = createEditorDataStore();
 
   const confirm = createConfirmController();
 
@@ -316,7 +321,7 @@ export const useEditorViewModel = () => {
   let resetLessonCreation = () => {};
 
   const selectionStore = createSelectionStore({
-    curriculumTree: () => curriculumTree() ?? undefined,
+    curriculumTree,
     editor,
     onResetTopicCreation: () => resetTopicCreation(),
     onResetLessonCreation: () => resetLessonCreation(),
@@ -339,11 +344,7 @@ export const useEditorViewModel = () => {
     lessons,
   } = selectionStore;
 
-  const updateCurriculumTree = (mutator: (tree: CurriculumTree) => CurriculumTree) => {
-    const tree = curriculumTree();
-    if (!tree) return;
-    mutateCurriculumTree(mutator(clone(tree)));
-  };
+  bindSelectedLessonId(selectedLessonId);
 
   const reportActionError = (message: string, error: unknown) => {
     console.error(message, error);
@@ -398,18 +399,6 @@ export const useEditorViewModel = () => {
   } = formsStore;
   resetTopicCreation = () => setIsCreatingTopic(false);
   resetLessonCreation = () => setIsCreatingLesson(false);
-
-  const [lessonRecord, { refetch: refetchLessonRecord }] = createResource<
-    LessonDraftRecord | undefined,
-    Id<'lessons'> | undefined
-  >(
-    () => selectedLessonId(),
-    async (lessonId) => {
-      if (!lessonId) return undefined;
-      const record = await fetchLessonById(lessonId);
-      return record ?? undefined;
-    },
-  );
 
   createEffect(() => {
     const unit = currentUnit();
@@ -470,8 +459,16 @@ export const useEditorViewModel = () => {
     setSelectedLessonId(lessonId);
   };
 
-  const refreshLessonAndTree = async () => {
-    await Promise.all([refetchLessonRecord(), refetchTree()]);
+  const refreshLessonAndTree = refreshLessonAndTreeFromStore;
+
+  const resolveErrorMessage = (error: unknown, fallback: string) => {
+    if (error instanceof Error && error.message) {
+      return error.message;
+    }
+    if (typeof error === 'string' && error.trim().length > 0) {
+      return error;
+    }
+    return fallback;
   };
 
   const handleSave = async () => {
@@ -499,8 +496,9 @@ export const useEditorViewModel = () => {
       await refreshLessonAndTree();
       toast.success('Draft saved');
     } catch (error) {
-      editor.setError((error as Error).message);
-      toast.error('Unable to save draft', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to save draft');
+      editor.setError(message);
+      toast.error('Unable to save draft', { description: message });
     }
   };
 
@@ -522,15 +520,24 @@ export const useEditorViewModel = () => {
       editor.setError(`Cannot publish yet:\n${validationErrors.join('\n')}`);
       return;
     }
+    let draftSaved = false;
     try {
       editor.beginSaving();
+      await saveLessonDraft(lessonId, document);
+      draftSaved = true;
       await publishLesson(lessonId);
       editor.markSaved();
       await refreshLessonAndTree();
       toast.success('Lesson published');
     } catch (error) {
-      editor.setError((error as Error).message);
-      toast.error('Unable to publish lesson', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to publish lesson');
+      if (draftSaved) {
+        editor.markSaved();
+        await refreshLessonAndTree();
+      }
+      editor.setError(message);
+      const description = draftSaved ? `${message}\nLatest draft saved successfully.` : message;
+      toast.error('Unable to publish lesson', { description });
     }
   };
 
@@ -1471,13 +1478,11 @@ export const useEditorViewModel = () => {
       setSelectedSegmentId: selectSegment,
     },
     resources: {
-      curriculumTree: () => curriculumTree() ?? undefined,
-      setCurriculumTree: (tree: CurriculumTree) => {
-        mutateCurriculumTree(tree);
-      },
-      refetchTree: async () => (await refetchTree()) ?? undefined,
-      lessonRecord: () => lessonRecord() ?? undefined,
-      refetchLessonRecord: async () => (await refetchLessonRecord()) ?? undefined,
+      curriculumTree,
+      setCurriculumTree,
+      refetchTree,
+      lessonRecord,
+      refetchLessonRecord,
     },
     forms: {
       unit: {

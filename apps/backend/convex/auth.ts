@@ -8,6 +8,7 @@ import { stripe as stripePlugin } from '@better-auth/stripe';
 import { components } from '@monte/api/convex/_generated/api.js';
 import type { DataModel } from './_generated/dataModel.js';
 import authSchema from './betterAuth/schema.js';
+import { sendMagicLinkEmail } from './magicLinkEmail.js';
 
 const convexSiteUrl =
   process.env.CONVEX_SITE_URL ?? process.env.SITE_URL ?? 'http://localhost:3000';
@@ -27,11 +28,13 @@ const createStripeClient = (secretKey: string) =>
 const sendMagicLink = async ({
   email,
   url,
+  token,
 }: {
   email: string;
   url: string;
+  token: string;
 }) => {
-  console.info('[better-auth] magic link ready', { email, url });
+  await sendMagicLinkEmail({ email, url, token });
 };
 
 const sendInvitationEmail = async ({

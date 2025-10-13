@@ -23,6 +23,9 @@ export interface TimelineStoreState {
   sceneNodes: Record<string, SceneNodeState>;
   selectedNodeIds: string[];
   steps: SegmentStep[];
+  timelineVersion: SegmentTimeline['version'];
+  timelineLabel?: string;
+  timelineMetadata?: Record<string, unknown>;
   currentStepIndex: number;
   isDirty: boolean;
 }

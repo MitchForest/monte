@@ -1,40 +1,15 @@
 import { createMemo } from 'solid-js';
 import { createStore, produce } from 'solid-js/store';
 
-import type {
-  SegmentStep,
-  SegmentTimeline,
-  TimelineTransform,
-  TimelineTrack,
-} from '@monte/types';
+import type { SegmentStep, SegmentTimeline, TimelineTrack, TimelineTransform } from '@monte/types';
+
+import {
+  normalizeTimeline,
+  normalizeTimelineStep,
+  normalizeTimelineTransform,
+} from '@monte/lesson-service';
 
 import type { SceneNodeState, TimelineLoadInput, TimelineSelectionMode, TimelineStoreState } from './types';
-
-const createTransform = (transform?: TimelineTransform): TimelineTransform => ({
-  position: transform?.position ?? { x: 0, y: 0 },
-  rotation: transform?.rotation ?? 0,
-  scale: transform?.scale ?? { x: 1, y: 1 },
-  opacity: transform?.opacity ?? 1,
-});
-
-const normalizeTrack = (track: TimelineTrack): TimelineTrack => ({
-  nodeId: track.nodeId,
-  keyframes: (track.keyframes ?? []).map((keyframe) => ({
-    ...keyframe,
-    transform: createTransform(keyframe.transform),
-    easing: keyframe.easing,
-    metadata: keyframe.metadata,
-  })),
-  metadata: track.metadata,
-});
-
-const normalizeStep = (step: SegmentStep): SegmentStep => ({
-  ...step,
-  keyframes: (step.keyframes ?? []).map(normalizeTrack),
-  interactions: step.interactions ?? [],
-});
-
-const normalizeSteps = (steps: SegmentStep[]): SegmentStep[] => steps.map(normalizeStep);
 
 export const createTimelineStore = () => {
   const [state, setState] = createStore<TimelineStoreState>({
@@ -43,15 +18,19 @@ export const createTimelineStore = () => {
     sceneNodes: {},
     selectedNodeIds: [],
     steps: [],
+    timelineVersion: 1,
+    timelineLabel: undefined,
+    timelineMetadata: undefined,
     currentStepIndex: 0,
     isDirty: false,
   });
 
   const load = (input: TimelineLoadInput) => {
     const { lessonId, segmentId, nodes, timeline } = input;
+    const normalizedTimeline = normalizeTimeline(timeline);
     const nodeEntries = nodes.map<SceneNodeState>((node) => ({
       ...node,
-      transform: createTransform(node.transform),
+      transform: normalizeTimelineTransform(node.transform),
     }));
 
     const sceneNodes = Object.fromEntries(nodeEntries.map((node) => [node.id, node]));
@@ -61,7 +40,10 @@ export const createTimelineStore = () => {
       segmentId,
       sceneNodes,
       selectedNodeIds: [],
-      steps: normalizeSteps(timeline.steps ?? []),
+      steps: normalizedTimeline.steps,
+      timelineVersion: normalizedTimeline.version ?? 1,
+      timelineLabel: normalizedTimeline.label,
+      timelineMetadata: normalizedTimeline.metadata,
       currentStepIndex: 0,
       isDirty: false,
     });
@@ -81,7 +63,7 @@ export const createTimelineStore = () => {
 
   const addStep = (step?: Partial<SegmentStep>) => {
     ensureLoaded();
-    const base: SegmentStep = normalizeStep({
+    const base: SegmentStep = normalizeTimelineStep({
       id: step?.id ?? `step-${Date.now()}`,
       title: step?.title,
       caption: step?.caption,
@@ -119,7 +101,7 @@ export const createTimelineStore = () => {
     if (index === -1) return;
     setState(
       produce((draft) => {
-        draft.steps[index] = normalizeStep(update(draft.steps[index]));
+        draft.steps[index] = normalizeTimelineStep(update(draft.steps[index]));
         draft.isDirty = true;
       }),
     );
@@ -158,7 +140,7 @@ export const createTimelineStore = () => {
       produce((draft) => {
         draft.sceneNodes[nodeId] = {
           ...draft.sceneNodes[nodeId],
-          transform: createTransform(transform),
+          transform: normalizeTimelineTransform(transform),
         };
         draft.isDirty = true;
       }),
@@ -174,37 +156,59 @@ export const createTimelineStore = () => {
       produce((draft) => {
         const step = draft.steps[stepIndex];
         if (!step) return;
-        const tracks = step.keyframes ?? [];
-        const byNode = new Map<string, TimelineTrack>(tracks.map((track) => [track.nodeId, normalizeTrack(track)]));
+        const existingTracks = step.keyframes ?? [];
+        const byNode = new Map<string, TimelineTrack>(
+          existingTracks.map((track) => [
+            track.nodeId,
+            {
+              nodeId: track.nodeId,
+              metadata: track.metadata,
+              keyframes: track.keyframes.map((frame) => ({
+                ...frame,
+                transform: normalizeTimelineTransform(frame.transform),
+              })),
+            },
+          ]),
+        );
         for (const nodeId of selected) {
           const node = draft.sceneNodes[nodeId];
           if (!node) continue;
-          const track = byNode.get(nodeId) ?? { nodeId, keyframes: [] };
-          track.keyframes = [
-            ...track.keyframes.filter((frame) => frame.timeMs !== timeMs),
+          const track = byNode.get(nodeId) ?? { nodeId, keyframes: [], metadata: undefined };
+          const filtered = track.keyframes.filter((frame) => frame.timeMs !== timeMs);
+          const updated = [
+            ...filtered,
             {
               timeMs,
-              transform: createTransform(node.transform),
+              transform: normalizeTimelineTransform(node.transform),
             },
           ];
-          byNode.set(nodeId, track);
+          byNode.set(nodeId, {
+            nodeId,
+            metadata: track.metadata,
+            keyframes: updated.map((frame) => ({
+              ...frame,
+              transform: normalizeTimelineTransform(frame.transform),
+            })),
+          });
         }
-        step.keyframes = Array.from(byNode.values()).map(normalizeTrack);
+        const normalized = normalizeTimelineStep({
+          ...step,
+          keyframes: Array.from(byNode.values()),
+        });
+        step.keyframes = normalized.keyframes;
+        step.interactions = normalized.interactions;
         draft.isDirty = true;
       }),
     );
   };
 
-  const serialize = (): SegmentTimeline => ({
-    version: 1,
-    steps: state.steps.map((step) => ({
-      ...step,
-      keyframes: (step.keyframes ?? []).map(normalizeTrack),
-      interactions: step.interactions ?? [],
-    })),
-    metadata: undefined,
-    label: undefined,
-  });
+  const serialize = (): SegmentTimeline =>
+    normalizeTimeline({
+      version: state.timelineVersion,
+      label: state.timelineLabel,
+      metadata: state.timelineMetadata,
+      steps: state.steps,
+    });
 
   const selectedNodes = createMemo(() => state.selectedNodeIds.map((id) => state.sceneNodes[id]).filter(Boolean));
 

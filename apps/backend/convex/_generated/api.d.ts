@@ -15,6 +15,7 @@ import type * as betterAuth_adapter from "../betterAuth/adapter.js";
 import type * as betterAuth_auth from "../betterAuth/auth.js";
 import type * as curriculum from "../curriculum.js";
 import type * as http from "../http.js";
+import type * as magicLinkEmail from "../magicLinkEmail.js";
 import type * as modules_curriculum_index from "../modules/curriculum/index.js";
 
 import type {
@@ -39,6 +40,7 @@ declare const fullApi: ApiFromModules<{
   "betterAuth/auth": typeof betterAuth_auth;
   curriculum: typeof curriculum;
   http: typeof http;
+  magicLinkEmail: typeof magicLinkEmail;
   "modules/curriculum/index": typeof modules_curriculum_index;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
