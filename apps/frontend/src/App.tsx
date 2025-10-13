@@ -4,12 +4,14 @@ import { Outlet, useNavigate, useRouterState } from '@tanstack/solid-router';
 import { ProgressProvider } from './domains/curriculum/state/progress';
 import { PageSection, ProfileAvatar, Button } from './components/ui';
 import { useAuth } from './providers/AuthProvider';
+import { formatUserRole } from './domains/auth/types';
 
 const App: Component = () => {
   const navigate = useNavigate();
   const routerState = useRouterState();
   const auth = useAuth();
 
+  const accountRoleLabel = createMemo(() => formatUserRole(auth.role()) ?? formatUserRole(auth.membershipRole()));
   const backTarget = createMemo<{ show: boolean; path: string }>(() => {
     const path = routerState().location.pathname;
     if (path === '/') {
@@ -75,6 +77,11 @@ const App: Component = () => {
                         <p class="text-sm font-medium text-[color:var(--color-heading)]">
                           {auth.user()?.name ?? auth.user()?.email ?? 'Member'}
                         </p>
+                        <Show when={accountRoleLabel()}>
+                          {(label) => (
+                            <p class="text-xs text-[color:var(--color-text-muted)]">{label()}</p>
+                          )}
+                        </Show>
                         <Button variant="ghost" size="compact" onClick={() => void auth.signOut()}>
                           Sign out
                         </Button>

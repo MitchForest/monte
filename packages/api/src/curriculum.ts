@@ -169,6 +169,9 @@ const createUnavailableCurriculumClient = (): CurriculumClient => {
     async listLessons() {
       return notReady('listLessons', []);
     },
+    async listLessonsByUnit() {
+      return notReady('listLessonsByUnit', []);
+    },
     async syncManifest() {
       return reject('syncManifest');
     },
@@ -242,6 +245,7 @@ export interface CurriculumClient {
   reorderLessons: (topicId: Id<'topics'>, lessonIds: Id<'lessons'>[]) => Promise<void>;
   updateLessonAuthoring: (input: UpdateLessonAuthoringInput) => Promise<LessonAuthoringUpdate>;
   listLessons: (topicId?: Id<'topics'>) => Promise<LessonDraftRecord[]>;
+  listLessonsByUnit: (unitId: Id<'units'>) => Promise<LessonDraftRecord[]>;
   syncManifest: (input: SyncManifestInput) => Promise<CurriculumSyncSummary>;
   exportManifest: () => Promise<CurriculumManifest>;
 }
@@ -498,6 +502,13 @@ export const createCurriculumClient = (httpClient: ConvexHttpClient): Curriculum
         LessonDraftRecordListSchema,
       );
     },
+    async listLessonsByUnit(unitId) {
+      return await executeQuery(
+        api.curriculum.listLessonsByUnit,
+        { unitId },
+        LessonDraftRecordListSchema,
+      );
+    },
     async syncManifest(input) {
       const manifest = CurriculumManifestSchema.parse(input.manifest);
       const options = {
@@ -601,9 +612,13 @@ export const {
   reorderLessons,
   updateLessonAuthoring,
   listLessons,
+  listLessonsByUnit,
   syncManifest,
   exportManifest,
 } = curriculumClientManager;
 
 export const fetchLessonDrafts = (topicId?: Id<'topics'>) =>
   curriculumClientManager.listLessons(topicId);
+
+export const fetchLessonsByUnit = (unitId: Id<'units'>) =>
+  curriculumClientManager.listLessonsByUnit(unitId);

@@ -97,7 +97,7 @@ const parseOrganization = (input: unknown): AuthOrganization => {
   if (input.metadata === null || typeof input.metadata === 'undefined') {
     metadata = input.metadata ?? null;
   } else if (isRecord(input.metadata)) {
-    metadata = input.metadata as Record<string, unknown>;
+    metadata = input.metadata;
   } else {
     throw new Error('Invalid organization metadata payload');
   }

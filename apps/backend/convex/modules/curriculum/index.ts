@@ -1074,3 +1074,29 @@ export const listLessons = query({
     }));
   },
 });
+
+export const listLessonsByUnit = query({
+  args: { unitId: v.id('units') },
+  handler: async (ctx, args) => {
+    await ensureMemberAccess(ctx);
+    const topics = await ctx.db
+      .query('topics')
+      .withIndex('by_unit', (q) => q.eq('unitId', args.unitId))
+      .collect();
+
+    const lessons: Doc<'lessons'>[] = [];
+    for (const topic of topics) {
+      const topicLessons = await ctx.db
+        .query('lessons')
+        .withIndex('by_topic', (q) => q.eq('topicId', topic._id))
+        .collect();
+      lessons.push(...topicLessons);
+    }
+
+    return lessons.map((lesson) => ({
+      ...lesson,
+      draft: lesson.draft,
+      published: lesson.published,
+    }));
+  },
+});

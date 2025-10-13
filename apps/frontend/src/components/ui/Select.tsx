@@ -185,7 +185,7 @@ export const Select = <T extends string = string>(props: SelectProps<T>) => {
       optionTextValue={getOptionTextValue}
       optionDisabled={(option) => option.disabled ?? false}
       itemComponent={(itemProps) => {
-        const option = itemProps.item.rawValue as SelectOption<T>;
+        const option = itemProps.item.rawValue;
         const disabled = option?.disabled ?? false;
 
         return (

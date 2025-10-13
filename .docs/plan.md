@@ -29,3 +29,11 @@ _Update this plan as work completes; keep it the single source of truth for base
 - [x] **Automate owner onboarding.** First sign-ins provision a default household organization (with metadata) and mark it active automatically.
 - [ ] **Confirm invitation UX.** Monte now ships a branded Resend invite flow—run UX/QA locally (and in staging) to ensure the templates and hooks behave as expected here. Other codebases will align separately.
 - [x] **Standardize smoke testing.** Diagnostics are captured via hooks and exposed through a secret-protected HTTP endpoint so tooling can observe magic-link/invite flows without touching Better Auth tables.
+
+## Curriculum Runtime & Auth Simplification (new)
+- [ ] **Align Better Auth role handling.** Update the auth store to consume `user.role` as delivered by Better Auth (`owner`/`admin`/`member`), drop the custom normalization, and make `RoleGuard` honor `owner` for editor access while keeping members locked out.
+- [ ] **Simplify role surfacing in UI.** Trim the dashboard/header role display to a single source of truth that reflects the updated store state without extra helpers.
+- [ ] **Split the lesson route.** Extract data loading, scenario prep, progress wiring, and analytics into `domains/curriculum/lesson/{state,actions,viewmodel}.ts` so `routes/lesson.tsx` is a thin view.
+- [ ] **Delete lesson dead code.** Remove the unused `WorkEquation` component, stray eslint suppressions, and any redundant utilities left behind after the split.
+- [ ] **Scope lesson queries per unit.** Add a Convex query + index that fetches lessons for one unit/topic, expose it through `@monte/api`, and swap the Unit route to rely on it instead of the all-lessons scan.
+- [ ] **Remove the no-op CurriculumProvider.** Delete the wrapper, update `main.tsx` to render `AuthProvider` directly, and clean up any imports that referenced the empty provider.

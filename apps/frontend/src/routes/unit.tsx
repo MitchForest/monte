@@ -3,16 +3,16 @@ import { useNavigate, useParams } from '@tanstack/solid-router';
 
 import {
   fetchUnitBySlug,
+  fetchLessonsByUnit,
   isCurriculumAuthReady,
   isCurriculumApiAvailable,
-  listLessons,
   type CurriculumTreeUnit,
   type LessonDraftRecord,
 } from '@monte/api';
 import { curriculumMaterials } from '../domains/curriculum/materials';
 import { getLessonTaskStatus, useProgress } from '../domains/curriculum/state/progress';
 import { safeBuildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
-import type { Lesson, LessonTask } from '@monte/types';
+import type { Id, Lesson, LessonTask } from '@monte/types';
 import { Button, Card, Chip, PageSection, ProgressDots, type ChipProps } from '../components/ui';
 import { CurriculumAccessNotice, type CurriculumAvailabilityStatus } from '../components/CurriculumAccessNotice';
 import { useAuth } from '../providers/AuthProvider';
@@ -97,22 +97,30 @@ const Unit = () => {
     },
   );
 
-  const fetchLessonListSafe = async (): Promise<LessonDraftRecord[]> => {
-    if (!curriculumReady()) {
-      return [];
-    }
-    return listLessons();
-  };
-
-  const [lessonsResource, { refetch: refetchLessons }] = createResource(fetchLessonListSafe);
+  const [lessonsResource, { refetch: refetchLessons }] = createResource(
+    () => {
+      const unit = unitResource();
+      return curriculumReady() && unit ? unit._id : undefined;
+    },
+    async (unitId: Id<'units'> | undefined): Promise<LessonDraftRecord[]> => {
+      if (!unitId) return [];
+      return fetchLessonsByUnit(unitId);
+    },
+  );
 
   createEffect(() => {
-    if (curriculumReady()) {
+    if (!curriculumReady()) return;
+    const slug = unitSlug();
+    if (slug) {
+      void refetchUnit();
+    }
+  });
+
+  createEffect(() => {
+    if (!curriculumReady()) return;
+    const unit = unitResource();
+    if (unit?._id) {
       void refetchLessons();
-      const slug = unitSlug();
-      if (slug) {
-        void refetchUnit();
-      }
     }
   });
 

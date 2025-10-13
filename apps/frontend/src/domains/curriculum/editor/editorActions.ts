@@ -20,7 +20,6 @@ import type {
   GuidedEvaluatorId,
   GuidedStep,
   LessonDocument,
-  LessonMaterialInventory,
   MaterialBankDefinition,
   PracticeQuestion,
   PresentationAction,
@@ -225,35 +224,25 @@ export const createEditorActions = (state: EditorState): EditorActions => {
     forms,
     resources,
     confirm,
-    document,
   } = state;
 
   const {
-    unit: { form: unitForm, setForm: setUnitForm, error: unitFormError, setError: setUnitFormError },
-    topic: { form: topicForm, setForm: setTopicForm, error: topicFormError, setError: setTopicFormError },
-    lessonMeta: { form: lessonMetaForm, setForm: setLessonMetaForm },
+    unit: { form: unitForm, setForm: setUnitForm, setError: setUnitFormError },
+    topic: { form: topicForm, setForm: setTopicForm, setError: setTopicFormError },
+    lessonMeta: { setForm: setLessonMetaForm },
     createUnit: {
       form: createUnitForm,
-      setForm: setCreateUnitForm,
-      error: createUnitError,
       setError: setCreateUnitError,
-      isCreating: isCreatingUnit,
       setIsCreating: setIsCreatingUnit,
     },
     createTopic: {
       form: createTopicForm,
-      setForm: setCreateTopicForm,
-      error: createTopicError,
       setError: setCreateTopicError,
-      isCreating: isCreatingTopic,
       setIsCreating: setIsCreatingTopic,
     },
     createLesson: {
       form: createLessonForm,
-      setForm: setCreateLessonForm,
-      error: createLessonError,
       setError: setCreateLessonError,
-      isCreating: isCreatingLesson,
       setIsCreating: setIsCreatingLesson,
     },
     helpers: { resetCreateUnitForm, resetCreateTopicForm, resetCreateLessonForm },
@@ -272,10 +261,7 @@ export const createEditorActions = (state: EditorState): EditorActions => {
     selectSegment,
   } = selection;
 
-  const { lessonDocument } = document;
-
   const {
-    curriculumTree,
     updateCurriculumTree,
     refetchTree,
     refreshLessonAndTree,
@@ -430,8 +416,9 @@ export const createEditorActions = (state: EditorState): EditorActions => {
       cancelCreateUnit();
       toast.success('Unit created');
     } catch (error) {
-      setCreateUnitError((error as Error).message);
-      toast.error('Unable to create unit', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to create unit');
+      setCreateUnitError(message);
+      toast.error('Unable to create unit', { description: message });
     }
   };
 
@@ -462,8 +449,9 @@ export const createEditorActions = (state: EditorState): EditorActions => {
       setUnitFormError(undefined);
       toast.success('Unit updated');
     } catch (error) {
-      setUnitFormError((error as Error).message);
-      toast.error('Unable to update unit', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to update unit');
+      setUnitFormError(message);
+      toast.error('Unable to update unit', { description: message });
     }
   };
 
@@ -486,8 +474,9 @@ export const createEditorActions = (state: EditorState): EditorActions => {
       setSelectedLessonId(undefined);
       toast.success('Unit deleted');
     } catch (error) {
-      reportActionError('Unable to delete unit. Please try again.', error);
-      toast.error('Unable to delete unit', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to delete unit. Please try again.');
+      reportActionError(message, error);
+      toast.error('Unable to delete unit', { description: message });
     }
   };
 
@@ -556,8 +545,9 @@ export const createEditorActions = (state: EditorState): EditorActions => {
       cancelCreateTopic();
       toast.success('Topic created');
     } catch (error) {
-      setCreateTopicError((error as Error).message);
-      toast.error('Unable to create topic', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to create topic');
+      setCreateTopicError(message);
+      toast.error('Unable to create topic', { description: message });
     }
   };
 
@@ -594,8 +584,9 @@ export const createEditorActions = (state: EditorState): EditorActions => {
       setTopicFormError(undefined);
       toast.success('Topic updated');
     } catch (error) {
-      setTopicFormError((error as Error).message);
-      toast.error('Unable to update topic', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to update topic');
+      setTopicFormError(message);
+      toast.error('Unable to update topic', { description: message });
     }
   };
 
@@ -626,8 +617,9 @@ export const createEditorActions = (state: EditorState): EditorActions => {
       setSelectedLessonId(undefined);
       toast.success('Topic deleted');
     } catch (error) {
-      reportActionError('Unable to delete topic. Please try again.', error);
-      toast.error('Unable to delete topic', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to delete topic. Please try again.');
+      reportActionError(message, error);
+      toast.error('Unable to delete topic', { description: message });
     }
   };
 
@@ -689,8 +681,9 @@ export const createEditorActions = (state: EditorState): EditorActions => {
       cancelCreateLesson();
       toast.success('Lesson created');
     } catch (error) {
-      setCreateLessonError((error as Error).message);
-      toast.error('Unable to create lesson', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to create lesson');
+      setCreateLessonError(message);
+      toast.error('Unable to create lesson', { description: message });
     }
   };
 
@@ -733,8 +726,9 @@ export const createEditorActions = (state: EditorState): EditorActions => {
       }
       toast.success('Lesson deleted');
     } catch (error) {
-      reportActionError('Unable to delete lesson. Please try again.', error);
-      toast.error('Unable to delete lesson', { description: (error as Error).message });
+      const message = resolveErrorMessage(error, 'Unable to delete lesson. Please try again.');
+      reportActionError(message, error);
+      toast.error('Unable to delete lesson', { description: message });
     }
   };
 

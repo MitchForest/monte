@@ -17,6 +17,7 @@ import type * as curriculum from "../curriculum.js";
 import type * as http from "../http.js";
 import type * as magicLinkEmail from "../magicLinkEmail.js";
 import type * as modules_curriculum_index from "../modules/curriculum/index.js";
+import type * as utils_authRoles from "../utils/authRoles.js";
 
 import type {
   ApiFromModules,
@@ -42,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   magicLinkEmail: typeof magicLinkEmail;
   "modules/curriculum/index": typeof modules_curriculum_index;
+  "utils/authRoles": typeof utils_authRoles;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 

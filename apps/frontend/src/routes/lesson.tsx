@@ -1,26 +1,9 @@
-import {
-  For,
-  Match,
-  Show,
-  Switch,
-  createEffect,
-  createMemo,
-  createResource,
-  createSignal,
-  onMount,
-} from 'solid-js';
-import { useNavigate, useParams } from '@tanstack/solid-router';
-
-import { safeBuildLessonTasks } from '../domains/curriculum/utils/lessonTasks';
-import { useProgress } from '../domains/curriculum/state/progress';
-import { useLessonPlayer } from '../domains/curriculum/state/lessonPlayer';
-import { type PlayerEvent, type PlayerStatus } from '@monte/lesson-service';
+import { For, Match, Show, Switch, createEffect, createMemo, createResource, onMount } from 'solid-js';
+import { type PlayerStatus } from '@monte/lesson-service';
 import type {
   GuidedEvaluatorId,
   GuidedStep,
   Lesson,
-  LessonDocument,
-  LessonScenarioBinding,
   LessonSegment,
   PracticeQuestion,
   PresentationScript,
@@ -29,24 +12,9 @@ import { LessonTimeline } from '../domains/curriculum/components/LessonTimeline'
 import { PresentationSegment } from '../domains/curriculum/components/segments/PresentationSegment';
 import { GuidedSegment } from '../domains/curriculum/components/segments/GuidedSegment';
 import { PracticeSegment } from '../domains/curriculum/components/segments/PracticeSegment';
-import { createLocalEventRecorder } from '../domains/curriculum/analytics/recorder';
 import type { DemoEventRecorder } from '../domains/curriculum/analytics/events';
-import {
-  generateGoldenBeadScenario,
-  generateStampGameScenario,
-  type GoldenBeadScenario,
-  type StampGameScenario,
-} from '@monte/lesson-service';
-import { CurriculumAccessNotice, type CurriculumAvailabilityStatus } from '../components/CurriculumAccessNotice';
 import { resolveNarrationAssets } from '../domains/curriculum/utils/assets';
-import {
-  fetchLessonBySlug,
-  fetchUnitBySlug,
-  isCurriculumAuthReady,
-  isCurriculumApiAvailable,
-  type LessonDraftRecord,
-  type CurriculumTreeUnit,
-} from '@monte/api';
+import { CurriculumAccessNotice } from '../components/CurriculumAccessNotice';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -59,7 +27,8 @@ import {
   ProfileAvatar,
 } from '../components/ui';
 import { LessonInventoryProvider, useLessonInventory } from '../domains/curriculum/inventory/context';
-import { useAuth } from '../providers/AuthProvider';
+import { useLessonViewModel } from '../domains/curriculum/lesson/viewModel';
+import type { LessonScenario } from '../domains/curriculum/lesson/state';
 
 // Mini equation component for left sidebar (compact version)
 const MiniEquation = (props: { notes: string[] }) => {
@@ -107,308 +76,8 @@ const MiniEquation = (props: { notes: string[] }) => {
   );
 };
 
-// Component to display vertical equation format (currently unused - kept for future use)
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const WorkEquation = (props: { notes: string[] }) => {
-  // Extract carries and result from notes  
-  const parseNotes = () => {
-    const carries: Record<number, string> = {}; // position -> carry value
-    let multiplicand = '';
-    let multiplier = '';
-    let resultDigits: string[] = [];
-
-    props.notes.forEach((note) => {
-      // Parse "2,466 × 3" format
-      if (note.includes('×')) {
-        const parts = note.split('×').map(p => p.trim());
-        multiplicand = parts[0].replace(/,/g, '');
-        multiplier = parts[1];
-      }
-      
-      // Parse exchange notes like "Exchange: 10 units → tens, remainder 8"
-      if (note.startsWith('Exchange:')) {
-        const match = note.match(/remainder\s+(\d+)/);
-        if (match) {
-          const remainder = match[1];
-          if (note.includes('units')) {
-            resultDigits[0] = remainder; // ones place
-          } else if (note.includes('tens')) {
-            resultDigits[1] = remainder; // tens place
-          } else if (note.includes('hundreds')) {
-            resultDigits[2] = remainder; // hundreds place
-          }
-        }
-        // Extract carry
-        const carryMatch = note.match(/(\d+)\s+(\w+)s?\s*→\s*(\w+)/);
-        if (carryMatch) {
-          const [, quantity, from] = carryMatch;
-          const carried = Math.floor(parseInt(match?.[1] || '0') / parseInt(quantity));
-          if (from === 'unit' && carried > 0) {
-            carries[1] = '1'; // carry to tens
-          } else if (from === 'ten') {
-            const totalTens = parseInt(note.match(/(\d+)\s+ten/)?.[1] || '0');
-            if (totalTens >= 10) {
-              carries[2] = Math.floor(totalTens / 10).toString();
-            }
-          } else if (from === 'hundred') {
-            const totalHundreds = parseInt(note.match(/(\d+)\s+hundred/)?.[1] || '0');
-            if (totalHundreds >= 10) {
-              carries[3] = Math.floor(totalHundreds / 10).toString();
-            }
-          }
-        }
-      }
-      
-      // Parse sentences like "8 units remain and 1 ten is carried."
-      if (note.includes('remain') && note.includes('carried')) {
-        const remainMatch = note.match(/(\d+)\s+(\w+)\s+remain/);
-        const carryMatch = note.match(/(\d+)\s+(\w+)\s+.*carried/);
-        if (remainMatch && carryMatch) {
-          const [, remainder, place] = remainMatch;
-          const [, carry] = carryMatch;
-          if (place === 'units' || place === 'unit') {
-            resultDigits[0] = remainder;
-            carries[1] = carry;
-          } else if (place === 'tens' || place === 'ten') {
-            resultDigits[1] = remainder;
-            carries[2] = carry;
-          } else if (place === 'hundreds' || place === 'hundred') {
-            resultDigits[2] = remainder;
-            carries[3] = carry;
-          }
-        }
-      }
-      
-      // Parse final result from "equals X" or just a number
-      const equalsMatch = note.match(/equals\s+([\d,]+)/);
-      if (equalsMatch) {
-        const fullResult = equalsMatch[1].replace(/,/g, '');
-        resultDigits = fullResult.split('').reverse();
-      }
-    });
-
-    const result = resultDigits.reverse().join('');
-    return { carries, multiplicand, multiplier, result };
-  };
-
-  const { carries, multiplicand, multiplier, result } = parseNotes();
-
-  return (
-    <div class="vertical-equation">
-      {/* Carries row */}
-      <Show when={Object.keys(carries).length > 0}>
-        <div class="equation-carries">
-          <For each={multiplicand.split('')}>
-            {(_, index) => {
-              const position = index();
-              const carry = carries[position + 1]; // carries are 1-indexed (tens=1, hundreds=2, etc.)
-              return <span class="carry-digit">{carry || ''}</span>;
-            }}
-          </For>
-        </div>
-      </Show>
-
-      {/* Multiplicand */}
-      <Show when={multiplicand}>
-        <div class="equation-row equation-multiplicand">
-          <For each={multiplicand.split('')}>
-            {(digit) => <span class="equation-digit">{digit}</span>}
-          </For>
-        </div>
-      </Show>
-
-      {/* Multiplier with × symbol */}
-      <Show when={multiplier}>
-        <div class="equation-row equation-multiplier">
-          <span class="equation-symbol">×</span>
-          <For each={Array(Math.max(0, multiplicand.length - multiplier.length)).fill('')}>
-            {() => <span class="equation-digit" />}
-          </For>
-          <For each={multiplier.split('')}>
-            {(digit) => <span class="equation-digit">{digit}</span>}
-          </For>
-        </div>
-      </Show>
-
-      {/* Divider line */}
-      <Show when={multiplicand && multiplier}>
-        <div class="equation-divider" />
-      </Show>
-
-      {/* Result */}
-      <Show when={result}>
-        <div class="equation-row equation-result">
-          <For each={Array(Math.max(0, multiplicand.length - result.length)).fill('')}>
-            {() => <span class="equation-digit" />}
-          </For>
-          <For each={result.split('')}>
-            {(digit) => <span class="equation-digit">{digit}</span>}
-          </For>
-        </div>
-      </Show>
-    </div>
-  );
-};
-
-type LessonScenario = GoldenBeadScenario | StampGameScenario | undefined;
-
-const normalizeScenarioBinding = (value: unknown): LessonScenarioBinding | undefined => {
-  if (!value || typeof value !== 'object') return undefined;
-  const candidate = value as Record<string, unknown>;
-  const kind = candidate.kind;
-  const seed = candidate.seed;
-  if (kind !== 'golden-beads' && kind !== 'stamp-game') return undefined;
-  if (typeof seed !== 'number') return undefined;
-  return { kind, seed } satisfies LessonScenarioBinding;
-};
-
-const extractScenarioBinding = (document: LessonDocument | undefined): LessonScenarioBinding | undefined => {
-  if (!document) return undefined;
-  if (document.meta?.scenario) return document.meta.scenario;
-  for (const segment of document.lesson.segments) {
-    if (segment.scenario) return segment.scenario;
-  }
-  return normalizeScenarioBinding(document.meta?.metadata?.scenario);
-};
-
-const createScenarioForLesson = (document: LessonDocument | undefined): LessonScenario => {
-  const binding = extractScenarioBinding(document);
-  if (!binding) return undefined;
-  switch (binding.kind) {
-    case 'golden-beads':
-      return generateGoldenBeadScenario(binding.seed);
-    case 'stamp-game':
-      return generateStampGameScenario(binding.seed);
-    default:
-      return undefined;
-  }
-};
-
 const Lesson = () => {
-  const params = useParams({ from: '/units/$unitSlug/lessons/$lessonSlug' });
-  const lessonSlug = createMemo(() => params().lessonSlug);
-  const unitSlug = createMemo(() => params().unitSlug);
-  const navigate = useNavigate();
-  const auth = useAuth();
-  type Availability = 'ready' | CurriculumAvailabilityStatus;
-  const availability = createMemo<Availability>(() => {
-    if (!isCurriculumApiAvailable) return 'offline';
-    if (auth.loading()) return 'loading';
-    if (!isCurriculumAuthReady()) return 'offline';
-    if (!auth.isAuthenticated()) return 'unauthorized';
-    return 'ready';
-  });
-  const curriculumReady = createMemo(() => availability() === 'ready');
-
-  const [lessonRecordResource, { refetch: refetchLessonRecord }] = createResource<
-    LessonDraftRecord | undefined,
-    string | undefined
-  >(
-    () => {
-      const slug = lessonSlug();
-      return curriculumReady() && slug ? slug : undefined;
-    },
-    async (slug) => {
-      if (!slug) return undefined;
-      return fetchLessonBySlug(slug);
-    },
-  );
-
-  const [unitResource] = createResource<CurriculumTreeUnit | undefined, string | undefined>(
-    () => {
-      const slug = unitSlug();
-      return curriculumReady() && slug ? slug : undefined;
-    },
-    async (slug) => {
-      if (!slug) return undefined;
-      return fetchUnitBySlug(slug);
-    },
-  );
-
-  const lessonDocument = createMemo<LessonDocument | undefined>(() => {
-    const record = lessonRecordResource();
-    if (!record) return undefined;
-    return record.published ?? record.draft;
-  });
-
-  const lesson = createMemo<Lesson | undefined>(() => lessonDocument()?.lesson);
-  const segments = createMemo(() => lesson()?.segments ?? []);
-  const tasks = createMemo(() => safeBuildLessonTasks(lesson(), 'lesson.playback'));
-
-  const { actions: progressActions } = useProgress();
-  const recordEvent = createLocalEventRecorder();
-
-  createEffect(() => {
-    const currentLesson = lesson();
-    if (!currentLesson) return;
-    const lessonTasks = tasks();
-    if (lessonTasks.length === 0) return;
-    progressActions.ensureTasks(currentLesson.id, lessonTasks);
-  });
-
-  const tasksBySegment = createMemo(() => {
-    const map = new Map<string, ReturnType<typeof tasks>>();
-    tasks().forEach((task) => {
-      const existing = map.get(task.segmentId) ?? [];
-      map.set(task.segmentId, [...existing, task]);
-    });
-    return map;
-  });
-
-  const lessonPlayer = useLessonPlayer(() => segments().length);
-  const playerState = createMemo(() => lessonPlayer.state());
-  const currentScenario = createMemo<LessonScenario>(() => {
-    const document = lessonDocument();
-    if (!document) return undefined;
-    return createScenarioForLesson(document);
-  });
-
-  // Shared state for captions and paper notes (K-3 UX: sidebars)
-  const [captionHistory, setCaptionHistory] = createSignal<Array<{ text: string; actionIndex: number }>>([]);
-  const [paperNotes, setPaperNotes] = createSignal<string[]>([]);
-  const [hasStarted, setHasStarted] = createSignal(false);
-  
-  // Action-level timeline state for presentation segments
-  const [currentActionIndex, setCurrentActionIndex] = createSignal(0);
-  const [totalActions, setTotalActions] = createSignal(0);
-  const [actionJumpToIndex, setActionJumpToIndex] = createSignal<number | undefined>(undefined);
-
-  const send = (event: PlayerEvent) => lessonPlayer.send(event);
-
-  const activeIndex = createMemo(() => {
-    const contextIndex = playerState()?.context.index ?? 0;
-    return Math.min(contextIndex, Math.max(segments().length - 1, 0));
-  });
-
-  const activeSegment = createMemo(() => segments()[activeIndex()] ?? segments()[0]);
-  const status = createMemo<PlayerStatus>(() => lessonPlayer.status());
-  const isPlaying = createMemo(() => status() === 'playing');
-  const activeSegmentType = createMemo(() => activeSegment()?.type ?? 'presentation');
-
-  const handleNavigateToUnit = () => {
-    const slug = unitSlug();
-    if (slug) {
-      void navigate({ to: '/units/$unitSlug', params: { unitSlug: slug } });
-      return;
-    }
-    void navigate({ to: '/' });
-  };
-
-  const handleNavigateToHome = () => {
-    void navigate({ to: '/' });
-  };
-
-  const unitTitle = createMemo(() => {
-    const unit = unitResource();
-    if (!unit?.title) return 'Unit';
-    return unit.title;
-  });
-
-  const lessonTitle = createMemo(() => {
-    const doc = lessonDocument();
-    if (!doc?.lesson?.title) return 'Lesson';
-    return doc.lesson.title;
-  });
+  const { state, actions } = useLessonViewModel();
 
   const renderLoading = () => (
     <div class="min-h-screen bg-[linear-gradient(180deg,var(--color-background)_0%,var(--color-background-soft)_100%)]">
@@ -431,7 +100,7 @@ const Lesson = () => {
             size="compact"
             iconPosition="left"
             icon={<span aria-hidden>←</span>}
-            onClick={handleNavigateToUnit}
+            onClick={actions.navigateToUnit}
           >
             Back to unit
           </Button>
@@ -451,7 +120,7 @@ const Lesson = () => {
             size="compact"
             iconPosition="left"
             icon={<span aria-hidden>↺</span>}
-            onClick={() => void refetchLessonRecord()}
+            onClick={() => void actions.refetchLesson()}
           >
             Try again
           </Button>
@@ -460,106 +129,8 @@ const Lesson = () => {
     </div>
   );
 
-  const getLessonId = () => lesson()?.id;
-
-  const markSegmentTasksCompleted = (segmentId: string) => {
-    const lessonId = getLessonId();
-    if (!lessonId) return;
-    const relatedTasks = tasksBySegment().get(segmentId);
-    if (!relatedTasks) return;
-    relatedTasks.forEach((task) => progressActions.markTaskStatus(lessonId, task.id, 'completed'));
-  };
-
-  const handlePresentationComplete = () => {
-    const currentSegment = activeSegment();
-    if (!currentSegment) return;
-    markSegmentTasksCompleted(currentSegment.id);
-    send({ type: 'COMPLETE' });
-  };
-
-  const handleGuidedComplete = (segmentId: string) => {
-    markSegmentTasksCompleted(segmentId);
-    send({ type: 'COMPLETE' });
-  };
-
-  const handlePracticeTaskResult = (taskId: string, status: 'completed' | 'incorrect') => {
-    const lessonId = getLessonId();
-    if (!lessonId) return;
-    progressActions.markTaskStatus(lessonId, taskId, status);
-  };
-
-  const handlePracticeResult = (segmentId: string, result: 'pass' | 'fail') => {
-    const lessonId = getLessonId();
-    if (!lessonId) return;
-    const segmentTasks = tasksBySegment().get(segmentId) ?? [];
-
-    if (result === 'pass') {
-      segmentTasks.forEach((task) => progressActions.markTaskStatus(lessonId, task.id, 'completed'));
-      send({ type: 'COMPLETE' });
-      return;
-    }
-
-    segmentTasks.forEach((task) => progressActions.markTaskStatus(lessonId, task.id, 'incorrect'));
-    progressActions.resetLesson(lessonId);
-    send({ type: 'SET_INDEX', index: 0 });
-  };
-
-  const handlePracticeReset = (_options?: { regenerate: boolean }) => {
-    const currentLesson = lesson();
-    if (!currentLesson) return;
-    progressActions.resetLesson(currentLesson.id);
-  };
-
-  const handleTogglePlay = () => {
-    if (status() === 'playing') {
-      send({ type: 'PAUSE' });
-      return;
-    }
-    send({ type: 'PLAY' });
-  };
-
-  const handleDockSelect = (index: number) => {
-    const current = activeSegment();
-    const currentLesson = lesson();
-    if (current && currentLesson) {
-      recordEvent({
-        type: 'segment.end',
-        lessonId: currentLesson.id,
-        segmentId: current.id,
-        reason: 'skipped',
-      });
-    }
-    // Clear captions when switching segments
-    setCaptionHistory([]);
-    send({ type: 'SET_INDEX', index });
-  };
-
-  const timelineSegments = createMemo(() =>
-    segments().map((segment) => ({
-      id: segment.id,
-      title: segment.title,
-      type: segment.type,
-    })),
-  );
-
-  const handleStartLesson = () => {
-    setHasStarted(true);
-    // Don't auto-play - let user click Play button
-  };
-
-  const handleNarrationUpdate = (narration: string, actionIndex: number) => {
-    setCaptionHistory((prev) => {
-      // Check if caption for this action already exists
-      const existing = prev.find((c) => c.actionIndex === actionIndex);
-      if (existing) return prev; // Don't duplicate
-      return [...prev, { text: narration, actionIndex }];
-    });
-  };
-  
-  // Separate effect to handle auto-scrolling when currentActionIndex changes
   createEffect(() => {
-    currentActionIndex(); // Track changes
-    // Auto-scroll to center the active caption (carousel-style)
+    state.ui.currentActionIndex();
     setTimeout(() => {
       const carousel = document.querySelector('.lesson-captions-carousel');
       const currentBubble = document.querySelector('.lesson-caption-current');
@@ -568,35 +139,25 @@ const Lesson = () => {
         const bubbleRect = currentBubble.getBoundingClientRect();
         const carouselCenter = carouselRect.height / 2;
         const bubbleCenter = bubbleRect.height / 2;
-        const scrollTarget = (currentBubble as HTMLElement).offsetTop - carouselCenter + bubbleCenter;
+        const scrollTarget =
+          (currentBubble as HTMLElement).offsetTop - carouselCenter + bubbleCenter;
         carousel.scrollTo({
           top: scrollTarget,
-          behavior: 'smooth'
+          behavior: 'smooth',
         });
       }
     }, 100);
   });
 
-  const handleActionChange = (currentIndex: number, total: number) => {
-    setCurrentActionIndex(currentIndex);
-    setTotalActions(total);
-  };
-
-  const handleActionSelect = (index: number) => {
-    setActionJumpToIndex(index);
-    // Reset after a tick so it can be triggered again
-    setTimeout(() => setActionJumpToIndex(undefined), 10);
-  };
-
   const renderLessonView = () => (
     <div class="lesson-screen-fullscreen">
       {/* Start overlay - no auto-play for K-3 */}
-      <Show when={!hasStarted()}>
+      <Show when={!state.ui.hasStarted()}>
         <div class="lesson-start-overlay">
           <div class="lesson-start-content">
             <button
               type="button"
-              onClick={handleStartLesson}
+              onClick={() => actions.startLesson()}
               class="lesson-start-button"
               aria-label="Start lesson"
             >
@@ -614,15 +175,15 @@ const Lesson = () => {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink onClick={handleNavigateToHome}>Home</BreadcrumbLink>
+                <BreadcrumbLink onClick={actions.navigateToHome}>Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink onClick={handleNavigateToUnit}>{unitTitle()}</BreadcrumbLink>
+                <BreadcrumbLink onClick={actions.navigateToUnit}>{state.lesson.unitTitle()}</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink current>{lessonTitle()}</BreadcrumbLink>
+                <BreadcrumbLink current>{state.lesson.lessonTitle()}</BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -638,12 +199,12 @@ const Lesson = () => {
         <aside class="lesson-sidebar-left">
           {/* Top section - mini equation */}
           <div class="lesson-equation-section">
-            <Show when={paperNotes().length > 0} fallback={
+            <Show when={state.ui.paperNotes().length > 0} fallback={
               <div class="text-[color:var(--color-text-muted)] text-sm text-center">
                 Equation will appear here...
               </div>
             }>
-              <MiniEquation notes={paperNotes()} />
+              <MiniEquation notes={state.ui.paperNotes()} />
             </Show>
           </div>
 
@@ -651,22 +212,22 @@ const Lesson = () => {
           <div class="lesson-captions-section">
             <div class="lesson-captions-carousel">
               <div class="lesson-captions-container">
-                <Show when={captionHistory().length > 0} fallback={
+                <Show when={state.ui.captionHistory().length > 0} fallback={
                   <div class="lesson-caption-bubble lesson-caption-muted">
                     Narration will appear here...
                   </div>
                 }>
-                  <For each={captionHistory()}>
+                  <For each={state.ui.captionHistory()}>
                     {(caption) => (
                       <button
                         type="button"
                         classList={{
                           'lesson-caption-bubble': true,
-                          'lesson-caption-current': caption.actionIndex === currentActionIndex(),
-                          'lesson-caption-past': caption.actionIndex < currentActionIndex(),
-                          'lesson-caption-future': caption.actionIndex > currentActionIndex(),
+                          'lesson-caption-current': caption.actionIndex === state.ui.currentActionIndex(),
+                          'lesson-caption-past': caption.actionIndex < state.ui.currentActionIndex(),
+                          'lesson-caption-future': caption.actionIndex > state.ui.currentActionIndex(),
                         }}
-                        onClick={() => handleActionSelect(caption.actionIndex)}
+                        onClick={() => actions.jumpToAction(caption.actionIndex)}
                         aria-label={`Jump to: ${caption.text}`}
                       >
                         {caption.text}
@@ -681,26 +242,26 @@ const Lesson = () => {
 
         {/* Main player - takes up remaining space */}
         <div class="lesson-player-center">
-          <Show when={lesson()} keyed>
+          <Show when={state.lesson.lesson()} keyed>
             {(currentLesson) => (
               <LessonInventoryProvider inventory={currentLesson.materialInventory}>
-                <Show when={activeSegment()} keyed>
+                <Show when={state.player.activeSegment()} keyed>
                   {(segment) => (
                     <SegmentContent
                       lesson={currentLesson}
                       segment={segment}
-                      playerStatus={status()}
-                      onPresentationComplete={handlePresentationComplete}
-                      onGuidedComplete={handleGuidedComplete}
-                      onPracticeResult={handlePracticeResult}
-                      onPracticeTaskResult={handlePracticeTaskResult}
-                      onPracticeReset={handlePracticeReset}
-                      scenario={currentScenario()}
-                      recordEvent={recordEvent}
-                      onNarrationChange={handleNarrationUpdate}
-                      onPaperNotesChange={setPaperNotes}
-                      onActionChange={handleActionChange}
-                      actionJumpToIndex={actionJumpToIndex()}
+                      playerStatus={state.player.status()}
+                      onPresentationComplete={actions.presentationComplete}
+                      onGuidedComplete={actions.guidedComplete}
+                      onPracticeResult={actions.practiceResult}
+                      onPracticeTaskResult={actions.practiceTaskResult}
+                      onPracticeReset={actions.practiceReset}
+                      scenario={state.lesson.scenario()}
+                      recordEvent={state.recordEvent}
+                      onNarrationChange={actions.updateNarration}
+                      onPaperNotesChange={state.ui.setPaperNotes}
+                      onActionChange={actions.setActionProgress}
+                      actionJumpToIndex={state.ui.actionJumpToIndex()}
                     />
                   )}
                 </Show>
@@ -715,53 +276,35 @@ const Lesson = () => {
 
       {/* Bottom bar - part of app shell */}
       <LessonDock
-        segments={timelineSegments()}
-        activeIndex={activeIndex()}
-        onSelect={handleDockSelect}
-        onTogglePlay={handleTogglePlay}
-        isPlaying={isPlaying()}
-        currentActionIndex={currentActionIndex()}
-        totalActions={totalActions()}
-        onActionSelect={handleActionSelect}
-        showActionDots={activeSegmentType() === 'presentation'}
+        segments={state.lesson.timelineSegments()}
+        activeIndex={state.player.activeIndex()}
+        onSelect={actions.dockSelect}
+        onTogglePlay={actions.togglePlay}
+        isPlaying={state.player.isPlaying()}
+        currentActionIndex={state.ui.currentActionIndex()}
+        totalActions={state.ui.totalActions()}
+        onActionSelect={actions.jumpToAction}
+        showActionDots={state.player.activeSegmentType() === 'presentation'}
       />
     </div>
   );
 
-  const showLoading = createMemo(() => !lesson() && lessonRecordResource.loading);
-  const lessonError = createMemo(() => lessonRecordResource.error as Error | string | undefined);
-  const showNotFound = createMemo(() => !lessonRecordResource.loading && !lessonError() && !lesson());
-  const lessonErrorMessage = () => {
-    const error = lessonError();
-    if (!error) return 'Unable to load lesson.';
-    if (error instanceof Error) return error.message || 'Unable to load lesson.';
-    return typeof error === 'string' ? error : 'Unable to load lesson.';
-  };
-
-  const fallbackStatus = createMemo<CurriculumAvailabilityStatus>(() =>
-    availability() === 'ready' ? 'loading' : (availability() as CurriculumAvailabilityStatus),
-  );
-
-  const handleSignIn = () => {
-    void navigate({ to: '/auth/sign-in' });
-  };
-
   return (
     <Show
-      when={curriculumReady()}
-      fallback={<CurriculumAccessNotice status={fallbackStatus()} onSignIn={handleSignIn} />}
+      when={state.meta.curriculumReady()}
+      fallback={<CurriculumAccessNotice status={state.meta.fallbackStatus()} onSignIn={actions.signIn} />}
     >
       <Switch>
-        <Match when={showLoading()}>
+        <Match when={state.meta.showLoading()}>
           {renderLoading()}
         </Match>
-        <Match when={lessonError()}>
-          {renderError(lessonErrorMessage())}
+        <Match when={state.meta.error()}>
+          {renderError(state.meta.errorMessage())}
         </Match>
-        <Match when={lesson()}>
+        <Match when={state.lesson.lesson()}>
           {renderLessonView()}
         </Match>
-        <Match when={showNotFound()}>
+        <Match when={state.meta.showNotFound()}>
           {renderNotFound()}
         </Match>
       </Switch>

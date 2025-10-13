@@ -5,6 +5,10 @@ import { Button, Card } from '../components/ui';
 import { useAuth } from '../providers/AuthProvider';
 import { getOrganizationOverview, type OrganizationOverviewResult } from '../domains/auth/organizationClient';
 import { toast } from 'solid-sonner';
+import { formatUserRole, isUserRole } from '../domains/auth/types';
+
+const renderRoleLabel = (role: string | null | undefined) =>
+  formatUserRole(isUserRole(role) ? role : null) ?? role ?? 'Unknown';
 
 const EmptyState = () => {
   const navigate = useNavigate();
@@ -148,9 +152,7 @@ const OrganizationDetails = () => {
                           <span class="font-medium text-[color:var(--color-heading)]">
                             {member.user?.name ?? member.user?.email ?? member.userId}
                           </span>
-                          <p class="text-xs text-[color:var(--color-text-muted)]">
-                            Role: {member.role} · User ID: {member.userId}
-                          </p>
+                    <p class="text-xs text-[color:var(--color-text-muted)]">Role: {renderRoleLabel(member.role)} · User ID: {member.userId}</p>
                         </li>
                       )}
                     </For>
@@ -170,7 +172,7 @@ const OrganizationDetails = () => {
                         <li class="flex flex-col rounded-lg border border-[rgba(12,42,101,0.1)] bg-white px-3 py-2">
                           <span class="font-medium text-[color:var(--color-heading)]">{invite.email}</span>
                           <p class="text-xs text-[color:var(--color-text-muted)]">
-                            Role: {invite.role} · Status: {invite.status}
+                            Role: {renderRoleLabel(invite.role)} · Status: {invite.status}
                           </p>
                         </li>
                       )}
@@ -188,6 +190,7 @@ const OrganizationDetails = () => {
 
 const Dashboard = () => {
   const auth = useAuth();
+  const accountRole = createMemo(() => formatUserRole(auth.role()) ?? formatUserRole(auth.membershipRole()));
 
   return (
     <Card variant="soft" class="w-full max-w-4xl space-y-6 p-6">
@@ -204,8 +207,9 @@ const Dashboard = () => {
           <span class="font-medium text-[color:var(--color-heading)]">
             {auth.user()?.email ?? auth.user()?.id ?? 'Unknown user'}
           </span>
-          {auth.role() ? ` · Account role: ${auth.role()}` : ''}
-          {auth.membershipRole() ? ` · Organization role: ${auth.membershipRole()}` : ''}
+          <Show when={accountRole()}>
+            {(label) => <> · Role: {label()}</>}
+          </Show>
         </p>
       </section>
 

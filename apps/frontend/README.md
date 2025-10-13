@@ -16,7 +16,7 @@ pnpm --filter @monte/frontend typecheck
 - Tailwind v4 styles live in `src/globals.css`.
 - Routes are declared in `src/router.tsx`; add pages under `src/routes`.
 - TanStack Form/Table utilities are available for when data wiring starts.
-- The lesson editor uses the live Convex deployment. Wrap the app in `CurriculumProvider` so the scoped curriculum client manager is available—the API helpers in `domains/curriculum/api/curriculumClient.ts` require that provider before issuing mutations.
+- The lesson editor uses the live Convex deployment. API helpers in `domains/curriculum/api/curriculumClient.ts` talk to the shared client manager directly—no extra provider wrapping is required.
 
 ### Curriculum content seeding
 

@@ -2,12 +2,12 @@ import type { JSX } from 'solid-js';
 import { Show, type ParentComponent } from 'solid-js';
 import { useNavigate } from '@tanstack/solid-router';
 
-import type { OrganizationRole, UserRole } from '../domains/auth/types';
+import type { UserRole } from '../domains/auth/types';
 
 import { Button, Card } from '../components/ui';
 import { useAuth } from '../providers/AuthProvider';
 
-type AllowedRole = UserRole | OrganizationRole;
+type AllowedRole = UserRole;
 
 interface RoleGuardProps {
   allowedRoles: AllowedRole[];

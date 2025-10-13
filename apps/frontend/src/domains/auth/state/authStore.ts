@@ -33,13 +33,17 @@ const extractImpersonator = (session: AuthSession): string | null => {
 const normalizeUserRole = (raw: unknown): UserRole | null => {
   if (typeof raw !== 'string') return null;
   const trimmed = raw.trim();
-  return isUserRole(trimmed) ? trimmed : null;
+  if (isUserRole(trimmed)) return trimmed;
+  if (trimmed === 'user') return 'member';
+  return null;
 };
 
 const normalizeMembershipRole = (raw: unknown): OrganizationRole | null => {
   if (typeof raw !== 'string') return null;
   const trimmed = raw.trim();
-  return isOrganizationRole(trimmed) ? trimmed : null;
+  if (isOrganizationRole(trimmed)) return trimmed;
+  if (trimmed === 'user') return 'member';
+  return null;
 };
 
 const slugify = (value: string) =>

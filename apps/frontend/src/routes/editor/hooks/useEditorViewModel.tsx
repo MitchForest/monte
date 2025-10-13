@@ -38,7 +38,6 @@ import {
 import type {
   CreateLessonFormState,
   LessonMetaFormState,
-  LessonScenario,
   TopicFormState,
   UnitFormState,
 } from '../../../domains/curriculum/editor/types';

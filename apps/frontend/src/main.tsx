@@ -4,7 +4,6 @@ import { RouterProvider } from '@tanstack/solid-router';
 
 import { router } from './router';
 import './globals.css';
-import { CurriculumProvider } from './providers/CurriculumProvider';
 import { AuthProvider } from './providers/AuthProvider';
 import { Toaster } from 'solid-sonner';
 
@@ -22,12 +21,10 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 
 render(
   () => (
-    <CurriculumProvider>
-      <AuthProvider>
-        <RouterProvider router={router} />
-        <Toaster position="top-right" closeButton richColors />
-      </AuthProvider>
-    </CurriculumProvider>
+    <AuthProvider>
+      <RouterProvider router={router} />
+      <Toaster position="top-right" closeButton richColors />
+    </AuthProvider>
   ),
   root!,
 );
